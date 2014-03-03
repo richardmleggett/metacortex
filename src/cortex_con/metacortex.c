@@ -187,6 +187,7 @@ void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename,
     log_and_screen_printf("          Contig file: %s\n", consensus_contigs_filename);
     log_and_screen_printf("        Analysis file: %s\n", analysis_filename);
     log_and_screen_printf("Minimum subgraph size: %i\n", min_subgraph_kmers);
+    log_and_screen_printf("Minimum contig length: %i\n", min_contig_length);
     
     /* Initialise temporaray path array buffers */
     path_array_initialise_buffers(graph->kmer_size);
@@ -280,7 +281,12 @@ void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename,
             path_reverse(path_fwd, final_path);
             path_append(final_path, path_rev);
             final_path->id = i;
-            path_to_fasta(final_path, fp);
+            if (final_path->length >= (min_contig_length - graph->kmer_size)) {
+                log_printf("Write path of size %d\n", final_path->length);
+                path_to_fasta(final_path, fp);
+            } else {
+                log_printf("Didn't write path of size %d\n", final_path->length);
+            }
             //log_printf("  Seed %s\tFwd path length %i\tRev path length %i\tFinal path length %i\n", seq, path_fwd->length, path_rev->length, final_path->length);
             path_reset(path_fwd);
             perfect_path_get_path(sub_graphs[i].seed_node, forward, &db_node_action_do_nothing, graph, path_fwd);
