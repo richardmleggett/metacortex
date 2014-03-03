@@ -769,6 +769,10 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
     if (cmd_line.output_log) {
 #ifdef ENABLE_BUBBLEPARSE
         log_printf("Cortex Con Bubble Finding\n\n");
+#elif defined METACORTEX
+        log_and_screen_printf("\nMetaCortex ");
+        log_and_screen_printf(METACORTEX_VERSION);
+        log_and_screen_printf("\n\n");
 #else
         log_printf("\nCortex Con\n\n");
 #endif
