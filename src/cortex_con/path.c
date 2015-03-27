@@ -705,8 +705,6 @@ void path_to_fasta_debug(Path * path, FILE * fout)
 	for(i = 0; i < len; i++, current++){
         if (path->step_flags[i] & PRINT_LABEL_AS_N) {
             fprintf(fout, "N");
-        } else if (path->step_flags[i] & PRINT_LABEL_LOWERCASE) {
-            fprintf(fout, "%c", tolower(path->seq[i]));
         } else {
             fprintf(fout, "%c",  path->seq[i]);
         }
@@ -852,8 +850,6 @@ void path_to_fasta(Path * path, FILE * fout)
 	for(i = 0; i < len; i++, current++) {
         if (path->step_flags[i] & PRINT_LABEL_AS_N) {
             fprintf(fout, "N");
-        } else if (path->step_flags[i] & PRINT_LABEL_LOWERCASE) {
-            fprintf(fout, "%c", tolower(path->seq[i]));
         } else {
             fprintf(fout, "%c",  path->seq[i]);
         }
@@ -1532,7 +1528,11 @@ void path_remove_last(Path * path)
     
     if(db_node_edges_count_all_colours(path_last_node(path), path_last_orientation(path)) > 1){
         path->out_nodes_count--;
-        assert(path->out_nodes_count >=0);
+        if (path->out_nodes_count < 0) {
+            path->out_nodes_count = 0;
+            printf("Warning: path->out_nodes_count < 0\n");
+        }
+        //assert(path->out_nodes_count >=0);
     }
     
 	path->length--;
@@ -2044,8 +2044,6 @@ void path_pairs_to_fasta(PathArray* pa, int distances[], FILE* fout) {
         for (j=0; j<strlen(path->seq); j++, current++) {
             if (path->step_flags[i] & PRINT_LABEL_AS_N) {
                 fprintf(fout, "N");
-            } else if (path->step_flags[i] & PRINT_LABEL_LOWERCASE) {
-                fprintf(fout, "%c", tolower(path->seq[i]));
             } else {
                 fprintf(fout, "%c",  path->seq[i]);
             }

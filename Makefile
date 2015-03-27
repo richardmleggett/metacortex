@@ -7,8 +7,12 @@ ifndef CC
 endif
 
 ifdef MAC
-  CC = gcc
+    # Change the following to point to your GCC binary
+    #CC=gcc
+    CC=~/gcc/bin/gcc 
+    #MACFLAG = -fnested-functions
 endif
+
 
 BIN = bin
 LIB = lib
@@ -76,7 +80,6 @@ endif
 
 # Mac OS X specific. Assuming CUnit is installed with MacPorts
 ifdef MAC
-MACFLAG = -fnested-functions 
 #-L/opt/local/lib/ 
 IDIR_CUNIT=/opt/local/include/CUnit/ 
 CFLAGS_CUNIT = -L/opt/local/lib/ -lncurses

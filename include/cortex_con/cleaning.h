@@ -39,6 +39,8 @@ typedef struct {
     dBGraph * db_graph;
 } clip_tip_vars;
 
+void cleaning_prune_db_node(dBNode * node, dBGraph * db_graph);
+
 int cleaning_prune_low_coverage_path(int min_cov,int limit, dBGraph * db_graph);
 
 int cleaning_remove_low_coverage(int coverage, dBGraph * db_graph);

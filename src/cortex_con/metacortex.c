@@ -33,6 +33,7 @@
 #include "coverage_walk.h"
 #include "perfect_path.h"
 #include "metacortex.h"
+#include "cleaning.h"
 
 /*----------------------------------------------------------------------*
  * Function:                                                            *
@@ -40,7 +41,7 @@
  * Params:                                                              *
  * Returns:                                                             *
  *----------------------------------------------------------------------*/
-int grow_graph_from_node(dBNode* start_node, dBNode** best_node, dBGraph* graph)
+int grow_graph_from_node(dBNode* start_node, dBNode** best_node, dBGraph* graph, Queue* graph_queue)
 {                         
     Queue* nodes_to_walk;
     dBNode* node;
@@ -117,6 +118,7 @@ int grow_graph_from_node(dBNode* start_node, dBNode** best_node, dBGraph* graph)
                         }
                         
                         db_node_action_set_flag_visited(new_path->nodes[i]);
+                        queue_push(graph_queue, new_path->nodes[i]);
                         current_graph_size++;                        
                     }
                 }
@@ -171,8 +173,9 @@ int grow_graph_from_node(dBNode* start_node, dBNode** best_node, dBGraph* graph)
 
 void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename, int min_subgraph_kmers, int min_contig_length)
 {
-    SubGraphInfo* sub_graphs;
-    FILE* fp;
+    FILE* fp_analysis;
+    FILE* fp_contigs;
+    Queue* graph_queue;
     Path *path_fwd = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
     Path *path_rev = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
     Path *final_path = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
@@ -180,7 +183,13 @@ void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename,
     char analysis_filename[strlen(consensus_contigs_filename) + 10];
     long int total_nodes = 0;
     int n_seeds = 0;
-    int i;
+    int counter= 0;
+    
+    graph_queue = queue_new(METACORTEX_QUEUE_SIZE);
+    if (!graph_queue) {
+        log_and_screen_printf("Couldn't get memory for graph queue.\n");
+        exit(-1);
+    }
     
     sprintf(analysis_filename, "%s.analysis", consensus_contigs_filename);
     log_and_screen_printf("Running metacortex subgraph analysis...\n");
@@ -192,21 +201,20 @@ void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename,
     /* Initialise temporaray path array buffers */
     path_array_initialise_buffers(graph->kmer_size);
     
-    /* Create a list of subgraphs */
-    log_and_screen_printf("Allocating %d Mb to store subgraph information (max %d seeds)...\n", ((MAX_SEEDS * sizeof(SubGraphInfo)) / 1024) / 1024, MAX_SEEDS);
-    sub_graphs = calloc(MAX_SEEDS, sizeof(SubGraphInfo));
-    if (!sub_graphs) {
-        log_and_screen_printf("ERROR: Can't get memory for subgraphs\n");
-        exit(-1);
-    }
-
     /* Open the analysis file */
-    fp = fopen(analysis_filename, "w");
-    if (!fp) {
+    fp_analysis = fopen(analysis_filename, "w");
+    if (!fp_analysis) {
         log_and_screen_printf("ERROR: Can't open analysis file.\n");
         exit(-1);
     }
-        
+
+    /* Open consensus contigs file */
+    fp_contigs = fopen(consensus_contigs_filename, "w");
+    if (!fp_contigs) {
+        log_and_screen_printf("ERROR: Can't open contig file.\n");
+        exit(-1);
+    }
+    
     /* For each node, if it's not pruned or visited, try and grow a graph */
     void explore_node(dBNode * node) {
         if (node == NULL) {
@@ -215,93 +223,75 @@ void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename,
         }
         
         if (db_node_check_for_any_flag(node, PRUNED | VISITED) == false) {
+            dBNode* seed_node;
             int nodes_in_graph;
             
             /* Grow graph from this node, returning the 'best' (highest coverage) node to store as seed point */
-            nodes_in_graph = grow_graph_from_node(node, &(sub_graphs[n_seeds].seed_node), graph);
+            log_printf("Growing graph from node\n");
+            graph_queue->number_of_items = 0;
+            nodes_in_graph = grow_graph_from_node(node, &seed_node, graph, graph_queue);
             total_nodes += nodes_in_graph;
             
-            if (sub_graphs[n_seeds].seed_node == NULL) {
+            if (seed_node == NULL) {
                 printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph);
             } else {
                 /* Write data to analysis file */
                 binary_kmer_to_seq(&(node->kmer), graph->kmer_size, seq);            
-                fprintf(fp, "%i\t%i\t%ld\t%s\t", n_seeds, nodes_in_graph, total_nodes, seq);
-                binary_kmer_to_seq(&(sub_graphs[n_seeds].seed_node->kmer), graph->kmer_size, seq);
-                fprintf(fp, "%s\n", seq);
-
-                /* Store nodes in this subgraph */
-                sub_graphs[n_seeds].graph_size = nodes_in_graph;
-                n_seeds++;
-                
-                /* Check we've not run out of seed storage - in future, this should dynamically allocate */
-                if (n_seeds == MAX_SEEDS) {
-                    log_and_screen_printf("Error: MAX_SEEDS exceeded. Quitting.\n");
-                    exit(-1);
+                fprintf(fp_analysis, "%i\t%i\t%ld\t%s\t", n_seeds, nodes_in_graph, total_nodes, seq);
+                binary_kmer_to_seq(&(seed_node->kmer), graph->kmer_size, seq);
+                fprintf(fp_analysis, "%s\n", seq);
+        
+                /* Enough nodes to bother with? If so, get consensus contig */
+                if (nodes_in_graph >= min_subgraph_kmers) {
+                    dBNode* queue_node;
+                    int pi;
+                    
+                    binary_kmer_to_seq(&(seed_node->kmer), graph->kmer_size, seq);
+                    coverage_walk_get_path(seed_node, forward, NULL, graph, path_fwd);
+                    coverage_walk_get_path(seed_node, reverse, NULL, graph, path_rev);
+                    path_reverse(path_fwd, final_path);
+                    path_append(final_path, path_rev);
+                    final_path->id = counter;
+                    if (final_path->length >= (min_contig_length - graph->kmer_size)) {
+                        log_printf("Write path of size %d\n", final_path->length);
+                        path_to_fasta(final_path, fp_contigs);
+                    } else {
+                        log_printf("Didn't write path of size %d\n", final_path->length);
+                    }
+                    
+                    /* Now clear visited flags for subgraph */
+                    while (graph_queue->number_of_items > 0) {
+                        queue_node = (dBNode*)queue_pop(graph_queue);
+                        db_node_action_unset_flag(queue_node, VISITED);
+                    }
+                    
+                    /* Now disconnect path from other nodes and mark path as visited, so it's not visited again */
+                    for (pi=0; pi<final_path->length; pi++) {
+                        cleaning_prune_db_node(final_path->nodes[pi], graph);
+                        db_node_action_set_flag(final_path->nodes[pi], VISITED);
+                    }
+                    
+                    /* Reset paths */
+                    path_reset(path_fwd);
+                    //perfect_path_get_path(seed_node, forward, &db_node_action_do_nothing, graph, path_fwd);
+                    path_reset(path_rev);
+                    path_reset(final_path);
+                } else {
+                    log_printf("  Number of nodes (%i} too small. Not outputting contig.\n", nodes_in_graph);
                 }
+
+                counter++;
             }
         }
     }
     
     /* Traverse each node... */
-    log_and_screen_printf("Finding subgraphs...\n");
+    db_graph_reset_flags(graph);
+    log_and_screen_printf("Finding subgraphs the new way!...\n");
     hash_table_traverse(&explore_node, graph);
     log_and_screen_printf("Finished. Total nodes: %ld\n", total_nodes);
-    fclose(fp);    
-    
-    /* Open consensus contigs file */
-    fp = fopen(consensus_contigs_filename, "w");
-    if (!fp) {
-        log_and_screen_printf("ERROR: Can't open contig file.\n");
-        exit(-1);
-    }
-    
-    /* Now go through all the seed points and generate the consensus contigs by walking forward and backward from the seed */
-    db_graph_reset_flags(graph);    
-    log_and_screen_printf("Outputting contigs...\n");
-	log_progress_bar(0);
-	long long one_percent = n_seeds/100;
-    int percent;
-    
-    if (one_percent < 1) {
-        one_percent = 1;
-    }
-    
-    for (i=0; i<n_seeds; i++) {
-        if (i % one_percent == 0) {
-            percent = (100 * i) / n_seeds;
-            log_progress_bar(percent);
-        } 
-        
-        //log_printf("Graph %i\n", i);           
-        if (sub_graphs[i].graph_size >= min_subgraph_kmers) {            
-            binary_kmer_to_seq(&(sub_graphs[i].seed_node->kmer), graph->kmer_size, seq);
-            coverage_walk_get_path(sub_graphs[i].seed_node, forward, NULL, graph, path_fwd);
-            coverage_walk_get_path(sub_graphs[i].seed_node, reverse, NULL, graph, path_rev);
-            path_reverse(path_fwd, final_path);
-            path_append(final_path, path_rev);
-            final_path->id = i;
-            if (final_path->length >= (min_contig_length - graph->kmer_size)) {
-                log_printf("Write path of size %d\n", final_path->length);
-                path_to_fasta(final_path, fp);
-            } else {
-                log_printf("Didn't write path of size %d\n", final_path->length);
-            }
-            //log_printf("  Seed %s\tFwd path length %i\tRev path length %i\tFinal path length %i\n", seq, path_fwd->length, path_rev->length, final_path->length);
-            path_reset(path_fwd);
-            perfect_path_get_path(sub_graphs[i].seed_node, forward, &db_node_action_do_nothing, graph, path_fwd);
-            //log_printf("\t\tPerfect path fwd length %i\n", path_fwd->length);
-            path_reset(path_rev);
-            path_reset(final_path);
-        } else {
-            log_printf("  Number of nodes (%i} too small. Not outputting contig.\n", sub_graphs[i].graph_size);
-        }
-        
-    }
-	log_progress_bar(100);
-	printf("\n");
-    log_and_screen_printf("Finished contig output.\n");    
-    fclose(fp);
-    
-    free(sub_graphs);
+
+    /* Close files */
+    fclose(fp_contigs);
+    fclose(fp_analysis);
 }
