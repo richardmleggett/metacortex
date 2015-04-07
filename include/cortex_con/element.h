@@ -46,39 +46,6 @@
 #define NUMBER_OF_COLOURS 1
 #endif
 
-
-#ifdef ENABLE_READ_PAIR
-
-#endif
-#ifdef ENABLE_READ_PAIR
-
-#ifndef READ_PAIR_DATATYPE
-#define READ_PAIR_DATATYPE unsigned long long
-//#define READ_PAIR_DATATYPE unsigned int
-#endif
-
-#ifndef READ_PAIR_LENGTH
-#define READ_PAIR_LENGTH   (sizeof(READ_PAIR_DATATYPE)*8)
-
-#endif
-
-#ifndef READ_PAIR_SEGMENTS
-#define READ_PAIR_SEGMENTS 1
-#endif
-
-// Before marking by perfect paths
-//#define NUMBER_OF_SIGNATURES (4 * READ_PAIR_SEGMENTS) 
-// To mark the perfect path and different segments
-#define NUMBER_OF_SIGNATURES READ_PAIR_SEGMENTS + 1 
-
-typedef READ_PAIR_DATATYPE ReadPairSignature;
-
-typedef enum {
-	Bitfield_First=0, Bitfield_Second=1, Bitfield_First_Inverse=2, Bitfield_Second_Inverse=3, Bitfield_PerfectPath=4
-} ReadPairBitfield;
-
-#endif
-
 #ifdef ENABLE_READ_TRACK
 #ifndef READ_TRACK_DATATYPE
 #define READ_TRACK_DATATYPE unsigned long long
@@ -104,11 +71,6 @@ typedef struct {
 	// less significant nibble forward
 	Edges edges[NUMBER_OF_COLOURS];
 	Flags flags;
-#ifdef ENABLE_READ_PAIR_OLD
-	ReadPairSignature signature[NUMBER_OF_COLOURS][READ_PAIR_SEGMENTS];
-#elif defined ENABLE_READ_PAIR
-    ReadPairSignature signatures[NUMBER_OF_SIGNATURES];
-#endif
 #ifdef INCLUDE_QUALITY_SCORES
 	QualityStringArray quality_string_arrays[NUMBER_OF_COLOURS];
 #endif
@@ -309,57 +271,6 @@ void db_node_action_set_flag_none(dBNode * node);
 boolean elemet_is_assigned(Element * node);
 
 boolean element_check_for_flag(Element * node, Flags flag);
-
-/**
- * 
- *Functions related to the read pair. They are in an ifdef block
- * to keep compatibility with programs that do not require the read pair
- * functionality  
- * 
- */
-#ifdef ENABLE_READ_PAIR_OLD
-
-/**
- * Function that sets the corresponding bit in the signature for the sequence count. 
- * We are assuming that the read pair files come in the same order and have the same number
- * of entries.The return value helps in counting the "collisions".
- * 
- * Returns true when setting the flag has an effect and false when the flag was already set. 
- */ 
-boolean db_node_action_add_read_pair(long long count, short pair, short colour, dBNode *  node);
-
-/**
- * Counts how many of the bits are present in the node from a given signature
- */
-int db_node_count_signature_matches(ReadPairSignature signature, short pair, short colour, dBNode * node); 
-
-
-/**
- * Gets the signature of a given pair in a given colour. 
- */ 
-ReadPairSignature db_node_get_signature(short pair, short colour, dBNode * node);
-
-/**
- * Function that sets the signature for a given node. It does and OR operation to set the field
- * It returns the number of bits that where already set up in the corresponing colour and pair. 
- * The return value is helpful to know how many of the merging signatures collide. 
- * 
- */ 
-int db_node_set_signature(ReadPairSignature signature,  short pair, short colour, dBNode * node);
-
-#elif defined ENABLE_READ_PAIR
-
-ReadPairSignature db_node_get_signature(short pair, ReadPairBitfield bitfield, dBNode * node);
-int db_node_count_signature_matches(ReadPairSignature signature, short pair, ReadPairBitfield bitfield, dBNode * node);
-int db_node_set_signature(ReadPairSignature signature, short pair, ReadPairBitfield bitfield, dBNode * node);
-boolean db_node_action_add_read_pair(long long count, short pair, ReadPairBitfield bitfield, dBNode * node);
-#elif defined ENABLE_MARK_PAIR
-
-uint32_t db_node_get_supernode(dBNode * node);
-
-void db_node_set_supernode_id(uint32_t id, dBNode * node);
-
-#endif
 
 #ifdef SOLID
 /**

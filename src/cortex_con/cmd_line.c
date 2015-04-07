@@ -117,11 +117,6 @@ int default_opts(CmdLine * c)
     c->output_reference_coverage_file_known=false;
     c->min_contig_length = 0;
     
-    //read pairs
-#ifdef ENABLE_READ_PAIR
-    c->read_pair_enabled=false;
-#endif
-    
     //-----------
     //parameters
     //-----------
@@ -157,17 +152,6 @@ int default_opts(CmdLine * c)
 	c->max_length=200000;
     c->min_subgraph_size=0;
     
-	//read pairs
-#ifdef ENABLE_READ_PAIR
-	c->read_pair_distance = 100;
-	c->read_pair_coverage = 20;
-	c->read_pair_tolerance = 0;
-	c->read_pair_min_bits = 2;
-	c->read_pair_start_length = 1000;
-	//c->read_pair_filename[0] required 
-	c->read_pair_max_paths = 16;
-	c->read_pair_min_kmers = 81+1; //TODO: check this
-#endif 
 	return 1;
 }
 
@@ -213,31 +197,13 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
         {"singleton_length", required_argument, NULL, 'x'},
         {"remove_low_coverage_kmers", required_argument, NULL, 'z'},
         {"algorithm",required_argument,NULL,'A'},
-#ifdef ENABLE_READ_PAIR
-        {"read_pair_min_bits", required_argument, NULL, 'B'},
-        {"read_pair_coverage", required_argument, NULL, 'C'},
-        {"read_pair_distance", required_argument, NULL, 'D'},
-        {"read_pair_max_paths", required_argument, NULL, 'E'},        
-#endif        
         {"graphviz", required_argument, NULL, 'G'},
    		{"input_reference", required_argument, NULL, 'H'},
-#ifdef ENABLE_READ_PAIR
-        {"pair_info", required_argument, NULL, 'I'},
-#endif        
 		{"output_kmer_coverage", required_argument, NULL, 'J'},
-#ifdef ENABLE_READ_PAIR
-        {"read_pair_min_kmers", required_argument, NULL, 'K'},
-#endif        
         {"remove_spurious_links",required_argument,NULL,'L'},
 		{"output_reference_coverage_file", required_argument, NULL, 'M'},
-#ifdef ENABLE_READ_PAIR
-        {"print_stack_as_n", required_argument, NULL, 'N'},
-#endif        
         {"hash_output_file", required_argument, NULL, 'O'},
         {"tip_clip_iterations", required_argument, NULL, 'P'},
-#ifdef ENABLE_READ_PAIR
-        {"read_pair_start_length", required_argument, NULL, 'S'},
-#endif        
         {"threads", required_argument, NULL, 'T'},
         {0, 0, 0, 0}
     };
@@ -493,45 +459,6 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                 exit(-1);
                 break;
                 
-            case 'B':
-#ifdef ENABLE_READ_PAIR
-                cmd_line.read_pair_enabled = true;
-                cmd_line.read_pair_min_bits =  atoi(optarg);
-#else
-                fprintf(stderr, "[-B | --read_pair_min_bits] Cortex is not compiled to use read pair information, please compile with make ENABLE_READ_PAIR=1]");
-                exit(-1);
-#endif
-                break;
-                
-            case 'C':
-#ifdef ENABLE_READ_PAIR
-                cmd_line.read_pair_enabled = true;
-                cmd_line.read_pair_coverage =  atoi(optarg);
-#else
-                fprintf(stderr, "[-C | --read_pair_coverage] Cortex is not compiled to use read pair information, please compile with make ENABLE_READ_PAIR=1]");
-                exit(-1);
-#endif
-                break;
-                
-            case 'D':
-#ifdef ENABLE_READ_PAIR
-                cmd_line.read_pair_enabled = true;
-                cmd_line.read_pair_distance =  atoi(optarg);
-#else
-                fprintf(stderr, "[-D | --read_pair_distance] Cortex is not compiled to use read pair information, please compile with make ENABLE_READ_PAIR=1]");
-                exit(-1);
-#endif
-                break;
-                
-            case 'E':
-#ifdef ENABLE_READ_PAIR
-                cmd_line.read_pair_enabled = true;
-                cmd_line.read_pair_max_paths = atoi(optarg);
-#else
-                fprintf(stderr, "[-E | --read_pair_max_paths] Cortex is not compiled to use read pair information, please compile with make ENABLE_READ_PAIR=1]");
-                exit(-1);
-#endif
-                break;            
             case 'G':
                 if (optarg == NULL) {
                     errx(1, "[-G | --graphviz] option requires a filename [file of filenames]");
@@ -561,23 +488,6 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                printf("Reference file: %s\n", optarg);
 			   cmd_line.input_reference_known = true;
                break;
-            case 'I':
-#if defined (ENABLE_MARK_PAIR) || defined ( ENABLE_READ_PAIR)
-                cmd_line.read_pair_enabled = true;
-                if (strlen(optarg) < LENGTH_FILENAME) {
-                    strcpy(cmd_line.read_pair_filename, optarg);
-                } else {
-                    errx(1, "[-I | --pair_info] filename too long [%s]", optarg);
-                }
-                
-#ifdef ENABLE_MARK_PAIR
-                mark_pair_validate_file(optarg);
-#endif
-#else
-                fprintf(stderr, "[-I | --pair_info] Cortex is not compiled to use read pair information, please compile with make ENABLE_READ_PAIR=1]");
-                exit(-1);
-#endif
-                break; 
             case 'J':
 				cmd_line.output_kmer_coverage_know = true;
 	            if (strlen(optarg) < LENGTH_FILENAME) {
@@ -585,23 +495,7 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
 	             } else {
 	                 errx(1, "[-J | --output_kmer_coverage] filename too long [%s]", optarg);
 	             }
-			break;
-                
-            case 'K':
-#ifdef ENABLE_READ_PAIR
-				
-	            if (strlen(optarg) < LENGTH_FILENAME) {
-	            	cmd_line.read_pair_min_kmers =  atoi(optarg);
-	            } else {
-	                errx(1, "[-K | --read_pair_min_kmers] filename too long [%s]", optarg);
-	            }
-                cmd_line.read_pair_enabled = true;
-               
-#else
-                fprintf(stderr, "[-K | --read_pair_min_kmers] Cortex is not compiled to use read pair information, please compile with make ENABLE_READ_PAIR=1]");
-                exit(-1);
-#endif
-                break;
+			     break;
                 
             case 'L':
                 if (optarg == NULL) {
@@ -674,16 +568,6 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                 cmd_line.input_file_format_known = true;
                 cmd_line.input_file_format = ROCHE;
                 printf ("Doing 454\n");
-                break;
-                
-            case 'S':
-#ifdef ENABLE_READ_PAIR
-                cmd_line.read_pair_enabled = true;
-                cmd_line.read_pair_start_length =  atoi(optarg);
-#else
-                fprintf(stderr, "[-S | --read_pair_start_length] Cortex is not compiled to use read pair information, please compile with make ENABLE_READ_PAIR=1]");
-                exit(-1);
-#endif
                 break;
                 
             case 'T':	//Number of threads

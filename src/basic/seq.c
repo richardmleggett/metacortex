@@ -662,7 +662,7 @@ int read_sequence_from_fasta_and_qual(FILE * fp, FILE * fq, Sequence * seq, int 
 	int i;
 	int j = 0;		// length of sequence
 	int q = 0;		// length of qualities
-	long file_pointer;
+	//long file_pointer;
 	boolean good_read = true;
 	int offset = seq->qual_offset;
 	if (offset == 0) {
@@ -719,7 +719,7 @@ int read_sequence_from_fasta_and_qual(FILE * fp, FILE * fq, Sequence * seq, int 
 		good_read = true;
 		q = 0;
 		j = 0;
-		file_pointer = ftell(fp);
+		//file_pointer = ftell(fp);
 		// read name of fastq entry
 		if (fgets(line, LINE_MAX, fp) != NULL) {
 			if (line[0] == '>') {
@@ -770,7 +770,7 @@ int read_sequence_from_fasta_and_qual(FILE * fp, FILE * fq, Sequence * seq, int 
 					}
 				}
 				// read qualities -- verify position first
-				file_pointer = ftell(fq);
+				//file_pointer = ftell(fq);
 				while (fgets(line, LINE_MAX, fq) != NULL) {
                     
 					if (line[0] == '>' )	// then we have
@@ -803,7 +803,7 @@ int read_sequence_from_fasta_and_qual(FILE * fp, FILE * fq, Sequence * seq, int 
 						tok = strtok(NULL, exp);
 					}
                     
-					file_pointer = ftell(fq);
+					//file_pointer = ftell(fq);
 				}
                 
 				if (j != q) {

@@ -53,16 +53,6 @@
 #include <perfect_path.h>
 #include <logger.h>
 
-#ifdef ENABLE_READ_PAIR
-#include <binary_tree.h>
-#include <read_pair.h>
-#endif
-
-#ifdef ENABLE_MARK_PAIR
-#include <binary_tree.h>
-#include <mark_pair.h>
-#endif
-
 /**
  * Returns the next node, and the reverse to come back.
  * This function DO NOT  tells which is the next node
@@ -282,11 +272,12 @@ int db_graph_get_perfect_path_with_first_edge(pathStep * first_step, void (*node
     
 	dBNode *node = first_step->node;
     
-	Nucleotide fst_nucleotide = first_step->label;
+	//Nucleotide fst_nucleotide = first_step->label;
 	//printf("First node\n");
 	//printNode(first_step->node, db_graph->kmer_size);
 	dBNode *current_node = node;
-	Nucleotide nucleotide, nucleotide2;
+    //Nucleotide nucleotide;
+    Nucleotide nucleotide2;
 	int length = 0;
 	char tmp_seq[db_graph->kmer_size + 1];
 	tmp_seq[db_graph->kmer_size] = '\0';
@@ -308,7 +299,7 @@ int db_graph_get_perfect_path_with_first_edge(pathStep * first_step, void (*node
                             db_graph->kmer_size, tmp_seq));
 	}
 	//first edge defined
-	nucleotide = fst_nucleotide;
+	//nucleotide = fst_nucleotide;
 	boolean added = true;
     
 	pathStep current_step, next_step, rev_step;
@@ -374,9 +365,10 @@ int db_graph_get_perfect_path_with_first_edge_all_colours(pathStep * first_step,
 {
 	dBNode *node = first_step->node;
     
-	Nucleotide fst_nucleotide = first_step->label;
+	//Nucleotide fst_nucleotide = first_step->label;
 	dBNode *current_node = node;
-	Nucleotide nucleotide, nucleotide2;
+    //Nucleotide nucleotide;
+    Nucleotide nucleotide2;
 	char tmp_seq[db_graph->kmer_size + 1];
 	tmp_seq[db_graph->kmer_size] = '\0';
     
@@ -393,7 +385,7 @@ int db_graph_get_perfect_path_with_first_edge_all_colours(pathStep * first_step,
                path->length, binary_kmer_to_seq(element_get_kmer(current_node), db_graph->kmer_size, tmp_seq));
 	}
 	//first edge defined
-	nucleotide = fst_nucleotide;
+	//nucleotide = fst_nucleotide;
 	boolean added = true;
     
 	pathStep current_step, next_step, rev_step;
@@ -1179,21 +1171,26 @@ int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions *
     next_step.path = path; //This way, on all the assignments we keep the pointer to the path that was sent to the function originally. 
 	functions->get_starting_step(&next_step, db_graph);
     
-	boolean  try = true;
+	//boolean  try = true;
 	int count = 0;
-	boolean walked, added;
+    boolean walked;
+    boolean added;
     
 	do {
 		walked = false;
         do {            
             added = path_add_node(&next_step, path);
             path_step_assign(&current_step, &next_step);
-            try = false;
+            //try = false;
             functions->pre_step_action(&current_step);
             
             added = false;            
             if (current_step.label != Undefined) {
                 functions->get_next_step(&current_step,&next_step, &rev_step,db_graph);
+            }
+            
+            if (added == false) {
+                // Do something?
             }
             
             functions->step_action(&current_step);
@@ -1260,10 +1257,6 @@ void db_graph_write_graphviz_file(char *filename, dBGraph * db_graph)
                     "<tr><td><font color=\"blue\">%s</font></td></tr>"
                     "<tr><td><font color=\"red\">%s</font></td></tr>"
                     "<tr><td><font color=\"black\">%d</font> </td></tr>"
-#ifdef ENABLE_READ_PAIR
-                    "<tr><td><font color=\"blue\">0x%llX</font></td></tr>"
-                    "<tr><td><font color=\"red\"> 0x%llX </font></td></tr>"
-#endif				
                     
 #ifdef SOLID
                     "<tr><td><font color=\"blue\">%c</font></td></tr>"
@@ -1272,10 +1265,7 @@ void db_graph_write_graphviz_file(char *filename, dBGraph * db_graph)
 #endif
                     "</table>>", seq1, reverse_seq1,
                     node->coverage[0]
-#ifdef ENABLE_READ_PAIR
-                    , (long long unsigned int)db_node_get_signature(0,0,node),
-                    (long long unsigned int)db_node_get_signature(1,0,node)
-#endif	
+	
 #ifdef SOLID
                     ,binary_nucleotide_base_space_to_char(db_node_get_starting_base(forward, node))
                     ,binary_nucleotide_base_space_to_char(db_node_get_starting_base(reverse, node))
@@ -1291,6 +1281,10 @@ void db_graph_write_graphviz_file(char *filename, dBGraph * db_graph)
 			Edges all_edges = db_node_get_edges_for_orientation_all_colours(node, o);
 			Edges ea[NUMBER_OF_COLOURS];
 			int i;
+            
+            if (all_edges < 0) {
+                // Do something???
+            }
             
 			for (i = 0; i < NUMBER_OF_COLOURS; i++) {
 				ea[i] = db_node_get_edges_for_orientation_by_colour(node, o, i);
@@ -1379,72 +1373,7 @@ Nucleotide db_graph_get_best_next_step_nucleotide(dBNode * from, dBNode * previo
     assert(previous != NULL);
     Nucleotide best = Undefined;
     
-#if defined (ENABLE_MARK_PAIR) || defined (ENABLE_READ_PAIR)
-    dBNode * neighbours[4];
-    Nucleotide labels[4];
-    int found = db_graph_get_neighbouring_nodes_all_colours(from, orientation, neighbours, labels, db_graph);
-    int i;
-#endif
-#ifdef ENABLE_READ_PAIR    
-    int j;
-    //TODO: add all the read pairs, at the moment I will assume that we have coverage in the first pair. 
-    
-    
-    // boolean valid = false;
-    int  best_matches = 0, temp_matches = 0, second_best_matches = 0;
-    ReadPairSignature rps = 0;
-    for(j = 0; j < NUMBER_OF_SIGNATURES; j++){
-        rps |= from->signatures[j];//TODO: make this line cleaner 
-    }
-    if (read_pair_count_bits(rps)  > 2 * (READ_PAIR_LENGTH / 3 ) ) {
-        return Undefined;
-    }
-    
-    for (i = 0; i < found; i++) {
-        temp_matches = 0;
-        for(j = 0; j < NUMBER_OF_SIGNATURES; j++){
-            temp_matches += read_pair_count_common_bits(previous->signatures[j], neighbours[i]->signatures[j]);//TODO: make this line cleaner 
-        }
-        if(temp_matches > db_graph->rpda->pair[0]->min_pair_coverage && temp_matches > best_matches){ //Hardcoded 2 matches, may be a variable? Make this even more flexible... 
-            second_best_matches = best_matches;
-            best_matches = temp_matches;
-            best = labels[i];
-        }else if(temp_matches == best_matches){
-            best = Undefined;
-        }
-    }
-    if(best_matches - second_best_matches < db_graph->rpda->pair[0]->min_pair_coverage ){
-        best = Undefined;
-    }
-    
-#elif ENABLE_MARK_PAIR
-    uint32_t conn_count = 0 ;
-    uint32_t curr_count;
-    boolean valid = true;
-    uint32_t supernode_prev = db_node_get_supernode(previous);
-    uint32_t supernode_curr = 0;
-    if (supernode_prev == 0) {
-        valid = false;
-    }
-    for (i = 0; i < found && valid; i++) {
-        supernode_curr = db_node_get_supernode(neighbours[i]);                                            
-        if (supernode_curr != 0) {
-            curr_count = mark_pair_connections_between(supernode_prev, supernode_curr, db_graph->supernode_link);
-            if (conn_count && curr_count) {
-                valid = false;  
-            }
-            if (conn_count == 0 && curr_count ) {
-                conn_count = curr_count;
-            }
-        }
-    }
-    if (valid == false) {
-        best = Undefined;
-    }
-#else
     //TODO: Make this with the coverage. 
-    
-#endif
     
     return best;
 }

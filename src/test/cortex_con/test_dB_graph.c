@@ -47,11 +47,6 @@
 #include <branches.h>
 #include <binary_tree.h>
 
-#ifdef ENABLE_READ_PAIR
-
-#include <read_pair.h>
-#endif
-
 #include <test_dB_graph.h>
 
 
@@ -76,12 +71,9 @@ void test_hash_table_find()
 	//    >read3
 	//    TAGG
 	
-#ifdef ENABLE_READ_PAIR_OLD
-	int seq_length = load_fasta_from_filename_into_graph("../data/test/graph/test_dB_graph.fasta",0,0,&bad_reads, 20, db_graph);
-#else
 	int seq_length = load_fasta_from_filename_into_graph("../data/test/graph/test_dB_graph.fasta",0,&bad_reads, 20, db_graph);
-#endif
-	//length of total sequence
+
+    //length of total sequence
 	CU_ASSERT(seq_length == 16);
 	
 	//number of kmers
@@ -181,11 +173,7 @@ void test_tip_clipping()
 	//GCGTCCCAT
 	//>tip
 	//CGTTT
-#ifdef ENABLE_READ_PAIR_OLD
-	int seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_tip.fasta",0,0,&bad_reads, 20, db_graph);
-#else
 	int seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_tip.fasta",0,&bad_reads, 20, db_graph);
-#endif
 	
 	CU_ASSERT_EQUAL(seq_length,14);
 	
@@ -268,11 +256,7 @@ void test_node_prunning_low_coverage()
 	//>tip
 	//CGTTT
 	
-#ifdef ENABLE_READ_PAIR_OLD
-	int seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_tip.fasta",0,0,&bad_reads, 20, db_graph);
-#else
 	int seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_tip.fasta",0,&bad_reads, 20, db_graph);
-#endif
 	CU_ASSERT_EQUAL(seq_length,14);
 	
 	dBNode* node1 = hash_table_find(element_get_key(seq_to_binary_kmer("CCC", kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
@@ -339,11 +323,7 @@ void test_get_perfect_path() //test db_graph_get_perfect_path
 	//  Sequence is :  ACGTAC
 	// ****
 	
-#ifdef ENABLE_READ_PAIR_OLD
-	seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_two_self_loops.fasta",0,0,&bad_reads, 20, db_graph);
-#else
 	seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_two_self_loops.fasta",0,  &bad_reads, 20,  db_graph);
-#endif
 	CU_ASSERT_EQUAL(seq_length,6);
 	CU_ASSERT_EQUAL(hash_table_get_unique_kmers(db_graph),2);
 	CU_ASSERT_EQUAL(bad_reads,0);
@@ -393,11 +373,7 @@ void test_get_perfect_path() //test db_graph_get_perfect_path
 	bad_reads = 0;
 	dBGraph * db_graph2 = hash_table_new(number_of_bits,bucket_size,10,kmer_size);
 	//db_graph = hash_table_new(number_of_bits,bucket_size,10,kmer_size);
-#ifdef ENABLE_READ_PAIR_OLD
-	seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_one_long_supernode_with_conflict_at_end.fasta",0,0,&bad_reads, 20, db_graph2);
-#else
 	seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_one_long_supernode_with_conflict_at_end.fasta",0, &bad_reads,20,db_graph2);
-#endif
 	db_graph_write_graphviz_file("test2.viz", db_graph2);
 	CU_ASSERT_EQUAL(seq_length,13);
 	CU_ASSERT_EQUAL(hash_table_get_unique_kmers(db_graph2),5);
@@ -462,12 +438,9 @@ void test_get_perfect_path() //test db_graph_get_perfect_path
 	
 	db_graph = hash_table_new(number_of_bits, bucket_size,10,kmer_size);
 	
-#ifdef ENABLE_READ_PAIR_OLD
-	seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_one_long_supernode_with_inward_conflict_at_end.fasta",0,0,&bad_reads, 20, db_graph);
-#else
 	seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_one_long_supernode_with_inward_conflict_at_end.fasta",0,  &bad_reads, 20,  db_graph);
-#endif
-	CU_ASSERT_EQUAL(seq_length,13);
+
+    CU_ASSERT_EQUAL(seq_length,13);
 	CU_ASSERT_EQUAL(hash_table_get_unique_kmers(db_graph),5);
 	CU_ASSERT_EQUAL(bad_reads,0);
 	
@@ -519,11 +492,7 @@ void test_get_perfect_path() //test db_graph_get_perfect_path
 	bad_reads = 0;
 	
 	db_graph = hash_table_new(number_of_bits,bucket_size,10,kmer_size);
-#ifdef ENABLE_READ_PAIR_OLD
-	seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_infinite_loop.fasta",0,0,&bad_reads, 20, db_graph);
-#else
 	seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_infinite_loop.fasta",0, &bad_reads,30,db_graph);
-#endif
 	CU_ASSERT_EQUAL(seq_length,25);
 	CU_ASSERT_EQUAL(hash_table_get_unique_kmers(db_graph),1);
 	CU_ASSERT_EQUAL(bad_reads,0);
@@ -1878,11 +1847,7 @@ void test_y_walk_from_perfect_path_tests() //test db_graph_get_perfect_path
 	//  Sequence is :  ACGTAC
 	// ****
 	
-#ifdef ENABLE_READ_PAIR_OLD
-	seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_two_self_loops.fasta",0,0,&bad_reads, 20, db_graph);
-#else
 	seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_two_self_loops.fasta",0,  &bad_reads, 20,  db_graph);
-#endif
 	CU_ASSERT_EQUAL(seq_length,6);
 	CU_ASSERT_EQUAL(hash_table_get_unique_kmers(db_graph),2);
 	CU_ASSERT_EQUAL(bad_reads,0);
@@ -1933,11 +1898,8 @@ void test_y_walk_from_perfect_path_tests() //test db_graph_get_perfect_path
 	bad_reads = 0;
 	dBGraph * db_graph2 = hash_table_new(number_of_bits,bucket_size,10,kmer_size);
 	//db_graph = hash_table_new(number_of_bits,bucket_size,10,kmer_size);
-#ifdef ENABLE_READ_PAIR_OLD
-	seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_one_long_supernode_with_conflict_at_end.fasta",0,0,&bad_reads, 20, db_graph2);
-#else
+
 	seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_one_long_supernode_with_conflict_at_end.fasta",0, &bad_reads,20,db_graph2);
-#endif
 	db_graph_write_graphviz_file("test2.viz", db_graph2);
 	CU_ASSERT_EQUAL(seq_length,13);
 	CU_ASSERT_EQUAL(hash_table_get_unique_kmers(db_graph2),5);
@@ -2001,11 +1963,7 @@ void test_y_walk_from_perfect_path_tests() //test db_graph_get_perfect_path
 	
 	db_graph = hash_table_new(number_of_bits, bucket_size,10,kmer_size);
 	
-#ifdef ENABLE_READ_PAIR_OLD
-	seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_one_long_supernode_with_inward_conflict_at_end.fasta",0,0,&bad_reads, 20, db_graph);
-#else
 	seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_one_long_supernode_with_inward_conflict_at_end.fasta",0,  &bad_reads, 20,  db_graph);
-#endif
 	db_graph_write_graphviz_file("test3.viz", db_graph);
 	CU_ASSERT_EQUAL(seq_length,13);
 	CU_ASSERT_EQUAL(hash_table_get_unique_kmers(db_graph),5);
@@ -2057,11 +2015,7 @@ void test_y_walk_from_perfect_path_tests() //test db_graph_get_perfect_path
 	bad_reads = 0;
 	
 	db_graph = hash_table_new(number_of_bits,bucket_size,10,kmer_size);
-#ifdef ENABLE_READ_PAIR_OLD
-	seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_infinite_loop.fasta",0,0,&bad_reads, 20, db_graph);
-#else
 	seq_length = load_fasta_from_filename_into_graph("../data/test/graph/generates_graph_with_infinite_loop.fasta",0, &bad_reads,30,db_graph);
-#endif
 
 	tmp_path->kmer_size = kmer_size;
 	
@@ -2320,669 +2274,3 @@ void test_get_all_paths_deep_search(){
 	hash_table_free(&db_graph);
 	
 }
-
-#ifdef ENABLE_READ_PAIR_OLD
-void test_read_pair()
-{
-	int kmer_size = 9;
-	int number_of_bits = 10; 
-	int bucket_size = 30;
-	long long bad_reads = 0; 
-	int seq_length;
-	dBGraph * db_graph;
-	BinaryKmer tmp_kmer1, tmp_kmer2;
-	
-	path_array_destroy_buffers();
-	path_array_initialise_buffers(kmer_size);
-	//
-	
-	db_graph = hash_table_new(number_of_bits,bucket_size,10,kmer_size);
-	
-	seq_length = load_fastq_from_filename_into_graph("../data/test/read_pair/rp_1.fastq",0, 0,&bad_reads, 5, 200, db_graph);
-	seq_length = load_fastq_from_filename_into_graph("../data/test/read_pair/rp_2.fastq",0, 1,&bad_reads, 5, 200, db_graph);
-	
-	
-	
-	db_graph_write_graphviz_file("test_read_pair.gv", db_graph);
-	//So far, we had just been reading the graph. From here, we are naming the end nodes of the different walks and possib
-	
-	dBNode * a = hash_table_find(element_get_key(seq_to_binary_kmer("ATTTGACGC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * b = hash_table_find(element_get_key(seq_to_binary_kmer("CCATCGGCA",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * c = hash_table_find(element_get_key(seq_to_binary_kmer("CCGCTGCCG",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * d = hash_table_find(element_get_key(seq_to_binary_kmer("GCATCACCC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * e = hash_table_find(element_get_key(seq_to_binary_kmer("CCATCACCC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * f = hash_table_find(element_get_key(seq_to_binary_kmer("GCATTTGAC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * g = hash_table_find(element_get_key(seq_to_binary_kmer("GTATTTGAC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * h = hash_table_find(element_get_key(seq_to_binary_kmer("GGATTTGAC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * i = hash_table_find(element_get_key(seq_to_binary_kmer("AACAACTTA",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * j = hash_table_find(element_get_key(seq_to_binary_kmer("AAGTTACCC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);//TODO: validate that I and J are the o
-	dBNode * k = hash_table_find(element_get_key(seq_to_binary_kmer("ACCCCATCG",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	
-	pathStep start_step[7];
-	pathStep end_step[7];
-	
-	//Unconnected path
-	start_step[0].node = i;
-	end_step  [0].node = j;
-	
-	
-	//b is the y node
-	start_step[1].node = e;
-	end_step	[1].node = a;
-	
-	start_step[2].node = d;
-	end_step	[2].node = a;
-	
-	
-	//c is the y node
-	start_step[3].node = h;
-	end_step	[3].node = e;
-	start_step[4].node = g;
-	end_step	[4].node = d;
-	start_step[5].node = f;
-	end_step	[5].node = c;
-	start_step[6].node = k;
-	end_step	[6].node = d;
-	
-	
-    //Unconnected path
-	start_step[0].orientation = reverse;//i
-	end_step	[0].orientation = reverse;//j
-	
-	
-	//b is the y node
-	start_step[1].orientation = reverse;//e
-	end_step  [1].orientation = reverse;//a
-	start_step[2].orientation = reverse;//d
-	end_step  [2].orientation = reverse;//a
-	
-	
-	//c is the y node
-	start_step[3].orientation = forward;//h
-	end_step	[3].orientation = forward;//e
-	start_step[4].orientation = forward;//g
-	end_step	[4].orientation = reverse;//d
-	start_step[5].orientation = forward;//f
-	end_step	[5].orientation = forward;//c
-	start_step[6].orientation = forward;//k
-	end_step	[6].orientation = reverse;//d
-	dBNode * double_y_node[2];
-	
-	double_y_node[0] = b;
-	double_y_node[1] = c;
-	
-	
-	
-	Path * tmp_path = path_new(100, db_graph->kmer_size);
-	pathStep  ps_last, ps_first;
-	int z;
-	db_graph_write_graphviz_file("test_read_pair_a.gv", db_graph);
-	ReadPairDescriptorArray * rpda = new_read_pair_descriptor_array(2, 10, 1, 0, 3, 3, 0, false);
-	/*ReadPairDescriptorArray * new_read_pair_descriptor_array(char capacity, int walk_distance, int max_coverage,
-                                                         int min_bits, int start_length, int max_paths,
-                                                         int min_kmers, boolean stack_as_n)*/
-	
-	read_pair_descriptor_array_add_pair(0, 0, 0, 18, 13,3,1,&simple_iterated_score_paths ,rpda	);
-	
-	db_graph_reset_flags(db_graph);
-	db_graph_write_graphviz_file("test_read_pair_b.gv", db_graph);
-	
-	for(z = 0; z < 7; z++){
-		printf("___________________________________________TEST %d_____________________________________________________________\n", z);
-		path_reset(tmp_path);
-		
-		if(z < 3){
-			db_node_action_set_flag(b, Y_START);
-			db_node_action_unset_flag(c, Y_START);
-		}else{
-			db_node_action_set_flag(c, Y_START);
-			db_node_action_unset_flag(b, Y_START);
-		}
-		
-		read_pair_get_path(start_step[z].node,  &db_node_action_set_flag_visited, rpda, db_graph, tmp_path);
-		//boolean read_pair_get_path(dBNode * node, void (*node_action) (dBNode * node),
-		//				 ReadPairDescriptorArray * rpda, dBGraph * db_graph, Path * path)
-		
-		path_get_last_step(&ps_last, tmp_path);
-		path_get_step_at_index(0, &ps_first, tmp_path);
-		path_to_fasta(tmp_path, stdout);
-		
-		switch (z) {
-			case 1:
-				CU_ASSERT(path_step_equals_without_label(&ps_first, &start_step[1])==true);
-				CU_ASSERT(path_step_equals_without_label(&ps_last, &end_step[1])==true);
-				break;
-			case 0:
-				CU_ASSERT(path_step_equals_without_label(&ps_last, &end_step[0])==true);
-				CU_ASSERT(path_step_equals_without_label(&ps_first, &start_step[0])==true);
-				break;
-			case 2:
-				CU_ASSERT(path_step_equals_without_label(&ps_first, &start_step[2])==true);
-				CU_ASSERT(path_step_equals_without_label(&ps_last, &end_step[2])==true);
-				break;
-			case 3:
-				CU_ASSERT(path_step_equals_without_label(&ps_first, &start_step[3])==true);
-				CU_ASSERT(path_step_equals_without_label(&ps_last, &end_step[3])==true);
-				break;
-			case 4:
-				CU_ASSERT(path_step_equals_without_label(&ps_first, &start_step[4])==true);
-				CU_ASSERT(path_step_equals_without_label(&ps_last, &end_step[4])==true);
-				break;
-			case 5:
-				CU_ASSERT(path_step_equals_without_label(&ps_first, &start_step[5])==true);
-				CU_ASSERT(path_step_equals_without_label(&ps_last, &end_step[5])==true);
-				break;
-			case 6:
-				CU_ASSERT(path_step_equals_without_label(&ps_first, &start_step[6])==true);
-				CU_ASSERT(path_step_equals_without_label(&ps_last, &end_step[6])==true);
-				break;
-			default:
-				break;
-		}
-		
-		
-	}
-	db_graph_write_graphviz_file("test_read_pair_c.gv", db_graph);
-	//Now, we will remove the read pair information and try to load it back. 
-	int y;
-	void clean_read_pair(dBNode * node){
-		for (y = 0; y <rpda->number_of_pairs; y++) {
-			ReadPairDescriptor * rpd = rpda->pair[y];
-			node->signature[rpd->colour][rpd->first]  = 0;
-			node->signature[rpd->colour][rpd->second] = 0;
-			
-		}
-	}
-	hash_table_traverse(&clean_read_pair, db_graph);
-	db_graph_write_graphviz_file("test_read_pair_clean.gv", db_graph);
-	
-	
-	FILE * f1 = fopen("../data/test/read_pair/rp_1.fastq", "r");
-	FILE * f2 = fopen("../data/test/read_pair/rp_2.fastq", "r");
-	
-	rpda->pair[0]->max_read_length = 100;
-	read_pair_enrich_graph(f1, f2, rpda->pair[0],  db_graph);
-	
-	fclose(f1);
-	fclose(f2);
-	
-	db_graph_write_graphviz_file("test_read_pair_enriched.gv", db_graph);
-	//Cleaning up. 
-	destroy_read_pair_descriptor_array(&rpda);
-	
-	path_destroy(tmp_path);
-	hash_table_free(&db_graph);
-}
-
-
-void test_enrich_read_pair()
-{
-	int kmer_size = 9;
-	int number_of_bits = 10; 
-	int bucket_size = 30;
-	long long bad_reads = 0; 
-	int seq_length;
-	dBGraph * db_graph;
-	BinaryKmer tmp_kmer1, tmp_kmer2;
-	
-	path_array_destroy_buffers();
-	path_array_initialise_buffers(kmer_size);
-	//
-	
-	db_graph = hash_table_new(number_of_bits,bucket_size,10,kmer_size);
-	
-	seq_length = load_fastq_from_filename_into_graph("../data/test/read_pair/rp_1.fastq",0, 0,&bad_reads, 5, 200, db_graph);
-	seq_length = load_fastq_from_filename_into_graph("../data/test/read_pair/rp_2.fastq",0, 1,&bad_reads, 5, 200, db_graph);
-	
-	
-	
-	db_graph_write_graphviz_file("test_read_pair.viz", db_graph);
-	//So far, we had just been reading the graph. From here, we are naming the end nodes of the different walks and possib
-	
-	dBNode * a = hash_table_find(element_get_key(seq_to_binary_kmer("ATTTGACGC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * b = hash_table_find(element_get_key(seq_to_binary_kmer("CCATCGGCA",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * c = hash_table_find(element_get_key(seq_to_binary_kmer("CCGCTGCCG",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * d = hash_table_find(element_get_key(seq_to_binary_kmer("GCATCACCC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * e = hash_table_find(element_get_key(seq_to_binary_kmer("CCATCACCC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * f = hash_table_find(element_get_key(seq_to_binary_kmer("GCATTTGAC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * g = hash_table_find(element_get_key(seq_to_binary_kmer("GTATTTGAC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * h = hash_table_find(element_get_key(seq_to_binary_kmer("GGATTTGAC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * i = hash_table_find(element_get_key(seq_to_binary_kmer("AACAACTTA",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * j = hash_table_find(element_get_key(seq_to_binary_kmer("AAGTTACCC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * k = hash_table_find(element_get_key(seq_to_binary_kmer("ACCCCATCG",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	
-	pathStep start_step[7];
-	pathStep end_step[7];
-	
-	//Unconnected path
-	start_step[0].node = i;
-	end_step	[0].node = j;
-	
-	
-	//b is the y node
-	start_step[1].node = e;
-	end_step	[1].node = a;
-	start_step[2].node = d;
-	end_step	[2].node = a;
-	
-	
-	//c is the y node
-	start_step[3].node = h;
-	end_step	[3].node = e;
-	start_step[4].node = g;
-	end_step	[4].node = d;
-	start_step[5].node = f;
-	end_step	[5].node = c;
-	start_step[6].node = k;
-	end_step	[6].node = d;
-	
-	
-    //Unconnected path
-	start_step[0].orientation = reverse;//i
-	end_step	[0].orientation = reverse;//j
-	
-	
-	//b is the y node
-	start_step[1].orientation = reverse;//e
-	end_step	[1].orientation = reverse;//a
-	start_step[2].orientation = reverse;//d
-	end_step	[2].orientation = reverse;//a
-	
-	
-	//c is the y node
-	start_step[3].orientation = forward;//h
-	end_step	[3].orientation = forward;//e
-	start_step[4].orientation = forward;//g
-	end_step	[4].orientation = reverse;//d
-	start_step[5].orientation = forward;//f
-	end_step	[5].orientation = forward;//c
-	start_step[6].orientation = forward;//k
-	end_step	[6].orientation = reverse;//d
-	dBNode * double_y_node[2];
-	
-	double_y_node[0] = b;
-	double_y_node[1] = c;
-	
-	
-	
-	Path * tmp_path = path_new(100, db_graph->kmer_size);
-	pathStep  ps_last, ps_first;
-	int z;
-	
-	ReadPairDescriptorArray * rpda = new_read_pair_descriptor_array(2, 10, 1, 2, 3, 3, 2, false);
-	/*ReadPairDescriptorArray * new_read_pair_descriptor_array(char capacity, int walk_distance, int max_coverage,
-                                                         int min_bits, int start_length, int max_paths,
-                                                         int min_kmers, boolean stack_as_n)*/
-	
-	read_pair_descriptor_array_add_pair(0, 0, 0, 5, 5,3,6,&simple_iterated_score_paths ,rpda	);
-	db_graph_reset_flags(db_graph);
-	//y_walk_dont_mark();
-	for(z = 0; z < 7; z++){
-		
-		path_reset(tmp_path);
-		
-		if(z < 3){
-			db_node_action_set_flag(b, Y_START);
-			db_node_action_unset_flag(c, Y_START);
-		}else{
-			db_node_action_set_flag(c, Y_START);
-			db_node_action_unset_flag(b, Y_START);
-		}
-		
-		read_pair_get_path(start_step[z].node, &db_node_action_set_flag_visited, rpda, db_graph, tmp_path);
-		path_get_last_step(&ps_last, tmp_path);
-		path_get_step_at_index(0, &ps_first, tmp_path);
-		path_to_fasta(tmp_path, stdout);
-		
-		CU_ASSERT(path_step_equals_without_label(&ps_last, &start_step[z])==true);
-		CU_ASSERT(path_step_equals_without_label(&ps_last, &end_step[z])==true);
-		
-	}
-	
-	destroy_read_pair_descriptor_array(&rpda);
-	
-	
-	
-	path_destroy(tmp_path);
-	hash_table_free(&db_graph);
-}
-
-
-
-
-#endif
-
-#ifdef ENABLE_READ_PAIR
-void test_read_pair()
-{
-	int kmer_size = 9;
-	int number_of_bits = 10; 
-	int bucket_size = 30;
-	long long bad_reads = 0; 
-	int seq_length;
-	dBGraph * db_graph;
-	BinaryKmer tmp_kmer1, tmp_kmer2;
-	
-	path_array_destroy_buffers();
-	path_array_initialise_buffers(kmer_size);
-	//
-	
-	db_graph = hash_table_new(number_of_bits,bucket_size,10,kmer_size);
-//	load_fastq_from_filename_into_graph(char *filename, short colour,
-//                                        long long *bad_reads,
-//                                        char quality_cut_off,
-//                                        int max_read_length, int fastq_ascii_offset, dBGraph * db_graph)
-	seq_length = load_fastq_from_filename_into_graph("../data/test/read_pair/rp_1.fastq", 0,&bad_reads, 5, 200, 64,db_graph);
-	seq_length = load_fastq_from_filename_into_graph("../data/test/read_pair/rp_2.fastq", 0,&bad_reads, 5, 200, 64,db_graph);
-	
-	
-	
-	db_graph_write_graphviz_file("test_read_pair.gv", db_graph);
-	//So far, we had just been reading the graph. From here, we are naming the end nodes of the different walks and possib
-	
-	dBNode * a = hash_table_find(element_get_key(seq_to_binary_kmer("ATTTGACGC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * b = hash_table_find(element_get_key(seq_to_binary_kmer("CCATCGGCA",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * c = hash_table_find(element_get_key(seq_to_binary_kmer("CCGCTGCCG",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * d = hash_table_find(element_get_key(seq_to_binary_kmer("GCATCACCC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * e = hash_table_find(element_get_key(seq_to_binary_kmer("CCATCACCC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * f = hash_table_find(element_get_key(seq_to_binary_kmer("GCATTTGAC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * g = hash_table_find(element_get_key(seq_to_binary_kmer("GTATTTGAC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * h = hash_table_find(element_get_key(seq_to_binary_kmer("GGATTTGAC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * i = hash_table_find(element_get_key(seq_to_binary_kmer("AACAACTTA",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * j = hash_table_find(element_get_key(seq_to_binary_kmer("AAGTTACCC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);//TODO: validate that I and J are the o
-	dBNode * k = hash_table_find(element_get_key(seq_to_binary_kmer("ACCCCATCG",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	
-	pathStep start_step[7];
-	pathStep end_step[7];
-	
-	//Unconnected path
-	start_step[0].node = i;
-	end_step  [0].node = j;
-	
-	
-	//b is the y node
-	start_step[1].node = e;
-	end_step	[1].node = a;
-	
-	start_step[2].node = d;
-	end_step	[2].node = a;
-	
-	
-	//c is the y node
-	start_step[3].node = h;
-	end_step	[3].node = e;
-	start_step[4].node = g;
-	end_step	[4].node = d;
-	start_step[5].node = f;
-	end_step	[5].node = c;
-	start_step[6].node = k;
-	end_step	[6].node = d;
-	
-	
-    //Unconnected path
-	start_step[0].orientation = reverse;//i
-	end_step	[0].orientation = reverse;//j
-	
-	
-	//b is the y node
-	start_step[1].orientation = reverse;//e
-	end_step  [1].orientation = reverse;//a
-	start_step[2].orientation = reverse;//d
-	end_step  [2].orientation = reverse;//a
-	
-	
-	//c is the y node
-	start_step[3].orientation = forward;//h
-	end_step	[3].orientation = forward;//e
-	start_step[4].orientation = forward;//g
-	end_step	[4].orientation = reverse;//d
-	start_step[5].orientation = forward;//f
-	end_step	[5].orientation = forward;//c
-	start_step[6].orientation = forward;//k
-	end_step	[6].orientation = reverse;//d
-	dBNode * double_y_node[2];
-	
-	double_y_node[0] = b;
-	double_y_node[1] = c;
-	
-	
-	
-	Path * tmp_path = path_new(100, db_graph->kmer_size);
-	pathStep  ps_last, ps_first;
-	int z;
-	db_graph_write_graphviz_file("test_read_pair_a.gv", db_graph);
-	ReadPairDescriptorArray * rpda = new_read_pair_descriptor_array(2, 10, 1, 0, 3, 3, 0, false);
-	/*ReadPairDescriptorArray * new_read_pair_descriptor_array(char capacity, int walk_distance, int max_coverage,
-     int min_bits, int start_length, int max_paths,
-     int min_kmers, boolean stack_as_n)*/
-	
-	read_pair_descriptor_array_add_pair(0, 0, 0, 18, 13,3,1,&simple_iterated_score_paths ,rpda	);
-	FILE * f1 = fopen("../data/test/read_pair/rp_1.fastq", "r");
-	FILE * f2 = fopen("../data/test/read_pair/rp_2.fastq", "r");
-	
-	rpda->pair[0]->max_read_length = 100;
-	read_pair_search_enrich_graph(f1, f2, rpda->pair[0],  64, db_graph);
-    
-	db_graph_reset_flags(db_graph);
-	db_graph_write_graphviz_file("test_read_pair_b.gv", db_graph);
-	/*
-	for(z = 0; z < 7; z++){
-		printf("___________________________________________TEST %d_____________________________________________________________\n", z);
-		path_reset(tmp_path);
-		
-		if(z < 3){
-			db_node_action_set_flag(b, Y_START);
-			db_node_action_unset_flag(c, Y_START);
-		}else{
-			db_node_action_set_flag(c, Y_START);
-			db_node_action_unset_flag(b, Y_START);
-		}
-		
-		read_pair_get_path(start_step[z].node,  &db_node_action_set_flag_visited, rpda, db_graph, tmp_path);
-		//boolean read_pair_get_path(dBNode * node, void (*node_action) (dBNode * node),
-		//				 ReadPairDescriptorArray * rpda, dBGraph * db_graph, Path * path)
-		
-		path_get_last_step(&ps_last, tmp_path);
-		path_get_step_at_index(0, &ps_first, tmp_path);
-		path_to_fasta(tmp_path, stdout);
-		
-		switch (z) {
-			case 1:
-				CU_ASSERT(path_step_equals_without_label(&ps_first, &start_step[1])==true);
-				CU_ASSERT(path_step_equals_without_label(&ps_last, &end_step[1])==true);
-				break;
-			case 0:
-				CU_ASSERT(path_step_equals_without_label(&ps_last, &end_step[0])==true);
-				CU_ASSERT(path_step_equals_without_label(&ps_first, &start_step[0])==true);
-				break;
-			case 2:
-				CU_ASSERT(path_step_equals_without_label(&ps_first, &start_step[2])==true);
-				CU_ASSERT(path_step_equals_without_label(&ps_last, &end_step[2])==true);
-				break;
-			case 3:
-				CU_ASSERT(path_step_equals_without_label(&ps_first, &start_step[3])==true);
-				CU_ASSERT(path_step_equals_without_label(&ps_last, &end_step[3])==true);
-				break;
-			case 4:
-				CU_ASSERT(path_step_equals_without_label(&ps_first, &start_step[4])==true);
-				CU_ASSERT(path_step_equals_without_label(&ps_last, &end_step[4])==true);
-				break;
-			case 5:
-				CU_ASSERT(path_step_equals_without_label(&ps_first, &start_step[5])==true);
-				CU_ASSERT(path_step_equals_without_label(&ps_last, &end_step[5])==true);
-				break;
-			case 6:
-				CU_ASSERT(path_step_equals_without_label(&ps_first, &start_step[6])==true);
-				CU_ASSERT(path_step_equals_without_label(&ps_last, &end_step[6])==true);
-				break;
-			default:
-				break;
-		}
-		
-		
-	}
-	db_graph_write_graphviz_file("test_read_pair_c.gv", db_graph);
-	//Now, we will remove the read pair information and try to load it back. 
-	int y;
-	void clean_read_pair(dBNode * node){
-		for (y = 0; y <rpda->number_of_pairs; y++) {
-			ReadPairDescriptor * rpd = rpda->pair[y];
-			node->signature[rpd->colour][rpd->first]  = 0;
-			node->signature[rpd->colour][rpd->second] = 0;
-			
-		}
-	}
-	hash_table_traverse(&clean_read_pair, db_graph);
-	db_graph_write_graphviz_file("test_read_pair_clean.gv", db_graph);
-	
-	
-	FILE * f1 = fopen("../data/test/read_pair/rp_1.fastq", "r");
-	FILE * f2 = fopen("../data/test/read_pair/rp_2.fastq", "r");
-	
-	rpda->pair[0]->max_read_length = 100;
-	read_pair_enrich_graph(f1, f2, rpda->pair[0],  db_graph);
-	
-	fclose(f1);
-	fclose(f2);
-	
-	db_graph_write_graphviz_file("test_read_pair_enriched.gv", db_graph);
-	//Cleaning up. 
-	destroy_read_pair_descriptor_array(&rpda);
-	*/
-	path_destroy(tmp_path);
-	hash_table_free(&db_graph);
-}
-
-
-void test_enrich_read_pair()
-{
-	int kmer_size = 9;
-	int number_of_bits = 10; 
-	int bucket_size = 30;
-	long long bad_reads = 0; 
-	int seq_length;
-	dBGraph * db_graph;
-	BinaryKmer tmp_kmer1, tmp_kmer2;
-	
-	path_array_destroy_buffers();
-	path_array_initialise_buffers(kmer_size);
-	//
-	
-	db_graph = hash_table_new(number_of_bits,bucket_size,10,kmer_size);
-	
-	seq_length = load_fastq_from_filename_into_graph("../data/test/read_pair/rp_1.fastq",0, 0,&bad_reads, 5, 200, db_graph);
-	seq_length = load_fastq_from_filename_into_graph("../data/test/read_pair/rp_2.fastq",0, 1,&bad_reads, 5, 200, db_graph);
-	
-	
-	
-	db_graph_write_graphviz_file("test_read_pair.viz", db_graph);
-	//So far, we had just been reading the graph. From here, we are naming the end nodes of the different walks and possib
-	
-	dBNode * a = hash_table_find(element_get_key(seq_to_binary_kmer("ATTTGACGC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * b = hash_table_find(element_get_key(seq_to_binary_kmer("CCATCGGCA",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * c = hash_table_find(element_get_key(seq_to_binary_kmer("CCGCTGCCG",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * d = hash_table_find(element_get_key(seq_to_binary_kmer("GCATCACCC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * e = hash_table_find(element_get_key(seq_to_binary_kmer("CCATCACCC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * f = hash_table_find(element_get_key(seq_to_binary_kmer("GCATTTGAC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * g = hash_table_find(element_get_key(seq_to_binary_kmer("GTATTTGAC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * h = hash_table_find(element_get_key(seq_to_binary_kmer("GGATTTGAC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * i = hash_table_find(element_get_key(seq_to_binary_kmer("AACAACTTA",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * j = hash_table_find(element_get_key(seq_to_binary_kmer("AAGTTACCC",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	dBNode * k = hash_table_find(element_get_key(seq_to_binary_kmer("ACCCCATCG",  kmer_size, &tmp_kmer1), kmer_size, &tmp_kmer2) ,db_graph);
-	
-	pathStep start_step[7];
-	pathStep end_step[7];
-	
-	//Unconnected path
-	start_step[0].node = i;
-	end_step	[0].node = j;
-	
-	
-	//b is the y node
-	start_step[1].node = e;
-	end_step	[1].node = a;
-	start_step[2].node = d;
-	end_step	[2].node = a;
-	
-	
-	//c is the y node
-	start_step[3].node = h;
-	end_step	[3].node = e;
-	start_step[4].node = g;
-	end_step	[4].node = d;
-	start_step[5].node = f;
-	end_step	[5].node = c;
-	start_step[6].node = k;
-	end_step	[6].node = d;
-	
-	
-    //Unconnected path
-	start_step[0].orientation = reverse;//i
-	end_step	[0].orientation = reverse;//j
-	
-	
-	//b is the y node
-	start_step[1].orientation = reverse;//e
-	end_step	[1].orientation = reverse;//a
-	start_step[2].orientation = reverse;//d
-	end_step	[2].orientation = reverse;//a
-	
-	
-	//c is the y node
-	start_step[3].orientation = forward;//h
-	end_step	[3].orientation = forward;//e
-	start_step[4].orientation = forward;//g
-	end_step	[4].orientation = reverse;//d
-	start_step[5].orientation = forward;//f
-	end_step	[5].orientation = forward;//c
-	start_step[6].orientation = forward;//k
-	end_step	[6].orientation = reverse;//d
-	dBNode * double_y_node[2];
-	
-	double_y_node[0] = b;
-	double_y_node[1] = c;
-	
-	
-	
-	Path * tmp_path = path_new(100, db_graph->kmer_size);
-	pathStep  ps_last, ps_first;
-	int z;
-	
-	ReadPairDescriptorArray * rpda = new_read_pair_descriptor_array(2, 10, 1, 2, 3, 3, 2, false);
-	/*ReadPairDescriptorArray * new_read_pair_descriptor_array(char capacity, int walk_distance, int max_coverage,
-     int min_bits, int start_length, int max_paths,
-     int min_kmers, boolean stack_as_n)*/
-	
-	read_pair_descriptor_array_add_pair(0, 0, 0, 5, 5,3,6,&simple_iterated_score_paths ,rpda	);
-	db_graph_reset_flags(db_graph);
-	//y_walk_dont_mark();
-	for(z = 0; z < 7; z++){
-		
-		path_reset(tmp_path);
-		
-		if(z < 3){
-			db_node_action_set_flag(b, Y_START);
-			db_node_action_unset_flag(c, Y_START);
-		}else{
-			db_node_action_set_flag(c, Y_START);
-			db_node_action_unset_flag(b, Y_START);
-		}
-		
-		read_pair_get_path(start_step[z].node, &db_node_action_set_flag_visited, rpda, db_graph, tmp_path);
-		path_get_last_step(&ps_last, tmp_path);
-		path_get_step_at_index(0, &ps_first, tmp_path);
-		path_to_fasta(tmp_path, stdout);
-		
-		CU_ASSERT(path_step_equals_without_label(&ps_last, &start_step[z])==true);
-		CU_ASSERT(path_step_equals_without_label(&ps_last, &end_step[z])==true);
-		
-	}
-	
-	destroy_read_pair_descriptor_array(&rpda);
-	
-	
-	
-	path_destroy(tmp_path);
-	hash_table_free(&db_graph);
-}
-#endif

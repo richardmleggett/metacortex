@@ -191,19 +191,6 @@ int  main()
    }
 */
 
-#ifdef ENABLE_READ_PAIR
-
-if (NULL == CU_add_test(pSuite, "Test get all paths",  test_get_all_paths)){
-     CU_cleanup_registry();
-     return CU_get_error();
- }
-
-if (NULL == CU_add_test(pSuite, "Test read pair",  test_read_pair)){
-     CU_cleanup_registry();
-     return CU_get_error();
- }
-
-#endif
 
 
 

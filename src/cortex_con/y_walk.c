@@ -81,10 +81,10 @@ static boolean is_conflicted(pathStep * current_step, pathStep * next_step,
 	}
 }
 
-static void path_step_do_nothing(pathStep * ps)
-{
-	return;
-}
+//static void path_step_do_nothing(pathStep * ps)
+//{
+//	return;
+//}
 
 
 static void pre_step_action(pathStep * ps){
@@ -278,13 +278,16 @@ Path *y_walk_get_path(dBNode * node, Orientation orientation,
 	wf.post_step_action = &post_step_action;
 	
     
-	if(orientation != undefined){
+	if (orientation != undefined) {
 		only_one_edge = db_node_has_precisely_one_edge(first.node, first.orientation, &first.label);
 		wf.get_starting_step = &get_first_step_identity;
 		
-	}else {
+	} else {
         first.orientation = reverse;
         only_one_edge = db_node_has_precisely_one_edge(first.node, first.orientation, &first.label);
+        if (only_one_edge) {
+            // Do something?
+        }
     }
     
     

@@ -48,9 +48,6 @@
 
 #define MAGIC_TEXT "BINARY_HASH"
 #define HASH_VERSION 1
-#ifdef ENABLE_READ_PAIR
-struct read_pair_descriptor_array;
-#endif
 typedef struct {
 	long long number_buckets;
 	long long unique_kmers;
@@ -74,9 +71,7 @@ typedef struct {
     double average_number_of_connections[NUMBER_OF_COLOURS]; 
     long long common_kmers_in_all_colours; 
     unsigned long perfect_path_count;
-#ifdef ENABLE_READ_PAIR
-    struct read_pair_descriptor_array * rpda;
-#endif
+
 #ifdef ENABLE_MARK_PAIR
 //    BinaryTree * supernode_links;
     void * supernode_link;

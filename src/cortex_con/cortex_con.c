@@ -48,10 +48,6 @@
 #include <y_walk.h>
 #include <logger.h>
 #include <assert.h>
-#ifdef ENABLE_READ_PAIR
-#include <binary_tree.h>
-#include <read_pair.h>
-#endif
 #ifdef ENABLE_MARK_PAIR
 #include <binary_tree.h>
 #include <mark_pair.h>
@@ -95,200 +91,6 @@ char *remove_file_extension(char *filename)
 
 	return filename;
 }
-
-#ifdef ENABLE_READ_PAIR
-void load_pair_data(char* filename, ReadPairDescriptorArray * rpda, int fastq_ascii_offset,dBGraph * db_graph) {
-    FILE *fp_fof = fopen(filename, "r");
-    FILE *fp_1;
-    FILE *fp_2;
-    char file_1[1000];
-    char file_2[1000];
-    int read_length = 0;
-    int read_tolerance = 0;
-    int insert_size = 0;
-    int allowed_misses = 0;
-    int min_pair_coverage = 0;
-    int max_pair_coverage = 0;
-    int depth;
-    
-    if (!fp_fof) {
-        printf("Error: can't open file %s\n", filename);
-        exit(-1);
-    }
-
-    while (!feof(fp_fof)) {
-        fscanf(fp_fof, "%s %s %d %d %d %d %d %d %d\n", file_1, file_2, &insert_size, &read_length, &read_tolerance, &allowed_misses, &min_pair_coverage, &max_pair_coverage, &depth);
-
-        if (strcmp(file_1, file_2) == 0) {
-            log_and_screen_printf("Error: Both files in the pair are the same!\n");
-            fclose(fp_fof);
-            exit(-1);
-        }
-        if (insert_size<(read_length*2)) {
-            log_and_screen_printf("Error: Bad insert size (%'d).\n", insert_size);
-            fclose(fp_fof);
-            exit(-1);
-        }
-        
-        if (read_length < 1) {
-            log_and_screen_printf("Error: Bad read length (%'d).\n", read_length);
-            fclose(fp_fof);
-            exit(-1);
-        }
-        if (min_pair_coverage < 1) {
-            log_and_screen_printf("Error: Bad minimum pair coverage(%'d).\n", min_pair_coverage);
-            fclose(fp_fof);
-            exit(-1);
-        }
-        if (max_pair_coverage < 1) {
-            log_and_screen_printf("Error: Bad maximum read pair coverage (%'d).\n", max_pair_coverage);
-            fclose(fp_fof);
-            exit(-1);
-        }
-        
-        if (depth < 1) {
-            log_and_screen_printf("Error: Bad depth (%'d).\n", depth);
-            fclose(fp_fof);
-            exit(-1);
-        }
-
-        if ((read_tolerance < 0) || (read_tolerance > insert_size)) {
-            log_and_screen_printf("Error: Bad tolerance (%'d).\n", read_tolerance);
-            fclose(fp_fof);
-            exit(-1);
-        }
-        
-        if ((allowed_misses < 0) || (allowed_misses > read_length)) {
-            log_and_screen_printf("Error: Bad allowed misses (%'d).\n", allowed_misses);
-            fclose(fp_fof);
-            exit(-1);
-        }
-
-        fp_1 = fopen(file_1, "r");
-        if (!fp_1) {
-            log_and_screen_printf("Error: can't open file %s\n", file_1);
-            fclose(fp_fof);
-            exit(-1);
-        }
-        
-        fp_2 = fopen(file_2, "r");
-        if (!fp_2) {
-            log_and_screen_printf("Error: can't open file %s\n", file_2);
-            fclose(fp_fof);
-            fclose(fp_1);
-            exit(-1);
-        }
-        
-        read_pair_descriptor_array_add_pair(0, 0, 0, insert_size, read_length, read_tolerance, min_pair_coverage, max_pair_coverage,  allowed_misses, depth,  &simple_iterated_score_paths, rpda);
-
-
-        fflush(stdout);
-	
-        fclose(fp_1);
-        fclose(fp_2);        
-    }
-#ifdef THREADS
-    hash_table_threaded_traverse(&db_node_action_clear_flags, db_graph);
-#else
-    hash_table_traverse(&db_node_action_clear_flags, db_graph);
-#endif
-    read_pair_mark_contiguous_perfect_paths(read_pair_get_maximum_insert_size(rpda) , db_graph);//TODO: bring back several read pairsr
-    
-    rewind(fp_fof);
-    while (!feof(fp_fof)) {
-        fscanf(fp_fof, "%s %s %d %d %d %d %d %d %d\n", file_1, file_2, &insert_size, &read_length, &read_tolerance, &allowed_misses,&min_pair_coverage, &max_pair_coverage, &depth);
-        
-        printf("Enriching pair: %s and %s, insert size %'d read length %'d tolerance %'d allowed misses %'d\n", file_1, file_2, insert_size, read_length, read_tolerance, allowed_misses);
-       
-        
-        fp_1 = fopen(file_1, "r");
-        if (!fp_1) {
-            log_and_screen_printf("Error: can't open file %s\n", file_1);
-            fclose(fp_fof);
-            exit(-1);
-        }
-        
-        fp_2 = fopen(file_2, "r");
-        if (!fp_2) {
-            log_and_screen_printf("Error: can't open file %s\n", file_2);
-            fclose(fp_fof);
-            fclose(fp_1);
-            exit(-1);
-        }
-        
-        fflush(stdout);
-		
-        //read_pair_enrich_graph(fp_1, fp_2, rpda->pair[0], fastq_ascii_offset,db_graph);
-        read_pair_search_enrich_graph(fp_1, fp_2, rpda->pair[0], fastq_ascii_offset,db_graph);
-        
-        fclose(fp_1);
-        fclose(fp_2);        
-    }
-    
-    db_graph->rpda = rpda;
-
-    fclose(fp_fof);
-}
-
-#elif ENABLE_MARK_PAIR
-
-void load_pair_data(char* filename,  int fastq_ascii_offset,dBGraph * db_graph) {
-    FILE *fp_fof = fopen(filename, "r");
-    FILE *fp_1;
-    FILE *fp_2;
-    char file_1[1000];
-    char file_2[1000];
-        
-    if (!fp_fof) {
-        printf("Error: can't open file %s\n", filename);
-        exit(-1);
-    }
-    
-#ifdef THREADS
-    hash_table_threaded_traverse(&db_node_action_clear_flags, db_graph);
-#else
-    hash_table_traverse(&db_node_action_clear_flags, db_graph);
-#endif
-    mark_pair_mark_contiguous_perfect_paths(db_graph);
-    
-    rewind(fp_fof);
-    while (!feof(fp_fof)) {
-        fscanf(fp_fof, "%s %s\n", file_1, file_2);
-        
-        printf("Enriching pair: %s and %s", file_1, file_2);
-        
-        
-        fp_1 = fopen(file_1, "r");
-        if (!fp_1) {
-            log_and_screen_printf("Error: can't open file %s\n", file_1);
-            fclose(fp_fof);
-            exit(-1);
-        }
-        
-        fp_2 = fopen(file_2, "r");
-        if (!fp_2) {
-            log_and_screen_printf("Error: can't open file %s\n", file_2);
-            fclose(fp_fof);
-            fclose(fp_1);
-            exit(-1);
-        }
-        
-        
-        
-        fflush(stdout);
-		
-        //read_pair_enrich_graph(fp_1, fp_2, rpda->pair[0], fastq_ascii_offset,db_graph);
-       // read_pair_search_enrich_graph(fp_1, fp_2, rpda->pair[0], fastq_ascii_offset,db_graph);
-        
-        fclose(fp_1);
-        fclose(fp_2);        
-    }
-    
-    
-    fclose(fp_fof);
-}
-
-#endif
 
 boolean add_read_file(char* filename, int colour, int pair, int* n_files, ReadFileDescriptor* list[])
 {
@@ -362,10 +164,8 @@ int main(int argc, char **argv)
 {
 	setlocale (LC_ALL, "");
     FILE *fp_fnames;
-    int hash_key_bits;
     dBGraph *db_graph = NULL;
     short kmer_size;
-    int bucket_size = 0;
     CmdLine cmd_line;
     boolean using_colours = false;
     ReadFileDescriptor* file_list[FILE_LIST_SIZE];
@@ -382,22 +182,12 @@ int main(int argc, char **argv)
     cmd_line = parse_cmdline(argc, argv, sizeof(Element));
 
     output_basic_info(cmd_line);
-    
-#ifdef ENABLE_READ_PAIR
-    log_and_screen_printf("Read pair enabled, %lu signatures on %i segments\n", READ_PAIR_LENGTH, READ_PAIR_SEGMENTS);
-#endif
-    
-#ifdef ENABLE_MARK_PAIR
-    log_and_screen_printf("Read pair enabled\n");
-#endif
         
     if(cmd_line.input_file_format == HASH) {
         db_graph = hash_table_read_dumped_memory(cmd_line.input_filename);        
     } else {
         fp_fnames = fopen(cmd_line.input_filename, "r");	//open file of file names
         kmer_size = cmd_line.kmer_size;
-        hash_key_bits = cmd_line.number_of_buckets_bits;	//number of buckets: 2^hash_key_bits
-        bucket_size = cmd_line.bucket_size;
        // DEBUG = cmd_line.verbose;
         
         timestamp();
@@ -671,72 +461,7 @@ int main(int argc, char **argv)
         }
     }
     
-    if (cmd_line.output_fasta) {
-              
-#ifdef ENABLE_MARK_PAIR
-        if (cmd_line.read_pair_filename[0] != 0) {
-            // Load pair file and enrich graph
-            
-            timestamp();
-            fflush(stdout);
-            //load_pair_data(cmd_line.read_pair_filename, cmd_line.quality_score_offset,db_graph);
-            mark_pair_load_pair_data(cmd_line.read_pair_filename, cmd_line.quality_score_offset,db_graph);
-            fflush(stdout);
-            log_and_screen_printf("Cleaning flags...\n");
-#ifdef THREADS
-            hash_table_threaded_traverse(&db_node_action_clear_flags, db_graph);
-#else
-            hash_table_traverse(&db_node_action_clear_flags, db_graph);
-#endif
-            mark_pair_print_paths(cmd_line.output_fasta_filename, cmd_line.max_length, cmd_line.output_coverages, cmd_line.graphviz, db_graph);
-        }   
-        
-//        read_pair_print_paths_single_walk(cmd_line.output_fasta_filename, cmd_line.max_length, cmd_line.output_coverages, cmd_line.graphviz,rpda, db_graph);
-        log_and_screen_printf("Finished printing read_pair paths.\n");
-#elif ENABLE_READ_PAIR
-        if (cmd_line.read_pair_enabled) {
-            ReadPairDescriptorArray * rpda = new_read_pair_descriptor_array(10,
-                                                                            cmd_line.read_pair_distance,
-                                                                            cmd_line.read_pair_coverage,
-                                                                            cmd_line.read_pair_min_bits,
-                                                                            cmd_line.read_pair_start_length,
-                                                                            cmd_line.read_pair_max_paths,
-                                                                            cmd_line.read_pair_min_kmers,
-                                                                            cmd_line.print_uncertain_as_n);
-            
-            fflush(stdout);
-            db_graph->rpda = rpda;
-            if (cmd_line.read_pair_filename[0] != 0) {
-                // Load pair file and enrich graph
-                
-                timestamp();
-                fflush(stdout);
-                load_pair_data(cmd_line.read_pair_filename, rpda, cmd_line.quality_score_offset,db_graph);
-                fflush(stdout);
-            }
-            
-            if (rpda->number_of_pairs > 0) {
-                timestamp();
-                fflush(stdout);
-                log_and_screen_printf("\nDumping contigs from read pairs to %s\n", cmd_line.output_fasta_filename);
-                clear_visited_count();
-               // read_pair_print_paths(cmd_line.output_fasta_filename, cmd_line.max_length, cmd_line.output_coverages, cmd_line.graphviz,rpda, db_graph); //TODO: have different calls for the different algorithms
-#ifdef THREADS
-                hash_table_threaded_traverse(&db_node_action_clear_flags, db_graph);
-#else
-                hash_table_traverse(&db_node_action_clear_flags, db_graph);
-#endif
-                read_pair_print_paths_single_walk(cmd_line.output_fasta_filename, cmd_line.max_length, cmd_line.output_coverages, cmd_line.graphviz,rpda, db_graph);
-                log_and_screen_printf("Finished printing read_pair paths.\n");
-            } else {
-                // Should probably just display a warning and call y_walk, but useful for now
-                printf("Error: no read pair descriptors. Can't continue.\n");
-                exit(-1);
-            }
-            
-            destroy_read_pair_descriptor_array(&rpda);
-        }
-#else
+    if (cmd_line.output_fasta) {              
         switch (cmd_line.algorithm) {
             case PERFECT_PATH:
                 log_and_screen_printf("\nDumping supernodes: %s\n", cmd_line.output_fasta_filename);
@@ -770,7 +495,6 @@ int main(int argc, char **argv)
                 log_and_screen_printf("Algorithm not implmeneted \n");
                 break;
         }
-#endif
     }
     
     if (cmd_line.graphviz) {

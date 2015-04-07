@@ -83,10 +83,6 @@ typedef struct
 	boolean output_kmer_coverage_known;
 	boolean output_reference_coverage_file_known;
 	boolean output_kmer_coverage_know ;
-    //read pairs
-#if defined (ENABLE_MARK_PAIR) || defined ( ENABLE_READ_PAIR)
-    boolean read_pair_enabled;
-#endif
 
     //colour space
 #ifdef SOLID
@@ -135,18 +131,6 @@ typedef struct
     int min_subgraph_size;
     int min_contig_length;
     TraverseAlgorithm algorithm;
-    
-    //read pairs
-#if defined (ENABLE_MARK_PAIR) || defined ( ENABLE_READ_PAIR)
-    int read_pair_distance;
-    int read_pair_coverage;
-    int read_pair_tolerance;
-    int read_pair_min_bits;
-    int read_pair_start_length;
-    char read_pair_filename[LENGTH_FILENAME];
-    int read_pair_max_paths;
-    int read_pair_min_kmers;
-#endif
     
 #ifdef ENABLE_MARK_PAIR
     char mark_pair_filename[LENGTH_FILENAME];

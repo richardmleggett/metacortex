@@ -48,11 +48,6 @@
 #include <element.h>
 //If this is just for the flags, maybe we want to have the Path-specific node actions in the path
 #include <path.h> 
-#ifdef ENABLE_READ_PAIR
-#include <binary_tree.h>
-#include <dB_graph.h>
-#include <read_pair.h>
-#endif
 
 long long int visited_count = 0;
 
@@ -948,11 +943,6 @@ db_node_print_binary_by_colour(FILE * fp, dBNode * node, short colour,
 	fwrite(&coverage, sizeof(uint32_t), 1, fp);
 	fwrite(&edges, sizeof(Edges), 1, fp);
 
-#ifdef ENABLE_READ_PAIR
-	//ReadPairSignature signature = db_node_get_signature(0, 0, node);
-	//fwrite(&signature, sizeof(ReadPairSignature), 1, fp);
-#endif
-
 #ifdef SOLID
 #warning solid2
 	//Edges first_base = db_node_get_all_starging_bases(node);
@@ -1181,143 +1171,6 @@ boolean element_check_for_flag(Element * node, Flags flag)
 {
 	return db_node_check_for_flag((dBNode *) node, flag);
 }
-
-#ifdef ENABLE_READ_PAIR_OLD
-
-boolean db_node_action_add_read_pair(long long count, short pair, short colour, dBNode * node)
-{
-	//ReadPairSignature old = node->signature[colour][pair];
-	ReadPairSignature old = db_node_get_signature( pair,  colour, node);
-	READ_PAIR_DATATYPE one = 1;
-	
-	node->signature[colour][pair] |= one << ((count - 1) % READ_PAIR_LENGTH); 
-	
-//	printf("count: %lld, pair: %i, old %d, new: %d\n", count, pair, old,  node->signature[colour][pair]);
-	
-	return node->signature[colour][pair] != old;	//returns true if the signature changed the node or not.
-}
-
-int db_node_count_signature_matches(ReadPairSignature signature, short pair, short colour, dBNode * node)
-{
-	ReadPairSignature matches = signature & db_node_get_signature(pair, colour, node);
-	ReadPairSignature tmp;
-	int i;
-	int count = 0;
-	for (i = 0; i < READ_PAIR_LENGTH; i++) {
-		tmp = 1 << i;
-		if (tmp & matches) {
-			count++;
-		}
-	}
-	return count;
-}
-
-ReadPairSignature db_node_get_signature(short pair, short colour, dBNode * node)
-{
-	return node->signature[colour][pair];
-}
-
-int db_node_set_signature(ReadPairSignature signature, short pair, short colour, dBNode * node)
-{
-	int matches = db_node_count_signature_matches(signature, pair, colour, node);
-	node->signature[colour][pair] |= signature;
-	return matches;
-}
-#elif defined ENABLE_MARK_PAIR
-
-uint32_t db_node_get_supernode(dBNode * node){
-    return node->supernode;
-}
-
-void db_node_set_supernode_id(uint32_t id, dBNode * node){
-    node->supernode = id;
-}
-
-
-
-#elif defined ENABLE_READ_PAIR
-
-ReadPairSignature db_node_get_signature(short pair, ReadPairBitfield bitfield, dBNode * node)
-{
-//    short signature_index = (pair * 4) + bitfield;
-
-    short signature_index = pair;
-    if(bitfield == Bitfield_PerfectPath){
-        signature_index = NUMBER_OF_SIGNATURES - 1;
-    }
-    assert(pair >= 0);
-    assert(bitfield >= 0);
-    assert(bitfield <= 4);
-    
-    return node->signatures[signature_index];
-}
-
-int db_node_count_signature_matches(ReadPairSignature signature, short pair, ReadPairBitfield bitfield, dBNode * node)
-{
-    assert(pair >= 0);
-    assert(bitfield >= 0);
-    assert(bitfield <= 4);
-    
-	ReadPairSignature matches = signature & db_node_get_signature(pair, bitfield, node);
-	ReadPairSignature tmp;
-	int i;
-	int count = 0;
-
-    
-
-	for (i = 0; i < READ_PAIR_LENGTH; i++) {
-		tmp = 1 << i;
-		if (tmp & matches) {
-			count++;
-		}
-	}
-    
-	return count;
-}
-
-int db_node_set_signature(ReadPairSignature signature, short pair, ReadPairBitfield bitfield, dBNode * node)
-{
-    assert(pair >= 0);
-    assert(bitfield >= 0);
-    assert(bitfield <= 4);
-    
-//    short signature_index = (pair * 4) + bitfield;
-     short signature_index = pair;
-    if (bitfield == Bitfield_PerfectPath) {
-        signature_index = NUMBER_OF_SIGNATURES - 1;
-    }
- //   int matches = db_node_count_signature_matches(signature, pair, bitfield, node);
-//TODO: validate there are no collisions. 
-    
-    
-    node->signatures[signature_index] |= signature;
-    	    
-    return 0;
-}
-
-boolean db_node_action_add_read_pair(long long count, short pair, ReadPairBitfield bitfield, dBNode * node)
-{
-    assert(pair >= 0);
-    assert(bitfield >= 0);
-    assert(bitfield <= 4);
-    
-    //    short signature_index = (pair * 4) + bitfield;
-
-    short signature_index = pair;
-    if (pair == Bitfield_PerfectPath) {
-        signature_index = NUMBER_OF_SIGNATURES - 1;
-    }
-	ReadPairSignature old = db_node_get_signature(pair, bitfield, node);
-	READ_PAIR_DATATYPE one = 1;
-
-   
-
-//    node->signatures[signature_index] |= one << ((count - 1) % READ_PAIR_LENGTH);
-    node->signatures[signature_index] |= one << ((count - 1) % READ_PAIR_LENGTH);
-	return node->signatures[signature_index] != old;	//returns true if the signature changed the node or not.
-}
-
-#endif
 
 //Code to deal with the SOLiD specific stuff. 
 #ifdef SOLID

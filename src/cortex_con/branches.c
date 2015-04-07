@@ -58,7 +58,8 @@ static boolean continue_traversing(pathStep * current_step,
     cont = current_step->label != Undefined;
     //cont = cont && db_node_has_precisely_one_edge(current_step->node, current_step->orientation, &n);
     path_get_step_at_index(0, &first, temp_path);
-    int n_fwd, n_rev;
+    int n_fwd;
+    int n_rev;
     /* We don't do these checks for the first node - in case it's a Y node */
     if(temp_path->length > 1) {
         if (db_node_check_for_any_flag(next_step->node, next_step->orientation == forward? VISITED_FORWARD:VISITED_REVERSE)) {
@@ -76,6 +77,9 @@ static boolean continue_traversing(pathStep * current_step,
         if (n_fwd == 0) {
             path_add_stop_reason(LAST, PATH_FLAG_STOP_BLUNT_END, temp_path);
             cont = false;
+        }
+        if (n_rev == 0) {
+            // Do nothing
         }
        
     }

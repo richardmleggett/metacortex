@@ -62,11 +62,7 @@ void test_dump_load_binary(){
 
   db_graph_pre = hash_table_new(number_of_bits_pre,bucket_size,max_retries,kmer_size);
 
-#ifdef ENABLE_READ_PAIR_OLD
-   seq_length_pre = load_fasta_from_filename_into_graph("../data/test/graph/test_dB_graph.fasta", 0, 0, &bad_reads, max_chunk_len_reading_from_fasta, db_graph_pre);
-#else
   seq_length_pre = load_fasta_from_filename_into_graph("../data/test/graph/test_dB_graph.fasta", 0, &bad_reads, max_chunk_len_reading_from_fasta, db_graph_pre);
-#endif
 
   db_graph_dump_binary("../data/test/graph/dump_graph.bin", &db_node_condition_always_true,db_graph_pre); 
 
@@ -77,11 +73,7 @@ void test_dump_load_binary(){
 
   
   db_graph_post = hash_table_new(number_of_bits_post,bucket_size,max_retries,kmer_size);
-#ifdef ENABLE_READ_PAIR_OLD
-   seq_length_post = load_binary_from_filename_into_graph("../data/test/graph/dump_graph.bin", db_graph_post, 0 ,0 ,true);
-#else
   seq_length_post = load_binary_from_filename_into_graph("../data/test/graph/dump_graph.bin", db_graph_post,0,true);
-#endif
   CU_ASSERT_EQUAL(seq_length_post,15);
   CU_ASSERT_EQUAL(hash_table_get_unique_kmers(db_graph_post),5);
   
@@ -220,11 +212,7 @@ void test_dump_load_binary(){
       
       db_graph_pre = hash_table_new(number_of_bits_pre,bucket_size,max_retries,kmer_size);
 
-#ifdef ENABLE_READ_PAIR_OLD
-      seq_length_pre = load_fasta_from_filename_into_graph("../data/test/graph/person2.fasta",0,0, &bad_reads, max_chunk_len_reading_from_fasta, db_graph_pre);
-#else
       seq_length_pre = load_fasta_from_filename_into_graph("../data/test/graph/person2.fasta",0, &bad_reads, max_chunk_len_reading_from_fasta, db_graph_pre);
-#endif
       /*
 	> 6 unique 33-mers
 	TAACCCTAACCCTAACCCTAACCCTAACCCTAACCCTAACCCTAACCCTAACCCTAACC
@@ -241,11 +229,7 @@ void test_dump_load_binary(){
       
   
       db_graph_post = hash_table_new(number_of_bits_post,bucket_size,max_retries,kmer_size);
-#ifdef ENABLE_READ_PAIR_OLD
-      seq_length_post = load_binary_from_filename_into_graph("../data/test/graph/dump_graph.bin",db_graph_post,0,0,true);
-#else
       seq_length_post = load_binary_from_filename_into_graph("../data/test/graph/dump_graph.bin",db_graph_post,0,true);
-#endif
       CU_ASSERT_EQUAL(hash_table_get_unique_kmers(db_graph_post),31);
   
 
@@ -346,11 +330,7 @@ void test_dump_load_binary(){
       
       db_graph_pre = hash_table_new(number_of_bits_pre,bucket_size,max_retries,kmer_size);
 
-#ifdef ENABLE_READ_PAIR_OLD
-      seq_length_pre = load_fasta_from_filename_into_graph("../data/test/graph/person3.fasta",0,0,  &bad_reads, max_chunk_len_reading_from_fasta, db_graph_pre);
-#else
 	  seq_length_pre = load_fasta_from_filename_into_graph("../data/test/graph/person3.fasta",0,  &bad_reads, max_chunk_len_reading_from_fasta, db_graph_pre);
-#endif      
 
 
       /*
@@ -386,11 +366,7 @@ void test_dump_load_binary(){
       
   
       db_graph_post = hash_table_new(number_of_bits_post,bucket_size,max_retries,kmer_size);
-#ifdef ENABLE_READ_PAIR_OLD
-      seq_length_post = load_binary_from_filename_into_graph("../data/test/graph/dump_graph.bin",db_graph_post,0,0,true);
-#else
       seq_length_post = load_binary_from_filename_into_graph("../data/test/graph/dump_graph.bin", db_graph_post,0,true);
-#endif
       //now try to traverse a supernode. This is effectively a regressiontest for a bug in graph/element.c: print_binary/read_binary
       test_element1 = hash_table_find(element_get_key(seq_to_binary_kmer("TAACCCTAACCCTAACC", kmer_size, &tmp_seq),kmer_size, &tmp_seq2) ,db_graph_post);
 
@@ -438,11 +414,7 @@ void test_coverage_is_correctly_counted_on_loading_from_file()
   dBGraph * db_graph = hash_table_new(number_of_bits,bucket_size,10,kmer_size);
   
   int max_chunk_length=100;
-#ifdef ENABLE_READ_PAIR_OLD
-  seq_length = load_fasta_from_filename_into_graph("../data/test/graph/file_to_test_covg_of_reads.fasta", 0, 0,&bad_reads,max_chunk_length,  db_graph);
-#else
   seq_length = load_fasta_from_filename_into_graph("../data/test/graph/file_to_test_covg_of_reads.fasta", 0, &bad_reads,max_chunk_length,  db_graph);
-#endif
 
   /*
     >occurs once
@@ -508,11 +480,7 @@ void test_getting_sliding_windows_where_you_break_at_kmers_not_in_db_graph()
   dBGraph * db_graph;
 
   db_graph = hash_table_new(number_of_bits,bucket_size,10,kmer_size);
-#ifdef ENABLE_READ_PAIR_OLD
-  seq_length = load_fasta_from_filename_into_graph("../data/test/graph/person3.fasta",0, 0, &bad_reads, 200, db_graph);
-#else  
   seq_length = load_fasta_from_filename_into_graph("../data/test/graph/person3.fasta",0,  &bad_reads, 200, db_graph);
-#endif
 
   //OK - we have graph. Now test getting sliding windows from 
   // 1. a sequence that is all in the graph
@@ -768,11 +736,7 @@ void test_dumping_of_clean_fasta()
   dBGraph * db_graph;
 
   db_graph = hash_table_new(number_of_bits,bucket_size,10,kmer_size);
-#ifdef ENABLE_READ_PAIR_OLD
-   seq_length = load_fasta_from_filename_into_graph("../data/test/graph/person3.fasta",0, 0, &bad_reads, 200, db_graph);
-#else
-   seq_length = load_fasta_from_filename_into_graph("../data/test/graph/person3.fasta",0,  &bad_reads, 200, db_graph);
-#endif
+  seq_length = load_fasta_from_filename_into_graph("../data/test/graph/person3.fasta",0,  &bad_reads, 200, db_graph);
 
   //OK, we now have a graph. Let's see if dumping a clean fasta gives the right answers. 
 

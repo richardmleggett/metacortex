@@ -256,8 +256,8 @@ int coverage_walk_get_path_with_callback(dBNode * node, Orientation orientation,
 	wf.get_starting_step = &coverage_walk_get_first_label;	
 	
     // Setup step action to include passed in node action
-	void (*action) (pathStep * step);
-	action = wf.step_action;
+	//void (*action) (pathStep * step);
+	//action = wf.step_action;
 	
 	void local_step_action(pathStep * ps) {
 		//action(ps);

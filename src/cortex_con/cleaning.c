@@ -571,9 +571,10 @@ static void remove_flaged_tips(dBNode * node, void * args ){
         int fwd_found = perfect_path_get_all_paths_from(node, forward, paf, MAX_PATH_LENGTH, ctv->db_graph);
         int rev_found = perfect_path_get_all_paths_from(node, reverse, par, MAX_PATH_LENGTH, ctv->db_graph);
         
-        Path * shortest = NULL, *tmp = NULL, *sh1 = NULL, *sh2 = NULL;
+        Path * shortest = NULL, *tmp = NULL;
+        //Path *sh1 = NULL, *sh2 = NULL;
         int i, shortest_l = ctv->tip_length +1, temp_l;
-      
+        
         if (fwd_found > 0) {
             for (i = 0; i < 4; i++) {
                 tmp = paf->paths[i];
@@ -584,7 +585,7 @@ static void remove_flaged_tips(dBNode * node, void * args ){
                         if(temp_l < shortest_l  ){
                             shortest = tmp;
                             shortest_l = temp_l;
-                            sh1 = tmp;
+                            //sh1 = tmp;
                         }
                     }
                 }
@@ -610,7 +611,7 @@ static void remove_flaged_tips(dBNode * node, void * args ){
                         if(temp_l < shortest_l  ){
                             shortest = tmp;
                             shortest_l = temp_l;
-                            sh2 = tmp;
+                            //sh2 = tmp;
                         }
                     }
                 }
@@ -655,7 +656,7 @@ int cleaning_remove_tips(int max_length, int max_it, dBGraph * db_graph){
     tip_clip_length = max_length;
     ct_db_graph = db_graph;
 
-    int tip_count = 0;
+    //int tip_count = 0;
     int tips_removed = 0;
     int nodes_removed = 0;
     int marked = 0;
@@ -665,9 +666,9 @@ int cleaning_remove_tips(int max_length, int max_it, dBGraph * db_graph){
     //nodes_removed = 0;
     int current_tips = 0, current_nodes = 0, current_marked = 0;
     
-    do{
+    do {
         prunned_before = db_graph->pruned_kmers;
-        tip_count = tips_removed;
+        //tip_count = tips_removed;
         log_and_screen_printf("clip_tip iteration: %'d\n",tc_it++);
 #ifdef THREADS
         hash_table_threaded_traverse(&db_node_action_clear_flags, ct_db_graph);
