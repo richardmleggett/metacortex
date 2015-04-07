@@ -456,16 +456,8 @@ static 	void print_supernode(dBNode * node, void * arg) {
             if (args->fout_cov != NULL) {
                 path_to_coverage(args->path, args->fout_cov);
             }
-#ifdef SOLID
-            if(args->db_graph->output_base_space){
-                path_to_base_space_fasta(args->path, args->fout);
-            }else{
-                path_to_fasta(args->path, args->fout);
-            }
-#else                
-            path_to_fasta(args->path, args->fout);
-#endif
             
+            path_to_fasta(args->path, args->fout);            
             
             path_counts_add(args->path, &args->counts);
             args->count_nodes++;

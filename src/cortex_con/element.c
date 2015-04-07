@@ -872,19 +872,6 @@ boolean db_node_read_binary(FILE * fp, short kmer_size, dBNode * node)
 	node->edges[0] = edges;
 	node->coverage[0] = coverage;
 
-#ifdef SOLID
-#warning solid0
-	Edges first_base;
-	read = fread(&first_base, sizeof(Edges), 1, fp);
-	if (read == 0) {
-		puts("error with input file\n");
-		exit(1);
-	}
-
-//	db_node_set_all_starting_bases(starting_base, node);
-	node->first_base = first_base;
-#endif 
-
 	return true;
 }
 
@@ -915,12 +902,6 @@ void db_node_print_binary(FILE * fp, dBNode * node, int kmer_size)
 	fwrite(&kmer, sizeof(bitfield_of_64bits), NUMBER_OF_BITFIELDS_IN_BINARY_KMER, fp);
 	fwrite(&coverage, sizeof(uint32_t), 1, fp);
 	fwrite(&edges, sizeof(Edges), 1, fp);
-#ifdef SOLID
-#warning solid1
-	//Edges first_base = db_node_get_all_starging_bases(node);
-	Edges first_base = node->first_base;
-	fwrite(&first_base, sizeof(Edges), 1, fp );
-#endif
 }
 
 /** Note: writes single instance of coverage and edges - only store one
@@ -943,12 +924,6 @@ db_node_print_binary_by_colour(FILE * fp, dBNode * node, short colour,
 	fwrite(&coverage, sizeof(uint32_t), 1, fp);
 	fwrite(&edges, sizeof(Edges), 1, fp);
 
-#ifdef SOLID
-#warning solid2
-	//Edges first_base = db_node_get_all_starging_bases(node);
-	Edges first_base = node->first_base;
-	fwrite(&first_base, sizeof(Edges), 1, fp );
-#endif
 }
 
 // Get edges for a given colour
@@ -1171,78 +1146,3 @@ boolean element_check_for_flag(Element * node, Flags flag)
 {
 	return db_node_check_for_flag((dBNode *) node, flag);
 }
-
-//Code to deal with the SOLiD specific stuff. 
-#ifdef SOLID
-
-Edges db_node_get_all_starging_bases(dBNode * node){
-	return node->first_base;
-}
-
-void db_node_set_all_starting_bases(Edges e, dBNode * node){
-	node->first_base = e;
-}
-
-void db_node_add_starting_base(NucleotideBaseSpace base, Orientation o, dBNode * node){
-    //set edge
-    if(base != Undef){ //Do nothing if the base is not defineds. 
-        char e = 1 << base;	// A (0) -> 0001, C (1) -> 0010, G (2) -> 0100, T (3) -> 1000
-        if(o == reverse){
-            e <<= 4 ;
-        }
-        node->first_base |= e;
-    }
-}
-
-NucleotideBaseSpace db_node_get_starting_base(Orientation orientation, dBNode * node){
-    Edges edges = node->first_base;
-    NucleotideBaseSpace base = Undef;
-    boolean found, valid;
-    Edges mask = 1;
-    Edges current;
-    NucleotideBaseSpace i;
-    
-    if (orientation == reverse) {
-		edges >>= 4;
-	}
-	edges &= 15;
-    
-    
-    valid = true;
-    found = false;
-    for(i = 0; i < 4; i++){
-        current = edges & mask;
-        if(current && found){
-            valid = false;
-        }
-        if(current){
-            base = i;
-            found = true;
-        }
-        mask <<= 1;
-    }
-    
-    if(!valid){
-        base = Undef;
-    }
-    return base;
-    
-}
-
-NucleotideBaseSpace db_node_get_starting_base_search_reverse(Orientation orientation, dBNode * node,short kmer_size){
-    NucleotideBaseSpace base = Undef;
-    
-    base = db_node_get_starting_base(orientation, node);
-    
-    if(base == Undef){
-        base = db_node_get_starting_base(opposite_orientation(orientation), node);
-    }
-    
-    base = binary_kmer_get_last_nucleotide_in_base_space(&node->kmer, orientation, base, kmer_size );
-    
-    return base;
-    
-}
-
-
-#endif

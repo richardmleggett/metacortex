@@ -83,11 +83,6 @@ typedef struct
 	boolean output_kmer_coverage_known;
 	boolean output_reference_coverage_file_known;
 	boolean output_kmer_coverage_know ;
-
-    //colour space
-#ifdef SOLID
-    boolean output_base_space;
-#endif
     
     //-----------
     //parameters 

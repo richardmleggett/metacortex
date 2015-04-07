@@ -405,15 +405,7 @@ void y_walk_print_paths(char *filename, int max_length, int singleton_length,
 				if(with_viz){
 					path_graphviz_line(fout_viz, path);
 				}
-#ifdef SOLID
-                if(db_graph->output_base_space){
-					path_to_base_space_fasta(path, fout);
-                }else{
-                  	path_to_fasta(path, fout);   
-                }
-#else                
 				path_to_fasta(path, fout);
-#endif
 				if (path->length == max_length) {
 					log_and_screen_printf("contig length equals max length [%i] for node_%i\n", max_length, count_nodes);
 				}

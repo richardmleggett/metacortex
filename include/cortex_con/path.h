@@ -368,14 +368,5 @@ void path_mark_as_visited(Path* path);
 
 void path_pairs_to_fasta(PathArray* pa, int distances[], FILE* fout);
 
-
-#ifdef SOLID
-NucleotideBaseSpace path_get_first_base(Path * p);
-
-void path_to_base_space_fasta(Path * path, FILE * fout);
-
-#endif
-
-
 #endif /* PATH_H_ */
 

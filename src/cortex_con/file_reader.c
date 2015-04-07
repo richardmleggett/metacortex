@@ -470,13 +470,6 @@ long long load_seq_into_graph(FILE * fp,
     
 	Element *previous_node = NULL;
     
-    //RHRG: Variables to deal with solid. 
-#ifdef SOLID
-    NucleotideBaseSpace first_base = Undef;
-    NucleotideBaseSpace first_real_base = Undef;
-    Nucleotide first_transition = Undefined;
-#endif
-    
 	while ((entry_length =
             file_reader(fp, seq, max_read_length, full_entry, &full_entry)))
 	{
@@ -523,14 +516,7 @@ long long load_seq_into_graph(FILE * fp,
 				for (j = 0; j < current_window->nkmers; j++) {	//for each kmer in window
 					boolean found = false;
                     boolean search = true;
-                    //Dont try to a
-#ifdef SOLID
-                    if ((i == 0 && j == 0 && prev_full_entry == true )){//Only happens on the first chunk of the fasta file. We don't expect them to be too big, anyway. Just to be consistent and in the case we have  genome in color space
-                        search = false;
-                        first_base = char_to_binary_nucleotide_base_space(sequence_get_base(0, seq));
-                    }
-                    
-#endif                    
+                   
                     if(search){//This only makes sense when working with solid, this way we don't add tho the graph the first base. 
                         current_node =	hash_table_find_or_insert(element_get_key(&(current_window->kmer[j]),db_graph->kmer_size, &tmp_kmer), &found, db_graph);
                         long long int k_read = hash_table_get_unique_kmers(db_graph);
@@ -545,16 +531,7 @@ long long load_seq_into_graph(FILE * fp,
                             element_update_coverage(current_node, colour, 1);
                         }
                         current_orientation = db_node_get_orientation(&(current_window->kmer[j]),current_node,db_graph->kmer_size);
-#ifdef SOLID
-                        //RHRG: Here we add the first base to the first 
-                        if(first_base != Undef && i == 0 && j == 1 ){
-                            first_transition = char_to_binary_nucleotide(sequence_get_base(1, seq));
-                            first_real_base = binary_nucleotide_base_space_get_next_base(first_base, first_transition);
-                            db_node_add_starting_base(first_real_base,current_orientation ,current_node);
-                            first_real_base = Undef;
-                            first_base = Undef;
-                        }
-#endif
+
                     }
                     
                     
@@ -671,13 +648,6 @@ long long load_seq_cov_into_graph(FILE * fp,
     
 	Element *previous_node = NULL;
     
-    //RHRG: Variables to deal with solid. 
-#ifdef SOLID
-    NucleotideBaseSpace first_base = Undef;
-    NucleotideBaseSpace first_real_base = Undef;
-    Nucleotide first_transition = Undefined;
-#endif
-    
 	while ((entry_length =file_reader(fp, seq, max_read_length, full_entry, &full_entry)))
 	{
 		seq_count++;
@@ -725,14 +695,7 @@ long long load_seq_cov_into_graph(FILE * fp,
 				for (j = 0; j < current_window->nkmers; j++) {	//for each kmer in window
 					
                     boolean search = true;
-                    //Dont try to a
-#ifdef SOLID
-                    if ((i == 0 && j == 0 && prev_full_entry == true )){//Only happens on the first chunk of the fasta file. We don't expect them to be too big, anyway. Just to be consistent and in the case we have  genome in color space
-                        search = false;
-                        first_base = char_to_binary_nucleotide_base_space(sequence_get_base(0, seq));
-                    }
-                    
-#endif                    
+                  
                     if(search){//This only makes sense when working with solid, this way we don't add tho the graph the first base. 
                         current_node =	hash_table_find(element_get_key(&(current_window->kmer[j]),db_graph->kmer_size, &tmp_kmer), db_graph);
                         long long int k_read = hash_table_get_unique_kmers(db_graph);
@@ -745,17 +708,7 @@ long long load_seq_cov_into_graph(FILE * fp,
                             if (!(i == 0 && j == 0 && prev_full_entry == false && current_node == previous_node)) {	//otherwise is the same old last entry
                                 element_update_coverage(current_node, colour, 1);
                             }
-                         
-#ifdef SOLID
-                            //RHRG: Here we add the first base to the first 
-                            if(first_base != Undef && i == 0 && j == 1 ){
-                                first_transition = char_to_binary_nucleotide(sequence_get_base(1, seq));
-                                first_real_base = binary_nucleotide_base_space_get_next_base(first_base, first_transition);
-                                db_node_add_starting_base(first_real_base,current_orientation ,current_node);
-                                first_real_base = Undef;
-                                first_base = Undef;
-                            }
-#endif            
+                            
                         }
                         
                     }

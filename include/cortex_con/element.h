@@ -267,26 +267,4 @@ boolean elemet_is_assigned(Element * node);
 
 boolean element_check_for_flag(Element * node, Flags flag);
 
-#ifdef SOLID
-/**
- * Function that sets certain node as a read-start node, from which we can start the translation. 
- */ 
-void db_node_add_starting_base(NucleotideBaseSpace base, Orientation o, dBNode * node);
-
-/**
- * Returns the starting base, provided that there is one and only one base in the given direction
- */
- 
-NucleotideBaseSpace db_node_get_starting_base(Orientation o, dBNode * node);
-
-  
-NucleotideBaseSpace db_node_get_starting_base_search_reverse(Orientation orientation, dBNode * node,short kmer_size);
-
-//Returns the inner structure, for writing the CTX. 
-Edges db_node_get_all_starging_bases(dBNode * node);
-
-//Overrides the inner representation, for reading the CTX
-void db_node_set_all_starting_bases(Edges e, dBNode * node);
-#endif
-
 #endif /* ELEMENT_H_ */

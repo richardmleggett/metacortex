@@ -265,7 +265,6 @@ Nucleotide binary_kmer_get_base_at_position(BinaryKmer * bkmer,short possition)
 	return r >> 2 * (possition % 32);
 }
 
-#ifndef SOLID
 //returns Undefined if given non AGCT character
 Nucleotide char_to_binary_nucleotide(char c)
 {
@@ -290,51 +289,7 @@ Nucleotide char_to_binary_nucleotide(char c)
 			return Undefined;
 	}
 }
-#else
-//returns Undefined if given non 0123 character
-Nucleotide char_to_binary_nucleotide(char c)
-{
-	switch (c) {
-		case '0':
-			return Cero;
-		case '1':
-			return One;
-		case '2':
-			return Two;
-		case '3':
-			return Three;
-		default:
-			return Undefined;
-	}
-}
 
-NucleotideBaseSpace char_to_binary_nucleotide_base_space(char c)
-{
-	switch (c) {
-		case 'A':
-			return Adenine;
-		case 'C':
-			return Cytosine;
-		case 'G':
-			return Guanine;
-		case 'T':
-			return Thymine;
-		case 'a':
-			return Adenine;
-		case 'c':
-			return Cytosine;
-		case 'g':
-			return Guanine;
-		case 't':
-			return Thymine;
-		default:
-			return Undefined;
-	}
-}
-
-#endif
-
-#ifndef SOLID
 char reverse_char_nucleotide(char c)
 {
 	switch (c) {
@@ -362,13 +317,6 @@ char reverse_char_nucleotide(char c)
 	}
 }
 
-#else
-char reverse_char_nucleotide(char c){
-    return c;
-}
-#endif
-
-
 //length is the length in number of bases; the char* should have one MORE base than that allocated, to hold '\0'
 char *seq_reverse_complement(char *in, int length, char *out)
 {
@@ -385,7 +333,6 @@ char *seq_reverse_complement(char *in, int length, char *out)
 
 
 
-#ifndef SOLID
 Nucleotide reverse_binary_nucleotide(Nucleotide n)
 {
 	switch (n) {
@@ -404,13 +351,7 @@ Nucleotide reverse_binary_nucleotide(Nucleotide n)
 			exit(1);
 	}
 }
-#else
-Nucleotide reverse_binary_nucleotide(Nucleotide n){
-    return n;
-}
-#endif
 
-#ifndef SOLID
 char binary_nucleotide_to_char(Nucleotide n)
 {
 	switch (n) {
@@ -430,47 +371,6 @@ char binary_nucleotide_to_char(Nucleotide n)
 			return 'N';	//Don't really return this, must fail before this point. But stops compiler warning.
 	}
 }
-#else
-char binary_nucleotide_to_char(Nucleotide n)
-{
-	switch (n) {
-        case Cero:
-			return '0';
-		case One:
-			return '1';
-		case Two:
-			return '2';
-		case Three:
-			return '3';
-		case Undefined:
-			return '.';
-		default:
-			printf("Non existent binary nucleotide %d\n", n);
-			assert(0);
-			return '.';	//Don't really return this, must fail before this point. But stops compiler warning.
-	}
-}
-
-char binary_nucleotide_base_space_to_char(NucleotideBaseSpace n)
-{
-	switch (n) {
-		case Adenine:
-			return 'A';
-		case Cytosine:
-			return 'C';
-		case Guanine:
-			return 'G';
-		case Thymine:
-			return 'T';
-		case Undefined:
-			return 'N';
-		default:
-			printf("Non existent binary nucleotide %d\n", n);
-			assert(0);
-			return 'N';	//Don't really return this, must fail before this point. But stops compiler warning.
-	}
-}
-#endif
 
 #ifdef INCLUDE_QUALITY_SCORES
 void quality_string_shift_one_base_and_insert_new_base_at_right_end(char
@@ -1060,12 +960,10 @@ BinaryKmer *binary_kmer_reverse_complement(BinaryKmer * kmer, short kmer_size,
 	bitfield_of_64bits mask = 3;	//000..0011
 	int j;
 	
-#ifndef SOLID    
 	//first complement the original kmer - xor with all 1's
 	for (j = 0; j < NUMBER_OF_BITFIELDS_IN_BINARY_KMER; j++) {
 		local_copy_of_input_kmer[j] ^= ~0;
 	}
-#endif
 	
 	//then reverse
 	for (j = 0; j < kmer_size; j++) {
@@ -1251,120 +1149,5 @@ void nucleotide_iterator(void (*f) (Nucleotide))
 	
 }
 
-//Area for functions only required by cortex_con_cs. 
-#ifdef SOLID
-
-static boolean color_code_started = false;
-static NucleotideBaseSpace  solid_code[4][4];
-static void start_solid_code(){
-    //Make this reentrant by only allowing this to happen once with a lock.
-    if(!color_code_started){
-        
-        solid_code[Adenine][0] = Adenine;
-        solid_code[Adenine][1] = Cytosine;
-        solid_code[Adenine][2] = Guanine;
-        solid_code[Adenine][3] = Thymine;
-        
-        solid_code[Cytosine][1] = Adenine;
-        solid_code[Cytosine][0] = Cytosine;
-        solid_code[Cytosine][3] = Guanine;
-        solid_code[Cytosine][2] = Thymine;
-        
-        solid_code[Guanine][2] = Adenine;
-        solid_code[Guanine][3] = Cytosine;
-        solid_code[Guanine][0] = Guanine;
-        solid_code[Guanine][1] = Thymine;
-        
-        solid_code[Thymine][3] = Adenine;
-        solid_code[Thymine][2] = Cytosine;
-        solid_code[Thymine][1] = Guanine;
-        solid_code[Thymine][0] = Thymine;
-    }
-    
-}
-
-NucleotideBaseSpace binary_nucleotide_base_space_get_next_base(NucleotideBaseSpace nbs, Nucleotide n){
-    if(!color_code_started){
-        start_solid_code();
-    }
-    return nbs==Undef?Undef:solid_code[nbs][n];
-    
-}
-
-NucleotideBaseSpace binary_kmer_get_last_nucleotide_in_base_space(BinaryKmer * kmer, Orientation o, NucleotideBaseSpace n, short kmer_size){
-    BinaryKmer local_kmer;
-    NucleotideBaseSpace base = n;
-    Nucleotide first;
-    int i;
-    
-    if(n == Undef){//Don't do anything if we don't know how we are starting.
-        return n;
-    }
-    if(o == forward){// We make a copy to avoid modifying the original kmer!
-        binary_kmer_assignment_operator(local_kmer, *kmer);
-    }else{
-        binary_kmer_reverse_complement(kmer, kmer_size, &local_kmer);
-    }
-    
-    for(i = 0; i < kmer_size; i++){
-        
-        //char seq[kmer_size +1]; //TODO: Just while debugging. 
-        //printf("\nReverting...");
-        //binary_kmer_to_seq(&local_kmer, kmer_size, seq);
-        //printf("%s ", seq);
-        first = binary_kmer_get_first_nucleotide(&local_kmer, kmer_size);
-        //printf(" %c -> %c =", binary_nucleotide_base_space_to_char(base), binary_nucleotide_to_char(first));
-        base = binary_nucleotide_base_space_get_next_base(base, first);
-        //printf(" %c", binary_nucleotide_base_space_to_char(base));
-        binary_kmer_left_shift(&local_kmer, 2, kmer_size);//In the last round, we get "out" the information. 
-    }
-    
-    return base;
-    
-    
-    
-}
-/**
- * This function converts the kmers in Colour Space to Nucleotides. It returns the sequence as a String, not including the
- * first base. It returns the last base in nucleotide base space for convienience. (This is likely to be used while printing, 
- * this avoids an extra search for which is the last base)
- * 
- */ 
-NucleotideBaseSpace binary_kmer_to_base_seq(BinaryKmer * kmer, Orientation o, NucleotideBaseSpace n, char * seq, short kmer_size){
-    BinaryKmer local_kmer;
-    NucleotideBaseSpace base = n;
-    Nucleotide first;
-    int i;
-    
-    if(o == forward){// We make a copy to avoid modifying the original kmer!
-        binary_kmer_assignment_operator(local_kmer, *kmer);
-    }else{
-        binary_kmer_reverse_complement(kmer, kmer_size, &local_kmer);
-    }
-    
-    for(i = 0; i < kmer_size; i++){
-        
-        //printf("\nTranslating kmer...");
-        //binary_kmer_to_seq(&local_kmer, kmer_size, seq);
-        //printf("%s ", seq);
-        
-        first = binary_kmer_get_first_nucleotide(&local_kmer, kmer_size);
-        //printf(" %c -> %c =", binary_nucleotide_base_space_to_char(base), binary_nucleotide_to_char(first));
-        base = binary_nucleotide_base_space_get_next_base(base, first);
-        //printf(" %c", binary_nucleotide_base_space_to_char(base));
-        
-        seq[i]=binary_nucleotide_base_space_to_char(base);
-        seq[i+1] = '\0';
-        binary_kmer_left_shift(&local_kmer, 2, kmer_size);//In the last round, we get "out" the information. 
-    }
-    
-    
-    return base;
-    
-    
-    
-}
-
-#endif
 
 

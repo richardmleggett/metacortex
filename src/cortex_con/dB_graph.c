@@ -61,7 +61,6 @@
  * reverse lable to be able to traverse back. 
  *  
  */
-#ifndef SOLID2
 pathStep *db_graph_get_next_step(pathStep * current_step, pathStep * next_step, pathStep * rev_step, dBGraph * db_graph)
 {
     
@@ -179,73 +178,6 @@ pathStep *db_graph_get_next_step_with_reverse(pathStep * current_step, pathStep 
 	next_step->label = Undefined;
 	return next_step;
 }
-
-
-#else
-pathStep *db_graph_get_next_step(pathStep * current_step, pathStep * next_step, pathStep * rev_step, dBGraph * db_graph)
-{
-    
-	assert(current_step != NULL);
-	assert(next_step != NULL);
-	assert(rev_step != NULL);
-	
-	assert(current_step->node != NULL);
-	
-	assert(current_step->label != Undefined);
-	
-	next_step->node = NULL;
-	rev_step->node = current_step->node;
-    
-	BinaryKmer local_copy_of_kmer;
-	binary_kmer_assignment_operator(local_copy_of_kmer,	current_step->node->kmer);
-    
-	BinaryKmer tmp_kmer;
-	//dBNode * next_node = NULL;
-    
-	// after the following line tmp_kmer and rev_kmer are pointing to the same B Kmer
-	BinaryKmer *rev_kmer =
-    binary_kmer_reverse_complement(&local_copy_of_kmer, db_graph->kmer_size, &tmp_kmer);//On solid, this is only asigning. 
-    
-	if (current_step->orientation == reverse) {
-		rev_step->label = binary_kmer_get_first_nucleotide(&local_copy_of_kmer, db_graph->kmer_size);
-        
-        binary_kmer_right_shift_and_insert_new_base_at_left_end(&local_copy_of_kmer, current_step->label, db_graph->kmer_size);
-        //  binary_kmer_left_shift_one_base_and_insert_new_base_at_right_end(&local_copy_of_kmer, current_step->label, db_graph->kmer_size);
-	} else {
-		rev_step->label = binary_kmer_get_last_nucleotide(rev_kmer);
-        binary_kmer_left_shift_one_base_and_insert_new_base_at_right_end(&local_copy_of_kmer, current_step->label, db_graph->kmer_size);
-	}
-    
-	
-    
-	//get node from table
-	next_step->node = hash_table_find(element_get_key(&local_copy_of_kmer, db_graph->kmer_size, &tmp_kmer), db_graph);
-	rev_step->node = next_step->node;
-    
-	if (next_step->node != NULL) {
-		next_step->orientation = current_step->orientation;
-		rev_step->orientation = opposite_orientation(next_step->orientation);
-	}    
-    //#ifdef __DEBUG
-	else {
-		if (DEBUG) {
-            
-			char tmpseq[db_graph->kmer_size];
-			printf("[db_graph_get_next_step] Cannot find %s so get a NULL node\n",
-                   binary_kmer_to_seq(&tmp_kmer, db_graph->kmer_size, tmpseq));
-			//Commented by ricardo, to reduce the log as for the traversing
-			//      algorithm relays on having this as null
-		}
-	}
-    //#endif
-    
-	next_step->label = Undefined;
-	return next_step;
-}
-
-
-
-#endif
 
 /**
  * This function resets the flags of the whole graph. A future improvement
@@ -1065,7 +997,6 @@ int db_graph_db_node_clip_tip_with_orientation(dBNode * node, Orientation orient
 }
 
 
-#ifndef SOLID
 //it doesn't check that it is a valid arrow -- it just assumes the arrow is fine
 dBNode *db_graph_get_next_node(dBNode * current_node, Orientation current_orientation, Orientation * next_orientation,
                                Nucleotide edge, Nucleotide * reverse_edge, dBGraph * db_graph)
@@ -1101,42 +1032,7 @@ dBNode *db_graph_get_next_node(dBNode * current_node, Orientation current_orient
     
 	return next_node;
 }
-#else
 
-dBNode *db_graph_get_next_node(dBNode * current_node, Orientation current_orientation,Orientation * next_orientation, Nucleotide edge, Nucleotide * reverse_edge, dBGraph * db_graph){
-    if (edge == Undefined) {
-		return NULL;	//If it is undefined, the next node is null...
-	}
-	BinaryKmer local_copy_of_kmer;
-	binary_kmer_assignment_operator(local_copy_of_kmer, current_node->kmer);
-    
-	BinaryKmer tmp_kmer;
-	dBNode *next_node = NULL;
-    
-	// after the following line tmp_kmer and rev_kmer are pointing to the same B Kmer
-	BinaryKmer *rev_kmer = binary_kmer_reverse_complement(&local_copy_of_kmer, db_graph->kmer_size, &tmp_kmer);
-    
-	if (current_orientation == reverse) {        
-        *reverse_edge = binary_kmer_get_first_nucleotide(&local_copy_of_kmer, db_graph->kmer_size);
-        binary_kmer_right_shift_and_insert_new_base_at_left_end(&local_copy_of_kmer, edge, db_graph->kmer_size);
-    } else {
-        *reverse_edge = binary_kmer_get_last_nucleotide(rev_kmer);
-        binary_kmer_left_shift_one_base_and_insert_new_base_at_right_end(&local_copy_of_kmer, edge, db_graph->kmer_size);
-	}
-    
-	
-    
-	//get node from table
-	next_node = hash_table_find(element_get_key(&local_copy_of_kmer, db_graph->kmer_size, &tmp_kmer), db_graph);
-    
-	if (next_node != NULL) {
-		*next_orientation = current_orientation;
-	}
-    
-	return next_node;
-}
-
-#endif
 int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions * functions, dBGraph * db_graph)
 {
 	//dBNode * node = first_step->node;
@@ -1257,19 +1153,9 @@ void db_graph_write_graphviz_file(char *filename, dBGraph * db_graph)
                     "<tr><td><font color=\"blue\">%s</font></td></tr>"
                     "<tr><td><font color=\"red\">%s</font></td></tr>"
                     "<tr><td><font color=\"black\">%d</font> </td></tr>"
-                    
-#ifdef SOLID
-                    "<tr><td><font color=\"blue\">%c</font></td></tr>"
-                    "<tr><td><font color=\"red\">%c</font></td></tr>"
-                    
-#endif
                     "</table>>", seq1, reverse_seq1,
                     node->coverage[0]
 	
-#ifdef SOLID
-                    ,binary_nucleotide_base_space_to_char(db_node_get_starting_base(forward, node))
-                    ,binary_nucleotide_base_space_to_char(db_node_get_starting_base(reverse, node))
-#endif
                     
                     );
 

@@ -62,9 +62,7 @@ typedef struct {
     short kmer_size;
     short max_double_y_complexity;
     short max_coverage_for_branches;
-#ifdef SOLID
-    boolean output_base_space;
-#endif
+
     //stuff from here is to get statistics.
     boolean calculated;
     double average_coverage[NUMBER_OF_COLOURS];
