@@ -1243,13 +1243,9 @@ void db_graph_write_graphviz_file(char *filename, dBGraph * db_graph)
 			char seq[kmer_size], seqNext[kmer_size], seq1[kmer_size];
 			binary_kmer_to_seq(&tmp, kmer_size, seq1);
 			char *print = db_node_check_for_any_flag(node, STARTING_FORWARD  | BRANCH_NODE_FORWARD | BRANCH_NODE_REVERSE | END_NODE_FORWARD | END_NODE_REVERSE | X_NODE) ? "ellipse" : "ellipse";
-            
-#ifdef ENABLE_BUBBLEPARSE
-			char *node_colour = ((node->coverage[0] == 0) && (node->coverage[1] > 0)) ? "orange":(((node->coverage[0] > 0) && (node->coverage[1] == 0)) ? "green" : "black");
-#else
 			char *node_colour = "black";
-#endif
-			if (db_node_check_for_any_flag(node, BRANCH_NODE_FORWARD | BRANCH_NODE_REVERSE | X_NODE)) {
+
+            if (db_node_check_for_any_flag(node, BRANCH_NODE_FORWARD | BRANCH_NODE_REVERSE | X_NODE)) {
 				print = "circle";
             }
             
@@ -1259,15 +1255,6 @@ void db_graph_write_graphviz_file(char *filename, dBGraph * db_graph)
 			seq_reverse_complement(seq1, kmer_size, reverse_seq1);
 			//sprintf(label_string, "\"%s\\n%s\\nC0=%d C1=%d\"", seq1, reverse_seq1, node->coverage[0], node->coverage[1]);
 			
-#ifdef ENABLE_BUBBLEPARSE
-			sprintf(label_string,
-                    "<<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
-                    "<tr><td><font color=\"blue\">%s</font></td></tr>"
-                    "<tr><td><font color=\"red\">%s</font></td></tr>"
-                    "<tr><td><font color=\"green\">%d</font> <font color=\"orange\">%d</font></td></tr>"
-                    "</table>>", seq1, reverse_seq1,
-                    node->coverage[0], node->coverage[1]);
-#else
 			sprintf(label_string,
                     "<<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
                     "<tr><td><font color=\"blue\">%s</font></td></tr>"
@@ -1295,8 +1282,8 @@ void db_graph_write_graphviz_file(char *filename, dBGraph * db_graph)
 #endif
                     
                     );
-#endif
-			fprintf(fp, "%s [label=%s, shape=%s, color=%s]\n", seq1, label_string, print, node_colour);
+
+            fprintf(fp, "%s [label=%s, shape=%s, color=%s]\n", seq1, label_string, print, node_colour);
             
 			binary_kmer_to_seq(&tmp, kmer_size, seq);
 			binary_kmer_left_shift(&tmp, 2, kmer_size);
@@ -1314,9 +1301,7 @@ void db_graph_write_graphviz_file(char *filename, dBGraph * db_graph)
 				Key k = &bk;
 				boolean colour0edge = (((ea[0] >> n) & 1) == 1);
 				boolean colour1edge = false;
-#ifdef ENABLE_BUBBLEPARSE
-				colour1edge = (((ea[1] >> n) & 1) == 1);
-#endif
+
 				if (colour0edge || colour1edge) {
 					char *labelcolour = (colour0edge && colour1edge) ? "black":(colour0edge ? "green":"orange");
 					binary_kmer_modify_base(&tmp, n, kmer_size, 0);

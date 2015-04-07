@@ -159,14 +159,11 @@ BinaryKmer *element_get_kmer(Element * e)
 int element_get_coverage_all_colours(Element * e)
 {
 	int coverage = 0;
-#ifndef ENABLE_BUBBLEPARSE
-	coverage = e->coverage[0];
-#else
-	int c;
+
+    int c;
 	for (c = 0; c < NUMBER_OF_COLOURS; c++) {
 		coverage = coverage + e->coverage[c];
 	}
-#endif
 	return coverage;
 }
 

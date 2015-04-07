@@ -849,7 +849,7 @@ void path_to_fasta(Path * path, FILE * fout)
 	size_t len = strlen(path->seq);
 	for(i = 0; i < len; i++, current++) {
         if (path->step_flags[i] & PRINT_LABEL_AS_N) {
-            fprintf(fout, "N");
+            fprintf(fout, "*");
         } else {
             fprintf(fout, "%c",  path->seq[i]);
         }
@@ -1966,7 +1966,7 @@ void path_free_buffer_path(Path * path)
 #endif
 }
 
-void path_step_mark_as_uncertain(int i, Path * path, boolean as_n) {
+void path_step_mark_as_uncertain(int i, Path * path, boolean as_n) {    
     if (as_n) {
         path->step_flags[i] |= PRINT_LABEL_AS_N;
     } else {

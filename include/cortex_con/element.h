@@ -43,11 +43,7 @@
 #define ELEMENT_H_
 
 #ifndef NUMBER_OF_COLOURS
-#ifdef ENABLE_BUBBLEPARSE
-#define NUMBER_OF_COLOURS 2
-#else
 #define NUMBER_OF_COLOURS 1
-#endif
 #endif
 
 

@@ -56,9 +56,6 @@
 #include <binary_tree.h>
 #include <mark_pair.h>
 #endif
-#ifdef ENABLE_BUBBLEPARSE
-#include <bubble_find.h>
-#endif
 #include <cleaning.h>
 #include <cmd_line.h>
 #include "metacortex.h"
@@ -376,19 +373,11 @@ int main(int argc, char **argv)
     int n_file_list = 0;
     int i;
     
-#ifdef ENABLE_BUBBLEPARSE
-    log_and_screen_printf("Cortex Con Bubble Finding\n\n");
-#elif defined METACORTEX
     log_and_screen_printf("\nMetaCortex ");
     log_and_screen_printf(METACORTEX_VERSION);
-    log_and_screen_printf("\n\n");
-#else
-    log_and_screen_printf("\nCortex Con\n\n");
-	log_and_screen_printf(SVN_VERSION);
-	log_and_screen_printf(SVN_COMMIT_DATE);
+    log_and_screen_printf("\n");
 	log_and_screen_printf("Compiled on %s at %s \n\n", __DATE__, __TIME__);
-#endif
-        
+    
     //command line arguments
     cmd_line = parse_cmdline(argc, argv, sizeof(Element));
 
@@ -684,32 +673,7 @@ int main(int argc, char **argv)
     
     if (cmd_line.output_fasta) {
               
-#ifdef ENABLE_BUBBLEPARSE
-        // Do bubble detection and output
-         timestamp();
-        log_and_screen_printf("\nFinding bubbles to output...\n");
-        fflush(stdout);
-        int max_length = cmd_line.bubble_max_length + 1000;
-        
-#ifdef DEBUG_CLEANUP
-        db_graph_cleanup_graph(db_graph);
-#endif
-        
-        // Identify branches
-        db_graph_identify_branches(max_length, db_graph);
-        
-        // Check for .fa, .fasta or .fastq at the end of filename and remove
-        remove_file_extension(cmd_line.output_fasta_filename);
-        
-        assert(cmd_line.bubble_max_length > 0);
-        
-        // Walk branches
-        db_graph_walk_branches(cmd_line.output_fasta_filename,
-                               max_length,
-                               cmd_line.bubble_max_length,
-                               cmd_line.bubble_max_depth,
-                               db_graph);
-#elif ENABLE_MARK_PAIR
+#ifdef ENABLE_MARK_PAIR
         if (cmd_line.read_pair_filename[0] != 0) {
             // Load pair file and enrich graph
             
@@ -926,14 +890,6 @@ void write_graphviz_file(char *filename, dBGraph * db_graph)
 
 void timestamp() {
 	time_t ltime = time(NULL);
-#ifdef ENABLE_BUBBLEPARSE
-	char *timestring = asctime(localtime(&ltime));
-	char  timestringcopy[64];
-	strcpy(timestringcopy, timestring);
-	timestringcopy[strlen(timestring)-1] = 0;
-	log_and_screen_printf("\n----- %s -----\n", timestringcopy);
-#else
 	log_and_screen_printf("\n-----\n%s",asctime(localtime(&ltime)));	
-#endif
 	fflush(stdout);
 }

@@ -153,13 +153,7 @@ int default_opts(CmdLine * c)
     //c->output_fasta_filename required
     //c->output_graphviz_filename required
     c->singleton_length = 100;
-#ifdef ENABLE_BUBBLEPARSE
-	c->algorithm = BUBBLES;
-#elif defined METACORTEX
     c->algorithm = METACORTEX_CONSENSUS;
-#else
-	c->algorithm = PERFECT_PATH;
-#endif	
 	c->max_length=200000;
     c->min_subgraph_size=0;
     
@@ -249,7 +243,7 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
     };
     
     while ((opt = getopt_long(argc, argv,
-                              "ab:c:d:ef:g:hi:jk:l:n:o:p:q:s:t:uvw:x:z:A:B:C:D:E:FG:H:I:J:K:L:M:N:O:P:S:TZ:",
+                              "ab:c:d:ef:g:hi:jk:l:m:n:o:p:q:s:t:uvw:x:z:A:B:C:D:E:FG:H:I:J:K:L:M:N:O:P:S:TZ:",
                               long_options, &longopt_index)) > 0)
     {                
         //Parse the default options
@@ -384,6 +378,12 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                 }                
                 break;
                 
+            case 'm':
+                if (optarg == NULL)
+                    errx(1,"[-m | --min_subgraph_size] option requires int argument");
+                cmd_line.min_subgraph_size = atoi(optarg);
+                break;
+                
             case 'n':	//number of buckets
                 if (optarg == NULL)
                     errx(1,"[-n | --mem_height] option requires int argument [hash table number of buckets in bits]");
@@ -475,23 +475,6 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                     errx(1,  "[-x | --singleton_length] requires an integer greater than 0");
                 }
                 break;
-                    
-#ifdef ENABLE_BUBBLEPARSE
-            case 'w':
-                if (optarg == NULL) {
-                    errx(1, "[-w | --detect_bubbles] option requires argument [max depth,max length]");
-                }
-                sscanf(optarg, "%d,%d", &cmd_line.bubble_max_depth, &cmd_line.bubble_max_length);
-                if ((cmd_line.bubble_max_depth < 0) || (cmd_line.bubble_max_depth > 10)) {
-                    errx(1, "[-w | --detect_bubbles] max depth out of range (0-10).");
-                }
-                if ((cmd_line.bubble_max_length < 1) || (cmd_line.bubble_max_length > 5000)) {
-                    errx(1, "[-w | --detect_bubbles] max length out of range (1-5000).");
-                }
-                cmd_line.detect_bubbles = true;
-                cmd_line.algorithm = BUBBLES;
-                break;	
-#endif
                 
             case 'z':	//node coverage threshold
                 if (optarg == NULL){
@@ -506,37 +489,8 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                 break;
                 
             case 'A':
-#ifdef ENABLE_BUBBLEPARSE
-                cmd_line.algorithm = BUBBLES;	
-                errx(1,"[-A  | --algorithm ] option is not used for coloured bubbles");
-                exit(-1);
-                break;
-#elif defined METACORTEX
                 errx(1,"[-A  | --algorithm ] option is not used for metacortex");
                 exit(-1);
-                break;
-#else
-                if (optarg == NULL){
-                    errx(1,"[-A  | --algorithm  BRANCHES | BUBBLES | PERFECT_PATH | Y_WALK | METACORTEX ] argument required]");
-                    exit(-1);
-                }
-                
-                if (strcmp(optarg, "BRANCHES")==0) {
-                    cmd_line.algorithm = BRANCHES;
-                } else if (strcmp(optarg, "BUBBLES")==0) {
-                    cmd_line.algorithm = BUBBLES;
-                } else if (strcmp(optarg, "PERFECT_PATH")==0) {
-                    cmd_line.algorithm = PERFECT_PATH;
-                } else if (strcmp(optarg, "Y_WALK")==0) {
-                    cmd_line.algorithm = Y_WALK;
-                } else if (strcmp(optarg, "METACORTEX")==0) {
-                    cmd_line.algorithm = METACORTEX_CONSENSUS;
-                } else {
-                    fprintf(stderr,
-                            "[-A  | --algorithm  BRANCHES | BUBBLES | PERFECT_PATH | Y_WALK | METACORTEX ] recieved an invalid option %s ]", optarg);
-                    exit(-1);
-                }
-#endif
                 break;
                 
             case 'B':
@@ -767,15 +721,10 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
 
     // We've already sent this to the screen, but the log wasn't open then...
     if (cmd_line.output_log) {
-#ifdef ENABLE_BUBBLEPARSE
-        log_printf("Cortex Con Bubble Finding\n\n");
-#elif defined METACORTEX
         log_and_screen_printf("\nMetaCortex ");
         log_and_screen_printf(METACORTEX_VERSION);
         log_and_screen_printf("\n\n");
-#else
-        log_printf("\nCortex Con\n\n");
-#endif
+
         log_printf("Command: ");
         for (i = 0; i < argc; i++) {
             log_printf("%s ", argv[i]);
@@ -807,13 +756,6 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
     if (cmd_line.kmer_size % 2 == 0) {
         errx(1, "[-k | --kmer_size] is even [%i]!", cmd_line.kmer_size);
     }
-    
-#ifdef ENABLE_BUBBLEPARSE
-    if ((cmd_line.detect_bubbles != true) || (cmd_line.algorithm != BUBBLES)) {
-        errx(1, "Cortex_bub requires the -w option.");
-    }
-#endif
-
     
     //check that if we are printing coverages then we are dumping contigs
     //RHRG: We dont need to do t his since we may want to just print the coverages of the full graph. 
