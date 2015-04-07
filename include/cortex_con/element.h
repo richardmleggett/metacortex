@@ -75,11 +75,6 @@ typedef struct {
 	QualityStringArray quality_string_arrays[NUMBER_OF_COLOURS];
 #endif
     
-#ifdef ENABLE_MARK_PAIR
-    uint32_t supernode;
-#endif
-
-
 } Element;
 
 

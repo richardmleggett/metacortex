@@ -111,14 +111,6 @@ typedef struct {
 	Flags stop_reasons_first;
 	Flags stop_reasons_last;
     
-#ifdef ENABLE_MARK_PAIR
-    uint32_t * supernodes;
-    uint32_t * supernodes_count;
-    uint32_t last_supernode;
-    int supernodes_capacity;
-    int supernodes_total_count;
-#endif
-    
 } Path;
 
 typedef struct {
@@ -384,13 +376,6 @@ void path_to_base_space_fasta(Path * path, FILE * fout);
 
 #endif
 
-#ifdef ENABLE_MARK_PAIR
-
-void path_add_supernode(uint32_t id,  Path * path);
-
-void path_remove_supernode(uint32_t id, Path * path);
-
-#endif
 
 #endif /* PATH_H_ */
 

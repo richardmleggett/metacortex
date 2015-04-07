@@ -131,10 +131,6 @@ typedef struct
     int min_subgraph_size;
     int min_contig_length;
     TraverseAlgorithm algorithm;
-    
-#ifdef ENABLE_MARK_PAIR
-    char mark_pair_filename[LENGTH_FILENAME];
-#endif
 } CmdLine;
 
 CmdLine parse_cmdline( int argc, char* argv[],int unit_size); 

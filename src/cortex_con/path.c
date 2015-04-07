@@ -96,12 +96,6 @@ Path *path_new(int max_length, short kmer_size)
 	path->kmer_size = kmer_size;
 	path->header = 0;
 	path->used = false;
-
-#ifdef ENABLE_MARK_PAIR
-    path->supernodes_total_count = 0;
-    path->supernodes = NULL;
-    path->supernodes_count = NULL;
-#endif
 	
     if ((!path->nodes) || (!path->orientations) || (!path->labels)
 	    || (!path->seq)) {
@@ -176,9 +170,7 @@ void path_reset(Path * path)
 	for(i = 0; i < path->in_nodes_capacity; i++){
 		path->in_nodes[i] = 0;
 	}
-#ifdef ENABLE_MARK_PAIR
-    path->supernodes_total_count = 0;
-#endif
+
 }
 
 /**
@@ -473,10 +465,6 @@ boolean path_add_node(pathStep * step, Path * path)
     path->seq[path->length] = nucleotide == Undefined ? '\0'
 	    : binary_nucleotide_to_char(nucleotide);
 	path->seq[path->length + 1] = '\0';
-	
-#ifdef ENABLE_MARK_PAIR
-    path_add_supernode(step->node->supernode, path);
-#endif
     
 	path->length++;
 
@@ -1536,9 +1524,7 @@ void path_remove_last(Path * path)
     }
     
 	path->length--;
-#ifdef ENABLE_MARK_PAIR
-    path_add_supernode(path->nodes[path->length]->supernode, path);
-#endif
+
 	path->seq[path->length] = '\0';
 	path->nodes[path->length] = NULL;
 	path->orientations[path->length] = 0;
@@ -2345,95 +2331,4 @@ void path_to_base_space_fasta(Path * path, FILE * fout)
 	
 	fflush(fout);
 }
-#endif
-
-#ifdef ENABLE_MARK_PAIR
-
-static void init_supernodes_array(Path * path){
-    path->supernodes = calloc(PATH_DEFAULT_SUPERNODES, sizeof(uint32_t));
-    path->supernodes_count = calloc(PATH_DEFAULT_SUPERNODES, sizeof(uint32_t));
-    if (path->supernodes_count == NULL) {
-        fprintf(stderr, "Unable to allocate memory for supernodes count\n");
-        assert(0);
-        exit(-1);
-    }
-    if (path->supernodes == NULL) {
-        fprintf(stderr, "Unable to allocate memory for supernodes\n");
-        assert(0);
-        exit(-1);
-    }
-    path->supernodes_capacity = PATH_DEFAULT_SUPERNODES;
-    path->last_supernode = -1;
-    path->supernodes_total_count = 0;
-}
-
-static void grow_supernodes_array(Path * path){
-    unsigned long new_size = path->supernodes_capacity + PATH_SUPERNODES_CAPACITY_INCREASE;
-    uint32_t * tmp_arr = realloc(path->supernodes, new_size * sizeof(uint32_t));
-    if (tmp_arr == NULL) {
-        fprintf(stderr, "Unable to reallocate memory for supernodes \n");
-        assert(0);
-        exit(-1);
-    }
-    path->supernodes = tmp_arr;
-    tmp_arr = realloc(path->supernodes_count, new_size * sizeof(uint32_t));
-    if (tmp_arr == NULL) {
-        fprintf(stderr, "Unable to reallocate memory for supernodes count\n");
-        assert(0);
-        exit(-1);
-    }
-    path->supernodes_count = tmp_arr;
-}
-
-static int find_index_of_supernode(uint32_t supernode, Path * path){
-    int i;
-    int index = -1;
-    if (path->supernodes == 0) {
-        return index;
-    }
-    if (path->last_supernode > path->supernodes_total_count) {
-        return index;
-    }
-    if (path->supernodes[path->last_supernode] == supernode) {
-        index = path->last_supernode;
-    }
-    
-    for (i = 0; i < path->supernodes_total_count && index == -1; i++) {
-        if (path->supernodes[i] == supernode) {
-            index = i;
-        }
-    }
-    return index;
-}
-
-void path_add_supernode(uint32_t id,  Path * path){
-    if (path->supernodes_capacity == 0) {
-        init_supernodes_array(path);
-    }
-    if (path->supernodes_total_count == path->supernodes_capacity) {
-        grow_supernodes_array(path);
-    }
-    int index = find_index_of_supernode(id, path);
-    if (index == -1) {
-        index = path->supernodes_total_count;
-        path->supernodes[index] = id;
-        path->supernodes_count[index] = 0;//force initialization of the counter. 
-        path->supernodes_total_count++;
-    }
-    path->last_supernode = index;
-    path->supernodes_count[index]++;
-}
-
-void path_remove_supernode(uint32_t id, Path * path){
-    int index = find_index_of_supernode(id, path);
-    path->supernodes_count[index]--;
-    while (path->supernodes_count[path->supernodes_total_count - 1] == 0) {
-        path->supernodes_total_count--;
-        index = path->supernodes_total_count;
-        path->supernodes[index] = 0;
-        path->last_supernode = index - 1;
-    }
-}
-
-
 #endif

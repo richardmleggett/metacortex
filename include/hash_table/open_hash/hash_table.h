@@ -71,11 +71,6 @@ typedef struct {
     double average_number_of_connections[NUMBER_OF_COLOURS]; 
     long long common_kmers_in_all_colours; 
     unsigned long perfect_path_count;
-
-#ifdef ENABLE_MARK_PAIR
-//    BinaryTree * supernode_links;
-    void * supernode_link;
-#endif
     long long number_of_reads[NUMBER_OF_COLOURS];
     
 #ifdef KMER_TOOLS 

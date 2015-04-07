@@ -42,11 +42,6 @@
 #include <err.h>
 #include <logger.h>
 
-#ifdef ENABLE_MARK_PAIR
-#include <db_graph.h>
-#include <mark_pair.h>
-#endif
-
 void usage(void)
 {
 #ifdef METACORTEX

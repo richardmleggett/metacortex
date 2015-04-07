@@ -92,9 +92,7 @@ HashTable * hash_table_new(int number_bits, int bucket_size, int max_rehash_trie
 	}
 	hash_table->kmer_size      = kmer_size;
 	hash_table->number_of_threads = 1;
-#ifdef ENABLE_MARK_PAIR
-    hash_table->supernode_link = NULL;
-#endif
+
 	return hash_table;
 }
 

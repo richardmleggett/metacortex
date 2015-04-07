@@ -48,10 +48,6 @@
 #include <y_walk.h>
 #include <logger.h>
 #include <assert.h>
-#ifdef ENABLE_MARK_PAIR
-#include <binary_tree.h>
-#include <mark_pair.h>
-#endif
 #include <cleaning.h>
 #include <cmd_line.h>
 #include "metacortex.h"
