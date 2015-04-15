@@ -56,14 +56,14 @@ BIN_SUFFIX = $(MAXK)
 IDIR_BASIC =include/basic
 IDIR_UTIL =include/util
 IDIR_HASH  =include/hash_table 
-IDIR_CORTEX = include/cortex_con
+IDIR_CORTEX = include/cortex
 IDIR_ALIGNMENT = include/alignment
 IDIR_STATS = include/stats
 
 # Test code includes
 IDIR_BASIC_TESTS =include/test/basic
 IDIR_HASH_TABLE_TESTS =include/test/hash_table
-IDIR_CORTEX_TESTS=include/test/cortex_con
+IDIR_CORTEX_TESTS=include/test/cortex
 
 #Default CUnit installation path in some Linux distributions. 
 IDIR_CUNIT=/usr/local/include/CUnit/ 
@@ -114,16 +114,16 @@ CFLAGS_METACORTEX_TESTS	= -I$(IDIR_CUNIT) $(CFLAGS_CUNIT) -I$(IDIR_BASIC) -I$(ID
 CFLAGS_BASIC_TESTS = -I$(IDIR_CUNIT) $(CFLAGS_CUNIT) -I$(IDIR_BASIC) -I$(IDIR_BASIC_TESTS)
 
 # Program objects
-METACORTEX_OBJ = obj/cortex_con/file_format.o obj/cortex_con/flags.o obj/cortex_con/cleaning.o obj/cortex_con/path.o obj/cortex_con/perfect_path.o obj/cortex_con/branches.o obj/cortex_con/y_walk.o obj/cortex_con/cmd_line.o obj/cortex_con/binary_kmer.o obj/cortex_con/seq.o obj/cortex_con/element.o obj/cortex_con/hash_value.o obj/cortex_con/hash_table.o obj/cortex_con/dB_graph.o obj/cortex_con/file_reader.o obj/cortex_con/cortex_con.o obj/cortex_con/logger.o obj/cortex_con/metacortex.o obj/cortex_con/coverage_walk.o obj/util/node_queue.o
-KMERINFO_OBJ =  obj/cortex_con/flags.o obj/cortex_con/path.o obj/cortex_con/binary_kmer.o obj/cortex_con/seq.o obj/cortex_con/element.o obj/cortex_con/hash_table.o obj/cortex_con/file_reader.o obj/util/kmerinfo.o obj/cortex_con/logger.o obj/cortex_con/hash_value.o
-GRAPHOUT_OBJ = obj/cortex_con/flags.o obj/cortex_con/path.o obj/cortex_con/binary_kmer.o obj/cortex_con/seq.o obj/cortex_con/element.o obj/cortex_con/hash_table.o obj/cortex_con/file_reader.o obj/cortex_con/dB_graph.o obj/util/graphout.o obj/cortex_con/perfect_path.o obj/cortex_con/logger.o obj/cortex_con/hash_value.o obj/util/graph_formats.o obj/util/node_queue.o obj/cortex_con/cleaning.o obj/cortex_con/coverage_walk.o obj/util/graph_tools.o obj/cortex_con/file_format.o
-FILTERREADS_OBJ = obj/util/filter_reads.o obj/cortex_con/flags.o obj/cortex_con/path.o obj/cortex_con/binary_kmer.o obj/cortex_con/seq.o obj/cortex_con/element.o obj/cortex_con/hash_table.o obj/cortex_con/file_reader.o obj/cortex_con/dB_graph.o obj/cortex_con/perfect_path.o obj/cortex_con/logger.o obj/cortex_con/hash_value.o obj/util/node_queue.o obj/cortex_con/cleaning.o obj/cortex_con/file_format.o
-BASIC_TESTS_OBJ	= obj/test/binary_kmer.o obj/test/seq.o obj/test/test_binary_kmer.o obj/test/test_seq.o obj/test/run_basic_tests.o  obj/cortex_con/logger.o
-HASH_TABLE_TESTS_OBJ = obj/cortex_con/flags.o obj/test/run_hash_table_tests.o obj/cortex_con/element.o obj/cortex_con/hash_value.o obj/cortex_con/hash_table.o obj/test/test_hash.o obj/cortex_con/binary_kmer.o  obj/cortex_con/seq.o obj/cortex_con/logger.o
-GRAPH_TESTS_OBJ = obj/cortex_con/branches.o obj/cortex_con/file_format.o obj/test/test_dB_graph.o obj/cortex_con/logger.o  obj/cortex_con/cleaning.o  obj/cortex_con/perfect_path.o obj/cortex_con/path.o obj/cortex_con/flags.o obj/cortex_con/binary_kmer.o obj/cortex_con/seq.o obj/cortex_con/element.o obj/cortex_con/hash_value.o obj/cortex_con/hash_table.o obj/cortex_con/dB_graph.o obj/cortex_con/file_reader.o obj/cortex_con/y_walk.o  obj/test/test_file_reader.o obj/test/test_graph_element.o obj/test/run_dB_graph_tests.o 
+METACORTEX_OBJ = obj/cortex/file_format.o obj/cortex/flags.o obj/cortex/cleaning.o obj/cortex/path.o obj/cortex/perfect_path.o obj/cortex/branches.o obj/cortex/y_walk.o obj/cortex/cmd_line.o obj/cortex/binary_kmer.o obj/cortex/seq.o obj/cortex/element.o obj/cortex/hash_value.o obj/cortex/hash_table.o obj/cortex/dB_graph.o obj/cortex/file_reader.o obj/cortex/cortex_con.o obj/cortex/logger.o obj/cortex/metacortex.o obj/cortex/coverage_walk.o obj/util/node_queue.o
+KMERINFO_OBJ =  obj/cortex/flags.o obj/cortex/path.o obj/cortex/binary_kmer.o obj/cortex/seq.o obj/cortex/element.o obj/cortex/hash_table.o obj/cortex/file_reader.o obj/util/kmerinfo.o obj/cortex/logger.o obj/cortex/hash_value.o
+GRAPHOUT_OBJ = obj/cortex/flags.o obj/cortex/path.o obj/cortex/binary_kmer.o obj/cortex/seq.o obj/cortex/element.o obj/cortex/hash_table.o obj/cortex/file_reader.o obj/cortex/dB_graph.o obj/util/graphout.o obj/cortex/perfect_path.o obj/cortex/logger.o obj/cortex/hash_value.o obj/util/graph_formats.o obj/util/node_queue.o obj/cortex/cleaning.o obj/cortex/coverage_walk.o obj/util/graph_tools.o obj/cortex/file_format.o
+FILTERREADS_OBJ = obj/util/filter_reads.o obj/cortex/flags.o obj/cortex/path.o obj/cortex/binary_kmer.o obj/cortex/seq.o obj/cortex/element.o obj/cortex/hash_table.o obj/cortex/file_reader.o obj/cortex/dB_graph.o obj/cortex/perfect_path.o obj/cortex/logger.o obj/cortex/hash_value.o obj/util/node_queue.o obj/cortex/cleaning.o obj/cortex/file_format.o
+BASIC_TESTS_OBJ	= obj/test/binary_kmer.o obj/test/seq.o obj/test/test_binary_kmer.o obj/test/test_seq.o obj/test/run_basic_tests.o  obj/cortex/logger.o
+HASH_TABLE_TESTS_OBJ = obj/cortex/flags.o obj/test/run_hash_table_tests.o obj/cortex/element.o obj/cortex/hash_value.o obj/cortex/hash_table.o obj/test/test_hash.o obj/cortex/binary_kmer.o  obj/cortex/seq.o obj/cortex/logger.o
+GRAPH_TESTS_OBJ = obj/cortex/branches.o obj/cortex/file_format.o obj/test/test_dB_graph.o obj/cortex/logger.o  obj/cortex/cleaning.o  obj/cortex/perfect_path.o obj/cortex/path.o obj/cortex/flags.o obj/cortex/binary_kmer.o obj/cortex/seq.o obj/cortex/element.o obj/cortex/hash_value.o obj/cortex/hash_table.o obj/cortex/dB_graph.o obj/cortex/file_reader.o obj/cortex/y_walk.o  obj/test/test_file_reader.o obj/test/test_graph_element.o obj/test/run_dB_graph_tests.o 
 
 #Library objects
-LIBRARY_OBJ =  obj/cortex_con/file_format.o obj/cortex_con/analysis.o obj/cortex_con/flags.o obj/cortex_con/cleaning.o obj/cortex_con/path.o obj/cortex_con/perfect_path.o obj/cortex_con/branches.o obj/cortex_con/y_walk.o obj/cortex_con/cmd_line.o obj/cortex_con/binary_kmer.o obj/cortex_con/seq.o obj/cortex_con/element.o obj/cortex_con/hash_value.o obj/cortex_con/hash_table.o obj/cortex_con/dB_graph.o obj/cortex_con/file_reader.o obj/cortex_con/cortex_con.o obj/cortex_con/logger.o obj/cortex_con/metacortex.o obj/cortex_con/coverage_walk.o obj/util/node_queue.o
+LIBRARY_OBJ =  obj/cortex/file_format.o obj/cortex/analysis.o obj/cortex/flags.o obj/cortex/cleaning.o obj/cortex/path.o obj/cortex/perfect_path.o obj/cortex/branches.o obj/cortex/y_walk.o obj/cortex/cmd_line.o obj/cortex/binary_kmer.o obj/cortex/seq.o obj/cortex/element.o obj/cortex/hash_value.o obj/cortex/hash_table.o obj/cortex/dB_graph.o obj/cortex/file_reader.o obj/cortex/cortex_con.o obj/cortex/logger.o obj/cortex/metacortex.o obj/cortex/coverage_walk.o obj/util/node_queue.o
 
 # Main rules
 metacortex : remove_objects $(METACORTEX_OBJ)
@@ -161,26 +161,26 @@ remove_objects:
 # Pattern rules
 
 # cortex_con
-obj/cortex_con/%.o : src/cortex_con/%.c include/cortex_con/%.h
-	mkdir -p obj/cortex_con;  $(CC) $(CFLAGS_METACORTEX) $(OPT) -c $< -o $@
+obj/cortex/%.o : src/cortex/%.c include/cortex/%.h
+	mkdir -p obj/cortex;  $(CC) $(CFLAGS_METACORTEX) $(OPT) -c $< -o $@
 
-obj/cortex_con/%.o : src/basic/%.c include/basic/%.h
-	mkdir -p obj/cortex_con;  $(CC) $(CFLAGS_METACORTEX) $(OPT) -c $< -o $@
+obj/cortex/%.o : src/basic/%.c include/basic/%.h
+	mkdir -p obj/cortex;  $(CC) $(CFLAGS_METACORTEX) $(OPT) -c $< -o $@
 
-obj/cortex_con/%.o : src/hash_table/hash_key/bob_jenkins/%.c include/hash_table/hash_value.h
-	mkdir -p obj/cortex_con;  $(CC) $(CFLAGS_METACORTEX) $(OPT) -c $< -o $@
+obj/cortex/%.o : src/hash_table/hash_key/bob_jenkins/%.c include/hash_table/hash_value.h
+	mkdir -p obj/cortex;  $(CC) $(CFLAGS_METACORTEX) $(OPT) -c $< -o $@
 
-obj/cortex_con/%.o : src/hash_table/open_hash/%.c include/hash_table/open_hash/%.h
-	mkdir -p obj/cortex_con;  $(CC) $(CFLAGS_METACORTEX) $(OPT) -c $< -o $@
+obj/cortex/%.o : src/hash_table/open_hash/%.c include/hash_table/open_hash/%.h
+	mkdir -p obj/cortex;  $(CC) $(CFLAGS_METACORTEX) $(OPT) -c $< -o $@
 
-obj/cortex_con/%.o : src/cortex_con/%.c 
-	mkdir -p obj/cortex_con;  $(CC) $(CFLAGS_METACORTEX) $(OPT) -c $? -o $@
+obj/cortex/%.o : src/cortex/%.c 
+	mkdir -p obj/cortex;  $(CC) $(CFLAGS_METACORTEX) $(OPT) -c $? -o $@
 
 # Unit tests
-obj/test/%.o : src/test/cortex_con/%.c include/test/cortex_con/%.h
+obj/test/%.o : src/test/cortex/%.c include/test/cortex/%.h
 	mkdir -p obj/test/; $(CC) $(CFLAGS_METACORTEX_TESTS) $(OPT) -c $< -o $@	
 
-obj/test/run_dB_graph_tests.o : src/test/cortex_con/run_dB_graph_tests.c
+obj/test/run_dB_graph_tests.o : src/test/cortex/run_dB_graph_tests.c
 	mkdir -p obj/test/; $(CC) $(CFLAGS_METACORTEX_TESTS) $(OPT) -c $< -o $@	
 
 obj/test/%.o : src/basic/%.c include/basic/%.h
