@@ -32,7 +32,7 @@
 #include "node_queue.h"
 #include "coverage_walk.h"
 #include "perfect_path.h"
-#include "metacortex.h"
+#include "metagraphs.h"
 #include "cleaning.h"
 
 /*----------------------------------------------------------------------*

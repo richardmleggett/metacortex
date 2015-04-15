@@ -50,7 +50,7 @@
 #include <assert.h>
 #include <cleaning.h>
 #include <cmd_line.h>
-#include "metacortex.h"
+#include "metagraphs.h"
 
 typedef struct {
     char* filename;

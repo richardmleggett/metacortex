@@ -1,4 +1,4 @@
 obj
 bin
-src/cortex_con/metacortex_old.c
-src/cortex_con/metacortex_new.c
+src/cortex/metacortex_old.c
+src/cortex/metacortex_new.c
