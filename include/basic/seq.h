@@ -46,9 +46,6 @@ typedef struct
     //TODO validate that the sequence never gets out of bounds...
     int max_length;
     int max_name_length;
-#ifdef ALIGN
-    int count;
-#endif
     boolean upper_case;
     boolean check_quality_values;
     char qual_offset;

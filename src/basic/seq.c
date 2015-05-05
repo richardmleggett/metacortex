@@ -1226,9 +1226,6 @@ void sequence_copy(Sequence * to, Sequence * from)
 	//printf("qual: %s = %s", to->qual, from->qual);
 	to->start = from->start;
 	to->end = from ->end;
-#ifdef ALIGN
-	to->count = from ->count;
-#endif
 	to->length = from ->length;
 	to->qual_offset = from->qual_offset;
 }
