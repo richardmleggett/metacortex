@@ -46,19 +46,6 @@
 #define NUMBER_OF_COLOURS 1
 #endif
 
-#ifdef ENABLE_READ_TRACK
-#ifndef READ_TRACK_DATATYPE
-#define READ_TRACK_DATATYPE unsigned long long
-#endif
-
-#ifndef READ_PAIR_LENGTH
-#define READ_PAIR_LENGTH   (sizeof(READ_TRACK_DATATYPE)*8)
-#endif
-
-#define NUMBER_OF_SIGNATURES 2
-
-#endif
-
 //type definitions
 typedef char Edges;
 
