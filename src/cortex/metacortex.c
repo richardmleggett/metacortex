@@ -378,12 +378,6 @@ int main(int argc, char **argv)
             hash_table_print_stats(db_graph);
         }
     }
-
-	if(cmd_line.output_reference_coverage_file_known){
-		timestamp();
-		log_and_screen_printf("\nPrinting coverages from fasta\n");
-		fflush(stdout);
-	}
     
     if(cmd_line.dump_hash){
 		timestamp();
@@ -391,7 +385,9 @@ int main(int argc, char **argv)
 		hash_table_dump_memory(cmd_line.output_hash_filename, db_graph);
 		fflush(stdout);
 	}
+
     hash_table_print_stats(db_graph);
+    
     if (cmd_line.dump_binary) {
         timestamp();
         log_and_screen_printf("\n");

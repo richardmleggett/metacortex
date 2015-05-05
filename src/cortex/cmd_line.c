@@ -103,7 +103,6 @@ int default_opts(CmdLine * c)
     c->graphviz = false;
     c->print_uncertain_as_n = true;
     c->output_log = false;
-    c->output_reference_coverage_file_known=false;
     c->min_contig_length = 0;
     
     //-----------
@@ -190,7 +189,6 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
    		{"input_reference", required_argument, NULL, 'H'},
 		{"output_kmer_coverage", required_argument, NULL, 'J'},
         {"remove_spurious_links",required_argument,NULL,'L'},
-		{"output_reference_coverage_file", required_argument, NULL, 'M'},
         {"hash_output_file", required_argument, NULL, 'O'},
         {"tip_clip_iterations", required_argument, NULL, 'P'},
         {"threads", required_argument, NULL, 'T'},
@@ -198,7 +196,7 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
     };
     
     while ((opt = getopt_long(argc, argv,
-                              "ab:c:d:ef:g:hi:jk:l:m:n:o:p:q:s:t:uvw:x:z:A:B:C:D:E:FG:H:I:J:K:L:M:N:O:P:S:TZ:",
+                              "ab:c:d:ef:g:hi:jk:l:m:n:o:p:q:s:t:uvw:x:z:A:B:C:D:E:FG:H:I:J:K:L:N:O:P:S:TZ:",
                               long_options, &longopt_index)) > 0)
     {                
         //Parse the default options
@@ -501,15 +499,6 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                     }
                 }
                 break;
-            case 'M':
-				cmd_line.output_reference_coverage_file_known = true;
-		        if (strlen(optarg) < LENGTH_FILENAME) {
-		           	strcpy(cmd_line.output_reference_coverage_file, optarg);
-		        } else {
-               		errx(1, "[-M | --output_reference_coverage_file] filename too long [%s]", optarg);
-		        }
-			break;
-				
             case 'N':
                 cmd_line.print_uncertain_as_n = false;
                 break;
@@ -629,20 +618,6 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
     if (cmd_line.kmer_size % 2 == 0) {
         errx(1, "[-k | --kmer_size] is even [%i]!", cmd_line.kmer_size);
     }
-    
-    //check that if we are printing coverages then we are dumping contigs
-    //RHRG: We dont need to do t his since we may want to just print the coverages of the full graph. 
-    //if (cmd_line.output_coverages == true){
-    //   if (cmd_line.output_fasta == false){
-    //       errx(1, "[-e] cannot output coverages without contigs\n");
-    //    } 
-    //}
-    //check that if we are going to print the coverage  of a reference, the reference file exists;
-	if(cmd_line.output_reference_coverage_file_known){
-		if(!cmd_line.input_reference_known){
-			errx(1, "[-M | --output_reference_coverage ] <filename> requires to give a reference file with [-H | --input_reference ] <filename>\n");
-		}
-	}
 
     return cmd_line;
 }
