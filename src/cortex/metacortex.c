@@ -435,7 +435,6 @@ int main(int argc, char **argv)
                                          db_graph);
                 
                 break;
-            
             case Y_WALK:
                 log_and_screen_printf("\nDumping supernodes (Y_WALK): %s\n", cmd_line.output_fasta_filename);
                 fflush(stdout);
@@ -459,10 +458,9 @@ int main(int argc, char **argv)
         }
     }
     
+    // Write graphviz file?
     if (cmd_line.graphviz) {
         timestamp();
-        // Write graphviz file
-        
         write_graphviz_file(cmd_line.output_graphviz_filename, db_graph);
         fflush(stdout);
 	}
