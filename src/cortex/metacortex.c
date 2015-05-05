@@ -197,8 +197,7 @@ int main(int argc, char **argv)
         fflush(stdout);
         
         //Create the de Bruijn graph/hash table
-        db_graph = hash_table_new(cmd_line.number_of_buckets_bits,
-                                  cmd_line.bucket_size, 25, cmd_line.kmer_size);
+        db_graph = hash_table_new(cmd_line.number_of_buckets_bits, cmd_line.bucket_size, 25, cmd_line.kmer_size);
         
         if (db_graph == NULL) {
             printf("Please free up memory and re-run.\n");
@@ -274,10 +273,7 @@ int main(int argc, char **argv)
                 case CTX:                    
                     log_and_screen_printf("\nReading ctx file %'d: %s\n", i+1, filename);		
 				    fflush(stdout);
-                    seq_length = load_binary_from_filename_into_graph(filename,
-                                                         db_graph,
-                                                         colour,
-                                                         all_entries_are_unique);
+                    seq_length = load_binary_from_filename_into_graph(filename, db_graph, colour, all_entries_are_unique);
                     
                     all_entries_are_unique = false;
                     break;
@@ -288,11 +284,7 @@ int main(int argc, char **argv)
                     }
                     log_and_screen_printf("\nReading fastq file %'d: %s\n", i+1, filename);		
 				    fflush(stdout);
-                    seq_length = load_fastq_from_filename_into_graph(filename,
-                                                        colour,
-                                                        &bad_reads,
-                                                        cmd_line.quality_score_threshold,
-                                                        5000, cmd_line.quality_score_offset, db_graph);
+                    seq_length = load_fastq_from_filename_into_graph(filename, colour, &bad_reads, cmd_line.quality_score_threshold, 5000, cmd_line.quality_score_offset, db_graph);
                     break;
                     
                 case FASTA:
@@ -301,10 +293,7 @@ int main(int argc, char **argv)
                     }
                     log_and_screen_printf("\nReading fasta file %'d: %s\n", i+1, filename);		
 				    fflush(stdout);
-                    seq_length = load_fasta_from_filename_into_graph(filename,
-                                                        colour,
-                                                        &bad_reads,
-                                                        5000, db_graph);
+                    seq_length = load_fasta_from_filename_into_graph(filename, colour, &bad_reads, 5000, db_graph);
                     break;
                 default:
                     printf("Unknown file format. ");
@@ -355,6 +344,7 @@ int main(int argc, char **argv)
         hash_table_print_stats(db_graph);
 	}
     
+    /* Prototype code */
     if (cmd_line.remove_spurious_links) {
 		timestamp();
 		log_and_screen_printf("\nRemoving spurious links\n");
@@ -387,26 +377,6 @@ int main(int argc, char **argv)
             log_and_screen_printf("%'d tips clipped\n", cleaning_remove_tips(cmd_line.tip_length, cmd_line.tip_clip_iterations ,db_graph));
             hash_table_print_stats(db_graph);
         }
-    }
-    
-        
-    if (cmd_line.output_kmer_coverage_known) {
-        timestamp();
-        char fname[1024];
-        strcpy(fname, cmd_line.output_kmer_coverage);
-        strcat(fname, ".tab");
-        
-        FILE *out = fopen(fname, "w");
-        db_graph_print_coverage(out, db_graph);
-        
-        strcpy(fname, cmd_line.output_kmer_coverage);
-        strcat(fname, "_kmer.tab");
-        
-        FILE *out2 = fopen(fname, "w");
-        db_graph_print_kmer_coverage(out2, db_graph);
-        fclose(out2);
-        fclose(out);
-        fflush(stdout);
     }
 
 	if(cmd_line.output_reference_coverage_file_known){

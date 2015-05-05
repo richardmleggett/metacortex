@@ -80,7 +80,6 @@ typedef struct
     boolean graphviz;
     boolean print_uncertain_as_n;
     boolean output_log;
-	boolean output_kmer_coverage_known;
 	boolean output_reference_coverage_file_known;
 	boolean output_kmer_coverage_know ;
     

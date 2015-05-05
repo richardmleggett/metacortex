@@ -85,7 +85,6 @@ int default_opts(CmdLine * c)
     c->input_file_format_known = false;
     c->health_check_binary = false; 
 	c->input_reference_known = false;
-    c->output_kmer_coverage_known = false;
     
     //cleaning
     c->tip_clip = false;
