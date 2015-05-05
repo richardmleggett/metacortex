@@ -61,15 +61,6 @@ void element_assign(Element * e1, Element * e2)
 	for (i = 0; i < NUMBER_OF_COLOURS; i++) {
 		e1->edges[i] = e2->edges[i];
 		e1->coverage[i] = e2->coverage[i];
-#ifdef INCLUDE_QUALITY_SCORES
-		e1->quality_string_arrays[i].number_of_strings =
-		    e2->quality_string_arrays[i].number_of_strings;
-		e1->quality_string_arrays[i].limit =
-		    e2->quality_string_arrays[i].limit;
-		// WARNING: Probably need to change this to copy the quality strings array
-		e1->quality_string_arrays[i].quality_strings =
-		    e2->quality_string_arrays[i].quality_strings;
-#endif
 	}
 }
 
@@ -83,56 +74,6 @@ boolean element_is_key(Key key, Element e, short kmer_size)
 
 	return binary_kmer_comparison_operator(*key, e.kmer);
 }
-
-#ifdef INCLUDE_QUALITY_SCORES
-void element_preallocate_quality_strings(Element * e, int c, int n)
-{
-	QualityStringArray *qa = &e->quality_string_arrays[c];
-    
-    if (n > 0) {
-        qa->quality_strings = calloc(n, sizeof(QualityString));
-        if (qa->quality_strings == NULL) {
-            printf("Can't allocate memory for quality strings.\n");
-            exit(1);
-        }
-    }
-    
-	qa->number_of_strings = 0;
-	qa->limit = n;
-}
-
-void element_add_quality_string(Element * e, short c, char *q)
-{
-	QualityStringArray *qa = &e->quality_string_arrays[c];
-
-    // Sanity checking
-    assert(e != NULL);
-    assert(q != NULL);
-    assert(c >= 0);
-    assert(qa->number_of_strings >= 0);    
-    
-	if (qa->number_of_strings == qa->limit) {
-		qa->limit += 1;
-		if (qa->limit == 1) {
-			qa->quality_strings = malloc(qa->limit * sizeof(QualityString));
-		} else {
-			qa->quality_strings = realloc(qa->quality_strings, qa->limit * sizeof(QualityString));
-		}
-		if (qa->quality_strings == NULL) {
-			printf("Can't allocate memory for quality strings.\n");
-			exit(1);
-		}
-	}
-    
-	qa->quality_strings[qa->number_of_strings].quality = malloc(strlen(q) + 1);
-	if (qa->quality_strings[qa->number_of_strings].quality == NULL) {
-		printf("Can't allocate memory for quality strings.\n");
-		exit(1);
-	}
-	strcpy(qa->quality_strings[qa->number_of_strings].quality, q);
-	qa->number_of_strings++;
-}
-#endif
 
 /* No longer required?
 boolean element_smaller(Element e1, Element e2) {
@@ -223,11 +164,6 @@ void element_initialise(Element * e, BinaryKmer * kmer, short kmer_size)
 	for (i = 0; i < NUMBER_OF_COLOURS; i++) {
 		e->edges[i] = 0;
 		e->coverage[i] = 0;
-#ifdef INCLUDE_QUALITY_SCORES
-		e->quality_string_arrays[i].number_of_strings = 0;
-		e->quality_string_arrays[i].limit = 0;
-		e->quality_string_arrays[i].quality_strings = NULL;
-#endif
 	}
 }
 

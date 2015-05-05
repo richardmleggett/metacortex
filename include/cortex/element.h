@@ -71,10 +71,6 @@ typedef struct {
 	// less significant nibble forward
 	Edges edges[NUMBER_OF_COLOURS];
 	Flags flags;
-#ifdef INCLUDE_QUALITY_SCORES
-	QualityStringArray quality_string_arrays[NUMBER_OF_COLOURS];
-#endif
-    
 } Element;
 
 
@@ -101,11 +97,6 @@ Key element_get_key(BinaryKmer*, short kmer_size, Key preallocated_key);
 //boolean element_smaller(Element, Element);
 
 void element_initialise(Element *, BinaryKmer* kmer, short kmer_size);
-
-#ifdef INCLUDE_QUALITY_SCORES
-void element_add_quality_string(Element *e, short c, char *q);
-void element_preallocate_quality_strings(Element *e, int c, int n);
-#endif
 
 BinaryKmer* element_get_kmer(Element *);
 

@@ -48,49 +48,19 @@
 #define SINGLE_NUCLEOTIDE_SHIFT 2
 #define BINVERSION 5
 
-#ifdef INCLUDE_QUALITY_SCORES
-#define TYPE_UNKNOWN  0
-#define TYPE_SANGER   1
-#define TYPE_SOLEXA   2
-#define TYPE_ILLUMINA 3
-#endif
-
 // change this if you want to support different kmer-ranges
 #ifndef NUMBER_OF_BITFIELDS_IN_BINARY_KMER
 #define NUMBER_OF_BITFIELDS_IN_BINARY_KMER  ALLOW_KMERS_UP_TO_31 //Moved to the makefile
 #endif
-
-
-
 
 //platform specific
 typedef uint64_t bitfield_of_64bits;
 
 typedef bitfield_of_64bits BinaryKmer[NUMBER_OF_BITFIELDS_IN_BINARY_KMER]; //think of this as the number of long longs we encode the kmer in
 
-
-
-
-
-#ifdef INCLUDE_QUALITY_SCORES
-typedef struct {
-	char * quality;
-} QualityString;
-
-typedef struct {
-	uint32_t number_of_strings;
-	uint32_t limit;
-	QualityString * quality_strings;
-} QualityStringArray;
-#endif
-
-
 typedef struct {
 	int nkmers;
 	BinaryKmer * kmer;
-#ifdef INCLUDE_QUALITY_SCORES
-	QualityString * quality_strings;
-#endif
 } KmerSlidingWindow;
 
 /**

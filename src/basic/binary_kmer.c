@@ -372,23 +372,6 @@ char binary_nucleotide_to_char(Nucleotide n)
 	}
 }
 
-#ifdef INCLUDE_QUALITY_SCORES
-void quality_string_shift_one_base_and_insert_new_base_at_right_end(char
-																	*quality_string,
-																	char q,
-																	int
-																	kmer_size)
-{
-	int i;
-	
-	for (i = 0; i < strlen(quality_string) - 1; i++) {
-		quality_string[i] = quality_string[i + 1];
-	}
-	
-	quality_string[strlen(quality_string) - 1] = q;
-}
-#endif
-
 char *nucleotides_to_string(Nucleotide * nucleotides, int length, char *string)
 {
 	
@@ -706,131 +689,6 @@ int get_single_kmer_sliding_window_from_sequence(char *seq, int length,
 	
 }
 
-// Version of get_sliding_windows_from_sequence used by bubbleparse
-// Could be merged back into original function in future
-#ifdef INCLUDE_QUALITY_SCORES
-int get_sliding_windows_from_sequence_with_quality(char *seq, char *qualities, int length,
-                                                   char quality_cut_off, short kmer_size,
-                                                   KmerSlidingWindowSet * windows,
-                                                   int max_windows, int max_kmers)
-{
-	char first_kmer[kmer_size + 1];
-	char quality_string[kmer_size + 1];
-	first_kmer[kmer_size] = '\0';
-	int i = 0;		//current index
-	int count_kmers = 0;
-	
-	if (seq == NULL) {
-		fputs("in get_sliding_windows_from_sequence, seq is NULL\n", stderr);
-		exit(1);
-	}
-	
-	if (length < kmer_size || max_windows == 0 || max_kmers == 0) {
-		return 0;
-	}
-	
-	int index_windows = 0;
-	
-	//loop over the bases in the sequence
-	//index i is the current position in input sequence -- it nevers decreases.
-	
-	do {
-		//built first kmer, ie a stretch of kmer_size good qualities bases
-		int j = 0;	//count how many good bases
-        
-		while ((i < length) && (j < kmer_size)) {
-			//collects the bases in the first kmer
-			first_kmer[j] = seq[i];
-			quality_string[j] = qualities[i] + 33;
-			if ((char_to_binary_nucleotide(seq[i]) == Undefined) || (quality_cut_off != 0 && qualities[i] <= quality_cut_off)) {
-                j = 0;	//restart the first kmer
-			} else {
-				j++;
-			}
-			
-			i++;
-		}
-		
-		if (j == kmer_size) {	//ie we did not parse the entire sequence looking for a single good kmer, the first kmer
-			
-			count_kmers++;
-			
-			//new sliding window
-			if (index_windows >= max_windows) {
-				fputs("number of windows is bigger than max_windows", stderr);
-				exit(1);
-			}
-			
-			KmerSlidingWindow *current_window =
-			&(windows->window[index_windows]);
-			
-			int index_kmers = 0;
-			//do first kmer
-			BinaryKmer tmp_bin_kmer;
-			seq_to_binary_kmer(first_kmer, kmer_size, &tmp_bin_kmer);
-			binary_kmer_assignment_operator(current_window->kmer[index_kmers], tmp_bin_kmer);
-            
-			if (current_window->quality_strings[index_kmers].quality == NULL) {
-				current_window->quality_strings[index_kmers].
-				quality = malloc(kmer_size + 1);
-			}
-			if (!current_window->quality_strings[index_kmers].quality) {
-				fputs("[get_sliding_windows_from_sequence] Couldn't get memory to store quality scores.\n", stderr);
-				exit(1);
-			}
-			strncpy(current_window->quality_strings[index_kmers].quality, quality_string, kmer_size);
-			current_window->quality_strings[index_kmers].
-			quality[kmer_size] = 0;
-			
-			//do the rest --
-			index_kmers++;
-			
-			while (i < length) {
-				
-				if (index_kmers >= max_kmers) {
-					fputs("number of kmers is bigger than max_kmers\n", stderr);
-					exit(1);
-				}
-				
-				Nucleotide current_base =
-				char_to_binary_nucleotide(seq[i]);
-				if ((current_base == Undefined) || (quality_cut_off != 0 && qualities[i] <= quality_cut_off)) {
-						i++;	//zam test
-						break;
-					}
-				//set the kmer to previous
-				binary_kmer_assignment_operator(current_window->kmer[index_kmers], current_window->kmer[index_kmers - 1]);
-				binary_kmer_left_shift_one_base_and_insert_new_base_at_right_end(&(current_window->kmer[index_kmers]), current_base, kmer_size);
-                
-				if (current_window->quality_strings[index_kmers].quality == NULL) {
-					current_window->
-					quality_strings[index_kmers].
-					quality = malloc(kmer_size + 1);
-				}
-				if (!current_window->quality_strings[index_kmers].quality) {
-					fputs("[get_sliding_windows_from_sequence] Couldn't get memory to store quality scores.\n", stderr);
-					exit(1);
-				}
-				strcpy(current_window->quality_strings[index_kmers].quality, current_window->quality_strings[index_kmers - 1].quality);
-				quality_string_shift_one_base_and_insert_new_base_at_right_end(current_window->quality_strings[index_kmers].quality, qualities[i] + 33, kmer_size);
-				
-				index_kmers++;
-				count_kmers++;
-				i++;
-			}
-			
-			current_window->nkmers = index_kmers;
-			
-			index_windows++;
-			
-		}
-	} while (i < length);
-	
-	windows->nwindows = index_windows;
-    binary_kmers_sliding_window_reset_iterator(windows);
-	return count_kmers;
-}
-#endif
 
 //caller passes in preallocated BinaryKmer, which is also returned in the return value
 BinaryKmer *seq_to_binary_kmer(char *seq, short kmer_size,
@@ -1105,10 +963,7 @@ void binary_kmer_alloc_kmers_set(KmerSlidingWindowSet * windows,
 		windows->window[w].nkmers = 0;
 		windows->window[w].kmer =
 		malloc(sizeof(BinaryKmer) * max_kmers);
-#ifdef INCLUDE_QUALITY_SCORES
-		windows->window[w].quality_strings =
-		(QualityString *) calloc(max_kmers, sizeof(QualityString));
-#endif
+
 		if (windows->window[w].kmer == NULL) {
 			fputs
 			("binary_kmer: Out of memory trying to allocate an array of BinaryKmer",
