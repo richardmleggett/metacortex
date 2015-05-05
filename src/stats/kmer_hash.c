@@ -94,15 +94,6 @@ int kmer_hash_present_kmers_in_sliding_window_set(KmerSlidingWindowSet * windows
     return count;
 }
 
-void kmer_hash_add_contaminated_reads(long long count, KmerHash * kmer_hash){
-#ifdef KMER_TOOLS 
-    kmer_hash->contaminated_reads += count;
-#else 
-    fprintf(stderr, "Unsupported function kkmer_hash_add_contaminated_reads");
-    exit(-1);
-#endif
-}
-
 void kmer_hash_print_kmer_stats(char * output_filename,char * reference_kmers_file,char * input_filename, KmerHash * kmer_hash){
     
     kmer_hash_calculate_stats( kmer_hash);

@@ -70,12 +70,6 @@ typedef struct {
     long long common_kmers_in_all_colours; 
     unsigned long perfect_path_count;
     long long number_of_reads[NUMBER_OF_COLOURS];
-    
-#ifdef KMER_TOOLS 
-    long long contaminated_reads;
-    long long contaminated_kmers_per_read[MAX_READ_LENGTH];
-#endif
-
 } HashTable;
 
 HashTable * hash_table_new(int number_bits, int bucket_size,

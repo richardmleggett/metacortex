@@ -683,9 +683,6 @@ long long load_seq_cov_into_graph(FILE * fp,
 		} else {
 			Element *current_node = NULL;
 			BinaryKmer tmp_kmer;
-#ifdef KMER_TOOLS
-            hash_table_add_number_of_reads(1, colour, db_graph);
-#endif
             //			Orientation current_orientation = undefined;
             //			Orientation previous_orientation = forward;
             
