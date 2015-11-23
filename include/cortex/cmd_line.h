@@ -1,8 +1,8 @@
 /*
- * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo 
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
  * **********************************************************************
@@ -27,7 +27,7 @@
 
 /*
   cmd_line.h - manipulation of command line
-  
+
 */
 
 #ifndef CMD_LINE_H_
@@ -43,63 +43,64 @@ typedef enum{
 	Y_WALK = 2,
 	BUBBLES = 3,
 	READ_PAIR = 5,
-    METACORTEX_CONSENSUS = 6
+  METACORTEX_CONSENSUS = 6
+  GRAPH_STATS = 7
 }TraverseAlgorithm;
 
 typedef struct
 {
-    //core parameters 
+    //core parameters
     boolean verbose;
     int kmer_size;
     int bucket_size;
     int number_of_buckets_bits;
-    
+
     //----------------
     //actions on/off
     //----------------
     //input
     boolean input_file; //if it is present
-    boolean input_file_format_known; 
-    boolean health_check_binary; 
+    boolean input_file_format_known;
+    boolean health_check_binary;
 	boolean input_reference_known;
-    
+
     //cleaning
     boolean tip_clip;
     boolean remove_bubbles;
     boolean low_coverage_path_clip;
     boolean low_coverage_node_clip;
-    boolean remove_low_coverage_supernodes; 
+    boolean remove_low_coverage_supernodes;
     boolean remove_spurious_links;
-    
-    //output 
+
+    //output
     boolean dump_binary;
     boolean output_fasta;
     boolean dump_hash;
-    boolean detect_bubbles; 
+    boolean detect_bubbles;
     boolean output_coverages;
     boolean graphviz;
     boolean print_uncertain_as_n;
     boolean output_log;
 	boolean output_kmer_coverage_know ;
-    
+
     //-----------
-    //parameters 
+    //parameters
     //-----------
     //core parameters
     int threads;
-    short max_double_y_complexity; 
-    
+    short max_double_y_complexity;
+
     //input
     FileFormat input_file_format;
     int quality_score_threshold;
     char input_filename[LENGTH_FILENAME];
     char qual_filename[LENGTH_FILENAME];
 	char input_reference[LENGTH_FILENAME];
-	
+
     int quality_score_offset;
-    int max_read_len; 
+    int max_read_len;
     int binary_version;
-    
+
     //cleaning
     int node_coverage_threshold;
     int tip_length;
@@ -110,7 +111,7 @@ typedef struct
     int remove_spurious_links_max_difference;
     int path_coverage_threshold;
     int tip_clip_iterations;
-    
+
     //output
     char output_ctx_filename[LENGTH_FILENAME];
     char output_fasta_filename[LENGTH_FILENAME];
@@ -126,7 +127,7 @@ typedef struct
     TraverseAlgorithm algorithm;
 } CmdLine;
 
-CmdLine parse_cmdline( int argc, char* argv[],int unit_size); 
+CmdLine parse_cmdline( int argc, char* argv[],int unit_size);
 int default_opts(CmdLine *);
 
 #endif /* CMD_LINE_H_ */

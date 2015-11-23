@@ -1,11 +1,11 @@
 /*
  * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
  * **********************************************************************
@@ -93,7 +93,7 @@ boolean add_read_file(char* filename, int colour, int pair, int* n_files, ReadFi
     boolean already_seen = false;
     FILE *fp;
     int i;
-    
+
     // Check if file already in list
     for (i=0; i<*n_files; i++) {
         if (strcmp(filename, list[i]->filename) == 0) {
@@ -102,7 +102,7 @@ boolean add_read_file(char* filename, int colour, int pair, int* n_files, ReadFi
             exit(-1);
         }
     }
-    
+
     // Check file exists
     fp = fopen(filename, "r");
     if (fp) {
@@ -111,19 +111,19 @@ boolean add_read_file(char* filename, int colour, int pair, int* n_files, ReadFi
         printf("Error: can't open file %s\n", filename);
         exit(-1);
     }
-    
+
     // Add to list if not already seen
     if (!already_seen) {
         if (*n_files == FILE_LIST_SIZE) {
             printf("Error: maximum file list size reached. Continuing might be dangerous.\n");
             exit(-1);
-        } else {            
+        } else {
             list[*n_files] = malloc(sizeof(ReadFileDescriptor));
             if (!list[*n_files]) {
                 printf("Error: Couldn't allocate memory for file descriptor\n");
                 exit(-1);
             }
-            
+
             list[*n_files]->filename = malloc(strlen(filename)+1);
             if (!list[*n_files]->filename) {
                 printf("Error: Couldn't allocate memory for filename\n");
@@ -132,18 +132,18 @@ boolean add_read_file(char* filename, int colour, int pair, int* n_files, ReadFi
             strcpy(list[*n_files]->filename, filename);
             list[*n_files]->colour = colour;
             list[*n_files]->pair = pair;
-            
+
             *n_files = *n_files + 1;
         }
     }
-    
+
     return already_seen;
 }
 
 void output_basic_info(CmdLine cmd_line)
 {
     log_and_screen_printf("Max k: %i\n", (NUMBER_OF_BITFIELDS_IN_BINARY_KMER*32)-1);
-    if (cmd_line.input_file_format == FASTQ) { 
+    if (cmd_line.input_file_format == FASTQ) {
         log_and_screen_printf("Quality score offset: %i", cmd_line.quality_score_offset);
         if (cmd_line.quality_score_offset == 33) {
             log_and_screen_printf(" (Sanger format)");
@@ -155,7 +155,7 @@ void output_basic_info(CmdLine cmd_line)
         log_and_screen_printf("\nQuality score threshold: %i\n", cmd_line.quality_score_threshold);
     }
 }
-               
+
 int main(int argc, char **argv)
 {
 	setlocale (LC_ALL, "");
@@ -168,24 +168,24 @@ int main(int argc, char **argv)
     long long seq_length = 0;
     int n_file_list = 0;
     int i;
-    
+
     log_and_screen_printf("\nMetaCortex ");
     log_and_screen_printf(METACORTEX_VERSION);
     log_and_screen_printf("\n");
 	log_and_screen_printf("Compiled on %s at %s \n\n", __DATE__, __TIME__);
-    
+
     //command line arguments
     cmd_line = parse_cmdline(argc, argv, sizeof(Element));
 
     output_basic_info(cmd_line);
-        
+
     if(cmd_line.input_file_format == HASH) {
-        db_graph = hash_table_read_dumped_memory(cmd_line.input_filename);        
+        db_graph = hash_table_read_dumped_memory(cmd_line.input_filename);
     } else {
         fp_fnames = fopen(cmd_line.input_filename, "r");	//open file of file names
         kmer_size = cmd_line.kmer_size;
        // DEBUG = cmd_line.verbose;
-        
+
         timestamp();
         log_and_screen_printf("\nInput file of filenames: %s\n", cmd_line.input_filename);
         log_and_screen_printf("Kmer size: %'d Hash table size (%'d bits): %'d Hash table bucket size: %'d Total size: %'qd\n",
@@ -195,20 +195,20 @@ int main(int argc, char **argv)
                               cmd_line.bucket_size,
                               ((long long)1 << cmd_line.number_of_buckets_bits) * cmd_line.bucket_size);
         fflush(stdout);
-        
+
         //Create the de Bruijn graph/hash table
         db_graph = hash_table_new(cmd_line.number_of_buckets_bits, cmd_line.bucket_size, 25, cmd_line.kmer_size);
-        
+
         if (db_graph == NULL) {
             printf("Please free up memory and re-run.\n");
             exit(-1);
         }
-        
+
         //TODO
         if (cmd_line.threads > 0) {
         	db_graph->number_of_threads = cmd_line.threads;
         }
-		
+
         //Zone to initalise the buffers
         path_array_initialise_buffers(kmer_size);
         timestamp();
@@ -217,17 +217,17 @@ int main(int argc, char **argv)
         fflush(stdout);
         int count_file = 0;
         long long total_length = 0;	//total sequence length
-        
+
         //Go through all the files, loading data into the graph
-        
+
         boolean all_entries_are_unique = false;
-        
+
         if (cmd_line.input_file_format == CTX) {
             all_entries_are_unique = true;
         }
-        
+
         long long bad_reads = 0;
-        
+
         while (!feof(fp_fnames)) {
             short colour = 0;
             short pair = 0;
@@ -241,57 +241,57 @@ int main(int argc, char **argv)
                     sscanf(line, "%s %hd %hd\n", filename, &colour, &pair);
                     add_read_file(filename, colour, pair, &n_file_list, file_list);
                 }
-            }            
+            }
         }
-        
+
         fclose(fp_fnames);
-        
+
         for (i=0; i<n_file_list; i++) {
             short colour = file_list[i]->colour;
             char* filename = file_list[i]->filename;
-            
+
 
             if (DEBUG) {
                 log_and_screen_printf("\nNew file: %s colour %'d\n", filename, colour);
                 fflush(stdout);
             }
-            
+
             fflush(stdout);
-            
+
             if ((colour < 0) || (colour >= NUMBER_OF_COLOURS)) {
                 printf("Colour is out of allowable range (maximum number of colours: %'d).", NUMBER_OF_COLOURS);
                 fflush(stdout);
                 exit(-1);
             }
-            
+
             if (colour > 0) {
                 using_colours = true;
             }
-            
+
             switch (cmd_line.input_file_format) {
-                    
-                case CTX:                    
-                    log_and_screen_printf("\nReading ctx file %'d: %s\n", i+1, filename);		
+
+                case CTX:
+                    log_and_screen_printf("\nReading ctx file %'d: %s\n", i+1, filename);
 				    fflush(stdout);
                     seq_length = load_binary_from_filename_into_graph(filename, db_graph, colour, all_entries_are_unique);
-                    
+
                     all_entries_are_unique = false;
                     break;
-                    
+
                 case FASTQ:
                     if (colour != 0) {
                         printf("\n*** Warning: Colour should be 0 for FASTQ files.\n");
                     }
-                    log_and_screen_printf("\nReading fastq file %'d: %s\n", i+1, filename);		
+                    log_and_screen_printf("\nReading fastq file %'d: %s\n", i+1, filename);
 				    fflush(stdout);
                     seq_length = load_fastq_from_filename_into_graph(filename, colour, &bad_reads, cmd_line.quality_score_threshold, 5000, cmd_line.quality_score_offset, db_graph);
                     break;
-                    
+
                 case FASTA:
                     if (colour != 0) {
                         printf("\n*** Warning: Colour should be 0 for FASTA files.\n");
                     }
-                    log_and_screen_printf("\nReading fasta file %'d: %s\n", i+1, filename);		
+                    log_and_screen_printf("\nReading fasta file %'d: %s\n", i+1, filename);
 				    fflush(stdout);
                     seq_length = load_fasta_from_filename_into_graph(filename, colour, &bad_reads, 5000, db_graph);
                     break;
@@ -306,16 +306,16 @@ int main(int argc, char **argv)
             log_and_screen_printf("\nRead of file %'d complete. Total kmers: %'lld Bad reads: %'qd Seq length: %'qd Total seq length: %'qd\n\n",
                                   i+1, hash_table_get_unique_kmers(db_graph), bad_reads, seq_length, total_length);
             hash_table_print_stats(db_graph);
-            
+
             fflush(stdout);
-            
-                       
+
+
         }
     }
 	path_array_initialise_buffers(db_graph->kmer_size);
     db_graph->max_double_y_complexity = cmd_line.max_double_y_complexity;
 	fflush(stdout);
-		
+
 	if (cmd_line.low_coverage_node_clip) {
 		timestamp();
 		log_and_screen_printf("\nRemove low coverage nodes (<=%'d) \n", cmd_line.node_coverage_threshold);
@@ -324,9 +324,9 @@ int main(int argc, char **argv)
         //		db_graph_remove_low_coverage_nodes
         //		    (cmd_line.node_coverage_threshold, db_graph);
         hash_table_print_stats(db_graph);
-		
+
 	}
-    
+
     if (cmd_line.remove_low_coverage_supernodes) {
 		timestamp();
 		log_and_screen_printf("\nRemoving paths with low coverage...\n");
@@ -335,7 +335,7 @@ int main(int argc, char **argv)
 		log_and_screen_printf("%'d nodes removed\n", p);
         hash_table_print_stats(db_graph);
 	}
-	
+
 	if (cmd_line.tip_clip) {
 		timestamp();
 		log_and_screen_printf("\nClip tips\n");
@@ -343,7 +343,7 @@ int main(int argc, char **argv)
         log_and_screen_printf("%'d tips clipped\n", cleaning_remove_tips(cmd_line.tip_length, cmd_line.tip_clip_iterations ,db_graph));
         hash_table_print_stats(db_graph);
 	}
-    
+
     /* Prototype code */
     if (cmd_line.remove_spurious_links) {
 		timestamp();
@@ -360,7 +360,7 @@ int main(int argc, char **argv)
             hash_table_print_stats(db_graph);
         }
     }
-    	
+
 	if (cmd_line.remove_bubbles) {
 		timestamp();
 		log_and_screen_printf("\nRemoving bubbles\n");
@@ -368,7 +368,7 @@ int main(int argc, char **argv)
 		cmd_line.bubble_max_length = db_graph->kmer_size * 10 + 1;
 		//TODO: we should defined the bubble depth here too
 		int kmers_removed_1 = cleaning_remove_bubbles(cmd_line.bubble_max_length, db_graph);
-		log_and_screen_printf("%'d kmers removed\n", kmers_removed_1);	
+		log_and_screen_printf("%'d kmers removed\n", kmers_removed_1);
         hash_table_print_stats(db_graph);
         if (cmd_line.tip_clip) {
             timestamp();
@@ -378,7 +378,7 @@ int main(int argc, char **argv)
             hash_table_print_stats(db_graph);
         }
     }
-    
+
     if(cmd_line.dump_hash){
 		timestamp();
 		log_and_screen_printf("\nDumping hash table to file: %s\n", cmd_line.output_hash_filename);
@@ -387,7 +387,7 @@ int main(int argc, char **argv)
 	}
 
     hash_table_print_stats(db_graph);
-    
+
     if (cmd_line.dump_binary) {
         timestamp();
         log_and_screen_printf("\n");
@@ -402,47 +402,47 @@ int main(int argc, char **argv)
                 char fname[1024];
                 char suffix[64];
                 char *extension;
-                
+
                 sprintf(suffix, "_c%d.ctx", c);
                 strcpy(fname, cmd_line.output_ctx_filename);
                 extension = strstr(fname, ".ctx");
                 if (!extension) {
                     extension = strstr(fname, ".CTX");
                 }
-                
+
                 if (extension) {
                     strcpy(extension, suffix);
                 } else {
                     strcat(fname, suffix);
                 }
-                
+
                 log_and_screen_printf("Dumping graph %s - ", fname);
                 db_graph_dump_binary_by_colour(fname, &db_node_check_flag_not_pruned, c, db_graph);
             }
             fflush(stdout);
         }
     }
-    
-    if (cmd_line.output_fasta) {              
+
+    if (cmd_line.output_fasta) {
         switch (cmd_line.algorithm) {
             case PERFECT_PATH:
                 log_and_screen_printf("\nDumping supernodes: %s\n", cmd_line.output_fasta_filename);
                 fflush(stdout);
-                
+
                 perfect_path_print_paths(cmd_line.output_fasta_filename,
-                                         cmd_line.max_length, cmd_line.singleton_length, 
+                                         cmd_line.max_length, cmd_line.singleton_length,
                                          cmd_line.output_coverages,
                                          db_graph);
-                
+
                 break;
             case Y_WALK:
                 log_and_screen_printf("\nDumping supernodes (Y_WALK): %s\n", cmd_line.output_fasta_filename);
                 fflush(stdout);
                 y_walk_print_paths(cmd_line.output_fasta_filename,
-                                   cmd_line.max_length,cmd_line.singleton_length, 
+                                   cmd_line.max_length,cmd_line.singleton_length,
                                    cmd_line.output_coverages, cmd_line.graphviz, db_graph);
                 log_and_screen_printf("Dump complete\n");
-                break;	
+                break;
             case BRANCHES:
                 log_and_screen_printf("\nDumping supernodes (branches): %s\n", cmd_line.output_fasta_filename);
                 fflush(stdout);
@@ -452,27 +452,31 @@ int main(int argc, char **argv)
                 log_and_screen_printf("\nDumping subgraph consensus contigs: %s\n", cmd_line.output_fasta_filename);
                 metacortex_find_subgraphs(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.min_contig_length);
                 break;
+            case GRAPH_STATS:
+                log_and_screen_printf("\nSearching graph for stats...\n");
+                //metacortex_find_subgraphs(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.min_contig_length);
+                break;
             default:
                 log_and_screen_printf("Algorithm not implmeneted \n");
                 break;
         }
     }
-    
+
     // Write graphviz file?
     if (cmd_line.graphviz) {
         timestamp();
         write_graphviz_file(cmd_line.output_graphviz_filename, db_graph);
         fflush(stdout);
 	}
-	
+
     // Stop program terminating, so XCode leaks tool can report!
     //printf("press char to continue");
-    //char c = getchar();       
+    //char c = getchar();
     //printf("Character pressed %c\n", c);
-    
-    timestamp(); 
+
+    timestamp();
     log_and_screen_printf("\n\nDONE\n\n");
-    
+
     return 0;
 }
 
@@ -561,7 +565,7 @@ void print_graph(dBGraph * db_graph)
 				}
 			}
 			nucleotide_iterator(&hasEdge2);
-			
+
 		}
 	}
 	hash_table_traverse(&print_graphviz, db_graph);
@@ -574,6 +578,6 @@ void write_graphviz_file(char *filename, dBGraph * db_graph)
 
 void timestamp() {
 	time_t ltime = time(NULL);
-	log_and_screen_printf("\n-----\n%s",asctime(localtime(&ltime)));	
+	log_and_screen_printf("\n-----\n%s",asctime(localtime(&ltime)));
 	fflush(stdout);
 }

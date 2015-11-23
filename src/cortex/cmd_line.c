@@ -1,8 +1,8 @@
 /*
  * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
  * **********************************************************************
@@ -76,16 +76,16 @@ int default_opts(CmdLine * c)
     c->kmer_size = 21;
     c->bucket_size = 100;
     c->number_of_buckets_bits = 10;
-    
+
     //----------------
     //actions on/off
     //----------------
     //input
     c->input_file = false; //it is not present until we see it
     c->input_file_format_known = false;
-    c->health_check_binary = false; 
+    c->health_check_binary = false;
 	c->input_reference_known = false;
-    
+
     //cleaning
     c->tip_clip = false;
     c->remove_bubbles = false;
@@ -93,7 +93,7 @@ int default_opts(CmdLine * c)
     c->low_coverage_node_clip = false;
     c->remove_low_coverage_supernodes = false;
     c->remove_spurious_links = false;
-    
+
     //output
     c->dump_binary = false;
     c->output_fasta = false;
@@ -104,14 +104,14 @@ int default_opts(CmdLine * c)
     c->print_uncertain_as_n = true;
     c->output_log = false;
     c->min_contig_length = 0;
-    
+
     //-----------
     //parameters
     //-----------
-    //threads 
+    //threads
     c->threads = 1;
     c->max_double_y_complexity = PATH_MAX_DOUBLE_Y_COMPLEXITY;
-    
+
     //input
     //c->input_file_format required
     c->quality_score_threshold = 0;
@@ -120,7 +120,7 @@ int default_opts(CmdLine * c)
     c->quality_score_offset = 33;
     c->max_read_len = 1000;
     //c->binary_version //TODO
-    
+
     //cleaning
     //c->node_coverage_threshold required
     c->tip_length = 100; //TODO
@@ -130,7 +130,7 @@ int default_opts(CmdLine * c)
     //c->bubble_max_length required
     c->remove_spurious_links_min_coverage = 40;
     c->remove_spurious_links_max_difference = 1;
-    
+
     //output
     //c->output_ctx_filename required
     //c->output_fasta_filename required
@@ -139,7 +139,7 @@ int default_opts(CmdLine * c)
     c->algorithm = METACORTEX_CONSENSUS;
 	c->max_length=200000;
     c->min_subgraph_size=0;
-    
+
 	return 1;
 }
 
@@ -152,13 +152,13 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
     }
     printf("\n");
     printf("Unit size: %i\n", unit_size);
-    
+
     CmdLine cmd_line;
     default_opts(&cmd_line);
-    
+
     int opt;
     int longopt_index;
-    
+
     static struct option long_options[] = {
         {"remove_bubbles", no_argument, NULL, 'a'},
         {"mem_width", required_argument, NULL, 'b'},
@@ -179,7 +179,7 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
         {"quality_score_threshold", required_argument, NULL, 'q'},
         {"remove_low_coverage_supernodes", required_argument, NULL,'s'},
         {"input_format", required_argument, NULL, 't'},
-        {"remove_seq_errors", no_argument, NULL, 'u'}, 
+        {"remove_seq_errors", no_argument, NULL, 'u'},
         {"verbose", no_argument, NULL, 'v'},
         {"detect_bubbles", required_argument, NULL, 'w'},
         {"singleton_length", required_argument, NULL, 'x'},
@@ -194,42 +194,42 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
         {"threads", required_argument, NULL, 'T'},
         {0, 0, 0, 0}
     };
-    
+
     while ((opt = getopt_long(argc, argv,
                               "ab:c:d:ef:g:hi:jk:l:m:n:o:p:q:s:t:uvw:x:z:A:B:C:D:E:FG:H:I:J:K:L:N:O:P:S:TZ:",
                               long_options, &longopt_index)) > 0)
-    {                
+    {
         //Parse the default options
         switch (opt) {
             case 'a':
                 cmd_line.remove_bubbles = true;
                 break;
-                
+
             case 'b':	//bucket size
                 if (optarg == NULL)
                     errx(1, "[-b | --mem_width] option requires int argument [hash table bucket size]");
                 cmd_line.bucket_size = atoi(optarg);
-                if (cmd_line.bucket_size == 0 || cmd_line.bucket_size > SHRT_MAX)	//check that -b is not bigger than max_short 
+                if (cmd_line.bucket_size == 0 || cmd_line.bucket_size > SHRT_MAX)	//check that -b is not bigger than max_short
                     errx(1, "[-b | --mem_width] option requires 'short' argument bigger than 0");
                 break;
-                
+
             case 'c':	//clip tip
                 if (optarg == NULL)
                     errx(1,
                          "[-c | --clip_tip] option requires int argument [max length of tips]");
                 cmd_line.tip_length = atoi(optarg);
-                
+
                 if (cmd_line.tip_length <= 0)
                     errx(1,
                          "[-c | --clip_tip] option requires int argument bigger than 0");
                 cmd_line.tip_clip = true;
                 break;
-                
+
             case 'd': //dump paths from the tree decomposion of the graph
                 cmd_line.output_fasta = true;
                 if (optarg==NULL)
                     errx(1,"[-d | --output_contigs] option requires a filename");
-                
+
                 if (strlen(optarg)<LENGTH_FILENAME)
                 {
                     strcpy(cmd_line.output_fasta_filename,optarg);
@@ -238,34 +238,34 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                 {
                     errx(1,"[-d | --output_contigs] filename too long [%s]",optarg);
                 }
-                
+
                 if (access(optarg,F_OK)==0){
                     errx(1,"[-d | --output_contigs] filename [%s] exist!",optarg);
                 }
-                
+
                 cmd_line.algorithm=Y_WALK;
-                break; 
-                
+                break;
+
             case 'e':	//output coverages
                 cmd_line.output_coverages = true;
                 break;
-                
+
             case 'f':	//output of supernodes (more conservative paths)
                 cmd_line.output_fasta = true;
                 if (optarg == NULL)
                     errx(1,
                          "[-f | --output_supernodes] option requires a filename");
-                
+
                 if (strlen(optarg) < LENGTH_FILENAME) {
                     strcpy(cmd_line.output_fasta_filename, optarg);
                 } else {
                     errx(1,"[-f | --output_supernodes] filename too long [%s]",optarg);
                 }
-                
+
                 if (access(optarg, F_OK) == 0) {
                     errx(1,"[-f | --output_supernodes] filename [%s] exist!",optarg);
                 }
-				
+
                 break;
             case 'g':
                 if (optarg == NULL) {
@@ -273,38 +273,38 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                 }
                 cmd_line.min_contig_length = atoi(optarg);
                 break;
-                
+
             case 'h':
                 usage();
                 exit(0);
                 break;
-                
-                
+
+
             case 'i': //file of filenames
                 if (optarg == NULL)
                     errx(1,"[-i | --input] option requires a filename [file of filenames]");
-                
+
                 if (strlen(optarg) < LENGTH_FILENAME) {
                     strcpy(cmd_line.input_filename, optarg);
                 } else {
                     errx(1, "[-i | --input] filename too long [%s]", optarg);
                 }
-                
+
                 if (access(optarg, R_OK) == -1) {errx(1,"[-i | --input] filename [%s] cannot be accessed", optarg);
                 }
                 cmd_line.input_file = true;
                 break;
-                
-            case 'j'://health check of binary 
+
+            case 'j'://health check of binary
                 cmd_line.health_check_binary = true;
                 break ;
-                
+
             case 'k':	//kmer size
                 if (optarg == NULL){
                     errx(1,"[-k | --kmer_size] option requires int argument [kmer size]");
                 }
                 cmd_line.kmer_size = atoi(optarg);
-                
+
                 if (cmd_line.kmer_size == 0){
                     errx(1,"[-k | --kmer_size] option requires int argument bigger than 0");
                 }
@@ -315,34 +315,34 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                     errx(1, "[-k | --kmer_size] The kmer size is greater than the maximum kmer_size. ");
                 }
                 break;
-                
+
             case 'l':
                 if (optarg == NULL) {
                     errx(1, "[-l | --log_file] option requires a filename");
                     exit(-1);
                 }
                 if (strlen(optarg) < LENGTH_FILENAME) {
-                    cmd_line.output_log = true;            
+                    cmd_line.output_log = true;
                     strcpy(cmd_line.log_filename, optarg);
                     log_start(optarg);
                     printf("Log file: %s\n", optarg);
                 } else {
                     errx(1, "[-l | --log_file] filename too long");
-                }                
+                }
                 break;
-                
+
             case 'm':
                 if (optarg == NULL)
                     errx(1,"[-m | --min_subgraph_size] option requires int argument");
                 cmd_line.min_subgraph_size = atoi(optarg);
                 break;
-                
+
             case 'n':	//number of buckets
                 if (optarg == NULL)
                     errx(1,"[-n | --mem_height] option requires int argument [hash table number of buckets in bits]");
                 cmd_line.number_of_buckets_bits = atoi(optarg);
                 break;
-                
+
             case 'o':	//output of binary ctx
                 cmd_line.dump_binary = true;
                 if (optarg == NULL)
@@ -362,41 +362,41 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                     errx(1, "[-p | --quality_score_offset] option requires int argument");
                 }
                 cmd_line.quality_score_offset = atoi(optarg);
-                
+
                 if (cmd_line.quality_score_offset == 0){
                     errx(1,"[-p | --quality_score_offset] option requires int argument bigger than 0");
                 }
                 break;
-                
+
             case 'q':	//quality threshold
                 if (optarg == NULL){
                     errx(1, "[-q | --quality_score_threshold] option requires int argument [quality score threshold]");
                 }
                 cmd_line.quality_score_threshold = atoi(optarg);
-                
+
                 if (cmd_line.quality_score_threshold == 0){
                     errx(1, "[-q | --quality_score_threshold] option requires int argument bigger than 0");
                 }
-                break;           
-                
+                break;
+
             case 's': //remove_low_coverage_supernodes
                 cmd_line.remove_low_coverage_supernodes=true;
                 if (optarg==NULL)
                     errx(1, "[-s | --remove_low_coverage_supernodes] option requires int argument [coverage threshold]");
                 cmd_line.remove_low_coverage_supernodes_threshold= atoi(optarg);
-                
+
                 if (cmd_line.remove_low_coverage_supernodes_threshold <= 0)
                     errx(1, "[-s | --remove_low_coverage_supernodes] option requires intint argument bigger than 0");
-                break;  
-                
+                break;
+
             case 't':
                 if (optarg == NULL){
                     errx(1, "[-t  | --input_format binary | fasta | fastq | hash ] option requires a file type");
                     exit(-1);
                 }
-                
+
                 cmd_line.input_file_format_known=true;
-                
+
                 if(strcmp(optarg, "binary") == 0){
                     cmd_line.input_file_format = CTX;
                 }else if(strcmp(optarg, "fasta") == 0){
@@ -410,12 +410,12 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                     exit(-1);
                 }
                 break;
-                
+
             case 'u': //remove_seq_errors --> this is consistent with an option on cortex_var -- it removes low coverate supernodes fixing the length tp k+1 and the coverage at 1
                 cmd_line.remove_low_coverage_supernodes=true;
                 cmd_line.remove_low_coverage_supernodes_threshold=1;
-                break;        
-                
+                break;
+
             case 'v':
                 cmd_line.verbose = true;
                 break;
@@ -428,24 +428,24 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                     errx(1,  "[-x | --singleton_length] requires an integer greater than 0");
                 }
                 break;
-                
+
             case 'z':	//node coverage threshold
                 if (optarg == NULL){
                     errx(1, "[-z | --node_coverage_threshold] option requires int argument [node coverate cut off]");
                 }
                 cmd_line.node_coverage_threshold = atoi(optarg);
                 cmd_line.low_coverage_node_clip = true;
-                
+
                 if (cmd_line.node_coverage_threshold == 0){
                     errx(1, "[-z | --remove_low_coverage_kmers] option requires int argument bigger than 0");
                 }
                 break;
-                
+
             case 'A':
                 errx(1,"[-A  | --algorithm ] option is not used for metacortex");
                 exit(-1);
                 break;
-                
+
             case 'G':
                 if (optarg == NULL) {
                     errx(1, "[-G | --graphviz] option requires a filename [file of filenames]");
@@ -483,7 +483,7 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
 	                 errx(1, "[-J | --output_kmer_coverage] filename too long [%s]", optarg);
 	             }
 			     break;
-                
+
             case 'L':
                 if (optarg == NULL) {
                     errx(1, "[-L | --remove_spurious_links] option requires argument [max difference,min coverage]");
@@ -502,7 +502,7 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
             case 'N':
                 cmd_line.print_uncertain_as_n = false;
                 break;
-                
+
             case 'O':
                 cmd_line.dump_hash = true;
                 if (strlen(optarg) < LENGTH_FILENAME) {
@@ -516,11 +516,11 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                     errx(1,
                          "[-P | --tip_clip_iterations] option requires int argument ");
                 cmd_line.tip_clip_iterations = atoi(optarg);
-                
+
                 if (cmd_line.tip_length <= 0)
                     errx(1,
                          "[-P | --tip_clip_iterations] option requires int argument bigger than 0");
-                
+
                 break;
             case 'Q':
                 errx(1, "454 quality files not implemented yet. Use the regular fasta format. \n");
@@ -528,26 +528,34 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                     errx(1, "[-Q  | --qual_file] option requires a filename [file of filenames]");
                     exit(-1);
                 }
-                
+
                 printf("Qual file %s\n", optarg);
                 if (strlen(optarg) < LENGTH_FILENAME) {
                     strcpy(cmd_line.qual_filename, optarg);
                 } else {
                     errx(1, "[-Q | --qual_file] filename too long [%s]", optarg);
                 }
-                
+
                 if (access(optarg, R_OK) == -1) {
                     errx(1, "[-Q | --qual_file ] filename [%s] cannot be accessed", optarg);
                 }
                 break;
-                
+
             case 'R':
                 errx(1, "454 quality files not implemented yet. Use the regular fasta format. \n");
                 cmd_line.input_file_format_known = true;
                 cmd_line.input_file_format = ROCHE;
                 printf ("Doing 454\n");
                 break;
-                
+
+            case 'S':
+                if (optarg) {
+                  errx(1, "Called the stats option with an argument is not required. Exiting...\n");
+                }
+                cmd_line.algorithm=GRAPH_STATS;
+                printf ("Getting stats, taking names...\n");
+                break;
+
             case 'T':	//Number of threads
                 if (optarg == NULL) {
                     errx(1, "[-T | --threads INT] option requires int argumen");
@@ -555,21 +563,21 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                 cmd_line.threads = atoi(optarg);
                 if (cmd_line.threads <= 0) {
                     errx(1, "[-T | --threads INT] option requires int argument bigger than 0");
-                }                
+                }
                 int tmp = cmd_line.threads  - 1;
-                int check = cmd_line.threads & tmp;	     
+                int check = cmd_line.threads & tmp;
                 if (check != 0 ) {
                     errx(1, "[-T | --threads INT] has to be a power of two. ");
-                }                
+                }
                 break;
-                
-            case 'Z'://max read length --> use by the parser to read fasta/fastq files.                 
+
+            case 'Z'://max read length --> use by the parser to read fasta/fastq files.
                 if (optarg==NULL) {
                     errx(1,"[-Z | --max_read_len] option requires int argument [maximum read length in input]");
                 }
-                
+
                 cmd_line.max_read_len = atoi(optarg);
-                
+
                 if (cmd_line.max_read_len <= 0)
                     errx(1,"[-Z | --max_read_len] option requires int argument bigger than 0");
                 break;
@@ -592,8 +600,8 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
             log_printf("%s ", argv[i]);
         }
         log_printf("\nUnit size: %i\n", unit_size);
-    }    
-    
+    }
+
     //check if input file format is known
     if (!cmd_line.input_file_format_known) {
         errx(1, "file format not defined [ --input_format fasta | fastq | binary | hash]");
@@ -602,18 +610,18 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
     if (!cmd_line.input_file) {
         errx(1, "input file required [option -i | --input_file]");
     }
-    
+
     if (cmd_line.number_of_buckets_bits < 0) {
         printf("args error -b %i -h %i \n", cmd_line.bucket_size,cmd_line.number_of_buckets_bits);
         errx(1, "memory configuration erorr - revise options -b -h and/or -m");
     }
-    
+
     if(cmd_line.input_file_format == ROCHE){
         if(strlen(cmd_line.qual_filename) == 0){
             printf("454 format requires a quality file [option -Q | --qual_file FILENAME] \n");
         }
     }
-    
+
     //check kmer_size is odd
     if (cmd_line.kmer_size % 2 == 0) {
         errx(1, "[-k | --kmer_size] is even [%i]!", cmd_line.kmer_size);
