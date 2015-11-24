@@ -51,6 +51,7 @@
 #include <cleaning.h>
 #include <cmd_line.h>
 #include "metagraphs.h"
+#include "graph_stats.h"
 
 typedef struct {
     char* filename;
@@ -454,10 +455,11 @@ int main(int argc, char **argv)
                 break;
             case GRAPH_STATS:
                 log_and_screen_printf("\nSearching graph for stats...\n");
+                metacortex_get_stats(db_graph, cmd_line.output_fasta_filename);
                 //metacortex_find_subgraphs(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.min_contig_length);
                 break;
             default:
-                log_and_screen_printf("Algorithm not implmeneted \n");
+                log_and_screen_printf("Algorithm not implemented \n");
                 break;
         }
     }

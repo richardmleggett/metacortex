@@ -43,7 +43,7 @@ typedef enum{
 	Y_WALK = 2,
 	BUBBLES = 3,
 	READ_PAIR = 5,
-  METACORTEX_CONSENSUS = 6
+  METACORTEX_CONSENSUS = 6,
   GRAPH_STATS = 7
 }TraverseAlgorithm;
 

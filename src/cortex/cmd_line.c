@@ -549,9 +549,9 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                 break;
 
             case 'S':
-                if (optarg) {
-                  errx(1, "Called the stats option with an argument is not required. Exiting...\n");
-                }
+                //if (optarg != NULL) {
+                //  errx(1, "Called the stats option with an argument is not required. Exiting...\n");
+                //}
                 cmd_line.algorithm=GRAPH_STATS;
                 printf ("Getting stats, taking names...\n");
                 break;
