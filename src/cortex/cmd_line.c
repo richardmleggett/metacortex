@@ -191,12 +191,13 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
         {"remove_spurious_links",required_argument,NULL,'L'},
         {"hash_output_file", required_argument, NULL, 'O'},
         {"tip_clip_iterations", required_argument, NULL, 'P'},
+        {"graph_stats", no_argument, NULL, 'S'},
         {"threads", required_argument, NULL, 'T'},
         {0, 0, 0, 0}
     };
 
     while ((opt = getopt_long(argc, argv,
-                              "ab:c:d:ef:g:hi:jk:l:m:n:o:p:q:s:t:uvw:x:z:A:B:C:D:E:FG:H:I:J:K:L:N:O:P:S:TZ:",
+                              "ab:c:d:ef:g:hi:jk:l:m:n:o:p:q:s:t:uvw:x:z:A:B:C:D:E:FG:H:I:J:K:L:N:O:P:STZ:",
                               long_options, &longopt_index)) > 0)
     {
         //Parse the default options
