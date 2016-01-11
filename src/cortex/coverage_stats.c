@@ -32,7 +32,7 @@
 #include "node_queue.h"
 #include "coverage_walk.h"
 #include "perfect_path.h"
-#include "graph_stats.h"
+#include "coverage_stats.h"
 #include "cleaning.h"
 #include "metagraphs.h"
 
@@ -49,7 +49,7 @@
 // ----------------------------------------------------------------------
 // Work through graph, count cov, X, Y nodes
 // ----------------------------------------------------------------------
-void metacortex_get_stats(dBGraph * graph, char* consensus_contigs_filename)
+void get_coverage_stats(dBGraph * graph, char* consensus_contigs_filename)
 {
   FILE* fp_analysis;
 	//int branchNodes = 0;
@@ -156,6 +156,8 @@ void metacortex_get_stats(dBGraph * graph, char* consensus_contigs_filename)
 
   // check each node in the graph
 	hash_table_traverse(&get_node_stats, graph);
+
+  //
 
 
   fprintf(fp_analysis, "#total\t%li\n#X-nodes\t%i\n#Y-nodes\t%i\n\n",total_nodes, X_Nodes, Y_Nodes);

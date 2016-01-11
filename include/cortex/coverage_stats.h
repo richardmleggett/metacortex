@@ -38,4 +38,4 @@
 //     int graph_size;
 //} SubGraphInfo;
 
-void metacortex_get_stats(dBGraph* graph, char* consensus_contigs_filename);
+void get_coverage_stats(dBGraph* graph, char* consensus_contigs_filename);
