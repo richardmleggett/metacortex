@@ -1,11 +1,11 @@
 /*
  * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
  * **********************************************************************
@@ -27,7 +27,7 @@
  *
  * **********************************************************************
  */
- 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -53,7 +53,7 @@ int BUBBLEDEBUG = 0;
 void db_graph_identify_branches(int max_length, dBGraph * db_graph)
 {
 	int branchNodes = 0;
-	
+
 	db_graph_reset_flags(db_graph);
 
 	// Hash table iterator to label nodes
@@ -69,7 +69,7 @@ void db_graph_identify_branches(int max_length, dBGraph * db_graph)
 				branchNodes++;
 				branch = true;
 			}
-			// Look for Y shape branch reverse orientation                     
+			// Look for Y shape branch reverse orientation
 			if (db_node_edges_count_all_colours(node, reverse) > 1
 			    && db_node_edges_count_all_colours(node, forward) == 1) {
 				db_node_action_set_flag(node, BRANCH_NODE_REVERSE);
@@ -180,7 +180,7 @@ void db_graph_walk_from_node(dBNode * node, Path * current_path, int orientation
 		binary_kmer_to_seq(element_get_kmer(node), db_graph->kmer_size, node_kmer);
 		printf("Path so far %s Start node %s orientation %s\n", current_path->seq, node_kmer, orientation == forward ? "forward" : "reverse");
 	}
-    
+
 	// Function to go through each nucleotide, walk the path if an edge exists and store path
 	void walk_if_exists(Nucleotide n) {
 		if (db_node_edge_exist_any_colour(node, n, orientation)) {
@@ -217,12 +217,12 @@ void db_graph_walk_from_node(dBNode * node, Path * current_path, int orientation
 					printf("    ");
                 }
 			}
-            
+
 			// What to do with the new path?
 			// - If path ends at a blunt end, we can go down no deeper
 			// - If first node in path is equal to the end node, it's a loop, so we don't add it to the
 			//   patharray and we check if we can ignore this node completely.
-			// - If we've reached the maximum length, then we look no deeper and add the path to the 
+			// - If we've reached the maximum length, then we look no deeper and add the path to the
 			//   path to the patharray.
 			// - If we've reached the maxium depth, then we look no deeper and add the path to the
 			//   patharray.
@@ -322,7 +322,7 @@ void db_graph_walk_branches(char *filename, int total_max_length, int bubble_max
 					binary_kmer_to_seq(element_get_kmer(node), db_graph->kmer_size, tmp_seq);
 					printf("\nWalking from node %s orientation %s\n", tmp_seq, orientation == forward ? "forward" : "reverse");
 				}
-                
+
 				initial_path = path_new(bubble_max_length, db_graph->kmer_size);
    				db_graph_walk_from_node(node, initial_path,	orientation, 0,	bubble_max_depth, bubble_max_length, patharray, db_graph);
 
@@ -351,12 +351,12 @@ void db_graph_walk_branches(char *filename, int total_max_length, int bubble_max
 				if (DEBUG) {
 					printf("[find_branch_points] Got X node\n");
 				}
-                
+
 				// Look in both directions.. forward first
 				if (DEBUG) {
 					printf("[find_branch_points] Orientation forward\n");
 				}
-                
+
 				// Build array of paths forward
 				orientation = forward;
 				initial_path = path_new(bubble_max_length, db_graph->kmer_size);
@@ -383,12 +383,12 @@ void db_graph_walk_branches(char *filename, int total_max_length, int bubble_max
 					binary_kmer_to_seq(element_get_kmer(node), db_graph->kmer_size, tmp_seq);
 					printf("\nWalking from X-node %s orientation reverse\n", tmp_seq);
 				}
-                
+
 				// then reverse
 				if (DEBUG) {
 					printf("[find_branch_points] Orientation reverse\n");
 				}
-                
+
 				// Build array of paths reverse
 				orientation = reverse;
 				initial_path = path_new(bubble_max_length, db_graph->kmer_size);
@@ -428,10 +428,10 @@ void db_graph_walk_branches(char * filename, int max_length, dBGraph * db_graph)
 	int id = 0;
 
 	printf("Looking for branches to walk.\n");
-	
+
 	// Create output files
 	db_graph_prepare_output_files(filename);
-	
+
 	// Function to go through hash table and find points marked as branches
 	void find_branch_points(dBNode * node) {
 		// Function to go through each nucleotide, walk the path if an edge exists and store path
@@ -441,19 +441,19 @@ void db_graph_walk_branches(char * filename, int max_length, dBGraph * db_graph)
 				first_step.node = node;
 				first_step.orientation = orientation;
 				first_step.label = n;
-				
+
 				if (DEBUG)
 					printf("[find_branch_points] Walking path for %c\n", binary_nucleotide_to_char(n));
-				
+
 				if (patharray->number_of_paths > patharray->capacity) {
 					fprintf(stderr, "\n[find_branch_points] Too many paths.\n\n");
 					exit(-1);
 				}
-				
+
 				new_path = path_new(max_length, db_graph->kmer_size);
 				if (!new_path) {
 					fprintf(stderr, "\n[find_branch_points] Couldn't get memory new_path.\n\n");
-					exit(-1);						
+					exit(-1);
 				}
 
 				path_array_add_path(new_path, patharray);
@@ -472,7 +472,7 @@ void db_graph_walk_branches(char * filename, int max_length, dBGraph * db_graph)
 			number_walked++;
 
 			patharray = path_array_new(4);
-		
+
 			// Slightly different behaviour for Y nodes and X nodes
 			if (db_node_check_for_any_flag(node, BRANCH_NODE_FORWARD | BRANCH_NODE_REVERSE)) {
 				if (DEBUG)
@@ -480,13 +480,13 @@ void db_graph_walk_branches(char * filename, int max_length, dBGraph * db_graph)
 
 				// Set orientation (used by walk_if_exists)
 				orientation = db_node_check_for_any_flag(node, BRANCH_NODE_REVERSE) ? reverse:forward;
-							
+
 				// Walk the 4 potential nucleotide paths, building an array
 				// of paths. Call function to compare these paths and then
 				// another separate function to deal with matches...
 				nucleotide_iterator(&walk_if_exists);
 				db_graph_walk_display_paths(patharray);
-				if (db_graph_compare_paths(patharray, &end_step, db_graph->kmer_size)) {					
+				if (db_graph_compare_paths(patharray, &end_step, db_graph->kmer_size)) {
 					id = db_graph_found_matched_paths(patharray, max_length, orientation, node, &end_step, filename, db_graph);
 				}
 			}
@@ -500,7 +500,7 @@ void db_graph_walk_branches(char * filename, int max_length, dBGraph * db_graph)
 				orientation = forward;
 				nucleotide_iterator(&walk_if_exists);
 				db_graph_walk_display_paths(patharray);
-				if (db_graph_compare_paths(patharray, &end_step, db_graph->kmer_size)) {					
+				if (db_graph_compare_paths(patharray, &end_step, db_graph->kmer_size)) {
 					id = db_graph_found_matched_paths(patharray, max_length, orientation, node, &end_step, filename, db_graph);
 				}
 
@@ -514,7 +514,7 @@ void db_graph_walk_branches(char * filename, int max_length, dBGraph * db_graph)
 				orientation = reverse;
 				nucleotide_iterator(&walk_if_exists);
 				db_graph_walk_display_paths(patharray);
-				if (db_graph_compare_paths(patharray, &end_step, db_graph->kmer_size)) {					
+				if (db_graph_compare_paths(patharray, &end_step, db_graph->kmer_size)) {
 					id = db_graph_found_matched_paths(patharray, max_length, orientation, node, &end_step, filename, db_graph);
 				}
 			}
@@ -523,7 +523,7 @@ void db_graph_walk_branches(char * filename, int max_length, dBGraph * db_graph)
 			path_array_destroy(patharray);
 		}
 	}
-	
+
 	hash_table_traverse(&find_branch_points, db_graph);
 
 	printf("Finished walking - %d contigs output.\n", id);
@@ -631,26 +631,26 @@ boolean db_graph_compare_paths(PathArray * patharray, pathStep * end, int kmer_s
 	if (DEBUG) {
 		printf("[db_graph_compare_paths] Starting to compare paths...\n");
 	}
-	// Compare each path against each other 
+	// Compare each path against each other
 	for (i = 0; i < patharray->number_of_paths; i++) {
 		for (j = i + 1; j < patharray->number_of_paths; j++) {
 			if (BUBBLEDEBUG) {
 				printf("[db_graph_compare_paths] Comparing path %d with path %d...\n", i, j);
 			}
-            
+
 			// ALGORITHM
 			//
 			// Given a branch point and a set of paths leading out of that branch point
 			//
-			// To find the end point for a given pair of paths:                     
+			// To find the end point for a given pair of paths:
 			// 1. Find path step that these paths diverge on.
 			// 2. Now find the step that they converge - store the node as the end node for these two paths.
-			// 3. There may be other paths that converge here also, so count total number of paths that contain this step. 
+			// 3. There may be other paths that converge here also, so count total number of paths that contain this step.
 			// 4. Keep looking further down the path until either:
 			//    - we reach a node that splits in the orientation of travel, or
 			//    - we reach the end of the path
 			// 5. If, whilst continuing to walk down this path, we find a node where another path joins the paths we already have (2 or more of them), then this is now the end node.
-			//              
+			//
 			// To decide which end point represents the one end point for this branch point:
 			// 1. Choose the one which has most paths meeting at it.
 			// 2. If two end points have the same number of paths, then choose the closest one to the branch point.
@@ -693,7 +693,7 @@ boolean db_graph_compare_paths(PathArray * patharray, pathStep * end, int kmer_s
 						end_paths = n_paths;
 						end_index = index;
 					}
-                    
+
 					// If there is more than one path out of this node, we don't go any further
 					if (db_node_edges_count_all_colours (step.node, step.orientation) > 1) {
 						break;
@@ -728,19 +728,19 @@ boolean db_graph_compare_paths(PathArray * patharray, pathStep * end, int kmer_s
 	int length;
 	char tmp_seq[kmer_size+1];
 	boolean match_found = false;
-	
+
 	if (patharray->number_of_paths < 2) {
 		return false;
 	}
-	
+
 	for (i=0; i<patharray->number_of_paths;  i++) {
 		path_action_unset_flag(patharray->paths[i], MATCH_FOUND);
 	}
-	
+
 	if (DEBUG) {
 		printf("[db_graph_compare_paths] Starting to compare paths...\n");
 	}
-	
+
 	void check_each_node(pathStep * step) {
 		if (!match_found) {
 			if (path_contains_step(step, patharray->paths[j])) {
@@ -758,21 +758,21 @@ boolean db_graph_compare_paths(PathArray * patharray, pathStep * end, int kmer_s
 			}
 		}
 	}
-	
+
 	// Compare each path against each other to see if it ends at a common point
 	for (i=0; i<patharray->number_of_paths; i++) {
 		for (j=i+1; j<patharray->number_of_paths; j++) {
 			if (DEBUG) {
 				printf("[db_graph_compare_paths] Comparing path %d with path %d...\n", i, j);
 			}
-			
+
 			// Find the first point these paths diverge
 			diverge_index = 0;
 			length = patharray->paths[i]->length;
 			if (patharray->paths[j]->length < length) {
 				length = patharray->paths[j]->length;
 			}
-			
+
 			for (k=0; k<length; k++) {
 				pathStep step_a, step_b;
 				path_get_step_at_index(k, &step_a, patharray->paths[i]);
@@ -782,20 +782,20 @@ boolean db_graph_compare_paths(PathArray * patharray, pathStep * end, int kmer_s
 					break;
 				}
 			}
-			
-			// Go through each step of path i and see if node is in path j                  
+
+			// Go through each step of path i and see if node is in path j
 			if (!match_found) {
 				path_iterator_from_index(diverge_index, &check_each_node, patharray->paths[i]);
 			}
 		}
 	}
-	
+
 	if (DEBUG) {
 		if (!match_found) {
 			printf("[db_graph_compare_paths] No matches.\n");
 		}
 	}
-	
+
 	return match_found;
 }
 */
@@ -1014,11 +1014,11 @@ int db_graph_found_matched_paths(PathArray * patharray, int max_length, Orientat
 			if (success) {
 				success = path_append(merged_path, patharray->paths[i]);
             }
-            
+
 			if ((success) && (suffix_path)) {
 				success = path_append(merged_path, suffix_path);
             }
-            
+
 			if (!success) {
 				char *message = "warning:path_append_failed ";
 				int j;
@@ -1136,7 +1136,7 @@ void db_graph_walk_display_paths(PathArray * patharray)
 		}
 	}
 #endif
-	
+
 }
 
 // ----------------------------------------------------------------------
@@ -1151,7 +1151,7 @@ void db_graph_prepare_output_files(char *filename)
 	if (DEBUG) {
 		printf("[db_graph_prepare_output_files] Creating output file: %s\n", pathname);
     }
-    
+
 	fp = fopen(pathname, "w");
 	fclose(fp);
 
@@ -1159,7 +1159,7 @@ void db_graph_prepare_output_files(char *filename)
 	if (DEBUG) {
 		printf("[db_graph_prepare_output_files] Creating output file: %s\n", pathname);
     }
-    
+
 	fp = fopen(pathname, "w");
 	fclose(fp);
 }

@@ -51,7 +51,7 @@
 #include <cleaning.h>
 #include <cmd_line.h>
 #include "metagraphs.h"
-#include "coverage_stats.h"
+#include "graph_stats.h"
 
 typedef struct {
     char* filename;
@@ -455,8 +455,7 @@ int main(int argc, char **argv)
                 break;
             case GRAPH_STATS:
                 log_and_screen_printf("\nSearching graph for stats...\n");
-                get_coverage_stats(db_graph, cmd_line.output_fasta_filename); // checks each node in graph for coverage. PLAN TO PHASE THIS OUT
-
+                find_subgraph_stats(db_graph, cmd_line.output_fasta_filename);
                 //metacortex_find_subgraphs(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.min_contig_length);
                 break;
             default:

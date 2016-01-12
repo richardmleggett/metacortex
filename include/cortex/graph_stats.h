@@ -38,4 +38,4 @@
 //     int graph_size;
 //} SubGraphInfo;
 
-void get_coverage_stats(dBGraph* graph, char* consensus_contigs_filename);
+void find_subgraph_stats(dBGraph* graph, char* consensus_contigs_filename);
