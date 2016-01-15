@@ -165,8 +165,7 @@ void db_graph_check_still_branch_after_loop_detected(pathStep * step, dBGraph * 
 // ----------------------------------------------------------------------
 // Walk path from branch node
 // ----------------------------------------------------------------------
-void db_graph_walk_from_node(dBNode * node, Path * current_path, int orientation, int depth, int max_depth,
-                             int max_length, PathArray * patharray, dBGraph * db_graph)
+void db_graph_walk_from_node(dBNode * node, Path * current_path, int orientation, int depth, int max_depth, int max_length, PathArray * patharray, dBGraph * db_graph)
 {
 	pathStep first_step;
 	char node_kmer[db_graph->kmer_size + 1];

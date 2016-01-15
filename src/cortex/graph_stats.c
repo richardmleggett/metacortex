@@ -149,7 +149,7 @@
          exit(-1);
      }
 
-     if (!db_node_check_flag_visited(start_node)) {
+     if (db_node_check_flag_visited(start_node)) {
          db_node_action_set_flag_visited(start_node);
          current_graph_size++;
      }
@@ -221,46 +221,46 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
 
 	// Hash table iterator to label nodes
 	void identify_branch_nodes(dBNode * node) {
-		if (!db_node_check_flag_visited(node)) {
-      int this_coverage = element_get_coverage_all_colours(node);
-      int edges_forward= db_node_edges_count_all_colours(node, forward);
-      int edges_reverse = db_node_edges_count_all_colours(node, reverse);
-      if (this_coverage<=0) {
-          log_and_screen_printf("Error: Coverage is <1 in the graph?\n");
-          exit(-1);
-      }
-      this_coverage = ((this_coverage-1) / COVERAGE_BIN_SIZE);
-      if(this_coverage>COVERAGE_BINS){
-        this_coverage = COVERAGE_BINS-1;
-      }
+		//if (!db_node_check_flag_visited(node)) {
+    int this_coverage = element_get_coverage_all_colours(node);
+    int edges_forward= db_node_edges_count_all_colours(node, forward);
+    int edges_reverse = db_node_edges_count_all_colours(node, reverse);
+    if (this_coverage<=0) {
+        log_and_screen_printf("Error: Coverage is <1 in the graph?\n");
+        exit(-1);
+    }
+    this_coverage = ((this_coverage-1) / COVERAGE_BIN_SIZE);
+    if(this_coverage>COVERAGE_BINS){
+      this_coverage = COVERAGE_BINS-1;
+    }
 
-      Coverage_Dist[this_coverage]++;
-      total_nodes++;
+    Coverage_Dist[this_coverage]++;
+    total_nodes++;
 
-			// Look for Y shape branch forward orientation
-			// The nodes at the top of the Y should contain different colours
-			if (edges_forward > 1
-			    && edges_reverse == 1) {
-				db_node_action_set_flag(node, BRANCH_NODE_FORWARD);
-        Y_Nodes_for[edges_forward - 1]++;
-        Y_Nodes++;
-			}
-			// Look for Y shape branch reverse orientation
-			if (edges_reverse > 1
-			    && edges_forward == 1) {
-				db_node_action_set_flag(node, BRANCH_NODE_REVERSE);
-        Y_Nodes_rev[edges_reverse - 1]++;
-        Y_Nodes++;
-			}
-			// Look for X-shaped branch
-			if (edges_reverse > 1
-			    && edges_forward > 1) {
-				db_node_action_set_flag(node, X_NODE);
-        X_Nodes_tot[edges_reverse + edges_forward + 1]++;
-        X_Nodes++;
-			}
+		// Look for Y shape branch forward orientation
+		// The nodes at the top of the Y should contain different colours
+		if (edges_forward > 1
+		    && edges_reverse == 1) {
+			db_node_action_set_flag(node, BRANCH_NODE_FORWARD);
+      Y_Nodes_for[edges_forward - 1]++;
+      Y_Nodes++;
 		}
-  } // identify_branch_nodes
+		// Look for Y shape branch reverse orientation
+		if (edges_reverse > 1
+		    && edges_forward == 1) {
+			db_node_action_set_flag(node, BRANCH_NODE_REVERSE);
+      Y_Nodes_rev[edges_reverse - 1]++;
+      Y_Nodes++;
+		}
+		// Look for X-shaped branch
+		if (edges_reverse > 1
+		    && edges_forward > 1) {
+			db_node_action_set_flag(node, X_NODE);
+      X_Nodes_tot[edges_reverse + edges_forward + 1]++;
+      X_Nodes++;
+		}
+	}
+  //} // identify_branch_nodes
 
 
   graph_queue = queue_new(METACORTEX_QUEUE_SIZE);
@@ -272,8 +272,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
   path_array_initialise_buffers(graph->kmer_size);
 
 	// Hash table iterator to walk nodes, looking for branches
-	void explore_node(dBNode * node) {
-	   if (db_node_check_flag_not_pruned(node)) {
+  void explore_node(dBNode * node) {
+    if(db_node_check_for_any_flag(node, PRUNED | VISITED) == false){
       dBNode* seed_node;
       int nodes_in_graph;
       // Grow graph from this node, returning the 'best' (highest coverage) node to store as seed point
@@ -293,7 +293,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
         log_printf("graph size of zero?\n");
       }
     }
-	} // explore_node
+  } // explore_node
 
 
   // check each node in the graph, FLAG X&Y nodes (mark all nodes as visited)
