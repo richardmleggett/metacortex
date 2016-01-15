@@ -219,17 +219,9 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
 
 	db_graph_reset_flags(graph);
 
-  graph_queue = queue_new(METACORTEX_QUEUE_SIZE);
-  if (!graph_queue) {
-      log_and_screen_printf("Couldn't get memory for graph queue.\n");
-      exit(-1);
-  }
-  /* Initialise temporaray path array buffers */
-  path_array_initialise_buffers(graph->kmer_size);
-
 	// Hash table iterator to label nodes
-	void get_node_stats(dBNode * node) {
-		if (db_node_check_flag_not_pruned(node)) {
+	void identify_branch_nodes(dBNode * node) {
+		if (!db_node_check_flag_visited(node)) {
       int this_coverage = element_get_coverage_all_colours(node);
       int edges_forward= db_node_edges_count_all_colours(node, forward);
       int edges_reverse = db_node_edges_count_all_colours(node, reverse);
@@ -268,36 +260,47 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
         X_Nodes++;
 			}
 		}
+  } // identify_branch_nodes
 
-    if (db_node_check_for_any_flag(node, PRUNED | VISITED) == false) {
+
+  graph_queue = queue_new(METACORTEX_QUEUE_SIZE);
+  if (!graph_queue) {
+      log_and_screen_printf("Couldn't get memory for graph queue.\n");
+      exit(-1);
+  }
+    /* Initialise temporaray path array buffers */
+  path_array_initialise_buffers(graph->kmer_size);
+
+	// Hash table iterator to walk nodes, looking for branches
+	void explore_node(dBNode * node) {
+	   if (db_node_check_flag_not_pruned(node)) {
       dBNode* seed_node;
       int nodes_in_graph;
-      /* Grow graph from this node, returning the 'best' (highest coverage) node to store as seed point */
+      // Grow graph from this node, returning the 'best' (highest coverage) node to store as seed point
       log_printf("Growing graph from node\n");
       graph_queue->number_of_items = 0;
+
+      // now with a subgraph, walk the graph looking for bubbles. check bubblefind.c for ideas.
       nodes_in_graph = grow_graph_from_node_stats(node, &seed_node, graph, graph_queue);
       if (seed_node == NULL) {
-          printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph);
-      } else {
-        // something here holding nodes in graph - array seems too much? could be unwieldy
-        // inflexible too. Can't pop onto array like in perl.
+        printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph);
+      } else if (nodes_in_graph) {
+        // print out the size of the current subgraph
         log_printf("graph size\t%i\n",nodes_in_graph);
         fprintf(fp_analysis, "%i\n",nodes_in_graph);
-
-        // now with a subgraph, walk the graph looking for bubbles. check bubblefind.c for ideas.
+      } else {
+        // catch graph size of zero? Not sure why this happens - grow-graph must be failing
+        log_printf("graph size of zero?\n");
       }
     }
-	}
-
-  // first line for stats output file
-  fprintf(fp_analysis, "#Subraph sizes\n");
-
-  // check each node in the graph
-	hash_table_traverse(&get_node_stats, graph);
+	} // explore_node
 
 
+  // check each node in the graph, FLAG X&Y nodes (mark all nodes as visited)
+	hash_table_traverse(&identify_branch_nodes, graph);
 
-  fprintf(fp_analysis, "\n\n#total\t%li\n#X-nodes\t%i\n#Y-nodes\t%i\n\n",total_nodes, X_Nodes, Y_Nodes);
+  // Output graph wide stats (X/Y node numbers)
+  fprintf(fp_analysis, "#total\t%li\n#X-nodes\t%i\n#Y-nodes\t%i\n\n",total_nodes, X_Nodes, Y_Nodes);
   fprintf(fp_analysis, "#total\t%li\n\t\n\t#X\t#Y-FOR\t#Y-REV\n",total_nodes);
   for(i=0;i<4;i++){
     fprintf(fp_analysis, "%i\t%i\t%i\t%i\n",i, X_Nodes_tot[i], Y_Nodes_for[i], Y_Nodes_rev[i]);
@@ -305,10 +308,17 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
   for(i=4;i<8;i++){
     fprintf(fp_analysis, "%i\t%i\n",i, X_Nodes_tot[i]);
   }
-  fprintf(fp_analysis, "#Coverage_dist\t---\n");
+  // first line for stats output file
+  fprintf(fp_analysis, "\n#Subgraph sizes\n");
+
+  // second travesal - build subgraphs out.
+	hash_table_traverse(&explore_node, graph);
+
+  // Output graph wide stats (coverage)
+  fprintf(fp_analysis, "\n#Coverage_dist\t---\n");
   for(i=0;i<(COVERAGE_BINS-1);i++){
     fprintf(fp_analysis, "#>%i<=%i\t%li\n",i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE, Coverage_Dist[i]);
   }
-  fprintf(fp_analysis, "#>=%i   \t%li\n",i*(COVERAGE_BIN_SIZE-1), Coverage_Dist[i]);
+  fprintf(fp_analysis, "#>=%i   \t%li\n",(COVERAGE_BINS-1)*COVERAGE_BIN_SIZE, Coverage_Dist[i]);
   fclose(fp_analysis);
 }

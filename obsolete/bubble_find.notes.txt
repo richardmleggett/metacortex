@@ -13,6 +13,7 @@ void db_graph_check_still_branch_after_loop_detected(pathStep * step, dBGraph * 
 void db_graph_walk_from_node(dBNode * node, Path * current_path, int orientation, int depth, int max_depth, int max_length, PathArray * patharray, dBGraph * db_graph)
   standard graph walk - given starting node, checks all nucelotides off of it (all colours); finds a perfect path. Then checks if this is blunt (end), is a circle (first node is last node, and if we removing the loop simplifies the node), 'path_is_cycle', and then if max length and depth have been reached in search. If not, call function again from the final node on the path.
 
+
 void db_graph_walk_branches(char *filename, int total_max_length, int bubble_max_length, int bubble_max_depth, dBGraph * db_graph)
   MAIN of script - traverses hashtable calling (void) find_branch_points, which calls walk_from_node
   ONLY looks for Y/X nodes! makes a path array off of them.
@@ -22,6 +23,7 @@ void db_graph_walk_branches(char *filename, int total_max_length, int bubble_max
 void db_graph_find_divergence(Path * path_a, Path * path_b, int *a_ctr, int *b_ctr)
   'Return point at which two paths diverge. If paths are same up until the end of one of them, divergence point will equal shortest length.'
   ***(calls path_step_equals)
+
 
 int db_graph_check_for_convergence(Path * path_a, Path * path_b, int *a_ctr, int *b_ctr)
   'Return point at which two paths converge. If they don't, return -1.'

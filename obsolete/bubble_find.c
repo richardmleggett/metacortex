@@ -369,7 +369,7 @@ void db_graph_walk_branches(char *filename, int total_max_length, int bubble_max
 						id = db_graph_found_matched_paths(patharray, total_max_length, orientation, node, &end_step, filename, db_graph);
 						if (id >= 0) {
 							contigs_output = id;
-                        }
+            }
 					}
 				}
 
