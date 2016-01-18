@@ -38,6 +38,12 @@
 
 #define COVERAGE_BINS 150
 #define COVERAGE_BIN_SIZE 1
+#define MAX_BRANCHES 5
+
+typedef struct {
+    int total_size;
+    int branch_nodes;
+} GraphInfo;
 
 /*----------------------------------------------------------------------*
  * Function:                                                            *
@@ -46,13 +52,12 @@
  * Returns:                                                             *
  *----------------------------------------------------------------------*/
 
- int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* graph, Queue* graph_queue)
+ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* graph, Queue* graph_queue, GraphInfo* nodes_in_graph)
  {
      Queue* nodes_to_walk;
      dBNode* node;
      int orientation;
      int depth;
-     int current_graph_size = 0;
      int best_coverage = 0;
      int best_edges = 0;
 
@@ -123,9 +128,13 @@
                              *best_node = new_path->nodes[i];
                          }
 
+                        if (db_node_check_for_any_flag(new_path->nodes[i], BRANCH_NODE_FORWARD | BRANCH_NODE_REVERSE | X_NODE)){
+                          nodes_in_graph->branch_nodes++;
+                        }
+
                          db_node_action_set_flag_visited(new_path->nodes[i]);
                          queue_push(graph_queue, new_path->nodes[i]);
-                         current_graph_size++;
+                         nodes_in_graph->total_size++;
                      }
                  }
 
@@ -151,7 +160,7 @@
 
      if (db_node_check_flag_visited(start_node)) {
          db_node_action_set_flag_visited(start_node);
-         current_graph_size++;
+         nodes_in_graph->total_size++;
      }
 
      // Now keep visiting nodes and walking paths
@@ -174,7 +183,7 @@
          *best_node = start_node;
      }
 
-     return current_graph_size;
+     return 0;
  }
 
 
@@ -188,9 +197,11 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
 	int X_Nodes_tot[8];
 	int Y_Nodes_rev[4];
 	int Y_Nodes_for[4];
+  long int Contig_Branches[MAX_BRANCHES];
 	int X_Nodes = 0;
 	int Y_Nodes = 0;
   long int total_nodes = 0;
+  GraphInfo* nodes_in_graph;
   // array to bin coverage 0-5, 5-10, 10-15..95-100
   long int Coverage_Dist[COVERAGE_BINS]; // will this work?
   //int COVERAGE_CEILING = (COVERAGE_BINS-1) * COVERAGE_BIN_SIZE;
@@ -199,6 +210,9 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
   Queue* graph_queue;
   int i;
   // Initialise Coverage_Dist  int i;
+  for(i=0;i<MAX_BRANCHES;i++){
+    Contig_Branches[i]=0;
+  }
   for(i=0;i<COVERAGE_BINS;i++){
     Coverage_Dist[i]=0;
   }
@@ -259,8 +273,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
       X_Nodes_tot[edges_reverse + edges_forward + 1]++;
       X_Nodes++;
 		}
-	}
-  //} // identify_branch_nodes
+  } // identify_branch_nodes()
 
 
   graph_queue = queue_new(METACORTEX_QUEUE_SIZE);
@@ -275,23 +288,28 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
   void explore_node(dBNode * node) {
     if(db_node_check_for_any_flag(node, PRUNED | VISITED) == false){
       dBNode* seed_node;
-      int nodes_in_graph;
+      nodes_in_graph->total_size = 0;
+      nodes_in_graph->branch_nodes = 0;
       // Grow graph from this node, returning the 'best' (highest coverage) node to store as seed point
       log_printf("Growing graph from node\n");
       graph_queue->number_of_items = 0;
 
       // now with a subgraph, walk the graph looking for bubbles. check bubblefind.c for ideas.
-      nodes_in_graph = grow_graph_from_node_stats(node, &seed_node, graph, graph_queue);
+      grow_graph_from_node_stats(node, &seed_node, graph, graph_queue, nodes_in_graph);
       if (seed_node == NULL) {
-        printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph);
-      } else if (nodes_in_graph) {
+        printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph->total_size);
+      } else if (nodes_in_graph->total_size) {
         // print out the size of the current subgraph
-        log_printf("graph size\t%i\n",nodes_in_graph);
-        fprintf(fp_analysis, "%i\n",nodes_in_graph);
+        log_printf("graph size\t%i\n",nodes_in_graph->total_size);
+        fprintf(fp_analysis, "%i\t%i\n",nodes_in_graph->branch_nodes,nodes_in_graph->total_size);
       } else {
         // catch graph size of zero? Not sure why this happens - grow-graph must be failing
         log_printf("graph size of zero?\n");
       }
+      if (nodes_in_graph->branch_nodes>(MAX_BRANCHES-1)){
+        nodes_in_graph->branch_nodes=MAX_BRANCHES-1;
+      }
+      Contig_Branches[nodes_in_graph->branch_nodes]++;
     }
   } // explore_node
 
@@ -315,6 +333,11 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
 	hash_table_traverse(&explore_node, graph);
 
   // Output graph wide stats (coverage)
+  fprintf(fp_analysis, "\n#Complexity_dist (# X/Y nodes)\t---\n");
+  for(i=0;i<MAX_BRANCHES;i++){
+    fprintf(fp_analysis, "%i\t%li\n",i, Contig_Branches[i]);
+  }
+
   fprintf(fp_analysis, "\n#Coverage_dist\t---\n");
   for(i=0;i<(COVERAGE_BINS-1);i++){
     fprintf(fp_analysis, "#>%i<=%i\t%li\n",i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE, Coverage_Dist[i]);
