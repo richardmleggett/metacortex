@@ -66,6 +66,7 @@ typedef struct {
      // Nucleotide iterator, used to walk all possible paths from a node
      void walk_if_exists(Nucleotide n) {
          //if (debug) printf("Trying nucleotide %i\n", n);
+   			int end_orientation;
 
          // If there is an edge in any colour for this nucleotide...
          if (db_node_edge_exist_any_colour(node, n, orientation)) {
@@ -103,6 +104,7 @@ typedef struct {
 
                  // Add end node to list of nodes to visit
                  end_node = new_path->nodes[new_path->length-1];
+           			 end_orientation = new_path->orientations[new_path->length - 1];
                  if (!db_node_check_flag_visited(end_node)) {
                      if (!db_node_is_blunt_end_all_colours(end_node, new_path->orientations[new_path->length-1])) {
                          if (queue_push_node(nodes_to_walk, end_node, depth+1) == NULL) {
@@ -112,9 +114,20 @@ typedef struct {
                      }
                  }
 
+
+                // check nodes in path now
+                // only really need to check final node as it's a perfect path
+                // is it blunt? has it been seen before?
+                if (db_node_is_blunt_end_all_colours(end_node, end_orientation)) {
+                // DO NOTHING WITH THIS
+          				//db_graph_check_and_add_path(merged_path, patharray);
+               }
+               if (db_node_check_flag_visited(end_node)) {
+                 // need to count back from here to original branching point?
+               }
+
                  // Now go through all nodes, look for best and mark all as visited
                  for (i=0; i<new_path->length; i++) {
-                   //  MARTIN : new_path established where?
                      if (!db_node_check_flag_visited(new_path->nodes[i])) {
                          int this_coverage = element_get_coverage_all_colours(new_path->nodes[i]);
                          int this_edges = db_node_edges_count_all_colours(new_path->nodes[i], forward) + db_node_edges_count_all_colours(new_path->nodes[i], reverse);
