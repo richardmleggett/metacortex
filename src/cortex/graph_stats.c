@@ -118,6 +118,7 @@ typedef struct {
                 // check nodes in path now
                 // only really need to check final node as it's a perfect path
                 // is it blunt? has it been seen before?
+                // things I@m dropping for now - loop detection, branch + loop, catching too large a bubble
                 if (db_node_is_blunt_end_all_colours(end_node, end_orientation)) {
                 // DO NOTHING WITH THIS
           				//db_graph_check_and_add_path(merged_path, patharray);

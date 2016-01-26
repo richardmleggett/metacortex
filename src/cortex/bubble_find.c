@@ -39,7 +39,8 @@
 #include <bubble_find.h>
 #include <logger.h>
 
-#define MAX_PATHS_IN_ARRAY 4096
+#define MAX_PATHS_IN_ARRAY 4096 
+#define DEBUG_BUBBLES 1
 
 #ifdef DEBUG_BUBBLES
 int BUBBLEDEBUG = 1;
