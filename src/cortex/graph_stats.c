@@ -214,6 +214,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
   long int Contig_Branches[MAX_BRANCHES];
 	int X_Nodes = 0;
 	int Y_Nodes = 0;
+  char* seq = calloc(256, 1);
   long int total_nodes = 0;
   GraphInfo* nodes_in_graph;
   // array to bin coverage 0-5, 5-10, 10-15..95-100
@@ -315,7 +316,14 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
       } else if (nodes_in_graph->total_size) {
         // print out the size of the current subgraph
         log_printf("graph size\t%i\n",nodes_in_graph->total_size);
-        fprintf(fp_analysis, "%i\t%i\n",nodes_in_graph->branch_nodes,nodes_in_graph->total_size);
+        fprintf(fp_analysis, "%i\t%i",nodes_in_graph->branch_nodes,nodes_in_graph->total_size);
+        if (nodes_in_graph->branch_nodes){
+          binary_kmer_to_seq(&(seed_node->kmer), graph->kmer_size, seq);
+          fprintf(fp_analysis, "\t%s\n", seq);
+        }
+        else{
+          fprintf(fp_analysis, "\n");
+        }
       } else {
         // catch graph size of zero? Not sure why this happens - grow-graph must be failing
         log_printf("graph size of zero?\n");
@@ -358,4 +366,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
   }
   fprintf(fp_analysis, "#>=%i   \t%li\n",(COVERAGE_BINS-1)*COVERAGE_BIN_SIZE, Coverage_Dist[i]);
   fclose(fp_analysis);
+
+
+  	db_graph_reset_flags(graph);
 }

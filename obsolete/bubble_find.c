@@ -41,11 +41,12 @@
 
 #define MAX_PATHS_IN_ARRAY 4096
 
-#ifdef DEBUG_BUBBLES
-int BUBBLEDEBUG = 1;
-#else
+//#ifdef DEBUG_BUBBLES
 int BUBBLEDEBUG = 0;
-#endif
+int DEBUG = 0;
+//#else
+//int BUBBLEDEBUG = 0;
+//#endif
 
 // ----------------------------------------------------------------------
 // Identify branch points of potential SNPs
@@ -410,6 +411,7 @@ void db_graph_walk_branches(char *filename, int total_max_length, int bubble_max
 		}
 	}
 
+  printf("Running find_branch_points");
 	hash_table_traverse(&find_branch_points, db_graph);
 
 	log_and_screen_printf("Finished walking - %d contigs output.\n", contigs_output);

@@ -39,8 +39,7 @@
 #include <bubble_find.h>
 #include <logger.h>
 
-#define MAX_PATHS_IN_ARRAY 4096 
-#define DEBUG_BUBBLES 1
+#define MAX_PATHS_IN_ARRAY 16384 //32768 //4096
 
 #ifdef DEBUG_BUBBLES
 int BUBBLEDEBUG = 1;
@@ -258,6 +257,15 @@ void db_graph_walk_from_node(dBNode * node, Path * current_path, int orientation
 				if (BUBBLEDEBUG) {
 					printf("  New path is %s\n", new_path->seq);
 				}
+								// DEBUGING 18/2/16
+								//log_and_screen_printf("\t\t\t\tpatharray->number_of_paths, %d\n", patharray->number_of_paths);
+								if (patharray->number_of_paths == patharray->capacity) {
+									log_and_screen_printf("\n\npatharray->number_of_paths before destruction, %d\n", patharray->number_of_paths);
+									binary_kmer_to_seq(&(end_node->kmer), db_graph->kmer_size, tmp_seq);
+									log_and_screen_printf("final kmer before exit\t%s\n", tmp_seq);
+									exit(-1);
+								}
+
 				db_graph_walk_from_node(end_node, merged_path, end_orientation, depth + 1, max_depth, max_length, patharray, db_graph);
 			}
 
@@ -296,6 +304,7 @@ void db_graph_walk_branches(char *filename, int total_max_length, int bubble_max
 
 	// Create output files
 	db_graph_prepare_output_files(filename);
+
 
 	// Function to go through hash table and find points marked as branches
 	void find_branch_points(dBNode * node) {
@@ -407,7 +416,11 @@ void db_graph_walk_branches(char *filename, int total_max_length, int bubble_max
 			}
 			// Destroy paths
 			path_destroy(initial_path);
+							// DEBUGING 18/2/16
+							log_and_screen_printf("\n\npatharray->number_of_paths before destruction, %d\n", patharray->number_of_paths);
 			path_array_destroy(patharray);
+							// DEBUGING 18/2/16
+							log_and_screen_printf("\tpatharray->number_of_paths after destruction, %d\n", patharray->number_of_paths);
 		}
 	}
 
@@ -675,6 +688,8 @@ boolean db_graph_compare_paths(PathArray * patharray, pathStep * end, int kmer_s
 			}
 			// Convergence index will be -1 if they don't converge, otherwise it will be the index where they do
 			if (converge != -1) {
+				//log_and_screen_printf("[db_graph_compare_paths] Convergence point %d\n", n_paths); // DEBUGING 18/2/16
+
 				// Count paths at this convergence point
 				path_get_step_at_index(i_ctr, &step, patharray->paths[i]);
 				n_paths = db_graph_count_paths_with_step(&step, patharray);
@@ -694,14 +709,15 @@ boolean db_graph_compare_paths(PathArray * patharray, pathStep * end, int kmer_s
 						end_index = index;
 					}
 
+
 					// If there is more than one path out of this node, we don't go any further
 					if (db_node_edges_count_all_colours (step.node, step.orientation) > 1) {
 						break;
 					}
 
 					i_ctr++;
-					j_ctr++;
 				}
+					j_ctr++;
 			}
 		}
 	}

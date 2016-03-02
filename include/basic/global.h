@@ -1,11 +1,11 @@
 /*
- * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo 
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
  * **********************************************************************
@@ -27,7 +27,7 @@
  *
  * **********************************************************************
  */
- 
+
 #ifndef GLOBAL_H_
 #define GLOBAL_H_
 

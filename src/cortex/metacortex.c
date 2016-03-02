@@ -52,6 +52,7 @@
 #include <cmd_line.h>
 #include "metagraphs.h"
 #include "graph_stats.h"
+#include "bubble_find.h"
 
 typedef struct {
     char* filename;
@@ -60,6 +61,8 @@ typedef struct {
 } ReadFileDescriptor;
 
 #define FILE_LIST_SIZE 1024
+#define TOTAL_MAX_LENGTH 10000
+#define BUBBLE_MAX_DEPTH 10
 
 void write_graphviz_file(char *filename, dBGraph * db_graph);
 void timestamp();
@@ -169,6 +172,8 @@ int main(int argc, char **argv)
     long long seq_length = 0;
     int n_file_list = 0;
     int i;
+    int total_max_length = TOTAL_MAX_LENGTH;
+    int bubble_max_depth = BUBBLE_MAX_DEPTH;
 
     log_and_screen_printf("\nMetaCortex ");
     log_and_screen_printf(METACORTEX_VERSION);
@@ -454,11 +459,16 @@ int main(int argc, char **argv)
                 metacortex_find_subgraphs(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.min_contig_length);
                 break;
             case GRAPH_STATS:
-                //log_and_screen_printf("\nSearching graph for stats...\n");
-                //find_subgraph_stats(db_graph, cmd_line.output_fasta_filename);
 
+                log_and_screen_printf("\nSearching graph for stats...\n");
+                find_subgraph_stats(db_graph, cmd_line.output_fasta_filename);
+
+
+
+                db_graph_identify_branches(1000, db_graph);
                 log_and_screen_printf("\nSearching graph for branches and bubbles...\n");
-                db_graph_walk_branches(cmd_line.output_fasta_filename, 1000, db_graph->kmer_size * 10 + 1, 5, db_graph);
+                db_graph_walk_branches(cmd_line.output_fasta_filename, total_max_length, db_graph->kmer_size * 10 + 1, bubble_max_depth, db_graph);
+
                 //db_graph_walk_branches(char *filename, int total_max_length, int bubble_max_length, int bubble_max_depth, dBGraph * db_graph)
                 //metacortex_find_subgraphs(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.min_contig_length);
                 break;
