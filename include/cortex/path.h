@@ -1,11 +1,11 @@
 /*
- * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo 
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
  * **********************************************************************
@@ -27,7 +27,7 @@
  *
  * **********************************************************************
  */
- 
+
 #ifndef PATH_H_
 #define PATH_H_
 
@@ -96,10 +96,10 @@ typedef struct {
 	int * in_nodes;
 	char * seq;
 	char * header;
-	
+
 	int length;
 	int max_length;
-    int max_virtual_length; //A soft limit to be used when you want a limit smaller than the buffer size. 
+    int max_virtual_length; //A soft limit to be used when you want a limit smaller than the buffer size.
     int new_nodes;
 	Flags flags;
 	int in_nodes_count;
@@ -107,18 +107,18 @@ typedef struct {
     int out_nodes_count;
 	short kmer_size;
 	boolean used;
-	
+
 	Flags stop_reasons_first;
 	Flags stop_reasons_last;
-    
+
 } Path;
 
 typedef struct {
 	dBNode * node;
 	Orientation orientation;
 	Nucleotide label;
-    Flags flags;//This should be used as read only, it reflects the status of the flag when the step was queried from the path. Whe a step path is added, The flags are added to whatever flags set internally would be used. 
-    Path * path;//Pointer to the path to which the step belongs, if any. If NULL, it doesnt really matters. 
+    Flags flags;//This should be used as read only, it reflects the status of the flag when the step was queried from the path. Whe a step path is added, The flags are added to whatever flags set internally would be used.
+    Path * path;//Pointer to the path to which the step belongs, if any. If NULL, it doesnt really matters.
 } pathStep;
 
 typedef struct{
@@ -147,7 +147,7 @@ typedef struct{
 	uint64_t is_double_y;//used to count how many paths are double y
 	uint64_t is_cycle;
 	uint64_t longer_than_buffer;
-	 
+
 	uint64_t minimum_double_y; //count how many double Y were marked
 	uint64_t total_double_y_lenght; //counts the total lenght of the double Ys. We divide later by the minimum_double_y to get the average. However
 }PathCounts;
@@ -220,12 +220,12 @@ PathArray * path_split_in_perfect_paths(Path * p);
 
 Orientation path_last_orientation(Path * path);
 /**
- * This method is the one to be called to call the squence. 
- * The grace  of it is that it will remove the last char of 
- * seq whenever the sequence is cyclic when the first and 
- * last steps are the same. in this way we can have 
- * cycles resolved by, for example, read pairs in the path. 
- * 
+ * This method is the one to be called to call the squence.
+ * The grace  of it is that it will remove the last char of
+ * seq whenever the sequence is cyclic when the first and
+ * last steps are the same. in this way we can have
+ * cycles resolved by, for example, read pairs in the path.
+ *
  */
 char * path_get_seq(char * tmp, Path * path);
 
@@ -239,7 +239,7 @@ void path_modfy_last_label(Nucleotide n, Path * p);
 
 /**
  * If the walking implementation supports it, it tells what is the percentage of new
- * nodes. Useful to avoid printing paths that had been printed already. 
+ * nodes. Useful to avoid printing paths that had been printed already.
  */
 int path_percentage_new_nodes(Path * path);
 
@@ -346,8 +346,8 @@ void path_array_initialise_buffers(short kmer_size);
 void path_array_to_fasta(FILE * f, PathArray * pa);
 
  /**
-  * This assumes that the program is always using the same kmer size! 
-  */ 
+  * This assumes that the program is always using the same kmer size!
+  */
 Path * path_get_buffer_path();
 
 void path_free_buffer_path(Path * path);
@@ -369,4 +369,3 @@ void path_mark_as_visited(Path* path);
 void path_pairs_to_fasta(PathArray* pa, int distances[], FILE* fout);
 
 #endif /* PATH_H_ */
-

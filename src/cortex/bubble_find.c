@@ -177,7 +177,8 @@ void db_graph_walk_from_node(dBNode * node, Path * current_path, int orientation
 			printf("    ");
         }
 		binary_kmer_to_seq(element_get_kmer(node), db_graph->kmer_size, node_kmer);
-		printf("Path so far %s Start node %s orientation %s\n", current_path->seq, node_kmer, orientation == forward ? "forward" : "reverse");
+		printf("Path so far %s Start node %s orientation
+	nucleotide_iterator(&walk_if_exists);%s\n", current_path->seq, node_kmer, orientation == forward ? "forward" : "reverse");
 	}
 
 	// Function to go through each nucleotide, walk the path if an edge exists and store path
@@ -570,10 +571,20 @@ int db_graph_check_for_convergence(Path * path_a, Path * path_b, int *a_ctr, int
 	pathStep step_a, step_b;
 	int index = -1;
 	int k;
+	int branch_nodes_A=0;
+	int branch_nodes_B=0;
+	dBNode * node;
 
 	while ((index == -1) && (*a_ctr < path_a->length)) {
 		// Get next step from path A
 		path_get_step_at_index(*a_ctr, &step_a, path_a);
+
+		// run through nodes in current path step, count any branches -
+		if (path_a->){
+			branch_nodes_A++;
+
+			(db_node_check_for_any_flag(node, BRANCH_NODE_FORWARD | BRANCH_NODE_REVERSE))
+		}
 
 		// See if it appears in path B
 		for (k = *b_ctr; k < path_b->length; k++) {
