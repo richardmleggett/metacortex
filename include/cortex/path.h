@@ -106,6 +106,7 @@ typedef struct {
 	int in_nodes_capacity;
     int out_nodes_count;
 	short kmer_size;
+  short depth;
 	boolean used;
 
 	Flags stop_reasons_first;

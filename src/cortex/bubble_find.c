@@ -177,8 +177,7 @@ void db_graph_walk_from_node(dBNode * node, Path * current_path, int orientation
 			printf("    ");
         }
 		binary_kmer_to_seq(element_get_kmer(node), db_graph->kmer_size, node_kmer);
-		printf("Path so far %s Start node %s orientation
-	nucleotide_iterator(&walk_if_exists);%s\n", current_path->seq, node_kmer, orientation == forward ? "forward" : "reverse");
+		printf("Path so far %s Start node %s orientation 	nucleotide_iterator(&walk_if_exists);%s\n", current_path->seq, node_kmer, orientation == forward ? "forward" : "reverse");
 	}
 
 	// Function to go through each nucleotide, walk the path if an edge exists and store path
@@ -208,6 +207,7 @@ void db_graph_walk_from_node(dBNode * node, Path * current_path, int orientation
 				path_copy(merged_path, current_path);
 				path_append(merged_path, new_path);
 			}
+			merged_path->depth=depth;
 			end_node = new_path->nodes[new_path->length - 1];
 			end_orientation = new_path->orientations[new_path->length - 1];
 
@@ -215,7 +215,7 @@ void db_graph_walk_from_node(dBNode * node, Path * current_path, int orientation
 				int i;
 				for (i = 0; i < depth; i++) {
 					printf("    ");
-                }
+        }
 			}
 
 			// What to do with the new path?
@@ -233,6 +233,7 @@ void db_graph_walk_from_node(dBNode * node, Path * current_path, int orientation
 					printf("  Path ends at %s (orientation %s) - adding...\n", tmp_seq, end_orientation == forward ? "forward" : "reverse");
 				}
 				db_graph_check_and_add_path(merged_path, patharray);
+				//log_and_screen_printf("\n END Of PATH - BLUNTEND, SIZE %d, DEPTH %d\n", merged_path->length, merged_path->depth);
 			} else if (merged_path->nodes[0] == merged_path->nodes[merged_path->length - 1]) {
 				pathStep step;
 				if (BUBBLEDEBUG) {
@@ -244,16 +245,19 @@ void db_graph_walk_from_node(dBNode * node, Path * current_path, int orientation
 					printf("  Path contains cycle.. Quitting and adding...\n");
 				}
 				db_graph_check_and_add_path(current_path, patharray);
+				//log_and_screen_printf("\n END Of PATH - CYCLE, SIZE %d, DEPTH %d\n", merged_path->length, merged_path->depth);
 			} else if (current_path->length + new_path->length >= max_length) {
 				if (BUBBLEDEBUG) {
 					printf("  Maximum path length reached... Quitting and adding...\n");
 				}
 				db_graph_check_and_add_path(merged_path, patharray);
+				//log_and_screen_printf("\n END Of PATH - MAX LENGTH, SIZE %d, DEPTH %d\n", merged_path->length, merged_path->depth);
 			} else if ((depth + 1) > max_depth) {
 				if (BUBBLEDEBUG) {
 					printf("  Max depth reached. Adding path.\n");
 				}
 				db_graph_check_and_add_path(merged_path, patharray);
+				log_and_screen_printf("\n END Of PATH - MAX DEPTH, SIZE %d, DEPTH %d\n", merged_path->length, merged_path->depth);
 			} else {
 				if (BUBBLEDEBUG) {
 					printf("  New path is %s\n", new_path->seq);
@@ -571,20 +575,18 @@ int db_graph_check_for_convergence(Path * path_a, Path * path_b, int *a_ctr, int
 	pathStep step_a, step_b;
 	int index = -1;
 	int k;
-	int branch_nodes_A=0;
-	int branch_nodes_B=0;
-	dBNode * node;
+	//int branch_nodes_A=0;
+	//int branch_nodes_B=0;
+	//dBNode * node;
 
 	while ((index == -1) && (*a_ctr < path_a->length)) {
 		// Get next step from path A
 		path_get_step_at_index(*a_ctr, &step_a, path_a);
 
 		// run through nodes in current path step, count any branches -
-		if (path_a->){
-			branch_nodes_A++;
-
-			(db_node_check_for_any_flag(node, BRANCH_NODE_FORWARD | BRANCH_NODE_REVERSE))
-		}
+		//if (path_a->){
+		//	branch_nodes_A++;
+	//	}
 
 		// See if it appears in path B
 		for (k = *b_ctr; k < path_b->length; k++) {
@@ -699,6 +701,7 @@ boolean db_graph_compare_paths(PathArray * patharray, pathStep * end, int kmer_s
 			}
 			// Convergence index will be -1 if they don't converge, otherwise it will be the index where they do
 			if (converge != -1) {
+				log_and_screen_printf("\n CONVERGENCE - i, SIZE %d, DEPTH %d\n\t\t j, SIZE %d, DEPTH %d\n", patharray->paths[i]->length, patharray->paths[i]->depth, patharray->paths[j]->length, patharray->paths[j]->depth);
 				//log_and_screen_printf("[db_graph_compare_paths] Convergence point %d\n", n_paths); // DEBUGING 18/2/16
 
 				// Count paths at this convergence point
