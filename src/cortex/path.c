@@ -1745,10 +1745,11 @@ boolean path_append(Path * destination, Path * source){
 		if (!path_add_node(&new_step, destination)) {
 			success = false;
 			break;
-		} /*else {
+		} else {
             // Update step flags - could be more elegant
-            destination->step_flags[destination->length - 1] = source->step_flags[i];
-        }*/
+            //destination->step_flags[destination->length - 1] = source->step_flags[i];
+						//destination->in_nodes[destination->length - 1] = source->in_nodes[i];
+        }
 	}
 
 	return success;
@@ -1798,6 +1799,7 @@ void path_copy(Path * to, Path * from)
 	to->flags = from->flags;
 	to->stop_reasons_first = from->stop_reasons_first;
 	to->stop_reasons_last = from->stop_reasons_last;
+	to->depth = from->depth;
     if (from->length > 0) {
        path_append(to, from);
     }

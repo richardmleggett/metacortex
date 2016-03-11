@@ -99,9 +99,9 @@ void db_graph_identify_branches(int max_length, dBGraph * db_graph)
 	}
 	hash_table_traverse(&find_end_nodes, db_graph);
 
-	if (DEBUG) {
+	//if (DEBUG) {
 		printf("[db_graph_identify_branches] Branch point identification complete: %d nodes labelled.\n", branchNodes);
-	}
+//	}
 }
 
 // ----------------------------------------------------------------------
@@ -644,6 +644,10 @@ boolean db_graph_compare_paths(PathArray * patharray, pathStep * end, int kmer_s
 	int converge;
 	int i_ctr;
 	int j_ctr;
+	// variables used just for debugging now
+	//pathStep * converge_step;	// do I need to calloc this?
+	char tmp_seq[kmer_size + 1];
+
 
 	// No point comparing if only 1 path
 	if (patharray->number_of_paths < 2) {
@@ -701,8 +705,11 @@ boolean db_graph_compare_paths(PathArray * patharray, pathStep * end, int kmer_s
 			}
 			// Convergence index will be -1 if they don't converge, otherwise it will be the index where they do
 			if (converge != -1) {
-				log_and_screen_printf("\n CONVERGENCE - i, SIZE %d, DEPTH %d\n\t\t j, SIZE %d, DEPTH %d\n", patharray->paths[i]->length, patharray->paths[i]->depth, patharray->paths[j]->length, patharray->paths[j]->depth);
-				//log_and_screen_printf("[db_graph_compare_paths] Convergence point %d\n", n_paths); // DEBUGING 18/2/16
+				// grab node for convergence point
+				//path_get_step_at_index(i_ctr, converge_step, patharray->paths[i]);
+				binary_kmer_to_seq(&(patharray->paths[i]->nodes[i_ctr]->kmer), kmer_size, tmp_seq);
+				log_and_screen_printf("\n CONVERGENCE - %d - i, SIZE %d, DEPTH %d\n\t\t j, SIZE %d, DEPTH %d\n\tkmer\t%s\n", converge, patharray->paths[i]->length, patharray->paths[i]->depth, patharray->paths[j]->length, patharray->paths[j]->depth,tmp_seq);
+
 
 				// Count paths at this convergence point
 				path_get_step_at_index(i_ctr, &step, patharray->paths[i]);

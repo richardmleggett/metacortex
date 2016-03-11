@@ -92,25 +92,27 @@ typedef struct {
 	dBNode * * nodes;
 	Orientation * orientations;
 	Nucleotide * labels;
-    Flags * step_flags;
+  Flags * step_flags;
+
+	int max_length;
+  short depth;
+
 	int * in_nodes;
 	char * seq;
 	char * header;
 
 	int length;
-	int max_length;
-    int max_virtual_length; //A soft limit to be used when you want a limit smaller than the buffer size.
-    int new_nodes;
+  int max_virtual_length; //A soft limit to be used when you want a limit smaller than the buffer size.
+  int new_nodes;
 	Flags flags;
 	int in_nodes_count;
 	int in_nodes_capacity;
-    int out_nodes_count;
+  int out_nodes_count;
 	short kmer_size;
-  short depth;
 	boolean used;
 
-	Flags stop_reasons_first;
-	Flags stop_reasons_last;
+  	Flags stop_reasons_first;
+  	Flags stop_reasons_last;
 
 } Path;
 
