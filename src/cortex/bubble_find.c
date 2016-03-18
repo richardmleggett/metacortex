@@ -207,7 +207,7 @@ void db_graph_walk_from_node(dBNode * node, Path * current_path, int orientation
 				path_copy(merged_path, current_path);
 				path_append(merged_path, new_path);
 			}
-			merged_path->depth=depth;
+			//merged_path->depth=depth;
 			end_node = new_path->nodes[new_path->length - 1];
 			end_orientation = new_path->orientations[new_path->length - 1];
 
@@ -257,7 +257,7 @@ void db_graph_walk_from_node(dBNode * node, Path * current_path, int orientation
 					printf("  Max depth reached. Adding path.\n");
 				}
 				db_graph_check_and_add_path(merged_path, patharray);
-				log_and_screen_printf("\n END Of PATH - MAX DEPTH, SIZE %d, DEPTH %d\n", merged_path->length, merged_path->depth);
+				//log_and_screen_printf("\n END Of PATH - MAX DEPTH, SIZE %d, DEPTH %d\n", merged_path->length, merged_path->depth);
 			} else {
 				if (BUBBLEDEBUG) {
 					printf("  New path is %s\n", new_path->seq);
@@ -642,6 +642,7 @@ boolean db_graph_compare_paths(PathArray * patharray, pathStep * end, int kmer_s
 	boolean match_found = false;
 	pathStep step;
 	int converge;
+	int diverge=0;
 	int i_ctr;
 	int j_ctr;
 	// variables used just for debugging now
@@ -689,6 +690,7 @@ boolean db_graph_compare_paths(PathArray * patharray, pathStep * end, int kmer_s
 			i_ctr = 0;
 			j_ctr = 0;
 			db_graph_find_divergence(patharray->paths[i], patharray->paths[j], &i_ctr, &j_ctr);
+			diverge = i_ctr;
 
 			if (BUBBLEDEBUG) {
 				printf("[db_graph_compare_paths] Divergence counters %d and %d\n", i_ctr, j_ctr);
@@ -708,7 +710,8 @@ boolean db_graph_compare_paths(PathArray * patharray, pathStep * end, int kmer_s
 				// grab node for convergence point
 				//path_get_step_at_index(i_ctr, converge_step, patharray->paths[i]);
 				binary_kmer_to_seq(&(patharray->paths[i]->nodes[i_ctr]->kmer), kmer_size, tmp_seq);
-				log_and_screen_printf("\n CONVERGENCE - %d - i, SIZE %d, DEPTH %d\n\t\t j, SIZE %d, DEPTH %d\n\tkmer\t%s\n", converge, patharray->paths[i]->length, patharray->paths[i]->depth, patharray->paths[j]->length, patharray->paths[j]->depth,tmp_seq);
+				log_and_screen_printf("\nDIVERGENCE - %d CONVERGENCE - %d - i, SIZE %d, DEPTH %d\n\t\t j, SIZE %d, DEPTH %d\n\tkmer\t%s\n", diverge, converge, patharray->paths[i]->length, 0, patharray->paths[j]->length, 0,tmp_seq);
+				//log_and_screen_printf("\nDIVERGENCE - %d CONVERGENCE - %d - i, SIZE %d, DEPTH %d\n\t\t j, SIZE %d, DEPTH %d\n\tkmer\t%s\n", diverge, converge, patharray->paths[i]->length, patharray->paths[i]->depth, patharray->paths[j]->length, patharray->paths[j]->depth,tmp_seq);
 
 
 				// Count paths at this convergence point

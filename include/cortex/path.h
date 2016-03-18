@@ -95,7 +95,7 @@ typedef struct {
   Flags * step_flags;
 
 	int max_length;
-  short depth;
+  //short depth;
 
 	int * in_nodes;
 	char * seq;

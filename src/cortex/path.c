@@ -94,7 +94,7 @@ Path *path_new(int max_length, short kmer_size)
 	flags_action_unset_flag(IS_CYCLE, &(path->flags));
 	flags_action_set_flag(PRINT_FIRST, &(path->flags));
 	path->kmer_size = kmer_size;
-	path->depth = -1;
+//	path->depth = -1;
 	path->header = 0;
 	path->used = false;
 
@@ -159,7 +159,7 @@ void path_reset(Path * path)
     path->out_nodes_count = 0;
 	path->length = 0;
     path->new_nodes = 0;
-	  path->depth = -1;
+	//  path->depth = -1;
     path->max_virtual_length = path->max_length;
 	flags_action_clear_flags(&(path->flags));
 	flags_action_set_flag(PRINT_FIRST, &(path->flags));
@@ -1799,7 +1799,7 @@ void path_copy(Path * to, Path * from)
 	to->flags = from->flags;
 	to->stop_reasons_first = from->stop_reasons_first;
 	to->stop_reasons_last = from->stop_reasons_last;
-	to->depth = from->depth;
+	//to->depth = from->depth;
     if (from->length > 0) {
        path_append(to, from);
     }
