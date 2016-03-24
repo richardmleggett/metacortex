@@ -464,10 +464,10 @@ int main(int argc, char **argv)
                 find_subgraph_stats(db_graph, cmd_line.output_fasta_filename);
 
 
-
-                db_graph_identify_branches(1000, db_graph);
-                log_and_screen_printf("\nSearching graph for branches and bubbles...\n");
-                db_graph_walk_branches(cmd_line.output_fasta_filename, total_max_length, db_graph->kmer_size * 10 + 1, bubble_max_depth, db_graph);
+                /* Put all of this into a seperate command line call (BUBBLEFIND)*/
+                //db_graph_identify_branches(1000, db_graph);
+                //log_and_screen_printf("\nSearching graph for branches and bubbles...\n");
+                //db_graph_walk_branches(cmd_line.output_fasta_filename, total_max_length, db_graph->kmer_size * 10 + 1, bubble_max_depth, db_graph);
 
                 //db_graph_walk_branches(char *filename, int total_max_length, int bubble_max_length, int bubble_max_depth, dBGraph * db_graph)
                 //metacortex_find_subgraphs(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.min_contig_length);

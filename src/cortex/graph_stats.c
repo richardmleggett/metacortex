@@ -40,10 +40,6 @@
 #define COVERAGE_BIN_SIZE 1
 #define MAX_BRANCHES 5
 
-typedef struct {
-    int total_size;
-    int branch_nodes;
-} GraphInfo;
 
 /*----------------------------------------------------------------------*
  * Function:                                                            *
@@ -131,19 +127,30 @@ typedef struct {
                  for (i=0; i<new_path->length; i++) {
                      if (!db_node_check_flag_visited(new_path->nodes[i])) {
                          int this_coverage = element_get_coverage_all_colours(new_path->nodes[i]);
-                         int this_edges = db_node_edges_count_all_colours(new_path->nodes[i], forward) + db_node_edges_count_all_colours(new_path->nodes[i], reverse);
+                         int this_FOR_edges = db_node_edges_count_all_colours(new_path->nodes[i], forward);
+                         int this_REV_edges = db_node_edges_count_all_colours(new_path->nodes[i], reverse);
 
                          if ((best_node == 0) ||
                              (this_coverage > best_coverage) ||
-                             ((this_coverage == best_coverage) && (this_edges < best_edges)))
+                             ((this_coverage == best_coverage) && ((this_FOR_edges + this_REV_edges) < best_edges)))
                          {
                              best_coverage = this_coverage;
-                             best_edges = this_edges;
+                             best_edges = (this_FOR_edges + this_REV_edges);
                              *best_node = new_path->nodes[i];
                          }
 
-                        if (db_node_check_for_any_flag(new_path->nodes[i], BRANCH_NODE_FORWARD | BRANCH_NODE_REVERSE | X_NODE)){
+                        if (db_node_check_for_any_flag(new_path->nodes[i], BRANCH_NODE_FORWARD)){
                           nodes_in_graph->branch_nodes++;
+                          nodes_in_graph->Y_degree_for[this_FOR_edges-1]++;
+                        }
+                        else if (db_node_check_for_any_flag(new_path->nodes[i], BRANCH_NODE_REVERSE)){
+                          nodes_in_graph->branch_nodes++;
+                          nodes_in_graph->Y_degree_rev[this_REV_edges-1]++;
+                        }
+                        else if (db_node_check_for_any_flag(new_path->nodes[i], X_NODE)){
+                          nodes_in_graph->branch_nodes++;
+                          // no ideal way to do this. Could distinguish between different classes of x-node, but maybe enough to just think of densely connected ones
+                          nodes_in_graph->X_degrees[this_FOR_edges+this_REV_edges-1]++;
                         }
 
                          db_node_action_set_flag_visited(new_path->nodes[i]);
@@ -305,11 +312,17 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
       dBNode* seed_node;
       nodes_in_graph->total_size = 0;
       nodes_in_graph->branch_nodes = 0;
+      for(i=0;i<4;i++){
+        nodes_in_graph->Y_degree_rev[i] = 0;
+        nodes_in_graph->Y_degree_for[i] = 0;
+        nodes_in_graph->X_degrees[i] = 0;
+        nodes_in_graph->X_degrees[i+4] = 0;
+      }
       // Grow graph from this node, returning the 'best' (highest coverage) node to store as seed point
       log_printf("Growing graph from node\n");
       graph_queue->number_of_items = 0;
 
-      // now with a subgraph, walk the graph looking for bubbles. check bubblefind.c for ideas.
+      // now with a subgraph, walk the graph looking counting degrees by graph and overal
       grow_graph_from_node_stats(node, &seed_node, graph, graph_queue, nodes_in_graph);
       if (seed_node == NULL) {
         printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph->total_size);
@@ -320,6 +333,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
         if (nodes_in_graph->branch_nodes){
           binary_kmer_to_seq(&(seed_node->kmer), graph->kmer_size, seq);
           fprintf(fp_analysis, "\t%s\n", seq);
+          log_and_screen_print_stats(nodes_in_graph);
         }
         else{
           fprintf(fp_analysis, "\n");
@@ -355,7 +369,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
 	hash_table_traverse(&explore_node, graph);
 
   // Output graph wide stats (coverage)
-  fprintf(fp_analysis, "\n#Complexity_dist (# X/Y nodes)\t---\n");
+  fprintf(fp_analysis, "\n#Complexity_dist of total graph (# X/Y nodes)\t---\n");
   for(i=0;i<MAX_BRANCHES;i++){
     fprintf(fp_analysis, "%i\t%li\n",i, Contig_Branches[i]);
   }
@@ -369,4 +383,22 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
 
 
   	db_graph_reset_flags(graph);
+}
+
+void log_and_screen_print_stats(GraphInfo * nodes_in_graph){
+  int i=0;
+  int X_PRESENT=0;
+  log_printf("\n#Complexity_dist of sub graph (# X/Y nodes)\t---\n");
+  log_printf("DEG\tFOR\tREV\n");
+  for(i=0;i<4;i++){
+    log_printf("%i\t%i\t%i\n",i+1, nodes_in_graph->Y_degree_for[i], nodes_in_graph->Y_degree_rev[i]);
+  }
+  log_printf("DEG\tALL\n");
+  for(i=0;i<8;i++){
+    log_printf("%i\t%i\n",i+1, nodes_in_graph->X_degrees[i]);
+    X_PRESENT=X_PRESENT+nodes_in_graph->X_degrees[i];
+  }
+  if(X_PRESENT){
+    log_printf("X_PRESENT\t%i\n", X_PRESENT);
+  }
 }
