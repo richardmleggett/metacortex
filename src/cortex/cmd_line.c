@@ -59,6 +59,7 @@ void usage(void)
     "   [-d|--ouput_contigs FILENAME] = Fasta file with all the contigs (after applying all specified actions on graph).\n" \
     "   [-t|--input_format FORMAT] = File format for input (binary | fasta | fastq | hash ).\n" \
     "   [-e|--output_coverages] = Print coverages for contigs/supernodes in a different file with _cov suffix.\n" \
+    "   [-g|--min_contig_length] = minimum contig length produced.\n" \
     "   [-u|--remove_seq_errors] = remove sequence of kmers induced by errors. Equivalent to --remove_low_coverage_kmers 1\n"\
     "   [-a|--remove_bubbles] = Removes the bubbles in the graph.\n"\
     "   [-Z|--max_read_len] = Maximum read length over all input files.\n"\

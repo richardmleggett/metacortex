@@ -312,6 +312,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
       dBNode* seed_node;
       nodes_in_graph->total_size = 0;
       nodes_in_graph->branch_nodes = 0;
+      nodes_in_graph->end_nodes = 0;
       for(i=0;i<4;i++){
         nodes_in_graph->Y_degree_rev[i] = 0;
         nodes_in_graph->Y_degree_for[i] = 0;
