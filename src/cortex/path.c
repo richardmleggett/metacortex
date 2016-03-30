@@ -1,11 +1,11 @@
 /*
  * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
  * **********************************************************************
@@ -27,7 +27,7 @@
  *
  * **********************************************************************
  */
- 
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -67,36 +67,37 @@ Path *path_new(int max_length, short kmer_size)
 		fprintf(stderr, "[path_new]Unable to allocate nodes\n");
 		exit(-1);
 	}
-	
+
 	if(path->orientations == NULL){
 		fprintf(stderr, "[path_new]Unable to allocate orientations\n");
 		exit(-1);
 	}
-	
+
 	if(path->labels == NULL){
 		fprintf(stderr, "[path_new]Unable to allocate labels\n");
 		exit(-1);
 	}
-	
+
 	if(path->seq == NULL){
 		fprintf(stderr, "[path_new]Unable to allocate seq\n");
 		exit(-1);
 	}
-	
+
 	if(path->in_nodes == NULL){
 		fprintf(stderr, "[path_new]Unable to allocate in_nodes\n");
 		exit(-1);
 	}
-	
+
 	path->in_nodes_capacity = PATH_MAX_IN_NODES;
     path->in_nodes_count = 0;
 	path->max_length = max_length;
 	flags_action_unset_flag(IS_CYCLE, &(path->flags));
 	flags_action_set_flag(PRINT_FIRST, &(path->flags));
 	path->kmer_size = kmer_size;
+//	path->depth = -1;
 	path->header = 0;
 	path->used = false;
-	
+
     if ((!path->nodes) || (!path->orientations) || (!path->labels)
 	    || (!path->seq)) {
 		free(path);
@@ -132,7 +133,7 @@ void path_increase_id(Path * path)
 	path->id++;
 }
 
-//We can only set the limit to new paths! 
+//We can only set the limit to new paths!
 void path_set_limit(int limit, Path * p){
     assert(limit <= p->max_length);
     assert(p->length == 0);
@@ -158,15 +159,16 @@ void path_reset(Path * path)
     path->out_nodes_count = 0;
 	path->length = 0;
     path->new_nodes = 0;
+	//  path->depth = -1;
     path->max_virtual_length = path->max_length;
 	flags_action_clear_flags(&(path->flags));
 	flags_action_set_flag(PRINT_FIRST, &(path->flags));
 	flags_action_set_flag(NEW_PATH, &(path->flags));
-	
+
 	path_clean_stop_reason(path);
-	
+
 	int i;
-		
+
 	for(i = 0; i < path->in_nodes_capacity; i++){
 		path->in_nodes[i] = 0;
 	}
@@ -174,10 +176,10 @@ void path_reset(Path * path)
 }
 
 /**
- * To get a natural order of two steps. 
+ * To get a natural order of two steps.
  * At the moment we are using just the address to compare, is
- * cheaper than comparing the kmers. If the nodes are the same, 
- * we use the orientations to distinguish them, and if Use with care. 
+ * cheaper than comparing the kmers. If the nodes are the same,
+ * we use the orientations to distinguish them, and if Use with care.
  */
 int path_step_compare(pathStep * a, pathStep * b){
 	if (a->node < b->node) {
@@ -209,7 +211,7 @@ boolean path_step_has_unvisited_edge_all_colours(pathStep * step){
 Nucleotide path_step_get_unvisited_edge_all_colours(pathStep * step){
     Edges e = db_node_get_edges_for_orientation_all_colours(step->node, step->orientation);
     Edges visited = step->flags & PATH_STEP_ALL_VISITED; //We relay on being using the 4 least significan bit.
-    Nucleotide n, nucleotide = Undefined; 
+    Nucleotide n, nucleotide = Undefined;
     Edges edges = ~visited & e;
     for (n = 0; n < 4 && nucleotide == Undefined; n++) {
 		if ((edges & 1) == 1) {
@@ -217,7 +219,7 @@ Nucleotide path_step_get_unvisited_edge_all_colours(pathStep * step){
 		}
 		edges >>= 1;
 	}
-    
+
     return nucleotide;
 }
 
@@ -241,7 +243,7 @@ void path_modfy_last_label(Nucleotide n, Path * p){
     p->labels[last_index] = n;
     p->seq[last_index] = last_c;
     p->step_flags[last_index] |= binary_nucleotide_to_edge(n);
-    
+
 }
 
 boolean unlabelled_path_step_equals(pathStep * step, pathStep * other)
@@ -252,7 +254,7 @@ boolean unlabelled_path_step_equals(pathStep * step, pathStep * other)
 
 
 boolean path_contains_step(pathStep * step, Path * path)
-{    
+{
     pathStep tmp;
     int i;
     int len = path_get_length(path);
@@ -284,7 +286,7 @@ boolean path_is_first_equals_to_last(Path * path)
 {
 	if(path->length < 2)
 		return false;
-	
+
 	pathStep first, last;
 	path_get_last_step(&last, path);
 	path_get_step_at_index(0, &first, path);
@@ -335,29 +337,29 @@ void path_add_in_step(pathStep * step, Path * path)
 	assert(step->node != NULL);
 	assert(path->in_nodes != NULL);
 	assert(path->in_nodes_count < path->in_nodes_capacity);
-	
+
 	path->in_nodes[path->in_nodes_count++] = path->length;
-	
+
 	if (path->in_nodes_count == path->in_nodes_capacity) {
 		int new_capacity = path->in_nodes_capacity + PATH_IN_NODES_CAPACITY_INCREASE;
 		int * in_tmp_ptr = realloc(path->in_nodes, new_capacity * sizeof(int));
         int i;
 		if (in_tmp_ptr == NULL){
-			fprintf(stderr, "out of memory while increasing the number  to %d of in paths  in path: \n", 
+			fprintf(stderr, "out of memory while increasing the number  to %d of in paths  in path: \n",
                         new_capacity);
 			path_to_fasta(path, stderr);
 			exit(1);
         }
-        
+
         path->in_nodes = in_tmp_ptr;
-        
+
         for (i=path->in_nodes_count; i<new_capacity; i++) {
             path->in_nodes[i] = 0;
         }
-        
+
         path->in_nodes_capacity = new_capacity;
 	}
-	
+
 	assert(path->in_nodes_count <= path->in_nodes_capacity);
 }
 
@@ -371,12 +373,12 @@ boolean path_has_in_step(pathStep * step, Path * path){
 				found = true;
 			}
 		}
-		
+
 	return found;
 }
 
 int path_index_of_last_in_node(Path * path){
-    int i = path->in_nodes_count; 
+    int i = path->in_nodes_count;
     if( i !=  0){
         return path->in_nodes[i-1];
     }
@@ -401,11 +403,11 @@ boolean path_add_node(pathStep * step, Path * path)
 	assert(path!=NULL);
 	assert(step != NULL);
 	assert(step->node != NULL);
-	
+
 	if (step->node == NULL) {
 		fprintf(stderr, "[path_add_node] The node is null\n");
 		//exit(-1);
-		return false;	//If you try to add a null node, you dont add it. Currently never happens because the assert... 
+		return false;	//If you try to add a null node, you dont add it. Currently never happens because the assert...
 	}
 	if (path->length == path->max_virtual_length) {
 		//log_and_screen_printf("[path_add_node] The node_%qd has reached the limit[%d]\n",
@@ -437,8 +439,8 @@ boolean path_add_node(pathStep * step, Path * path)
 		if(path_has_in_step(step, path)){
 			flags_action_set_flag(IS_CYCLE, &(path->flags));
 		}
-		
-		
+
+
 	}
     int edges_in = db_node_edges_count_all_colours(step->node,  opposite_orientation(step->orientation));
     if(edges_in > 1){
@@ -447,12 +449,12 @@ boolean path_add_node(pathStep * step, Path * path)
     if(!db_node_check_flag_visited(step->node)){
         path->new_nodes++;
     }
-    
+
     int edges_out = db_node_edges_count_all_colours(step->node, step->orientation);
     if(edges_out > 1){
         path->out_nodes_count++;
     }
-    
+
 	/*flags_action_set_flag(FIND_AGAIN, &(path->flags)); */
 	flags_action_unset_flag(NEW_PATH | EMPTY_PATH, &(path->flags));
 
@@ -460,12 +462,12 @@ boolean path_add_node(pathStep * step, Path * path)
 	path->orientations[path->length] = orientation;
 	path->labels[path->length] = nucleotide;
     if(nucleotide != Undefined){
-        path->step_flags[path->length] = step->flags | binary_nucleotide_to_edge(nucleotide);//We add the current nucleotide to the flags. The step may come with already marked nucleotides. 
+        path->step_flags[path->length] = step->flags | binary_nucleotide_to_edge(nucleotide);//We add the current nucleotide to the flags. The step may come with already marked nucleotides.
 	}
     path->seq[path->length] = nucleotide == Undefined ? '\0'
 	    : binary_nucleotide_to_char(nucleotide);
 	path->seq[path->length + 1] = '\0';
-    
+
 	path->length++;
 
 	return true;
@@ -503,7 +505,7 @@ static void compute_label(dBNode * node, Orientation o, char *label)
 			i++;
 		}
     }
-    
+
 	label[i] = '\0';
 }
 
@@ -514,7 +516,7 @@ static void check_print_first(Path * path)
 	Flags fs = db_node_get_flags(path->nodes[0], PRINT_FORWARD | PRINT_REVERSE);
 	// Include the first node if:
 	// - first node orientation is forward and PRINT_FORWARD is set
-	// - first node orientation is reverse and PRINT_REVERSE is set	
+	// - first node orientation is reverse and PRINT_REVERSE is set
 	ignoreFirst = (path->orientations[0] == forward) ? ((fs == PRINT_FORWARD) ? false : true) : ((fs == PRINT_REVERSE) ? false : true);
 #endif
 	if (!ignoreFirst) {
@@ -526,8 +528,8 @@ static void check_print_first(Path * path)
 
 
 /*
- * Returns a path array with all the perfect paths from the path. If the path is a perfect path, it returns an array containing a copy of the path. 
- * WARNING! dont forget to use the free from buffer functions, and destroy the path array 
+ * Returns a path array with all the perfect paths from the path. If the path is a perfect path, it returns an array containing a copy of the path.
+ * WARNING! dont forget to use the free from buffer functions, and destroy the path array
  */
 PathArray * path_split_in_perfect_paths(Path * p){
     assert(p != NULL);
@@ -541,10 +543,10 @@ PathArray * path_split_in_perfect_paths(Path * p){
     i = 0;
     path_get_step_at_index(i, &tmp, p);
     count_rev = db_node_edges_count_all_colours(tmp.node, reverse);
-    path_add_node(&tmp, current_path);  
+    path_add_node(&tmp, current_path);
     if(count_rev > 1){
         current_path = path_get_buffer_path();
-        path_add_node(&tmp, current_path);    
+        path_add_node(&tmp, current_path);
         path_array_add_path(current_path, pa);
     }
     for(i = 1; i < path_length; i++){
@@ -554,7 +556,7 @@ PathArray * path_split_in_perfect_paths(Path * p){
         path_add_node(&tmp, current_path);
         if(count_fwd > 1 || count_rev > 1 ){
             current_path = path_get_buffer_path();
-            path_add_node(&tmp, current_path);    
+            path_add_node(&tmp, current_path);
             path_array_add_path(current_path, pa);
         }
     }
@@ -569,38 +571,38 @@ void path_array_merge(PathArray ** from, PathArray * to){
          path_array_add_path(path_array_get(i, from_p), to);
     }
     path_array_destroy_struct(from);
-   
-    
+
+
 }
 
 void path_to_fasta_debug(Path * path, FILE * fout)
 {
 	short kmer_size = path->kmer_size;
 	//int length = path->length;
-    
+
 	// Sanity checking
 	if (path == NULL) {
 		printf("[path_to_fasta] trying to print a null Path\n");
 		exit(-1);
 	}
-    
+
 	if (fout == NULL) {
 		printf("[path_to_fasta] trying to print to a null FILE\n");
 		exit(-1);
 	}
-    
+
 	if (DEBUG) {
 		printf("[path_to_fasta] About to print a path\n");
 	}
 	// Set value of PRINT_FIRST (whether first node included)
 	//check_print_first(path);
-    
+
 	// Get coverage statistics from path
 	double avg_coverage;
 	int min_coverage;
 	int max_coverage;
 	path_get_statistics(&avg_coverage, &min_coverage, &max_coverage, path);
-    
+
 	// Get orientation of first and last node
 	Orientation fst_orientation;
 	//if (flags_check_for_flag(PRINT_FIRST, &(path->flags))) {
@@ -609,7 +611,7 @@ void path_to_fasta_debug(Path * path, FILE * fout)
 	//	fst_orientation = path->orientations[1];
 	//}
 	Orientation lst_orientation = path->orientations[path->length];
-    
+
 	// Get the first node - this will be nodes[0] if PRINT_FIRST is
 	// specified, or nodes[1] otherwise.
 	dBNode *fst_node;
@@ -626,10 +628,10 @@ void path_to_fasta_debug(Path * path, FILE * fout)
 		}
 		fst_node = path->nodes[1];
 	}
-    
+
 	// Get the last node
 	dBNode *lst_node = path->nodes[path->length - 1];
-    
+
 	// Make a set of labels for first and last nodes which list the
 	// acceptable forward and reverse path labels
 	char fst_f[5], fst_r[5], lst_f[5], lst_r[5];
@@ -637,13 +639,13 @@ void path_to_fasta_debug(Path * path, FILE * fout)
 	compute_label(fst_node, reverse, fst_r);
 	compute_label(lst_node, forward, lst_f);
 	compute_label(lst_node, reverse, lst_r);
-    
+
 	// Places to store first and last kmer sequence
 	char fst_seq[kmer_size + 1], lst_seq[kmer_size + 1];
 	fst_seq[kmer_size] = '\0';
 	lst_seq[kmer_size] = '\0';
 	BinaryKmer tmp_kmer;
-    
+
 	// Get the first kmer sequence (or complement)
 	BinaryKmer fst_kmer;
 	binary_kmer_assignment_operator(fst_kmer, *(element_get_kmer(fst_node)));
@@ -655,7 +657,7 @@ void path_to_fasta_debug(Path * path, FILE * fout)
 	if (DEBUG) {
 		printf("[path_to_fasta] First kmer: %s\n", fst_seq);
     }
-    
+
 	// Get the last kmer sequence (or complement)
 	BinaryKmer lst_kmer;
 	binary_kmer_assignment_operator(lst_kmer, *(element_get_kmer(lst_node)));
@@ -664,7 +666,7 @@ void path_to_fasta_debug(Path * path, FILE * fout)
 		binary_kmer_assignment_operator(lst_kmer, tmp_kmer);
 	}
 	binary_kmer_to_seq(&lst_kmer, kmer_size, lst_seq);
-    
+
 	// Output to file
 	/*fprintf(fout,
             ">node_%qd length:%i average_coverage:%.2f min_coverage:%i max_coverage:%i fst_coverage:%i fst_kmer:%s fst_r:%s fst_f:%s lst_coverage:%i lst_kmer:%s lst_r:%s lst_f:%s\n",
@@ -680,15 +682,15 @@ void path_to_fasta_debug(Path * path, FILE * fout)
             (lst_orientation == forward ? lst_f : lst_r));
     */
 	binary_kmer_to_seq(&fst_kmer, flags_check_for_flag(PRINT_FIRST, &(path->flags)) ? kmer_size : kmer_size - 1, fst_seq);
-    
+
 	int i, current;
 	for(i = 0, current = 1; i < path->kmer_size; i++, current++) {
 		fprintf(fout, "%c", fst_seq[i]);
 		if(current % PATH_FASTA_LINE == 0) {
-			fprintf(fout, "\n");	
+			fprintf(fout, "\n");
 		}
 	}
-	
+
 	size_t len = strlen(path->seq);
 	for(i = 0; i < len; i++, current++){
         if (path->step_flags[i] & PRINT_LABEL_AS_N) {
@@ -697,11 +699,11 @@ void path_to_fasta_debug(Path * path, FILE * fout)
             fprintf(fout, "%c",  path->seq[i]);
         }
 		if(current % PATH_FASTA_LINE == 0){
-			fprintf(fout, "\n");	
+			fprintf(fout, "\n");
 		}
 	}
 	fprintf(fout, "\n");
-	
+
 	fflush(fout);
 }
 
@@ -725,7 +727,7 @@ void path_to_fasta(Path * path, FILE * fout)
 	if (DEBUG) {
 		printf("[path_to_fasta] About to print a path\n");
 	}
-    
+
     if (length == max_length) {
         log_and_screen_printf
         ("contig length equals max length [%i] for node_%i\n",
@@ -744,7 +746,7 @@ void path_to_fasta(Path * path, FILE * fout)
 	Orientation fst_orientation;
 
     fst_orientation = path->orientations[0];
-	
+
 	Orientation lst_orientation = path->orientations[path->length];
 
 	// Get the first node - this will be nodes[0] if PRINT_FIRST is
@@ -792,7 +794,7 @@ void path_to_fasta(Path * path, FILE * fout)
 	if (DEBUG) {
 		printf("[path_to_fasta] First kmer: %s\n", fst_seq);
     }
-    
+
 	// Get the last kmer sequence (or complement)
 	BinaryKmer lst_kmer;
 	binary_kmer_assignment_operator(lst_kmer, *(element_get_kmer(lst_node)));
@@ -819,14 +821,14 @@ void path_to_fasta(Path * path, FILE * fout)
 	binary_kmer_to_seq(&fst_kmer, flags_check_for_flag(PRINT_FIRST,	&(path->flags)) ? kmer_size : kmer_size - 1, fst_seq);
 
 	int i, current= 1;
-    
+
 	for(i = 0, current = 1 ; i < path->kmer_size; i++, current++) {
 		fprintf(fout, "%c", fst_seq[i]);
 		if(current % PATH_FASTA_LINE == 0) {
-			fprintf(fout, "\n");	
+			fprintf(fout, "\n");
 		}
 	}
-	
+
 	size_t len = strlen(path->seq);
 	for(i = 0; i < len; i++, current++) {
         if (path->step_flags[i] & PRINT_LABEL_AS_N) {
@@ -834,13 +836,13 @@ void path_to_fasta(Path * path, FILE * fout)
         } else {
             fprintf(fout, "%c",  path->seq[i]);
         }
-        
+
 		if(current % PATH_FASTA_LINE == 0) {
-			fprintf(fout, "\n");	
+			fprintf(fout, "\n");
 		}
 	}
 	fprintf(fout, "\n");
-	
+
 	fflush(fout);
 }
 
@@ -928,7 +930,7 @@ void path_to_fasta_colour(Path * path, FILE * fout, char *id)
 	if (DEBUG) {
 		printf("[path_to_fasta_colour] First kmer: %s\n", fst_seq);
     }
-    
+
 	// Get the last kmer sequence (or complement)
 	BinaryKmer lst_kmer;
 	binary_kmer_assignment_operator(lst_kmer, *(element_get_kmer(lst_node)));
@@ -956,7 +958,7 @@ void path_to_fasta_colour(Path * path, FILE * fout, char *id)
 
 	fprintf(fout, "%s", binary_kmer_to_seq(&fst_kmer, kmer_size, fst_seq));
 	fprintf(fout, "%s\n", flags_check_for_flag(PRINT_FIRST, &(path->flags)) ? path->seq : path->seq + 1);
-		
+
     fflush(fout);
 
 log_and_screen_printf("path_to_fasta: PRINT_FIRST %i path->seq length %i path->length %i\n", flags_check_for_flag(PRINT_FIRST, &(path->flags)) ? 1:0, strlen(path->seq), path->length);
@@ -975,7 +977,7 @@ void path_to_coverage(Path * path, FILE * fout)
 	}
 
 	check_print_first(path);
-	
+
     int i = flags_check_for_flag(PRINT_FIRST, &(path->flags)) ? 0 : 1;
 
 	fprintf(fout, ">node_%qd \n", path->id);
@@ -987,7 +989,7 @@ void path_to_coverage(Path * path, FILE * fout)
 	for (i = 0; i < path->length; i++) {
 		fprintf(fout, "%i ", element_get_coverage_all_colours(path->nodes[i]));
 	}
-    
+
 	fprintf(fout, "\n");
 }
 
@@ -1094,7 +1096,7 @@ boolean path_is_singleton(int length, Path * path){
     pathStep last;
     path_get_step_at_index(0, &first, path);
     path_get_last_step(&last, path);
-    
+
     if(path_get_length(path) < length){
         if(path_is_blunt(forward, path ) && path_is_blunt(reverse, path)){
             sing = true;
@@ -1108,9 +1110,9 @@ boolean path_is_singleton(int length, Path * path){
                 sing = true;
             }
         }
-        
+
     }
-    
+
     return sing;
 }
 
@@ -1132,13 +1134,13 @@ boolean path_is_repetitive(double graph_cov, Path * p)
         }
 
     }
-    
+
     if(path_get_length(p)  < p->kmer_size * 2){
         if(avg_cov > (graph_cov * 3) ){
             rep = true;
         }
     }
-    
+
     return rep;
 
 }
@@ -1160,15 +1162,15 @@ void path_iterator_with_index(void (*step_action) (int index, pathStep * step), 
 	int i = 0;
 	pathStep ps;
 	for (i = 0; i < path->length; i++) {
-	
+
 		ps.node = path->nodes[i];
-	
+
 		ps.label = path->labels[i];
-	
+
 		ps.orientation = path->orientations[i];
-	
+
 		step_action(i,&ps);
-	
+
 	}
 }
 
@@ -1177,12 +1179,12 @@ void path_iterator_with_index(void (*step_action) (int index, pathStep * step), 
 /**
  *
  *Gets the index of the step in the path, or -1 if it
- * is not found.  
+ * is not found.
  */
 int path_index_of_step(pathStep * step, Path * path)
 {
 
-//TODO fill it.         
+//TODO fill it.
 	return -1;
 }
 
@@ -1199,14 +1201,14 @@ pathStep *path_get_step_reverse(pathStep * step, Path * path, int index)
 	//assert(path->length != 1);
 	assert(path->length >=1);
 	assert(index < path->length);
-	
+
 	step->node = path->nodes[index];
-	step->orientation = opposite_orientation(path->orientations[index]);    
+	step->orientation = opposite_orientation(path->orientations[index]);
     step->flags = path->step_flags[index];
-    
+
     if (path->length == 1) {
         step->label = Undefined;
-    } else {    
+    } else {
         if (index == 0) {
             step->label = Undefined;
         } else {
@@ -1274,7 +1276,7 @@ void path_graphviz_open_header(FILE * f){
 	"node [shape = circle];\n"
 	"edge [dir=none];\n");
 
-	
+
 }
 
 void path_graphviz_close_header(FILE * f){
@@ -1283,16 +1285,16 @@ void path_graphviz_close_header(FILE * f){
 }
 
 void path_graphviz_line(FILE * f, Path * p){
-	
+
 	if(p == NULL || p->length == 0)
 		return;
-	
+
 	pathStep  first ;
 	pathStep last;
-	
+
 	path_get_step_at_index(0, &first, p);
 	path_get_last_step(&last, p);
-	
+
 	short kmer_size = p->kmer_size;
 	char  seq_f[kmer_size + 1];
 	char  seq_l[kmer_size + 1];
@@ -1300,7 +1302,7 @@ void path_graphviz_line(FILE * f, Path * p){
 	Key k = &bk;
 	BinaryKmer * tmp = element_get_kmer(first.node) ;
 	binary_kmer_to_seq(element_get_key(tmp ,kmer_size, k), kmer_size, seq_f);
-	
+
 	tmp = element_get_kmer(last.node) ;
 	binary_kmer_to_seq(element_get_key(tmp ,kmer_size, k), kmer_size, seq_l);
 	double size = ((double)p->length/(100000));
@@ -1314,7 +1316,7 @@ void path_graphviz_line(FILE * f, Path * p){
 }
 
 void path_print_contig_with_details(FILE * fout, Path * p){
-    
+
     pathStep  ps;
     int i;
     fprintf(fout, ">node_%qd \n", p->id);
@@ -1383,14 +1385,14 @@ boolean path_is_empty(Path * path)
 }
 
 /**
- * Returns if a path is blunt. 
+ * Returns if a path is blunt.
  * If orientation is forward, it checks if the last node is blunt
- * If the orientation is reverse, it checks if the first node is blunt. 
- */ 
+ * If the orientation is reverse, it checks if the first node is blunt.
+ */
 boolean path_is_blunt(Orientation o, Path * p){
     if (path_get_length(p) > 0) {
         pathStep ps;
-        
+
         if(o == forward){
             path_get_last_step(&ps, p);
         }else if(o == reverse){
@@ -1399,12 +1401,12 @@ boolean path_is_blunt(Orientation o, Path * p){
             fprintf(stderr, "Invalid orientation at path_is_blunt\n");
             exit(-1);
         }
-        
+
         return db_node_is_blunt_end(ps.node, ps.orientation);
     }else{
         return  false;
     }
-	
+
 }
 
 void path_add_stop_reason(PathEnd o, Flags f, Path * path){
@@ -1427,7 +1429,7 @@ boolean path_has_any_stop_reason(PathEnd o, Flags f, Path * path){
 }
 
 void path_clean_stop_reason(Path * path){
-	
+
 	path->stop_reasons_first = 0;
 	path->stop_reasons_last = 0;
 		//flags_action_clear_flags(&(path->stop_reasons_first));
@@ -1438,21 +1440,21 @@ void path_clean_stop_reason(Path * path){
 
 boolean path_is_cycle(Path * path)
 {
-	
+
 	/*if(path->len < 2){
-		return false;	
+		return false;
 	}
 	if(!flags_check_for_flag(IS_CYCLE, &(path->flags))){
 		int len = path->length;
 		int i,j;
 		pathStep psi, psj;
-		
+
 		for(i = 0; i < len; i++){
 			path_get_step_at_index(i, &psi, path);
-		
+
 			for(j = i+i; j < len; j++){
 				path_get_step_at_index(j, &psj, path);
-				
+
 				if(path_step_equals_without_label(&psi, &psj)){
 					i = len;
 					j = len;
@@ -1465,7 +1467,7 @@ boolean path_is_cycle(Path * path)
 				}
 			}
 		}
-			
+
 	}*/
 	return flags_check_for_flag(IS_CYCLE, &(path->flags));
 }
@@ -1506,7 +1508,7 @@ void path_remove_last(Path * path)
 		     0 ? 'N' : path->seq[path->length - 1]);
 		//printNode(current_node, db_graph->kmer_size);
 	}
-    
+
     if(db_node_edges_count_all_colours(path_last_node(path), path_last_orientation(path)) > 1){
         path->out_nodes_count--;
         if (path->out_nodes_count < 0) {
@@ -1515,7 +1517,7 @@ void path_remove_last(Path * path)
         }
         //assert(path->out_nodes_count >=0);
     }
-    
+
 	path->length--;
 
 	path->seq[path->length] = '\0';
@@ -1589,14 +1591,15 @@ int path_array_get_number_of_paths(PathArray * pa){
 
 void path_array_destroy(PathArray * pa)
 {
-    
-    //TODO: design a cleaver lock. 
+
+    //TODO: design a cleaver lock.
     while (pa->number_of_paths > 0) {
 		pa->number_of_paths--;
 		path_destroy(pa->paths[pa->number_of_paths]);
 
 	}
 	free(pa->paths);
+	// pa->number_of_paths=0; // not sure if this needs to be freed?
 	free(pa);
 }
 
@@ -1606,7 +1609,7 @@ void path_array_destroy_struct (PathArray ** pa){
     (*pa)=NULL;
 }
 
-//WARNING: This is not thread safe, the method calling it must be. 
+//WARNING: This is not thread safe, the method calling it must be.
 static void  path_array_double_capacity(PathArray * pa){
 
     int new_capacity = pa->capacity * 2;
@@ -1618,9 +1621,9 @@ static void  path_array_double_capacity(PathArray * pa){
     }
     pa->capacity = new_capacity;
     pa->paths = new_array;
-    
-    
-    
+
+
+
 }
 
 boolean path_array_add_path(Path * p, PathArray * pa)
@@ -1667,7 +1670,7 @@ Flags path_get_flags(Path * node, Flags f)
 boolean path_check_for_flag(Path * node, Flags flag)
 {
 	return flags_check_for_flag(flag, &(node->flags));
-    
+
 }
 
 boolean path_check_for_any_flag(Path * path, Flags flag)
@@ -1677,7 +1680,7 @@ boolean path_check_for_any_flag(Path * path, Flags flag)
 
 int path_percentage_new_nodes(Path * path){
     return (100 * path->new_nodes)/path->length;
-    
+
 }
 
 void path_reverse(Path * source, Path * destination)
@@ -1692,7 +1695,7 @@ void path_reverse(Path * source, Path * destination)
         // Update step flags - could be more elegant
         //destination->step_flags[destination->length-1] = source->step_flags[i];
 	}
-	
+
 }
 
 int path_get_index_of_last_in_node(Path * p){
@@ -1742,10 +1745,11 @@ boolean path_append(Path * destination, Path * source){
 		if (!path_add_node(&new_step, destination)) {
 			success = false;
 			break;
-		} /*else {
+		} else {
             // Update step flags - could be more elegant
-            destination->step_flags[destination->length - 1] = source->step_flags[i];
-        }*/
+            //destination->step_flags[destination->length - 1] = source->step_flags[i];
+						//destination->in_nodes[destination->length - 1] = source->in_nodes[i];
+        }
 	}
 
 	return success;
@@ -1785,8 +1789,8 @@ static PathArray *path_buffers = NULL;
 //static PathArray *short_path_buffers = NULL;
 
 /**
- * Makes a copy of the "from" path into the "to" path. 
- * WARNING! The to path is cleared before the copy. 
+ * Makes a copy of the "from" path into the "to" path.
+ * WARNING! The to path is cleared before the copy.
  */
 void path_copy(Path * to, Path * from)
 {
@@ -1795,10 +1799,11 @@ void path_copy(Path * to, Path * from)
 	to->flags = from->flags;
 	to->stop_reasons_first = from->stop_reasons_first;
 	to->stop_reasons_last = from->stop_reasons_last;
+	//to->depth = from->depth;
     if (from->length > 0) {
        path_append(to, from);
     }
-	
+
 }
 
 #ifdef THREADS
@@ -1810,7 +1815,7 @@ static void path_buffers_init(){
 
 void path_array_initialise_buffers(short kmer_size)
 {
-#ifdef THREADS	
+#ifdef THREADS
     pthread_once(&path_array_init_once, path_buffers_init);
 #else
     if (path_buffers == NULL) {
@@ -1819,13 +1824,13 @@ void path_array_initialise_buffers(short kmer_size)
 #endif
 	if (path_buffers->kmer_size == 0) {
 		path_buffers->kmer_size = kmer_size;
-        
+
 //		path_buffers_short = path_array_new(MAX_PATH_BUFFERS);
 //		for (i = 0; i < MAX_PATH_BUFFERS; i++) {
 //			tmp = path_new(MAX_PATH_LENGTH, kmer_size);
 //			tmp->id = i;
 //			path_array_add_path(tmp, path_buffers);
-			
+
 //		}
 	}
 }
@@ -1883,7 +1888,7 @@ void path_array_to_fasta(FILE * f, PathArray * pa){
 		if (path_get_length(path_array_get(i,pa)) > 0) {
 			path_to_fasta(path_array_get(i, pa), f);
 		}
-		
+
 	}
 }
 
@@ -1891,39 +1896,39 @@ Path *path_get_buffer_path()
 {
 	//TODO make this thread safe
 	assert(path_buffers !=NULL);
-    
+
 #ifdef THREADS
     pthread_mutex_lock(&path_buffers->mutex);
 #endif
-    
+
 	Path *tmp = NULL, *found = NULL;
 	int i;
 	for (i = 0; i < path_buffers->number_of_paths && found == NULL; i++) {
 		tmp = path_buffers->paths[i];
 		if (!tmp->used) {
 			found = tmp;
-			
+
 		}
 	}
     tmp = NULL;
-    assert(i < MAX_PATH_BUFFERS); //TODO: make this a growing array. 
+    assert(i < MAX_PATH_BUFFERS); //TODO: make this a growing array.
     if(found == NULL){
-    
+
         tmp = path_new(MAX_PATH_LENGTH, path_buffers->kmer_size);
         tmp->id = i;
         path_array_add_path(tmp, path_buffers);
         found = path_buffers->paths[i];
-        
-        //This is the old logic, that was in the initializer. 
+
+        //This is the old logic, that was in the initializer.
         //		path_buffers_short = path_array_new(MAX_PATH_BUFFERS);
         //		for (i = 0; i < MAX_PATH_BUFFERS; i++) {
         //			tmp = path_new(MAX_PATH_LENGTH, kmer_size);
         //			tmp->id = i;
         //			path_array_add_path(tmp, path_buffers);
-        
+
         //		}
     }
-    
+
 	assert(found != NULL);
     found->used = true;
 #ifdef THREADS
@@ -1939,13 +1944,13 @@ void path_free_buffer_path(Path * path)
 #endif
 	path_reset(path);
 	path->used = false;
-    
+
 #ifdef THREADS
     pthread_mutex_unlock(&path_buffers->mutex);
 #endif
 }
 
-void path_step_mark_as_uncertain(int i, Path * path, boolean as_n) {    
+void path_step_mark_as_uncertain(int i, Path * path, boolean as_n) {
     if (as_n) {
         path->step_flags[i] |= PRINT_LABEL_AS_N;
     } else {
@@ -1954,9 +1959,9 @@ void path_step_mark_as_uncertain(int i, Path * path, boolean as_n) {
 }
 
 boolean is_step_marked_as_uncertain(int i, Path * path) {
-	boolean r = (path->step_flags[i] & (PRINT_LABEL_AS_N | PRINT_LABEL_LOWERCASE)) > 0; 
+	boolean r = (path->step_flags[i] & (PRINT_LABEL_AS_N | PRINT_LABEL_LOWERCASE)) > 0;
 
-	return r;    
+	return r;
 }
 
 static void step_mark_visited(pathStep * ps) {
@@ -1979,28 +1984,28 @@ void path_pairs_to_fasta(PathArray* pa, int distances[], FILE* fout) {
                 "[path_pairs_to_fasta] trying to print a null Path\n");
 		exit(-1);
 	}
-    
+
     if (pa->number_of_paths < 2) {
 		fprintf(stderr,
                 "[path_pairs_to_fasta] trying to print less than one path\n");
 		exit(-1);
     }
-    
+
 	if (fout == NULL) {
 		fprintf(stderr,
                 "[path_pairs_to_fasta] trying to print to a null FILE\n");
 		exit(-1);
 	}
-    
+
     kmer_size = pa->paths[0]->kmer_size;
-    
+
     for (i=0; i<pa->number_of_paths; i++) {
         total_length += strlen(pa->paths[i]->seq) + kmer_size;
         if (i < (pa->number_of_paths-1)) {
             total_length += distances[i];
         }
     }
-    
+
     int current = 1;
     fprintf(fout, ">rpnode_%qd length:%i\n", pa->paths[0]->id, total_length);
     for (i=0; i<pa->number_of_paths; i++) {
@@ -2010,15 +2015,15 @@ void path_pairs_to_fasta(PathArray* pa, int distances[], FILE* fout) {
         char fst_seq[kmer_size+1];
         binary_kmer_assignment_operator(fst_kmer, *(element_get_kmer(fst_node)));
         binary_kmer_to_seq(&fst_kmer, kmer_size, fst_seq);
-        
+
         // Print first kmer
         for (j=0; j<kmer_size; j++, current++) {
             fprintf(fout, "%c", fst_seq[j]);
             if(current % PATH_FASTA_LINE == 0){
-                fprintf(fout, "\n");	
-            }            
+                fprintf(fout, "\n");
+            }
         }
-        
+
         // Print rest
         for (j=0; j<strlen(path->seq); j++, current++) {
             if (path->step_flags[i] & PRINT_LABEL_AS_N) {
@@ -2027,18 +2032,18 @@ void path_pairs_to_fasta(PathArray* pa, int distances[], FILE* fout) {
                 fprintf(fout, "%c",  path->seq[i]);
             }
             if(current % PATH_FASTA_LINE == 0){
-                fprintf(fout, "\n");	
+                fprintf(fout, "\n");
             }
         }
         fprintf(fout, "\n");
-        
+
         // Print Ns
         if (i < (pa->number_of_paths-1)) {
             for (j=0; j<distances[i]; j++, current++) {
                 if(current % PATH_FASTA_LINE == 0){
-                    fprintf(fout, "\n");	
+                    fprintf(fout, "\n");
                 }
-                fprintf(fout, "N");                
+                fprintf(fout, "N");
             }
         }
     }
@@ -2052,8 +2057,8 @@ void path_counts_reset(PathCounts * pc){
 	pc->is_double_y = 0;
 	pc->is_cycle = 0;
 	pc->longer_than_buffer = 0;
-	 
-	pc-> minimum_double_y = 0; 
+
+	pc-> minimum_double_y = 0;
 	pc-> total_double_y_lenght = 0;
 }
 
@@ -2067,8 +2072,8 @@ void path_counts_print_and_log(PathCounts * pc){
 }
 
 void path_counts_add(Path * p, PathCounts * pc){
-	
-	
+
+
 	if(path_has_stop_reason(LAST, PATH_FLAG_STOP_BLUNT_END,  p)){
 		pc->blunt_ends++;
 	}
@@ -2078,15 +2083,15 @@ void path_counts_add(Path * p, PathCounts * pc){
 	if(path_has_stop_reason(LAST, PATH_FLAG_DIVERGING_PATHS, p)){
 		pc->diverging_paths++;
 	}
-	
+
 	if(path_has_stop_reason(LAST, PATH_FLAG_IS_CYCLE, p)){
 		pc->is_cycle++;
 	}
-	
+
 	if(path_has_stop_reason(LAST, PATH_FLAG_IS_DOUBLE_Y, p)){
 		pc->is_double_y++;
 	}
-	
+
 	if(path_has_stop_reason(FIRST, PATH_FLAG_STOP_BLUNT_END,  p)){
 		pc->blunt_ends++;
 	}
@@ -2096,11 +2101,11 @@ void path_counts_add(Path * p, PathCounts * pc){
 	if(path_has_stop_reason(FIRST, PATH_FLAG_DIVERGING_PATHS, p)){
 		pc->diverging_paths++;
 	}
-	
+
 	if(path_has_stop_reason(FIRST, PATH_FLAG_IS_CYCLE, p)){
 		pc->is_cycle++;
 	}
-	
+
 	if(path_has_stop_reason(FIRST, PATH_FLAG_IS_DOUBLE_Y, p)){
 		pc->is_double_y++;
 	}

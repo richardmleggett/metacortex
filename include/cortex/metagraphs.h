@@ -1,11 +1,11 @@
 /*
- * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo 
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
  * **********************************************************************
@@ -37,5 +37,15 @@ typedef struct {
      dBNode* seed_node;
      int graph_size;
 } SubGraphInfo;
+
+/*typedef struct {
+	int max_size;
+	int number_of_items;
+	int head;
+	int tail;
+	void** items;
+} Queue;
+*/
+//int grow_graph_from_node(dBNode* start_node, dBNode** best_node, dBGraph* graph, Queue* graph_queue);
 
 void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename, int min_subgraph_kmers, int min_contig_length);

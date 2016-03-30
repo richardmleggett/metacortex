@@ -1,0 +1,73 @@
+void db_graph_identify_branches(int max_length, dBGraph * db_graph)
+  finds X or Y nodes in graph, counts them up; debug option to print out Kmer
+
+
+void db_graph_check_and_add_path(Path * path, PathArray * patharray)
+  check not circular (first and last nodes the same), then adds path
+
+
+void db_graph_check_still_branch_after_loop_detected(pathStep * step, dBGraph * db_graph)
+  counts edges from a node, subtracts one from the number in the direction of step, and checks if the node is now simple
+
+
+void db_graph_walk_from_node(dBNode * node, Path * current_path, int orientation, int depth, int max_depth, int max_length, PathArray * patharray, dBGraph * db_graph)
+  standard graph walk - given starting node, checks all nucelotides off of it (all colours); finds a perfect path. Then checks if this is blunt (end), is a circle (first node is last node, and if we removing the loop simplifies the node), 'path_is_cycle', and then if max length and depth have been reached in search. If not, call function again from the final node on the path.
+
+
+void db_graph_walk_branches(char *filename, int total_max_length, int bubble_max_length, int bubble_max_depth, dBGraph * db_graph)
+  MAIN of script - traverses hashtable calling (void) find_branch_points, which calls walk_from_node
+  ONLY looks for Y/X nodes! makes a path array off of them.
+        IGNORE_START_NODE?
+
+
+void db_graph_find_divergence(Path * path_a, Path * path_b, int *a_ctr, int *b_ctr)
+  'Return point at which two paths diverge. If paths are same up until the end of one of them, divergence point will equal shortest length.'
+  ***(calls path_step_equals)
+
+
+int db_graph_check_for_convergence(Path * path_a, Path * path_b, int *a_ctr, int *b_ctr)
+  'Return point at which two paths converge. If they don't, return -1.'
+  ***** works through path, step by step, looking for overlap (path_step_equals_without_label)
+
+
+int db_graph_count_paths_with_step(pathStep * step, PathArray * patharray)
+  'Count how many paths in the array contain the given step'
+
+
+boolean db_graph_compare_paths(PathArray * patharray, pathStep * end, int kmer_size)
+------
+**calls db_graph_check_for_convergence**
+
+
+int db_graph_found_matched_paths(PathArray * patharray, int max_length, Orientation orientation, dBNode * start_node,
+                                 pathStep * end_step, char *filename, dBGraph * db_graph)
+------
+
+
+Path* db_graph_get_surrounding_path(dBNode * node, Orientation orientation, boolean reverse_path, int max_length, dBGraph * db_graph)
+  checks for simple node, then gets perfect path in forward or reverse direction (FLAG)
+
+
+void db_graph_walk_display_paths(PathArray * patharray)
+  'Display paths to screen'
+
+
+void db_graph_prepare_output_files(char *filename)
+  'Create blank file'
+
+
+void db_graph_change_case_at(PathArray * patharray, int index)
+  'Change case of character at given index for all paths where MATCH_FOUND is set.''
+
+
+void db_graph_make_differences_lower_case(PathArray * patharray)
+  'Make differences between two paths lower case.''
+
+
+int db_graph_output_search_paths(char *filename, PathArray * patharray)
+  outputs arrays of path and coverage to files,
+    (calls db_graph_make_differences_lower_case)
+
+
+char* db_graph_generate_colour_stats_string(Path * p, Path * prefix, Path * suffix, char *type)
+   kicks out the pre/mid/post lengths of a path, and average coverage for each colour across mid

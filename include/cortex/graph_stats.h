@@ -28,40 +28,25 @@
  * **********************************************************************
  */
 
-#ifndef GLOBAL_H_
-#define GLOBAL_H_
+//#define MAX_SEEDS 200000000
+//#define METACORTEX_QUEUE_SIZE 10000000
+//#define MAX_EXPLORE_PATH_LENGTH 200000
+//#define MAX_EXPLORE_NODES 200
 
+//typedef struct {
+//     dBNode* seed_node;
+//     int graph_size;
+//} SubGraphInfo;
 
-typedef signed char boolean;
-#ifndef true
-#define true 1
-#define false 0
-#endif
+typedef struct {
+    int total_size;
+    int branch_nodes;
+    int end_nodes;
+    int Y_degree_rev[4];
+    int Y_degree_for[4];
+    int X_degrees[8];
+} GraphInfo;
 
-typedef enum{
-  forward = 0,
-  reverse = 1,
-  undefined = 3,
-} Orientation;
+void find_subgraph_stats(dBGraph* graph, char* consensus_contigs_filename);
 
-
-
-#define LENGTH_FILENAME 300
-#define VERSION 1.00
-#ifndef MAX_READ_LENGTH
-#define MAX_READ_LENGTH 20000
-#endif
-#define MAX_FILENAME_LENGTH 200
-//boolean DEBUG;
-
-#ifndef DEBUG
-#define DEBUG  0
-#endif
-
-#define METACORTEX_VERSION "v0.2"
-#define SVN_VERSION "Revision: 891\n"
-#define SVN_COMMIT_DATE "Last source update on Aug 17 2012 at 18:00:26\n"
-
-
-
-#endif /* GLOBAL_H_ */
+void log_and_screen_print_stats(GraphInfo * nodes_in_graph);

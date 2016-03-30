@@ -1,11 +1,11 @@
 /*
  * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
  * **********************************************************************
@@ -57,52 +57,52 @@
  * Returns the next node, and the reverse to come back.
  * This function DO NOT  tells which is the next node
  * label to traverse, since it depends on the algorithm
- * to decide which one to use. It, however, gives the 
- * reverse lable to be able to traverse back. 
- *  
+ * to decide which one to use. It, however, gives the
+ * reverse lable to be able to traverse back.
+ *
  */
 pathStep *db_graph_get_next_step(pathStep * current_step, pathStep * next_step, pathStep * rev_step, dBGraph * db_graph)
 {
-    
+
 	assert(current_step != NULL);
 	assert(next_step != NULL);
 	assert(rev_step != NULL);
-	
+
 	assert(current_step->node != NULL);
 	assert(current_step->label != Undefined);
-	
+
 	next_step->node = NULL;
 	rev_step->node = current_step->node;
     next_step->flags = 0;
     rev_step->flags = current_step->flags & PATH_STEP_MASK_VISITED;
-    
+
 	BinaryKmer local_copy_of_kmer;
 	binary_kmer_assignment_operator(local_copy_of_kmer,	current_step->node->kmer);
-    
+
 	BinaryKmer tmp_kmer;
 	//dBNode * next_node = NULL;
-    
+
 	// after the following line tmp_kmer and rev_kmer are pointing to the same B Kmer
 	BinaryKmer *rev_kmer =
     binary_kmer_reverse_complement(&local_copy_of_kmer, db_graph->kmer_size, &tmp_kmer);
-    
+
 	if (current_step->orientation == reverse) {
 		rev_step->label = binary_kmer_get_last_nucleotide(&local_copy_of_kmer);
 		binary_kmer_assignment_operator(local_copy_of_kmer, *rev_kmer);
-	} else {//TODO: This could be avoided by reversing just the first nucleotide, not requiring to reverse always. 
+	} else {//TODO: This could be avoided by reversing just the first nucleotide, not requiring to reverse always.
 		rev_step->label = binary_kmer_get_last_nucleotide(rev_kmer);
 	}
-    
+
 	binary_kmer_left_shift_one_base_and_insert_new_base_at_right_end(&local_copy_of_kmer, current_step->label, db_graph->kmer_size);
-    
+
 	//get node from table
 	next_step->node = hash_table_find(element_get_key(&local_copy_of_kmer, db_graph->kmer_size, &tmp_kmer), db_graph);
 	rev_step->node = next_step->node;
-    
+
 	if (next_step->node != NULL) {
 		next_step->orientation = db_node_get_orientation(&local_copy_of_kmer, next_step->node, db_graph->kmer_size);
 		rev_step->orientation = opposite_orientation(next_step->orientation);
-	}    
+	}
     //#ifdef __DEBUG
 	else {
         //		if (DEBUG) {
@@ -115,53 +115,53 @@ pathStep *db_graph_get_next_step(pathStep * current_step, pathStep * next_step, 
         //		}
 	}
     //#endif
-    
+
 	next_step->label = Undefined;
 	return next_step;
 }
 
 pathStep *db_graph_get_next_step_with_reverse(pathStep * current_step, pathStep * next_step, pathStep * rev_step, dBGraph * db_graph)
 {
-    
+
 	assert(current_step != NULL);
 	assert(next_step != NULL);
 	assert(rev_step != NULL);
-	
+
 	assert(current_step->node != NULL);
 	assert(current_step->label != Undefined);
-	
+
 	next_step->node = NULL;
 	rev_step->node = current_step->node;
     next_step->flags = 0;
     rev_step->flags = current_step->flags & PATH_STEP_MASK_VISITED;
-    
+
 	BinaryKmer local_copy_of_kmer;
 	binary_kmer_assignment_operator(local_copy_of_kmer,	current_step->node->kmer);
-    
+
 	BinaryKmer tmp_kmer;
 	//dBNode * next_node = NULL;
-    
+
 	// after the following line tmp_kmer and rev_kmer are pointing to the same B Kmer
 	BinaryKmer *rev_kmer =
     binary_kmer_reverse_complement(&local_copy_of_kmer, db_graph->kmer_size, &tmp_kmer);
-    
+
 	if (current_step->orientation == reverse) {
 		rev_step->label = binary_kmer_get_last_nucleotide(&local_copy_of_kmer);
 		binary_kmer_assignment_operator(local_copy_of_kmer, *rev_kmer);
-	} else {//TODO: This could be avoided by reversing just the first nucleotide, not requiring to reverse always. 
+	} else {//TODO: This could be avoided by reversing just the first nucleotide, not requiring to reverse always.
 		rev_step->label = binary_kmer_get_last_nucleotide(rev_kmer);
 	}
-    
+
 	binary_kmer_left_shift_one_base_and_insert_new_base_at_right_end(&local_copy_of_kmer, current_step->label, db_graph->kmer_size);
-    
+
 	//get node from table
 	next_step->node = hash_table_find(element_get_key(&local_copy_of_kmer, db_graph->kmer_size, &tmp_kmer), db_graph);
 	rev_step->node = next_step->node;
-    
+
 	if (next_step->node != NULL) {
 		next_step->orientation = db_node_get_orientation(&local_copy_of_kmer, next_step->node, db_graph->kmer_size);
 		rev_step->orientation = opposite_orientation(next_step->orientation);
-	}    
+	}
     //#ifdef __DEBUG
 	else {
         //		if (DEBUG) {
@@ -174,15 +174,15 @@ pathStep *db_graph_get_next_step_with_reverse(pathStep * current_step, pathStep 
         //		}
 	}
     //#endif
-    
+
 	next_step->label = Undefined;
 	return next_step;
 }
 
 /**
  * This function resets the flags of the whole graph. A future improvement
- * should be to do this in a traditional look, using a single binary operation. 
- * That will reduce the number of jumps, and should be paralellizable and vectorizable. 
+ * should be to do this in a traditional look, using a single binary operation.
+ * That will reduce the number of jumps, and should be paralellizable and vectorizable.
  */
 void db_graph_reset_flags(dBGraph * db_graph)
 {
@@ -201,9 +201,9 @@ void db_graph_reset_flags(dBGraph * db_graph)
 
 int db_graph_get_perfect_path_with_first_edge(pathStep * first_step, void (*node_action) (dBNode* node), Path * path, dBGraph * db_graph)
 {
-    
+
 	dBNode *node = first_step->node;
-    
+
 	//Nucleotide fst_nucleotide = first_step->label;
 	//printf("First node\n");
 	//printNode(first_step->node, db_graph->kmer_size);
@@ -213,16 +213,16 @@ int db_graph_get_perfect_path_with_first_edge(pathStep * first_step, void (*node
 	int length = 0;
 	char tmp_seq[db_graph->kmer_size + 1];
 	tmp_seq[db_graph->kmer_size] = '\0';
-    
+
 	//sanity check
 	if (node == NULL) {
 		printf
         ("[db_graph_get_perfect_path_with_first_edge] db_graph_get_perfect_path: can't pass a null node\n");
 		exit(1);
 	}
-    
+
 	path_reset(path);
-    
+
 	if (DEBUG) {
 		printf
         ("[db_graph_get_perfect_path_with_first_edge] Node %i in path: %s\n",
@@ -233,7 +233,7 @@ int db_graph_get_perfect_path_with_first_edge(pathStep * first_step, void (*node
 	//first edge defined
 	//nucleotide = fst_nucleotide;
 	boolean added = true;
-    
+
 	pathStep current_step, next_step, rev_step;
 	path_step_assign(&next_step, first_step);
 	do {
@@ -244,13 +244,13 @@ int db_graph_get_perfect_path_with_first_edge(pathStep * first_step, void (*node
 		//printNode(current_step.node, db_graph->kmer_size);
 		added = path_add_node(&current_step, path);
 		if (added) {
-            
+
 			node_action(current_step.node);
 			//                      db_graph_get_next_node(pathStep * current_step,
 			//                                      pathStep * next_step, pathStep * rev_step, dBGraph * db_graph);
 			db_graph_get_next_step(&current_step, &next_step,
                                    &rev_step, db_graph);
-            
+
 			//sanity check
 			if (next_step.node == NULL) {
 				fprintf(stderr,
@@ -265,7 +265,7 @@ int db_graph_get_perfect_path_with_first_edge(pathStep * first_step, void (*node
                         forward ? "forward" : "reverse");
 				exit(1);
 			}
-            
+
 		}
 	}
 	while (added && !path_is_cycle(path) &&	//loop
@@ -287,31 +287,31 @@ int db_graph_get_perfect_path_with_first_edge(pathStep * first_step, void (*node
 			       path->length);
 		}
 	}
-    
+
 	return length;
-    
+
 }
 
 // An all colours version of db_graph_get_perfect_path_with_first_edge
 int db_graph_get_perfect_path_with_first_edge_all_colours(pathStep * first_step, void (*node_action) (dBNode * node), Path * path, dBGraph * db_graph)
 {
 	dBNode *node = first_step->node;
-    
+
 	//Nucleotide fst_nucleotide = first_step->label;
 	dBNode *current_node = node;
     //Nucleotide nucleotide;
     Nucleotide nucleotide2;
 	char tmp_seq[db_graph->kmer_size + 1];
 	tmp_seq[db_graph->kmer_size] = '\0';
-    
+
 	//sanity check
 	if (node == NULL) {
 		printf("[db_graph_get_perfect_path_with_first_edge_all_colours] db_graph_get_perfect_path: can't pass a null node\n");
 		exit(1);
 	}
-    
+
 	path_reset(path);
-    
+
 	if (DEBUG) {
 		printf("[db_graph_get_perfect_path_with_first_edge_all_colours] Node %i in path: %s\n",
                path->length, binary_kmer_to_seq(element_get_kmer(current_node), db_graph->kmer_size, tmp_seq));
@@ -319,7 +319,7 @@ int db_graph_get_perfect_path_with_first_edge_all_colours(pathStep * first_step,
 	//first edge defined
 	//nucleotide = fst_nucleotide;
 	boolean added = true;
-    
+
 	pathStep current_step, next_step, rev_step;
 	path_step_assign(&next_step, first_step);
 	do {
@@ -330,7 +330,7 @@ int db_graph_get_perfect_path_with_first_edge_all_colours(pathStep * first_step,
 			//                      db_graph_get_next_node(pathStep * current_step,
 			//                                      pathStep * next_step, pathStep * rev_step, dBGraph * db_graph);
 			db_graph_get_next_step(&current_step, &next_step, &rev_step, db_graph);
-            
+
 			//sanity check
 			if (next_step.node == NULL) {
 				fprintf(stderr, "[db_graph_get_perfect_path_with_first_edge_all_colours] dB_graph: didnt find node in hash table: %s %c %s\n",
@@ -354,7 +354,7 @@ int db_graph_get_perfect_path_with_first_edge_all_colours(pathStep * first_step,
 	while (added && !path_is_cycle(path) &&	//loop
 	       db_node_has_precisely_one_edge_all_colours(next_step.node, opposite_orientation(next_step.orientation), &nucleotide2) &&	//multiple entries
 	       db_node_has_precisely_one_edge_all_colours(next_step.node, next_step.orientation, &next_step.label));	//has one next edge only
-    
+
 	if (current_step.node != NULL) {
 		if (!(db_node_has_precisely_one_edge_all_colours(next_step.node, opposite_orientation(next_step.orientation), &nucleotide2) &&
               db_node_has_precisely_one_edge_all_colours(next_step.node,	next_step.orientation, &next_step.label)))
@@ -369,7 +369,7 @@ int db_graph_get_perfect_path_with_first_edge_all_colours(pathStep * first_step,
 			node_action(next_step.node);
 		}
 	}
-    
+
 	if (DEBUG) {
 		if (next_step.node == NULL) {
 			printf("[db_graph_get_perfect_path_with_first_edge_all_colours] Next node is null! \n");
@@ -378,9 +378,9 @@ int db_graph_get_perfect_path_with_first_edge_all_colours(pathStep * first_step,
                    binary_kmer_to_seq(element_get_kmer(next_step.node), db_graph->kmer_size, tmp_seq), db_node_get_edges_all_colours(next_step.node), path->length);
 		}
 	}
-    
+
 	return path_get_edges_count(path);
-    
+
 }
 
 
@@ -395,7 +395,7 @@ void db_graph_print_status(dBGraph * db_graph)
 
 int db_graph_get_perfect_path(dBNode * node, Orientation orientation, void (*node_action) (dBNode * node), dBGraph * db_graph, Path * path)
 {
-    
+
 	//sanity check
 	if (node == NULL) {
 		printf("[db_graph_get_perfect_path] can't pass a null node\n");
@@ -410,7 +410,7 @@ int db_graph_get_perfect_path(dBNode * node, Orientation orientation, void (*nod
 		exit(1);
 	}
 	perfect_path_get_path(node, orientation, node_action, db_graph, path);
-    
+
 	return path_get_edges_count(path);
 }
 
@@ -421,7 +421,7 @@ int db_graph_get_perfect_path(dBNode * node, Orientation orientation, void (*nod
 int db_graph_supernode(dBNode * node, void (*node_action) (dBNode * node), Path * path, dBGraph * db_graph)
 {
 	return db_graph_get_perfect_path(node, undefined, node_action, db_graph, path);
-    
+
 }
 
 void printNode(dBNode * dbn, short int kmerSize)
@@ -445,49 +445,49 @@ void printNode(dBNode * dbn, short int kmerSize)
 
 
 void db_graph_add_node_action(WalkingFunctions * wf, void (*node_action)(dBNode * node)){
-    
+
     assert(wf);
-    
+
     if (node_action == NULL) {
         return;
     }
-    
+
     if(wf->node_callbacks.used >= MAX_STACKED_FUNCTIONS){
         fprintf(stderr, "Trying to overload more functions than we have capacity.");
         assert(wf->node_callbacks.used >= MAX_STACKED_FUNCTIONS);
         exit(-1);
     }
-   
+
     wf->node_callbacks.callback[wf->node_callbacks.used] = NULL;
-    
-    wf->node_callbacks.callback[wf->node_callbacks.used++] = (void (*) ) node_action; //Make sure the action is not in the array yet.  
-    
-    
+
+    wf->node_callbacks.callback[wf->node_callbacks.used++] = (void (*) ) node_action; //Make sure the action is not in the array yet.
+
+
 }
 
 void db_graph_add_path_callback(WalkingFunctions * wf, void (*path_callback)(Path * path)){
-    
+
     assert(wf != NULL);
     if (path_callback == NULL) {
         return;
     }
-    
+
     if(wf->path_callbacks.used >= MAX_STACKED_FUNCTIONS){
         fprintf(stderr, "Trying to overload more functions than we have capacity.");
         assert(wf->path_callbacks.used >= MAX_STACKED_FUNCTIONS);
         exit(-1);
     }
-    
+
     wf->path_callbacks.args[wf->path_callbacks.used] = NULL;
-    wf->path_callbacks.callback[wf->path_callbacks.used++] = (void (*) ) path_callback; 
-   
+    wf->path_callbacks.callback[wf->path_callbacks.used++] = (void (*) ) path_callback;
+
 }
 
 boolean db_graph_remove_path_callback(WalkingFunctions * wf, void * funct){
     int used_orig = wf->path_callbacks.used;
     int removed = 0;
     int i;
-    
+
     for (i = 0; i < used_orig; i++) {
         if(wf->path_callbacks.callback[i] == funct) {
             removed++;
@@ -507,77 +507,77 @@ boolean db_graph_remove_path_callback(WalkingFunctions * wf, void * funct){
 }
 
 void db_graph_add_step_action(WalkingFunctions * wf, void (*step_action)(pathStep * ps)){
-    
+
     assert(wf != NULL);
     if (step_action == NULL) {
         return;
     }
-    
+
     if(wf->step_actions.used >= MAX_STACKED_FUNCTIONS){
         fprintf(stderr, "Trying to overload more functions than we have capacity.");
         assert(wf->step_actions.used >= MAX_STACKED_FUNCTIONS);
         exit(-1);
     }
-    
+
     wf->step_actions.callback[wf->step_actions.used] = NULL;
-    wf->step_actions.callback[wf->step_actions.used++] = (void (*) ) step_action; //Make sure the action is not in the array yet.  
-    
+    wf->step_actions.callback[wf->step_actions.used++] = (void (*) ) step_action; //Make sure the action is not in the array yet.
+
 }
 
 void db_graph_add_node_action_with_args(WalkingFunctions * wf, void (*node_action)(dBNode * node, void * arg), void * args){
-    
+
     assert(wf);
-    
+
     if (node_action == NULL) {
         return;
     }
-    
+
     if(wf->node_callbacks.used >= MAX_STACKED_FUNCTIONS){
         fprintf(stderr, "Trying to overload more functions than we have capacity.");
         assert(wf->node_callbacks.used >= MAX_STACKED_FUNCTIONS);
         exit(-1);
     }
-    
+
     wf->node_callbacks.callback[wf->node_callbacks.used] = args;
-    wf->node_callbacks.callback[wf->node_callbacks.used++] = node_action; //Make sure the action is not in the array yet.  
-    
-    
+    wf->node_callbacks.callback[wf->node_callbacks.used++] = node_action; //Make sure the action is not in the array yet.
+
+
 }
 
 void db_graph_add_path_callback_with_args(WalkingFunctions * wf, void (*path_callback)(Path * path, void * arg), void * args){
-    
+
     assert(wf != NULL);
     if (path_callback == NULL) {
         return;
     }
-    
+
     if(wf->path_callbacks.used >= MAX_STACKED_FUNCTIONS){
         fprintf(stderr, "Trying to overload more functions than we have capacity.");
         assert(wf->path_callbacks.used >= MAX_STACKED_FUNCTIONS);
         exit(-1);
     }
-    
+
     wf->path_callbacks.args[wf->path_callbacks.used] = args;
-    wf->path_callbacks.callback[wf->path_callbacks.used++] = path_callback; 
-    
+    wf->path_callbacks.callback[wf->path_callbacks.used++] = path_callback;
+
 }
 
 void db_graph_add_step_action_with_args(WalkingFunctions * wf, void (*step_action)(pathStep * ps, void * arg), void * args){
-    
+
     assert(wf != NULL);
     if (step_action == NULL) {
         return;
     }
-    
+
     if(wf->step_actions.used >= MAX_STACKED_FUNCTIONS){
         fprintf(stderr, "Trying to overload more functions than we have capacity.");
         assert(wf->step_actions.used >= MAX_STACKED_FUNCTIONS);
         exit(-1);
     }
-    
+
     wf->step_actions.callback[wf->step_actions.used] = args;
-    wf->step_actions.callback[wf->step_actions.used++] = step_action; //Make sure the action is not in the array yet.  
-    
+    wf->step_actions.callback[wf->step_actions.used++] = step_action; //Make sure the action is not in the array yet.
+
 }
 
 
@@ -590,7 +590,7 @@ static void execute_path_callbacks(Path * p, PathCallbackArray * callbacks){
         }else{
             f(p, callbacks->args[i]);
         }
-    }  
+    }
 }
 
 
@@ -603,7 +603,7 @@ static void execute_path_step_callbacks(pathStep * p, PathStepActionCallbackArra
         }else{
             f(p, callbacks->args[i]);
         }
-    }  
+    }
 }
 
 static void execute_node_callbacks(dBNode * n, NodeActionCallbackArray * callbacks){
@@ -615,7 +615,7 @@ static void execute_node_callbacks(dBNode * n, NodeActionCallbackArray * callbac
         }else{
             f(n, callbacks->args[i]);
         }
-    }  
+    }
 }
 
 // clip a tip in the graph (the tip starts in node)
@@ -625,14 +625,14 @@ static void execute_node_callbacks(dBNode * n, NodeActionCallbackArray * callbac
 int db_graph_db_node_clip_tip(dBNode * node, int limit, void (*node_action) (dBNode * node), dBGraph * db_graph)
 {
 	int length_tip = 0;
-    
+
 	length_tip = db_graph_db_node_clip_tip_with_orientation(node, forward, limit, node_action, db_graph);
-    
+
 	if (length_tip == 0) {
         //printf("PLEASE NOTE: I do get here!\n");
 		length_tip = db_graph_db_node_clip_tip_with_orientation(node, reverse, limit, node_action, db_graph);
 	}
-    
+
 	return length_tip;
 }
 
@@ -641,37 +641,37 @@ void db_graph_print_supernodes(char *filename, int max_length, boolean with_cove
 	FILE *fout;
 	FILE *fout_cov;
 	fout = fopen(filename, "w");
-    
+
 	if (with_coverages) {
 		char filename_cov[strlen(filename) + 10];
 		sprintf(filename_cov, "%s_cov", filename);
 		fout_cov = fopen(filename_cov, "w");
 	}
-    
+
 	int count_nodes = 0;
-    
+
 	Path *path = path_new(max_length, db_graph->kmer_size);
 	if (!path) {
 		fprintf(stderr, "\n[db_graph_print_supernodes] Can't get memory for new path.\n\n");
 		exit(-1);
 	}
-    
+
 	long long count_kmers = 0;
 	long long count_sing = 0;
-    
+
 	void print_supernode(dBNode * node) {
-        
+
 		count_kmers++;
 		if (db_node_check_flag_visited(node) == false) {
 			int length = db_graph_supernode(node,
                                             &db_node_action_set_flag_visited,
                                             path, db_graph);
-            
+
 			if (length > 0) {
 				if (with_coverages) {
 					path_to_coverage(path, fout_cov);
 				}
-				
+
 				path_to_fasta(path, fout);
 				path_increase_id(path);
 				if (length == max_length) {
@@ -679,14 +679,14 @@ void db_graph_print_supernodes(char *filename, int max_length, boolean with_cove
 				}
 				count_nodes++;
 				path_reset(path);
-                
-			} 
+
+			}
 		}
 	}
-    
+
 	hash_table_traverse(&print_supernode, db_graph);
 	log_and_screen_printf("%'qd nodes visited [%'qd singletons]\n", count_kmers, count_sing);
-    
+
 	path_destroy(path);
 	fclose(fout);
 	if (with_coverages) {
@@ -704,7 +704,7 @@ static void get_cov(dBNode * node, void * dbsa){
     int i;
     boolean all_common;
     long long curr_cov;
-    
+
     if(db_node_check_flag_not_pruned(node)){
         all_common = true;
         for(i = 0; i < NUMBER_OF_COLOURS; i++){
@@ -719,60 +719,60 @@ static void get_cov(dBNode * node, void * dbsa){
         if(all_common){
             args->db_graph->common_kmers_in_all_colours ++;
         }
-    } 
+    }
 }
 
 
 void db_graph_calculate_stats(dBGraph * db_graph){
-    //TODO: This should be easy to multithread... 
-    
+    //TODO: This should be easy to multithread...
+
     if(db_graph->calculated == true){
         return;
     }
-    double avg_cov = 0; 
+    double avg_cov = 0;
     //	long long tmp_cov[NUMBER_OF_COLOURS];
     short i;
     //   long long curr_cov;
     db_graph_stats_args ** tmp_args = calloc(1, sizeof(db_graph_stats_args *));
     tmp_args[0] = calloc(1, sizeof(db_graph_stats_args));
-    
+
     for(i = 0; i < NUMBER_OF_COLOURS; i++){
-        
+
         tmp_args[0]->tmp_cov[i] = 0;
         db_graph->colour_kmers[i] = 0;
     }
     tmp_args[0]->db_graph = db_graph;
-    
+
 	log_and_screen_printf("Calculating graph stats...\n");
-    
+
     db_graph->common_kmers_in_all_colours = 0;
-    
+
     hash_table_traverse_with_args(&get_cov,(void **) tmp_args, db_graph);
     for(i = 0; i < NUMBER_OF_COLOURS; i++){
 	    avg_cov = (double)tmp_args[0]->tmp_cov[i] / (double)db_graph->colour_kmers[i];
 	    db_graph->average_coverage[i] = avg_cov;
-	    
+
     }
     db_graph->calculated = true;
     free(tmp_args[0]);
     free(tmp_args);
-    
+
 }
 
 //This just gets the average colour of the first colour
 double db_graph_get_average_coverage(dBGraph * db_graph){
-	if (db_graph->calculated == false) {//We already have calculated the stats, there is no need 
+	if (db_graph->calculated == false) {//We already have calculated the stats, there is no need
         db_graph_calculate_stats(db_graph);
     }
-	
+
 	return db_graph->average_coverage[0];
 }
 
 double db_graph_get_average_coverage_by_colour(short colour, dBGraph * db_graph){
-	if (db_graph->calculated == false) {//We already have calculated the stats, there is no need 
+	if (db_graph->calculated == false) {//We already have calculated the stats, there is no need
         db_graph_calculate_stats(db_graph);
     }
-	
+
 	return db_graph->average_coverage[colour];
 }
 
@@ -789,47 +789,47 @@ void db_graph_print_coverage(FILE * out, dBGraph * db_graph)
 			max_cov = tmp_cov;
 		}
 	}
-    
+
 	hash_table_traverse(&f_max_cov, db_graph);
 	count = calloc(max_cov, sizeof(long long));
-    
+
 	if(count == NULL){
 		fprintf(stderr, "[db_graph_print_coverage] WARNING! Unable to allocate memory to count the coverages (%lli)\n", tmp_cov);
 		return;
 	}
-    
+
 	void sum_cov(dBNode * node) {
 		tmp_cov = element_get_coverage_all_colours(node);
 		count[tmp_cov - 1]++;
 	}
 	hash_table_traverse(&sum_cov, db_graph);
 	fprintf(out, "Kmer\tCoverage\n");
-    
+
 	for (tmp_cov = 0; tmp_cov < max_cov; tmp_cov++) {
 		fprintf(out, "%lld\t%lld\n", tmp_cov + 1, count[tmp_cov]);
 	}
-    
+
 	fprintf(stdout, "done \n");
 	free(count);
 }
 
 void db_graph_print_kmer_coverage(FILE * out, dBGraph * db_graph)
 {
-    
+
 	char *tmp_kmer = calloc(db_graph->kmer_size + 1, sizeof(char));
-    
+
 	fprintf(stdout, "Printing kmer and coverage..");
 	fprintf(out, "Kmer\tCoverage\n");
-    
+
 	void print_cov(dBNode * node) {
 		//BinaryKmer * bk = (BinaryKmer*)node->kmer;
 		binary_kmer_to_seq(element_get_kmer(node), db_graph->kmer_size, tmp_kmer);
 		fprintf(out, "%s\t%d\n", tmp_kmer, element_get_coverage_all_colours(node));
 	}
-    
+
 	hash_table_traverse(&print_cov, db_graph);
 	fprintf(stdout, "done \n");
-    
+
 	free(tmp_kmer);
 }
 
@@ -838,13 +838,13 @@ int db_graph_clip_tips(int threshold, dBGraph * db_graph)
 	db_graph_reset_flags(db_graph);
 	long long tips_clipped = 0;
 	long long nodes_clipped = 0;
-    
+
 	void local_node_prune(dBNode * no) {
 		//db_node_action_set_flag_pruned(no);
         cleaning_prune_db_node(no, db_graph);
 		nodes_clipped++;
 	}
-    
+
 	void clip_tips(dBNode * node) {
 		if (!db_node_check_for_any_flag(node, PRUNED | VISITED)) {
             if (db_graph_db_node_clip_tip(node, threshold, &local_node_prune, db_graph) > 0) {
@@ -852,14 +852,14 @@ int db_graph_clip_tips(int threshold, dBGraph * db_graph)
             }
 		}
 	}
-	
+
 #ifdef THREADS
 	hash_table_threaded_traverse(&clip_tips, db_graph);
 #else
 	hash_table_traverse(&clip_tips, db_graph);
-#endif 
+#endif
 	log_and_screen_printf("clip_tip removed nodes %'lld\n", nodes_clipped);
-    
+
 	return tips_clipped;
 }
 
@@ -873,13 +873,13 @@ void db_graph_dump_binary(char *filename, boolean(*condition) (dBNode * node), d
 		fprintf(stderr, "cannot open %s", filename);
 		exit(1);
 	}
-    
-	int mean_read_len=0;//Mario - you can plumb this in if you want. See cortex_var/core/graph_info.c, and how the GraphInfo object is used in my file_reader * cprtex_var.c, 
+
+	int mean_read_len=0;//Mario - you can plumb this in if you want. See cortex_var/core/graph_info.c, and how the GraphInfo object is used in my file_reader * cprtex_var.c,
 	// for how I did it.
 	long long total_seq=0;
 	print_binary_signature(fout,db_graph->kmer_size,1, mean_read_len, total_seq);
-    
-    
+
+
 	long long count = 0;
 	//routine to dump graph
 	void print_node_binary(dBNode * node) {
@@ -888,10 +888,10 @@ void db_graph_dump_binary(char *filename, boolean(*condition) (dBNode * node), d
 			db_node_print_binary(fout, node, db_graph->kmer_size);
 		}
 	}
-    
+
 	hash_table_traverse(&print_node_binary, db_graph);
 	fclose(fout);
-    
+
 	log_and_screen_printf("%'lld kmers dumped\n", count);
 }
 
@@ -904,13 +904,13 @@ void db_graph_dump_binary_by_colour(char *filename, boolean(*condition) (dBNode 
 		fprintf(stderr, "cannot open %s", filename);
 		exit(1);
 	}
-    
-	int mean_read_len=0;//Mario - you can plumb this in if you want. See cortex_var/core/graph_info.c, and how the GraphInfo object is used in my file_reader * cprtex_var.c, 
+
+	int mean_read_len=0;//Mario - you can plumb this in if you want. See cortex_var/core/graph_info.c, and how the GraphInfo object is used in my file_reader * cprtex_var.c,
 	// for how I did it.
 	long long total_seq=0;
 	print_binary_signature(fout,db_graph->kmer_size,1, mean_read_len, total_seq);
-    
-    
+
+
 	long long count = 0;
 	//routine to dump graph
 	void print_node_binary(dBNode * node) {
@@ -919,10 +919,10 @@ void db_graph_dump_binary_by_colour(char *filename, boolean(*condition) (dBNode 
 			db_node_print_binary_by_colour(fout, node, colour, db_graph->kmer_size);
 		}
 	}
-    
+
 	hash_table_traverse(&print_node_binary, db_graph);
 	fclose(fout);
-    
+
 	log_and_screen_printf("%qd kmers dumped\n", count);
 }
 
@@ -939,24 +939,24 @@ int db_graph_db_node_clip_tip_with_orientation(dBNode * node, Orientation orient
 	Orientation next_orientation;
 	dBNode *next_node;
 	char seq[db_graph->kmer_size + 1];
-    
+
 	//starting in a blunt end also prevents full loops
 	if (db_node_is_blunt_end_all_colours(node, opposite_orientation(orientation))) {
 		boolean join_main_trunk = false;
-        
+
 		while (db_node_has_precisely_one_edge_all_colours(node, orientation, &nucleotide)) {
 			nodes[length] = node;
-            
+
 			next_node = db_graph_get_next_node(node, orientation, &next_orientation, nucleotide, &reverse_nucleotide, db_graph);
-            
+
 			if (next_node == NULL) {
 				printf("dB_graph_db_node_clip_tip_with_orientation: didnt find node in hash table: %s\n",
                        binary_kmer_to_seq(element_get_kmer(node), db_graph->kmer_size, seq));
 				exit(1);
 			}
-            
+
 			length++;
-            
+
 			if (length > limit) {
 				break;
 			}
@@ -966,33 +966,33 @@ int db_graph_db_node_clip_tip_with_orientation(dBNode * node, Orientation orient
 				break;
 			}
 			//keep track of node
-            
+
 			node = next_node;
 			orientation = next_orientation;
 		}
-        
+
 		if (!join_main_trunk) {
 			length = 0;
 		} else {	//clear edges and mark nodes as pruned
 			for (i = 0; i < length; i++) {
-                
+
 				if (DEBUG) {
 					printf("CLIPPING node: %s\n", binary_kmer_to_seq(element_get_kmer(nodes[i]), db_graph->kmer_size, seq));
 				}
-                
+
 				node_action(nodes[i]);
                 //perhaps we want to move this inside the node action?
 				//(we already did). db_node_reset_edges_all_colours(nodes[i]);
 			}
-            
+
 			if (DEBUG) {
 				printf("RESET %c BACK\n", binary_nucleotide_to_char(reverse_nucleotide));
 			}
-			db_node_reset_edge_all_colours(next_node, opposite_orientation(next_orientation), reverse_nucleotide);//Why is this necessary?  
+			db_node_reset_edge_all_colours(next_node, opposite_orientation(next_orientation), reverse_nucleotide);//Why is this necessary?
 		}
-        
+
 	}
-    
+
 	return length;
 }
 
@@ -1004,32 +1004,32 @@ dBNode *db_graph_get_next_node(dBNode * current_node, Orientation current_orient
 	if (edge == Undefined) {
 		return NULL;	//If it is undefined, the next node is null...
 	}
-    
+
 	BinaryKmer local_copy_of_kmer;
 	binary_kmer_assignment_operator(local_copy_of_kmer, current_node->kmer);
-    
+
 	BinaryKmer tmp_kmer;
 	dBNode *next_node = NULL;
-    
+
 	// after the following line tmp_kmer and rev_kmer are pointing to the same B Kmer
 	BinaryKmer *rev_kmer = binary_kmer_reverse_complement(&local_copy_of_kmer, db_graph->kmer_size, &tmp_kmer);
-    
+
 	if (current_orientation == reverse) {
 		*reverse_edge = binary_kmer_get_last_nucleotide(&local_copy_of_kmer);
 		binary_kmer_assignment_operator(local_copy_of_kmer, *rev_kmer);
 	} else {
 		*reverse_edge = binary_kmer_get_last_nucleotide(rev_kmer);
 	}
-    
+
 	binary_kmer_left_shift_one_base_and_insert_new_base_at_right_end(&local_copy_of_kmer, edge, db_graph->kmer_size);
-    
+
 	//get node from table
 	next_node = hash_table_find(element_get_key(&local_copy_of_kmer, db_graph->kmer_size, &tmp_kmer), db_graph);
-    
+
 	if (next_node != NULL) {
 		*next_orientation = db_node_get_orientation(&local_copy_of_kmer, next_node, db_graph->kmer_size);
 	}
-    
+
 	return next_node;
 }
 
@@ -1042,82 +1042,82 @@ int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions *
         assert(0);
 		exit(1);
 	}
-    
+
 	if (path == NULL) {
 		printf("[db_graph_generic_walk] can't pass a null path\n");
         assert(0);
 		exit(1);
 	}
-    
+
 	if (functions == NULL) {
 		printf("[db_graph_generic_walk] can't pass  null functions\n");
         assert(0);
 		exit(1);
 	}
-    
+
 	if (db_graph == NULL) {
 		printf("[db_graph_generic_walk] can't pass  null db_graph\n");
         assert(0);
 		exit(1);
 	}
-    
+
 	pathStep current_step, next_step, rev_step;
-	
+
 	path_step_assign(&next_step, first_step);
-    next_step.path = path; //This way, on all the assignments we keep the pointer to the path that was sent to the function originally. 
+    next_step.path = path; //This way, on all the assignments we keep the pointer to the path that was sent to the function originally.
 	functions->get_starting_step(&next_step, db_graph);
-    
+
 	//boolean  try = true;
 	int count = 0;
     boolean walked;
     boolean added;
-    
+
 	do {
 		walked = false;
-        do {            
+        do {
             added = path_add_node(&next_step, path);
             path_step_assign(&current_step, &next_step);
             //try = false;
             functions->pre_step_action(&current_step);
-            
-            added = false;            
+
+            added = false;
             if (current_step.label != Undefined) {
                 functions->get_next_step(&current_step,&next_step, &rev_step,db_graph);
             }
-            
+
             if (added == false) {
                 // Do something?
             }
-            
+
             functions->step_action(&current_step);
             execute_path_step_callbacks(&current_step,&functions->step_actions);
             execute_node_callbacks(current_step.node, &functions->node_callbacks);
         }
         while (functions->continue_traversing(&current_step, &next_step, &rev_step, path,db_graph));
-		
+
 		if (path->length > 0) {
 			walked = true;
 		}
-        
+
 		if (walked) {
 			count++;
 			functions->output_callback(path);
             execute_path_callbacks(path, &functions->path_callbacks);
-            
+
 		}
 		do {
 			pathStep ps;
-            
+
 			path_get_last_step(&ps, path);
 			if(ps.node != NULL){
                 functions->post_step_action(&ps);
                 path_remove_last(path);
             }
 		}while (functions->continue_backwards(path, db_graph));
-        if(path_get_length(path) > 0){//This is to enable the backtracking. 
+        if(path_get_length(path) > 0){//This is to enable the backtracking.
             path_get_last_step(&current_step, path);//The continue_backwards should fix the last step
             functions->get_next_step(&current_step,&next_step, &rev_step,db_graph);
-            
+
         }
 	}while (path_get_length(path) > 0);
 	return count;
@@ -1126,7 +1126,7 @@ int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions *
 void db_graph_write_graphviz_file(char *filename, dBGraph * db_graph)
 {
 	FILE *fp;
-    
+
 	void print_graphviz_colours(dBNode * node) {
 		if (node != NULL) {
 			BinaryKmer tmp, co;
@@ -1138,44 +1138,42 @@ void db_graph_write_graphviz_file(char *filename, dBGraph * db_graph)
 			char *print = db_node_check_for_any_flag(node, STARTING_FORWARD  | BRANCH_NODE_FORWARD | BRANCH_NODE_REVERSE | END_NODE_FORWARD | END_NODE_REVERSE | X_NODE) ? "ellipse" : "ellipse";
 			char *node_colour = "black";
 
-            if (db_node_check_for_any_flag(node, BRANCH_NODE_FORWARD | BRANCH_NODE_REVERSE | X_NODE)) {
-				print = "circle";
-            }
-            
+      if (db_node_check_for_any_flag(node, BRANCH_NODE_FORWARD | BRANCH_NODE_REVERSE | X_NODE)) {
+	       print = "circle";
+      }
+
 			char reverse_seq1[kmer_size + 1];
 			char label_string[512];
-            
+
 			seq_reverse_complement(seq1, kmer_size, reverse_seq1);
 			//sprintf(label_string, "\"%s\\n%s\\nC0=%d C1=%d\"", seq1, reverse_seq1, node->coverage[0], node->coverage[1]);
-			
-			sprintf(label_string,
-                    "<<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
-                    "<tr><td><font color=\"blue\">%s</font></td></tr>"
-                    "<tr><td><font color=\"red\">%s</font></td></tr>"
-                    "<tr><td><font color=\"black\">%d</font> </td></tr>"
-                    "</table>>", seq1, reverse_seq1,
-                    node->coverage[0]
-	
-                    
-                    );
 
-            fprintf(fp, "%s [label=%s, shape=%s, color=%s]\n", seq1, label_string, print, node_colour);
-            
+			sprintf(label_string,
+      "<<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
+      "<tr><td><font color=\"blue\">%s</font></td></tr>"
+      "<tr><td><font color=\"red\">%s</font></td></tr>"
+      "<tr><td><font color=\"black\">%d</font> </td></tr>"
+      "</table>>", seq1, reverse_seq1,
+      node->coverage[0]
+      );
+
+      fprintf(fp, "%s [label=%s, shape=%s, color=%s]\n", seq1, label_string, print, node_colour);
+
 			binary_kmer_to_seq(&tmp, kmer_size, seq);
 			binary_kmer_left_shift(&tmp, 2, kmer_size);
 			Orientation o = forward;
 			Edges all_edges = db_node_get_edges_for_orientation_all_colours(node, o);
 			Edges ea[NUMBER_OF_COLOURS];
 			int i;
-            
-            if (all_edges < 0) {
-                // Do something???
-            }
-            
+
+      if (all_edges < 0) {
+          // Do something???
+      }
+
 			for (i = 0; i < NUMBER_OF_COLOURS; i++) {
 				ea[i] = db_node_get_edges_for_orientation_by_colour(node, o, i);
-            }
-            
+      }
+
 			void hasEdge(Nucleotide n) {
 				BinaryKmer bk;
 				Key k = &bk;
@@ -1186,27 +1184,23 @@ void db_graph_write_graphviz_file(char *filename, dBGraph * db_graph)
 					char *labelcolour = (colour0edge && colour1edge) ? "black":(colour0edge ? "green":"orange");
 					binary_kmer_modify_base(&tmp, n, kmer_size, 0);
 					binary_kmer_to_seq(element_get_key(&tmp, kmer_size, k), kmer_size, seqNext);
-					fprintf(fp,
-                            "%s -> %s [ label=<<font color=\"%s\">%c</font>>, color=\"%s\"];\n",
-                            seq, seqNext, labelcolour,
-                            binary_nucleotide_to_char(n),
-                            o == forward ? "blue" : "red");
+					fprintf(fp, "%s -> %s [ label=<<font color=\"%s\">%c</font>>, color=\"%s\"];\n", seq, seqNext, labelcolour, binary_nucleotide_to_char(n), o == forward ? "blue" : "red");
 				}
 			}
-            
+
 			nucleotide_iterator(&hasEdge);
 			binary_kmer_assignment_operator(tmp, co);
 			binary_kmer_left_shift(&tmp, 2, kmer_size);
-            
+
 			o = reverse;
 			all_edges = db_node_get_edges_for_orientation_all_colours(node, o);
 			for (i = 0; i < NUMBER_OF_COLOURS; i++) {
 				ea[i] = db_node_get_edges_for_orientation_by_colour(node, o, i);
-            }
+      }
 			nucleotide_iterator(&hasEdge);
 		}
 	}
-    
+
 	if (db_graph->unique_kmers < 450) {
 		if (filename) {
 			fp = fopen(filename, "w");
@@ -1233,7 +1227,7 @@ void db_graph_write_graphviz_file(char *filename, dBGraph * db_graph)
 int db_graph_get_neighbouring_nodes_all_colours(dBNode* start, Orientation orientation, dBNode* neighbours[], Nucleotide labels[], dBGraph * db_graph) {
     int num_neighbours = 0;
     Nucleotide nucleotide;
-    for (nucleotide = Adenine; nucleotide < Undefined; 
+    for (nucleotide = Adenine; nucleotide < Undefined;
          nucleotide++) {
         if (db_node_edge_exist_any_colour(start, nucleotide, orientation)) {
             pathStep current_step, next_step, rev_step;
@@ -1241,7 +1235,7 @@ int db_graph_get_neighbouring_nodes_all_colours(dBNode* start, Orientation orien
             current_step.label = nucleotide;
             current_step.orientation = orientation;
             db_graph_get_next_step(&current_step, &next_step, &rev_step, db_graph);
-            
+
             if (next_step.node != NULL) {
                 labels[num_neighbours] = nucleotide;
                 neighbours[num_neighbours] = next_step.node;
@@ -1249,8 +1243,8 @@ int db_graph_get_neighbouring_nodes_all_colours(dBNode* start, Orientation orien
             }
         }
     }
-    
-    
+
+
     return num_neighbours;
 }
 
@@ -1258,9 +1252,9 @@ Nucleotide db_graph_get_best_next_step_nucleotide(dBNode * from, dBNode * previo
     assert(from != NULL);
     assert(previous != NULL);
     Nucleotide best = Undefined;
-    
-    //TODO: Make this with the coverage. 
-    
+
+    //TODO: Make this with the coverage.
+
     return best;
 }
 
@@ -1271,7 +1265,7 @@ Nucleotide db_graph_get_best_next_step_nucleotide(dBNode * from, dBNode * previo
 void db_graph_cleanup_graph(dBGraph * db_graph)
 {
 	Orientation orientation;
-    
+
 	void clean_node(dBNode * node) {
 		void check_edge(Nucleotide nucleotide) {
 			// Check if edge exists
@@ -1288,18 +1282,15 @@ void db_graph_cleanup_graph(dBGraph * db_graph)
 				}
 			}
 		}
-        
+
 		orientation = forward;
 		nucleotide_iterator(&check_edge);
-        
+
 		orientation = reverse;
 		nucleotide_iterator(&check_edge);
 	}
-    
+
 	printf("\nTidying up graph...\n");
 	hash_table_traverse(&clean_node, db_graph);
 }
 #endif
-
-
-

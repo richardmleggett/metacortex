@@ -1,0 +1,8 @@
+
+make MAXK=95 metacortex
+
+metac_path=/usr/users/ga002/aylingm/grimoire/metacortex/bin/metacortex_k95
+
+# in output dir, with ctx and fa files already there; otheriwse, drop the 'rm' bit.
+rm all.ctx contigs.fa; ${metac_path} -S -k 31 -n 15 -b 100 -i allfiles.txt -t fasta -o all.ctx -f contigs.fa -g 100 -l log.txt
+
