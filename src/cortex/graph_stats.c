@@ -331,14 +331,14 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
         // print out the size of the current subgraph
         log_printf("graph size\t%i\n",nodes_in_graph->total_size);
         fprintf(fp_analysis, "%i\t%i",nodes_in_graph->branch_nodes,nodes_in_graph->total_size);
-        if (nodes_in_graph->branch_nodes){
           binary_kmer_to_seq(&(seed_node->kmer), graph->kmer_size, seq);
           fprintf(fp_analysis, "\t%s\n", seq);
+        if (nodes_in_graph->branch_nodes){
           log_and_screen_print_stats(nodes_in_graph);
         }
-        else{
-          fprintf(fp_analysis, "\n");
-        }
+        //else{
+        //  fprintf(fp_analysis, "\n");
+        //}
       } else {
         // catch graph size of zero? Not sure why this happens - grow-graph must be failing
         log_printf("graph size of zero?\n");
