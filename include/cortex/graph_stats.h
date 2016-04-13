@@ -42,9 +42,7 @@ typedef struct {
     int total_size;
     int branch_nodes;
     int end_nodes;
-    int Y_degree_rev[4];
-    int Y_degree_for[4];
-    int X_degrees[8];
+    int node_degree[5][5];
 } GraphInfo;
 
 void find_subgraph_stats(dBGraph* graph, char* consensus_contigs_filename);
