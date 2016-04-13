@@ -67,8 +67,6 @@
          // If there is an edge in any colour for this nucleotide...
          if (db_node_edge_exist_any_colour(node, n, orientation)) {
 
-             //if (debug) printf("  Edge exists\n");
-
              // Get first node along this edge and check we've not already visited it...
              Orientation next_orientation;
              Nucleotide reverse_nucleotide;
@@ -144,16 +142,12 @@
 
                       if (db_node_check_for_any_flag(new_path->nodes[i], BRANCH_NODE_FORWARD)){
                         nodes_in_graph->branch_nodes++;
-                        //nodes_in_graph->Y_degree_for[this_FOR_edges-1]++;
                       }
                       else if (db_node_check_for_any_flag(new_path->nodes[i], BRANCH_NODE_REVERSE)){
                         nodes_in_graph->branch_nodes++;
-                      //  nodes_in_graph->Y_degree_rev[this_REV_edges-1]++;
                       }
                       else if (db_node_check_for_any_flag(new_path->nodes[i], X_NODE)){
                         nodes_in_graph->branch_nodes++;
-                        // no ideal way to do this. Could distinguish between different classes of x-node, but maybe enough to just think of densely connected ones
-                      //  nodes_in_graph->X_degrees[this_FOR_edges+this_REV_edges-1]++;
                       }
 
                        db_node_action_set_flag_visited(new_path->nodes[i]);
@@ -217,19 +211,12 @@
 void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
 {
   FILE* fp_analysis;
-	//int branchNodes = 0;
-	//int X_Nodes_tot[8];
-	//int Y_Nodes_rev[4];
-	//int Y_Nodes_for[4];
   long int Contig_Branches[MAX_BRANCHES];
-	//int X_Nodes = 0;
-	//int Y_Nodes = 0;
   char* seq = calloc(256, 1);
   long int total_nodes = 0;
   GraphInfo* nodes_in_graph;
   // array to bin coverage 0-5, 5-10, 10-15..95-100
   long int Coverage_Dist[COVERAGE_BINS]; // will this work?
-  //int COVERAGE_CEILING = (COVERAGE_BINS-1) * COVERAGE_BIN_SIZE;
   char analysis_filename[strlen(consensus_contigs_filename) + 10];
 
   Queue* graph_queue;
@@ -241,12 +228,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
   for(i=0;i<COVERAGE_BINS;i++){
     Coverage_Dist[i]=0;
   }
-  //for(i=0;i<4;i++){
-  //  X_Nodes_tot[i*2]=0;
-  //  X_Nodes_tot[(i*2)+1]=0;
-  //  Y_Nodes_for[i]=0;
-  //  Y_Nodes_rev[i]=0;
-  //} // should I be using pointers and malloc/calloc instead?
 
   /* Open the analysis file */
   sprintf(analysis_filename, "%s.analysis", consensus_contigs_filename);
@@ -281,22 +262,16 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
 		if (edges_forward > 1
 		    && edges_reverse == 1) {
 			db_node_action_set_flag(node, BRANCH_NODE_FORWARD);
-      //Y_Nodes_for[edges_forward - 1]++;
-      //Y_Nodes++;
 		}
 		// Look for Y shape branch reverse orientation
 		if (edges_reverse > 1
 		    && edges_forward == 1) {
 			db_node_action_set_flag(node, BRANCH_NODE_REVERSE);
-      //Y_Nodes_rev[edges_reverse - 1]++;
-      //Y_Nodes++;
 		}
 		// Look for X-shaped branch
 		if (edges_reverse > 1
 		    && edges_forward > 1) {
 			db_node_action_set_flag(node, X_NODE);
-      //X_Nodes_tot[edges_reverse + edges_forward + 1]++;
-      //X_Nodes++;
 		}
   } // identify_branch_nodes()
 
@@ -321,11 +296,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
           nodes_in_graph->node_degree[i][j]=0;
         }
       }
-    /*for(i=0;i<4;i++){
-        nodes_in_graph->Y_degree_rev[i] = 0;
-        nodes_in_graph->Y_degree_for[i] = 0;
-        nodes_in_graph->X_degrees[i] = 0;
-      }*/
       // Grow graph from this node, returning the 'best' (highest coverage) node to store as seed point
       log_printf("Growing graph from node\n");
       graph_queue->number_of_items = 0;
@@ -340,12 +310,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
         fprintf(fp_analysis, "%i\t%i",nodes_in_graph->branch_nodes,nodes_in_graph->total_size);
           binary_kmer_to_seq(&(seed_node->kmer), graph->kmer_size, seq);
           fprintf(fp_analysis, "\t%s\n", seq);
-        if (nodes_in_graph->branch_nodes){
+
           log_and_screen_print_stats(nodes_in_graph);
-        }
-        //else{
-        //  fprintf(fp_analysis, "\n");
-        //}
       } else {
         // catch graph size of zero? Not sure why this happens - grow-graph must be failing
         log_printf("graph size of zero?\n");
@@ -361,15 +327,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
   // check each node in the graph, FLAG X&Y nodes (mark all nodes as visited)
 	hash_table_traverse(&identify_branch_nodes, graph);
 
-  // Output graph wide stats (X/Y node numbers)
-  //fprintf(fp_analysis, "#total\t%li\n#X-nodes\t%i\n#Y-nodes\t%i\n\n",total_nodes, X_Nodes, Y_Nodes);
-  //fprintf(fp_analysis, "#total\t%li\n\t\n\t#X\t#Y-FOR\t#Y-REV\n",total_nodes);
-  /*for(i=0;i<4;i++){
-    fprintf(fp_analysis, "%i\t%i\t%i\t%i\n",i, X_Nodes_tot[i], Y_Nodes_for[i], Y_Nodes_rev[i]);
-  }
-  for(i=4;i<8;i++){
-    fprintf(fp_analysis, "%i\t%i\n",i, X_Nodes_tot[i]);
-  }*/
   // first line for stats output file
   fprintf(fp_analysis, "\n#Subgraph sizes\n");
 
@@ -390,23 +347,16 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
   fclose(fp_analysis);
 
 
-  	db_graph_reset_flags(graph);
+  db_graph_reset_flags(graph);
 }
 
 void log_and_screen_print_stats(GraphInfo * nodes_in_graph){
-  int i=0;
-  //int X_PRESENT=0;
-/*  log_printf("\n#Complexity_dist of sub graph (# X/Y nodes)\t---\n");
-  log_printf("DEG\tFOR\tREV\n");
-  for(i=0;i<4;i++){
-    log_printf("%i\t%i\t%i\n",i+1, nodes_in_graph->Y_degree_for[i], nodes_in_graph->Y_degree_rev[i]);
-  }*/
-  log_printf("DEG\tALL\n");
-  /*for(i=0;i<8;i++){
-    log_printf("%i\t%i\n",i+1, nodes_in_graph->X_degrees[i]);
-    X_PRESENT=X_PRESENT+nodes_in_graph->X_degrees[i];
-
-  if(X_PRESENT){
-    log_printf("X_PRESENT\t%i\n", X_PRESENT);
-  }}*/
+  int x_nodes=0;
+  int y_nodes=0;
+  x_nodes=nodes_in_graph->node_degree[2][2]+nodes_in_graph->node_degree[3][3]+nodes_in_graph->node_degree[4][4];
+  y_nodes=nodes_in_graph->node_degree[2][1]+nodes_in_graph->node_degree[2][3]+nodes_in_graph->node_degree[2][4];
+  y_nodes=y_nodes+nodes_in_graph->node_degree[3][1]+nodes_in_graph->node_degree[3][3]+nodes_in_graph->node_degree[3][4];
+  y_nodes=y_nodes+nodes_in_graph->node_degree[4][1]+nodes_in_graph->node_degree[4][2]+nodes_in_graph->node_degree[4][3];
+  // Worth a sanity check - count blunt ends as well? ([0][x] or [x][0])
+  log_printf("ALL\t%i\tI nodes\t%i\tY nodes\t%i\tX nodes\t%i\n", nodes_in_graph->total_size, nodes_in_graph->node_degree[1][1], y_nodes, x_nodes);
 }
