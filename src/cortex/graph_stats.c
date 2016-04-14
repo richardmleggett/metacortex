@@ -216,10 +216,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
   long int total_nodes = 0;
 
   GraphInfo* nodes_in_graph = calloc(1,sizeof(GraphInfo));
-  //nodes_in_graph->total_size = malloc (1);
-  //nodes_in_graph->total_size = malloc (1);
-  //nodes_in_graph->branch_nodes = malloc (1);
-  //nodes_in_graph->end_nodes = calloc (5, 5);
 
   // array to bin coverage 0-5, 5-10, 10-15..95-100
   long int Coverage_Dist[COVERAGE_BINS]; // will this work?
