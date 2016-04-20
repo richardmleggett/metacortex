@@ -47,4 +47,4 @@ typedef struct {
 
 void find_subgraph_stats(dBGraph* graph, char* consensus_contigs_filename);
 
-void log_and_screen_print_stats(GraphInfo * nodes_in_graph);
+void print_degree_stats(GraphInfo * nodes_in_graph, FILE* fp_degrees);
