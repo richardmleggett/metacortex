@@ -211,6 +211,7 @@
 void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
 {
   FILE* fp_analysis;
+  FILE* fp_degrees;
   long int Contig_Branches[MAX_BRANCHES];
   char* seq = calloc(256, 1);
   long int total_nodes = 0;
@@ -220,6 +221,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
   // array to bin coverage 0-5, 5-10, 10-15..95-100
   long int Coverage_Dist[COVERAGE_BINS]; // will this work?
   char analysis_filename[strlen(consensus_contigs_filename) + 10];
+  char degrees_filename[strlen(consensus_contigs_filename) + 10];
 
   Queue* graph_queue;
   int i;  int j;
@@ -238,6 +240,22 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
       log_and_screen_printf("ERROR: Can't open analysis file.\n");
       exit(-1);
   }
+
+  /* Open the sugraph degree file */
+  sprintf(degrees_filename, "%s.degrees", consensus_contigs_filename);
+  fp_degrees = fopen(degrees_filename, "w");
+  if (!fp_degrees) {
+      log_and_screen_printf("ERROR: Can't open degrees file.\n");
+      exit(-1);
+  }
+
+  // header line for degrees file
+  for(i=0;i<5;i++){
+    for(j=0;j<5;j++){
+      fprintf(fp_degrees,"for[%d]rev[%d]\t", i, j);
+    }
+  }
+  fprintf(fp_degrees,"total\n");
 
 	db_graph_reset_flags(graph);
 
@@ -313,7 +331,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
           binary_kmer_to_seq(&(seed_node->kmer), graph->kmer_size, seq);
           fprintf(fp_analysis, "\t%s\n", seq);
 
-          log_and_screen_print_stats(nodes_in_graph);
+          print_degree_stats(nodes_in_graph, fp_degrees);
       } else {
         // catch graph size of zero? Not sure why this happens - grow-graph must be failing
         log_printf("graph size of zero?\n");
@@ -352,13 +370,21 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
   db_graph_reset_flags(graph);
 }
 
-void log_and_screen_print_stats(GraphInfo * nodes_in_graph){
-  int x_nodes=0;
+void print_degree_stats(GraphInfo * nodes_in_graph, FILE* fp_degrees){
+  int i;  int j;
+  int total_nodes=nodes_in_graph->total_size;
+  /*int x_nodes=0;
   int y_nodes=0;
   x_nodes=nodes_in_graph->node_degree[2][2]+nodes_in_graph->node_degree[3][3]+nodes_in_graph->node_degree[4][4];
   y_nodes=nodes_in_graph->node_degree[2][1]+nodes_in_graph->node_degree[2][3]+nodes_in_graph->node_degree[2][4];
   y_nodes=y_nodes+nodes_in_graph->node_degree[3][1]+nodes_in_graph->node_degree[3][3]+nodes_in_graph->node_degree[3][4];
   y_nodes=y_nodes+nodes_in_graph->node_degree[4][1]+nodes_in_graph->node_degree[4][2]+nodes_in_graph->node_degree[4][3];
   // Worth a sanity check - count blunt ends as well? ([0][x] or [x][0])
-  log_printf("ALL\t%i\tI nodes\t%i\tY nodes\t%i\tX nodes\t%i\n", nodes_in_graph->total_size, nodes_in_graph->node_degree[1][1], y_nodes, x_nodes);
+  log_printf("ALL\t%i\tI nodes\t%i\tY nodes\t%i\tX nodes\t%i\n", nodes_in_graph->total_size, nodes_in_graph->node_degree[1][1], y_nodes, x_nodes);*/
+  for(i=0;i<5;i++){
+    for(j=0;j<5;j++){
+      fprintf(fp_degrees,"%f\t",  ((float) nodes_in_graph->node_degree[i][j]) / (float) total_nodes);
+    }
+  }
+  fprintf(fp_degrees,"%d\n", total_nodes);
 }
