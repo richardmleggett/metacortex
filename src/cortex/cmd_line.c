@@ -94,6 +94,7 @@ int default_opts(CmdLine * c)
     c->low_coverage_node_clip = false;
     c->remove_low_coverage_supernodes = false;
     c->remove_spurious_links = false;
+    c->multiple_subgraph_contigs = false;
 
     //output
     c->dump_binary = false;
@@ -190,6 +191,7 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
    		{"input_reference", required_argument, NULL, 'H'},
 		{"output_kmer_coverage", required_argument, NULL, 'J'},
         {"remove_spurious_links",required_argument,NULL,'L'},
+        {"multiple_subgraph_contigs",no_argument,NULL,'M'},
         {"hash_output_file", required_argument, NULL, 'O'},
         {"tip_clip_iterations", required_argument, NULL, 'P'},
         {"graph_stats", no_argument, NULL, 'S'},
@@ -198,7 +200,7 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
     };
 
     while ((opt = getopt_long(argc, argv,
-                              "ab:c:d:ef:g:hi:jk:l:m:n:o:p:q:s:t:uvw:x:z:A:B:C:D:E:FG:H:I:J:K:L:N:O:P:STZ:",
+                              "ab:c:d:ef:g:hi:jk:l:m:n:o:p:q:s:t:uvw:x:z:A:B:C:D:E:FG:H:I:J:K:L:MN:O:P:STZ:",
                               long_options, &longopt_index)) > 0)
     {
         //Parse the default options
@@ -501,10 +503,12 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                     }
                 }
                 break;
+            case 'M':
+                cmd_line.multiple_subgraph_contigs = true;
+                break;
             case 'N':
                 cmd_line.print_uncertain_as_n = false;
                 break;
-
             case 'O':
                 cmd_line.dump_hash = true;
                 if (strlen(optarg) < LENGTH_FILENAME) {
