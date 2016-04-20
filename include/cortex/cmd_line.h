@@ -81,7 +81,8 @@ typedef struct
     boolean graphviz;
     boolean print_uncertain_as_n;
     boolean output_log;
-	boolean output_kmer_coverage_know ;
+	boolean output_kmer_coverage_know;
+    boolean multiple_subgraph_contigs;
 
     //-----------
     //parameters

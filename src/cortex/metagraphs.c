@@ -172,7 +172,7 @@ int grow_graph_from_node(dBNode* start_node, dBNode** best_node, dBGraph* graph,
     return current_graph_size;
 }
 
-void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename, int min_subgraph_kmers, int min_contig_length)
+void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename, int min_subgraph_kmers, int min_contig_length, boolean multiple_subgraph_contigs)
 {
     FILE* fp_analysis;
     FILE* fp_contigs;
@@ -260,17 +260,19 @@ void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename,
                     } else {
                         log_printf("Didn't write path of size %d\n", final_path->length);
                     }
+                    
+                    if (multiple_subgraph_contigs) {
+                        /* Now clear visited flags for subgraph */
+                        while (graph_queue->number_of_items > 0) {
+                            queue_node = (dBNode*)queue_pop(graph_queue);
+                            db_node_action_unset_flag(queue_node, VISITED);
+                        }
 
-                    /* Now clear visited flags for subgraph */
-                    while (graph_queue->number_of_items > 0) {
-                        queue_node = (dBNode*)queue_pop(graph_queue);
-                        db_node_action_unset_flag(queue_node, VISITED);
-                    }
-
-                    /* Now disconnect path from other nodes and mark path as visited, so it's not visited again */
-                    for (pi=0; pi<final_path->length; pi++) {
-                        cleaning_prune_db_node(final_path->nodes[pi], graph);
-                        db_node_action_set_flag(final_path->nodes[pi], VISITED);
+                        /* Now disconnect path from other nodes and mark path as visited, so it's not visited again */
+                        for (pi=0; pi<final_path->length; pi++) {
+                            cleaning_prune_db_node(final_path->nodes[pi], graph);
+                            db_node_action_set_flag(final_path->nodes[pi], VISITED);
+                        }
                     }
 
                     /* Reset paths */

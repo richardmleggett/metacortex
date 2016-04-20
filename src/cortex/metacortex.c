@@ -456,7 +456,7 @@ int main(int argc, char **argv)
                 break;
             case METACORTEX_CONSENSUS:
                 log_and_screen_printf("\nDumping subgraph consensus contigs: %s\n", cmd_line.output_fasta_filename);
-                metacortex_find_subgraphs(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.min_contig_length);
+                metacortex_find_subgraphs(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.min_contig_length, cmd_line.multiple_subgraph_contigs);
                 break;
             case GRAPH_STATS:
 
@@ -470,7 +470,7 @@ int main(int argc, char **argv)
                 //db_graph_walk_branches(cmd_line.output_fasta_filename, total_max_length, db_graph->kmer_size * 10 + 1, bubble_max_depth, db_graph);
 
                 //db_graph_walk_branches(char *filename, int total_max_length, int bubble_max_length, int bubble_max_depth, dBGraph * db_graph)
-                //metacortex_find_subgraphs(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.min_contig_length);
+                //metacortex_find_subgraphs(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.min_contig_length, cmd_line.multiple_subgraph_contigs);
                 break;
             default:
                 log_and_screen_printf("Algorithm not implemented \n");
