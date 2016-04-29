@@ -461,7 +461,7 @@ int main(int argc, char **argv)
             case GRAPH_STATS:
 
                 log_and_screen_printf("\nSearching graph for stats...\n");
-                find_subgraph_stats(db_graph, cmd_line.output_fasta_filename);
+                find_subgraph_stats(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size);
 
 
                 /* Put all of this into a seperate command line call (BUBBLEFIND)*/

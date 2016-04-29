@@ -36,8 +36,8 @@
 #include "cleaning.h"
 #include "metagraphs.h"
 
-#define COVERAGE_BINS 150
-#define COVERAGE_BIN_SIZE 1
+#define COVERAGE_BINS 15
+#define COVERAGE_BIN_SIZE 10
 #define MAX_BRANCHES 5
 
 
@@ -155,12 +155,11 @@
                        nodes_in_graph->total_size++;
                    }
                }
-
                // Clean up
                path_destroy(new_path);
              }
          }
-     }
+     } // walk_if_exists
 
      // Start a queue of nodes to walk
      //log_and_screen_printf("Allocating %d Mb to store queue information (max %d nodes, when full each node could be %d)...\n", ((METACORTEX_QUEUE_SIZE * sizeof(QueueItem*)) / 1024) / 1024, METACORTEX_QUEUE_SIZE, sizeof(QueueItem));
@@ -208,7 +207,7 @@
 // ----------------------------------------------------------------------
 // Work through graph, count cov, X, Y nodes
 // ----------------------------------------------------------------------
-void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
+void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int min_subgraph_kmers)
 {
   FILE* fp_analysis;
   FILE* fp_degrees;
@@ -316,6 +315,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
           nodes_in_graph->node_degree[i][j]=0;
         }
       }
+
       // Grow graph from this node, returning the 'best' (highest coverage) node to store as seed point
       log_printf("Growing graph from node\n");
       graph_queue->number_of_items = 0;
@@ -328,10 +328,12 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
         // print out the size of the current subgraph
         log_printf("graph size\t%i\n",nodes_in_graph->total_size);
         fprintf(fp_analysis, "%i\t%i",nodes_in_graph->branch_nodes,nodes_in_graph->total_size);
-          binary_kmer_to_seq(&(seed_node->kmer), graph->kmer_size, seq);
-          fprintf(fp_analysis, "\t%s\n", seq);
+        binary_kmer_to_seq(&(seed_node->kmer), graph->kmer_size, seq);
+        fprintf(fp_analysis, "\t%s\n", seq);
 
-          print_degree_stats(nodes_in_graph, fp_degrees);
+        print_degree_stats(nodes_in_graph, fp_degrees);
+
+
       } else {
         // catch graph size of zero? Not sure why this happens - grow-graph must be failing
         log_printf("graph size of zero?\n");
@@ -373,14 +375,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename)
 void print_degree_stats(GraphInfo * nodes_in_graph, FILE* fp_degrees){
   int i;  int j;
   int total_nodes=nodes_in_graph->total_size;
-  /*int x_nodes=0;
-  int y_nodes=0;
-  x_nodes=nodes_in_graph->node_degree[2][2]+nodes_in_graph->node_degree[3][3]+nodes_in_graph->node_degree[4][4];
-  y_nodes=nodes_in_graph->node_degree[2][1]+nodes_in_graph->node_degree[2][3]+nodes_in_graph->node_degree[2][4];
-  y_nodes=y_nodes+nodes_in_graph->node_degree[3][1]+nodes_in_graph->node_degree[3][3]+nodes_in_graph->node_degree[3][4];
-  y_nodes=y_nodes+nodes_in_graph->node_degree[4][1]+nodes_in_graph->node_degree[4][2]+nodes_in_graph->node_degree[4][3];
-  // Worth a sanity check - count blunt ends as well? ([0][x] or [x][0])
-  log_printf("ALL\t%i\tI nodes\t%i\tY nodes\t%i\tX nodes\t%i\n", nodes_in_graph->total_size, nodes_in_graph->node_degree[1][1], y_nodes, x_nodes);*/
+
   for(i=0;i<5;i++){
     for(j=0;j<5;j++){
       fprintf(fp_degrees,"%f\t",  ((float) nodes_in_graph->node_degree[i][j]) / (float) total_nodes);

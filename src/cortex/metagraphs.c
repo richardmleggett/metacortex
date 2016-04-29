@@ -260,7 +260,7 @@ void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename,
                     } else {
                         log_printf("Didn't write path of size %d\n", final_path->length);
                     }
-                    
+
                     if (multiple_subgraph_contigs) {
                         /* Now clear visited flags for subgraph */
                         while (graph_queue->number_of_items > 0) {
@@ -281,7 +281,7 @@ void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename,
                     path_reset(path_rev);
                     path_reset(final_path);
                 } else {
-                    log_printf("  Number of nodes (%i} too small. Not outputting contig.\n", nodes_in_graph);
+                    log_printf("  Number of nodes (%i) too small. Not outputting contig.\n", nodes_in_graph);
                 }
 
                 counter++;

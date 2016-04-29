@@ -45,6 +45,6 @@ typedef struct {
     int node_degree[5][5];
 } GraphInfo;
 
-void find_subgraph_stats(dBGraph* graph, char* consensus_contigs_filename);
+void find_subgraph_stats(dBGraph* graph, char* consensus_contigs_filename, int min_subgraph_kmers);
 
 void print_degree_stats(GraphInfo * nodes_in_graph, FILE* fp_degrees);
