@@ -28,23 +28,21 @@
  * **********************************************************************
  */
 
-//#define MAX_SEEDS 200000000
-//#define METACORTEX_QUEUE_SIZE 10000000
-//#define MAX_EXPLORE_PATH_LENGTH 200000
-//#define MAX_EXPLORE_NODES 200
-
-//typedef struct {
-//     dBNode* seed_node;
-//     int graph_size;
-//} SubGraphInfo;
+#include <binary_kmer.h>
 
 typedef struct {
     int total_size;
     int branch_nodes;
     int end_nodes;
     int node_degree[5][5];
+    int best_coverage[5];
+    BinaryKmer kmer[5];
+    BinaryKmer temp_kmer;
+    BinaryKmer current_kmer;
 } GraphInfo;
 
 void find_subgraph_stats(dBGraph* graph, char* consensus_contigs_filename, int min_subgraph_kmers);
 
 void print_degree_stats(GraphInfo * nodes_in_graph, FILE* fp_degrees);
+
+int sum_Coverage_Dist(long int * Coverage_Dist, int first; int last);

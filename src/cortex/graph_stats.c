@@ -36,7 +36,7 @@
 #include "cleaning.h"
 #include "metagraphs.h"
 
-#define COVERAGE_BINS 15
+#define COVERAGE_BINS 10
 #define COVERAGE_BIN_SIZE 10
 #define MAX_BRANCHES 5
 
@@ -54,9 +54,11 @@
      dBNode* node;
      int orientation;
      int depth;
-     int best_coverage = 0;
      int best_edges = 0;
-
+     int i;
+     for (i=0; i<5; i++) {
+       nodes_in_graph->best_coverage[i]=0;
+     }
      *best_node = 0;
 
      // Nucleotide iterator, used to walk all possible paths from a node
@@ -82,7 +84,7 @@
                  pathStep first_step;
                  Path * new_path;
                  dBNode* end_node;
-                 int i = 0;
+                 i = 0;
 
                  // Get path
                  first_step.node = node;
@@ -131,14 +133,46 @@
                        // add node degrees to 2D array of all degrees in subgraph
                        nodes_in_graph->node_degree[this_FOR_edges][this_REV_edges]++;
 
-                       if ((best_node == 0) ||
-                           (this_coverage > best_coverage) ||
-                           ((this_coverage == best_coverage) && ((this_FOR_edges + this_REV_edges) < best_edges)))
+                       // if this is the new best node update the other bests
+                       if ((best_node[0] == 0) ||
+                           (this_coverage > nodes_in_graph->best_coverage[0]) ||
+                           ((this_coverage == nodes_in_graph->best_coverage[0]) && ((this_FOR_edges + this_REV_edges) < best_edges)))
                        {
-                           best_coverage = this_coverage;
                            best_edges = (this_FOR_edges + this_REV_edges);
                            *best_node = new_path->nodes[i];
                        }
+
+                       // if this is better than the lowest good node
+                       if ((best_node == 0) ||
+                           (this_coverage > nodes_in_graph->best_coverage[4]) ||
+                           ((this_coverage == nodes_in_graph->best_coverage[4]) && ((this_FOR_edges + this_REV_edges) < best_edges)))
+                       {
+                          // sort algorithm - because I sort as I build array, no need to make more than one pass
+                          int temp_cov=0;
+                          binary_kmer_initialise_to_zero(&(nodes_in_graph->temp_kmer));
+                          binary_kmer_assignment_operator(nodes_in_graph->current_kmer,new_path->nodes[i]->kmer);
+                          // seed_node->kmer
+                          int j=0;
+                          while(this_coverage){
+                            if (this_coverage>nodes_in_graph->best_coverage[j]||
+                            ((this_coverage == nodes_in_graph->best_coverage[j]) && ((this_FOR_edges + this_REV_edges) < best_edges))){
+                              temp_cov = nodes_in_graph->best_coverage[j];
+                              nodes_in_graph->best_coverage[j] = this_coverage;
+                              this_coverage=temp_cov;
+                              temp_cov=0;
+
+                              binary_kmer_assignment_operator(nodes_in_graph->temp_kmer,nodes_in_graph->kmer[j]);
+                              binary_kmer_assignment_operator(nodes_in_graph->kmer[j],nodes_in_graph->current_kmer);
+                              binary_kmer_assignment_operator(nodes_in_graph->current_kmer,nodes_in_graph->temp_kmer);
+                            }
+                            else if(j>4){
+                              this_coverage=0;
+                            }
+                            else{
+                              j++;
+                            }
+                          }
+                      }
 
                       if (db_node_check_for_any_flag(new_path->nodes[i], BRANCH_NODE_FORWARD)){
                         nodes_in_graph->branch_nodes++;
@@ -218,7 +252,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   GraphInfo* nodes_in_graph = calloc(1,sizeof(GraphInfo));
 
   // array to bin coverage 0-5, 5-10, 10-15..95-100
-  long int Coverage_Dist[COVERAGE_BINS]; // will this work?
+  long int Coverage_Dist[COVERAGE_BINS*COVERAGE_BIN_SIZE]; // will this work?
   char analysis_filename[strlen(consensus_contigs_filename) + 10];
   char degrees_filename[strlen(consensus_contigs_filename) + 10];
 
@@ -228,7 +262,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   for(i=0;i<MAX_BRANCHES;i++){
     Contig_Branches[i]=0;
   }
-  for(i=0;i<COVERAGE_BINS;i++){
+  for(i=0;i<COVERAGE_BINS*COVERAGE_BIN_SIZE;i++){
     Coverage_Dist[i]=0;
   }
 
@@ -268,9 +302,10 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
         log_and_screen_printf("Error: Coverage is <1 in the graph?\n");
         exit(-1);
     }
+    if()
     this_coverage = ((this_coverage-1) / COVERAGE_BIN_SIZE);
-    if(this_coverage>COVERAGE_BINS){
-      this_coverage = COVERAGE_BINS-1;
+    if(this_coverage>COVERAGE_BINS*COVERAGE_BIN_SIZE){
+      this_coverage = COVERAGE_BINS*COVERAGE_BIN_SIZE-1;
     }
 
     Coverage_Dist[this_coverage]++;
@@ -327,9 +362,15 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
       } else if (nodes_in_graph->total_size) {
         // print out the size of the current subgraph
         log_printf("graph size\t%i\n",nodes_in_graph->total_size);
-        fprintf(fp_analysis, "%i\t%i",nodes_in_graph->branch_nodes,nodes_in_graph->total_size);
-        binary_kmer_to_seq(&(seed_node->kmer), graph->kmer_size, seq);
-        fprintf(fp_analysis, "\t%s\n", seq);
+        fprintf(fp_analysis, "%i\t%i\t",nodes_in_graph->branch_nodes,nodes_in_graph->total_size);
+        for(i=0;i<5;i++){
+          // seq never re-initialised
+          binary_kmer_to_seq(&(nodes_in_graph->kmer[i]), graph->kmer_size, seq);
+          fprintf(fp_analysis, "%s,", seq);
+        }
+        fprintf(fp_analysis, "\n");
+        //binary_kmer_to_seq(&(seed_node->kmer), graph->kmer_size, seq);
+        //fprintf(fp_analysis, "\t%s\n", seq);
 
         print_degree_stats(nodes_in_graph, fp_degrees);
 
@@ -362,8 +403,16 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   }
 
   fprintf(fp_analysis, "\n#Coverage_dist\t---\n");
-  for(i=0;i<(COVERAGE_BINS-1);i++){
-    fprintf(fp_analysis, "#>%i<=%i\t%li\n",i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE, Coverage_Dist[i]);
+
+  // first two lines are for 1, 2-4 cov. after that stick revert to cov bin size
+  fprintf(fp_analysis, "#1\t%li\n", Coverage_Dist[0]);
+  fprintf(fp_analysis, "#>1<=4\t%li\n", sum_Coverage_Dist(Coverage_Dist,1,3);
+  if(COVERAGE_BIN_SIZE>4){
+    fprintf(fp_analysis, "#>4<=%i\t%li\n", COVERAGE_BIN_SIZE, sum_Coverage_Dist(Coverage_Dist,4,COVERAGE_BIN_SIZE-1));
+  }
+
+  for(i=1;i<(COVERAGE_BINS-1);i++){
+    fprintf(fp_analysis, "#>%i<=%i\t%li\n",i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE, sum_Coverage_Dist(Coverage_Dist, i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE));
   }
   fprintf(fp_analysis, "#>=%i   \t%li\n",(COVERAGE_BINS-1)*COVERAGE_BIN_SIZE, Coverage_Dist[i]);
   fclose(fp_analysis);
@@ -382,4 +431,14 @@ void print_degree_stats(GraphInfo * nodes_in_graph, FILE* fp_degrees){
     }
   }
   fprintf(fp_degrees,"%d\n", total_nodes);
+}
+
+int sum_Coverage_Dist(long int * Coverage_Dist, int first; int last){
+  int sum = 0;
+  int i;
+
+  for(i=first; i<=last; i++){
+    sum =+ *Coverage_Dist[i];
+  }
+  return sum;
 }
