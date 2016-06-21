@@ -302,7 +302,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
         log_and_screen_printf("Error: Coverage is <1 in the graph?\n");
         exit(-1);
     }
-    if()
     this_coverage = ((this_coverage-1) / COVERAGE_BIN_SIZE);
     if(this_coverage>COVERAGE_BINS*COVERAGE_BIN_SIZE){
       this_coverage = COVERAGE_BINS*COVERAGE_BIN_SIZE-1;
@@ -406,13 +405,13 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
   // first two lines are for 1, 2-4 cov. after that stick revert to cov bin size
   fprintf(fp_analysis, "#1\t%li\n", Coverage_Dist[0]);
-  fprintf(fp_analysis, "#>1<=4\t%li\n", sum_Coverage_Dist(Coverage_Dist,1,3);
+  fprintf(fp_analysis, "#>1<=4\t%i\n", sum_Coverage_Dist(Coverage_Dist,1,3));
   if(COVERAGE_BIN_SIZE>4){
-    fprintf(fp_analysis, "#>4<=%i\t%li\n", COVERAGE_BIN_SIZE, sum_Coverage_Dist(Coverage_Dist,4,COVERAGE_BIN_SIZE-1));
+    fprintf(fp_analysis, "#>4<=%i\t%i\n", COVERAGE_BIN_SIZE, sum_Coverage_Dist(Coverage_Dist,4,COVERAGE_BIN_SIZE-1));
   }
 
   for(i=1;i<(COVERAGE_BINS-1);i++){
-    fprintf(fp_analysis, "#>%i<=%i\t%li\n",i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE, sum_Coverage_Dist(Coverage_Dist, i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE));
+    fprintf(fp_analysis, "#>%i<=%i\t%i\n",i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE, sum_Coverage_Dist(Coverage_Dist, i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE));
   }
   fprintf(fp_analysis, "#>=%i   \t%li\n",(COVERAGE_BINS-1)*COVERAGE_BIN_SIZE, Coverage_Dist[i]);
   fclose(fp_analysis);
@@ -433,12 +432,12 @@ void print_degree_stats(GraphInfo * nodes_in_graph, FILE* fp_degrees){
   fprintf(fp_degrees,"%d\n", total_nodes);
 }
 
-int sum_Coverage_Dist(long int * Coverage_Dist, int first; int last){
+int sum_Coverage_Dist(long int * Coverage_Dist, int first, int last){
   int sum = 0;
   int i;
 
   for(i=first; i<=last; i++){
-    sum =+ *Coverage_Dist[i];
+    sum =+ Coverage_Dist[i];
   }
   return sum;
 }

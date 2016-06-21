@@ -45,4 +45,4 @@ void find_subgraph_stats(dBGraph* graph, char* consensus_contigs_filename, int m
 
 void print_degree_stats(GraphInfo * nodes_in_graph, FILE* fp_degrees);
 
-int sum_Coverage_Dist(long int * Coverage_Dist, int first; int last);
+int sum_Coverage_Dist(long int * Coverage_Dist, int first, int last);
