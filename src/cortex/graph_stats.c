@@ -37,7 +37,7 @@
 #include "metagraphs.h"
 
 #define COVERAGE_BINS 10
-#define COVERAGE_BIN_SIZE 10
+#define COVERAGE_BIN_SIZE 1
 #define MAX_BRANCHES 5
 
 
@@ -258,11 +258,11 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
   Queue* graph_queue;
   int i;  int j;
-  // Initialise Coverage_Dist  int i;
   for(i=0;i<MAX_BRANCHES;i++){
     Contig_Branches[i]=0;
   }
-  for(i=0;i<COVERAGE_BINS*COVERAGE_BIN_SIZE;i++){
+  // Initialise Coverage_Dist  int i;
+  for(i=0;i<(COVERAGE_BINS*COVERAGE_BIN_SIZE);i++){
     Coverage_Dist[i]=0;
   }
 
@@ -302,10 +302,12 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
         log_and_screen_printf("Error: Coverage is <1 in the graph?\n");
         exit(-1);
     }
-    this_coverage = ((this_coverage-1) / COVERAGE_BIN_SIZE);
-    if(this_coverage>COVERAGE_BINS*COVERAGE_BIN_SIZE){
+    this_coverage = (this_coverage-1);
+
+    if(this_coverage>COVERAGE_BINS*COVERAGE_BIN_SIZE-1){
       this_coverage = COVERAGE_BINS*COVERAGE_BIN_SIZE-1;
     }
+      log_and_screen_printf("WTFCOVDIST\t%i\n", this_coverage);
 
     Coverage_Dist[this_coverage]++;
     total_nodes++;
@@ -410,10 +412,19 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     fprintf(fp_analysis, "#>4<=%i\t%i\n", COVERAGE_BIN_SIZE, sum_Coverage_Dist(Coverage_Dist,4,COVERAGE_BIN_SIZE-1));
   }
 
-  for(i=1;i<(COVERAGE_BINS-1);i++){
-    fprintf(fp_analysis, "#>%i<=%i\t%i\n",i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE, sum_Coverage_Dist(Coverage_Dist, i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE));
+  for(i=1;i<(COVERAGE_BINS*COVERAGE_BIN_SIZE-1);i+=COVERAGE_BIN_SIZE){
+    if(COVERAGE_BIN_SIZE>1){
+      fprintf(fp_analysis, "#>%i<=%i\t%i\n",(i)*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE, sum_Coverage_Dist(Coverage_Dist, i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE));
+    }
+    else{
+      fprintf(fp_analysis, "#%i\t%i\n",i+1, Coverage_Dist[i]);
+    }
   }
-  fprintf(fp_analysis, "#>=%i   \t%li\n",(COVERAGE_BINS-1)*COVERAGE_BIN_SIZE, Coverage_Dist[i]);
+  fprintf(fp_analysis, "#>=%i   \t%li\n",(COVERAGE_BINS)*COVERAGE_BIN_SIZE, Coverage_Dist[(COVERAGE_BINS*COVERAGE_BIN_SIZE)-1]);
+
+  // kmer figures
+  fprintf(fp_analysis, "\n\n#kmers\nunique\t%lli\ttotal\t%lli\n",graph->unique_kmers,graph->loaded_kmers);
+
   fclose(fp_analysis);
 
 
@@ -437,7 +448,7 @@ int sum_Coverage_Dist(long int * Coverage_Dist, int first, int last){
   int i;
 
   for(i=first; i<=last; i++){
-    sum =+ Coverage_Dist[i];
+    sum += Coverage_Dist[i];
   }
   return sum;
 }

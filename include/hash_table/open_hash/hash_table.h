@@ -1,11 +1,11 @@
 /*
- * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo 
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
  * **********************************************************************
@@ -27,8 +27,8 @@
  *
  * **********************************************************************
  */
- 
- 
+
+
  /*
  hash_table.h
 
@@ -52,6 +52,7 @@ typedef struct {
 	long long number_buckets;
 	long long unique_kmers;
     long long pruned_kmers;
+    long long loaded_kmers;
     long long colour_kmers[NUMBER_OF_COLOURS];
     int bucket_size;
 	Element * table;
@@ -66,8 +67,8 @@ typedef struct {
     //stuff from here is to get statistics.
     boolean calculated;
     double average_coverage[NUMBER_OF_COLOURS];
-    double average_number_of_connections[NUMBER_OF_COLOURS]; 
-    long long common_kmers_in_all_colours; 
+    double average_number_of_connections[NUMBER_OF_COLOURS];
+    long long common_kmers_in_all_colours;
     unsigned long perfect_path_count;
     long long number_of_reads[NUMBER_OF_COLOURS];
 } HashTable;
@@ -85,7 +86,7 @@ void hash_table_traverse(void(*f)(Element *), HashTable *);
 
 //applies f to every element of the table, we can pass arguments to the option. The array is designed for
 //the multithreaded version, only the first element in the array of arguments is used. The signature
-//compatibility is designed to facilitate the adoption of multithreading. 
+//compatibility is designed to facilitate the adoption of multithreading.
 void hash_table_traverse_with_args( void (*f)(Element *, void * args), void ** args, HashTable * hash_table);
 
 //if the element is not in table create an element with key and adds it
@@ -114,11 +115,11 @@ void hash_table_set_number_of_threads(int threads, HashTable * hash_table);
 
 #ifdef THREADS
 //Iterator that splits the hash table on the number of threads given to the
-//table. Default is 1. 
+//table. Default is 1.
 void hash_table_threaded_traverse_with_vars( void (*f)(Element *, void * args), void ** args, HashTable * hash_table);
 
 //Iterator that splits the hash table on the number of threads given to the
-//table. Default is 1. 
+//table. Default is 1.
 void hash_table_threaded_traverse( void (*f)(Element *), HashTable * hash_table);
 #endif
 

@@ -222,7 +222,7 @@ int main(int argc, char **argv)
         db_graph_print_status(db_graph);
         fflush(stdout);
         int count_file = 0;
-        long long total_length = 0;	//total sequence length
+        db_graph->loaded_kmers = 0;	//total sequence length
 
         //Go through all the files, loading data into the graph
 
@@ -307,10 +307,10 @@ int main(int argc, char **argv)
                     break;
             }
 
-            total_length += seq_length;
+            db_graph->loaded_kmers += seq_length;
             timestamp();
             log_and_screen_printf("\nRead of file %'d complete. Total kmers: %'lld Bad reads: %'qd Seq length: %'qd Total seq length: %'qd\n\n",
-                                  i+1, hash_table_get_unique_kmers(db_graph), bad_reads, seq_length, total_length);
+                                  i+1, hash_table_get_unique_kmers(db_graph), bad_reads, seq_length, db_graph->loaded_kmers);
             hash_table_print_stats(db_graph);
 
             fflush(stdout);
