@@ -32,10 +32,13 @@
 
 typedef struct {
     int total_size;
+    int largest_subgraph;
+    int num_subgraphs;
     int branch_nodes;
     int end_nodes;
     int node_degree[5][5];
     int best_coverage[5];
+    int subgraph_dist[10];
     BinaryKmer kmer[5];
     BinaryKmer temp_kmer;
     BinaryKmer current_kmer;

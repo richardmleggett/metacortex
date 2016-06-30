@@ -127,16 +127,16 @@ LIBRARY_OBJ =  obj/cortex/file_format.o obj/cortex/analysis.o obj/cortex/flags.o
 
 # Main rules
 metacortex : remove_objects $(METACORTEX_OBJ)
-	mkdir -p $(BIN); $(CC) $(OPT) $(OPT_COLS) -o $(BIN)/metacortex_k$(BIN_SUFFIX) $(METACORTEX_OBJ) -lm
+	mkdir -p $(BIN); $(CC) -lm $(OPT) $(OPT_COLS) -o $(BIN)/metacortex_k$(BIN_SUFFIX) $(METACORTEX_OBJ)
 
 kmerinfo: remove_objects $(KMERINFO_OBJ)
-	mkdir -p $(BIN); $(CC) $(OPT) -o $(BIN)/kmerinfo $(KMERINFO_OBJ) -lm
+	mkdir -p $(BIN); $(CC) -lm $(OPT) -o $(BIN)/kmerinfo $(KMERINFO_OBJ)
 
 graphout:remove_objects $(GRAPHOUT_OBJ)
-	mkdir -p $(BIN); $(CC) $(OPT) -o $(BIN)/graphout_$(BIN_SUFFIX) $(GRAPHOUT_OBJ) -lm 
+	mkdir -p $(BIN); $(CC) -lm $(OPT) -o $(BIN)/graphout_$(BIN_SUFFIX) $(GRAPHOUT_OBJ)
 
 filterreads:remove_objects $(FILTERREADS_OBJ)
-	mkdir -p $(BIN); $(CC) $(OPT) -o $(BIN)/filterreads_$(BIN_SUFFIX) $(FILTERREADS_OBJ) -lm
+	mkdir -p $(BIN); $(CC) -lm $(OPT) -o $(BIN)/filterreads_$(BIN_SUFFIX) $(FILTERREADS_OBJ)
 
 run_basic_tests : remove_objects $(BASIC_TESTS_OBJ)
 	mkdir -p $(BIN); $(CC) $(OPT) $(CFLAGS_CUNIT) $(CFLAGS_BASIC_TESTS)      -lcunit -o $(BIN)/run_basic_tests_$(MAXK)$(READ_PAIR_SUFFIX) $(BASIC_TESTS_OBJ)

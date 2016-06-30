@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <math.h>
 #include "global.h"
 #include "binary_kmer.h"
 #include "flags.h"
@@ -248,8 +249,16 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   long int Contig_Branches[MAX_BRANCHES];
   char* seq = calloc(256, 1);
   long int total_nodes = 0;
+  int i;  int j;
+
 
   GraphInfo* nodes_in_graph = calloc(1,sizeof(GraphInfo));
+  // need a small function for initialising this?
+  nodes_in_graph->largest_subgraph = 0;
+  nodes_in_graph->num_subgraphs = 0;
+  for(i=0;i<10;i++){
+    nodes_in_graph->subgraph_dist[i]=0;
+  }
 
   // array to bin coverage 0-5, 5-10, 10-15..95-100
   long int Coverage_Dist[COVERAGE_BINS*COVERAGE_BIN_SIZE]; // will this work?
@@ -257,7 +266,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   char degrees_filename[strlen(consensus_contigs_filename) + 10];
 
   Queue* graph_queue;
-  int i;  int j;
   for(i=0;i<MAX_BRANCHES;i++){
     Contig_Branches[i]=0;
   }
@@ -307,7 +315,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     if(this_coverage>COVERAGE_BINS*COVERAGE_BIN_SIZE-1){
       this_coverage = COVERAGE_BINS*COVERAGE_BIN_SIZE-1;
     }
-      log_and_screen_printf("WTFCOVDIST\t%i\n", this_coverage);
+      //log_and_screen_printf("WTFCOVDIST\t%i\n", this_coverage);
 
     Coverage_Dist[this_coverage]++;
     total_nodes++;
@@ -374,7 +382,17 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
         //fprintf(fp_analysis, "\t%s\n", seq);
 
         print_degree_stats(nodes_in_graph, fp_degrees);
+        if(nodes_in_graph->total_size>nodes_in_graph->largest_subgraph){
+          nodes_in_graph->largest_subgraph=nodes_in_graph->total_size;
+        }
+        nodes_in_graph->num_subgraphs++;
 
+        i=log10(nodes_in_graph->total_size);
+        if(i>=10){
+          i=10-1;
+        }
+        printf("log of graph size %d, %ld\n", i, nodes_in_graph->total_size);
+        nodes_in_graph->subgraph_dist[i]++;
 
       } else {
         // catch graph size of zero? Not sure why this happens - grow-graph must be failing
@@ -417,13 +435,14 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
       fprintf(fp_analysis, "#>%i<=%i\t%i\n",(i)*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE, sum_Coverage_Dist(Coverage_Dist, i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE));
     }
     else{
-      fprintf(fp_analysis, "#%i\t%i\n",i+1, Coverage_Dist[i]);
+      fprintf(fp_analysis, "#%i\t%li\n",i+1, Coverage_Dist[i]);
     }
   }
   fprintf(fp_analysis, "#>=%i   \t%li\n",(COVERAGE_BINS)*COVERAGE_BIN_SIZE, Coverage_Dist[(COVERAGE_BINS*COVERAGE_BIN_SIZE)-1]);
 
   // kmer figures
   fprintf(fp_analysis, "\n\n#kmers\nunique\t%lli\ttotal\t%lli\n",graph->unique_kmers,graph->loaded_kmers);
+  fprintf(fp_analysis, "largest_subgraph\t%i\tnum_subgraphs\t%i\n",nodes_in_graph->largest_subgraph, nodes_in_graph->num_subgraphs);
 
   fclose(fp_analysis);
 
