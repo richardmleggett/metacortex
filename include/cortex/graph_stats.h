@@ -33,19 +33,23 @@
 typedef struct {
     int total_size;
     int largest_subgraph;
+    int subgraph_dist[10];
     int num_subgraphs;
+    int num_subgraphs_2k;
     int branch_nodes;
+    int branch_nodes_total;
     int end_nodes;
     int node_degree[5][5];
     int best_coverage[5];
-    int subgraph_dist[10];
     BinaryKmer kmer[5];
     BinaryKmer temp_kmer;
     BinaryKmer current_kmer;
+    BinaryKmer highest_cov_in_subgraph;
+    int highest_cov;
 } GraphInfo;
 
 void find_subgraph_stats(dBGraph* graph, char* consensus_contigs_filename, int min_subgraph_kmers);
 
 void print_degree_stats(GraphInfo * nodes_in_graph, FILE* fp_degrees);
 
-int sum_Coverage_Dist(long int * Coverage_Dist, int first, int last);
+int sum_array(long int * array, int first, int last);

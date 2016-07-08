@@ -40,6 +40,7 @@
 #define COVERAGE_BINS 10
 #define COVERAGE_BIN_SIZE 1
 #define MAX_BRANCHES 5
+#define GRAPH_LOG10_LIMIT 10 // little hacky to do this here, because it needs to match size of subgraph_dist in graph_stats.h
 
 
 /*----------------------------------------------------------------------*
@@ -57,9 +58,6 @@
      int depth;
      int best_edges = 0;
      int i;
-     for (i=0; i<5; i++) {
-       nodes_in_graph->best_coverage[i]=0;
-     }
      *best_node = 0;
 
      // Nucleotide iterator, used to walk all possible paths from a node
@@ -143,6 +141,12 @@
                            *best_node = new_path->nodes[i];
                        }
 
+                       if (this_coverage>nodes_in_graph->highest_cov){
+                          nodes_in_graph->highest_cov=this_coverage;
+                          binary_kmer_assignment_operator(nodes_in_graph->current_kmer,new_path->nodes[i]->kmer);
+                          binary_kmer_assignment_operator(nodes_in_graph->highest_cov_in_subgraph,nodes_in_graph->current_kmer);
+                       }
+
                        // if this is better than the lowest good node
                        if ((best_node == 0) ||
                            (this_coverage > nodes_in_graph->best_coverage[4]) ||
@@ -151,8 +155,10 @@
                           // sort algorithm - because I sort as I build array, no need to make more than one pass
                           int temp_cov=0;
                           binary_kmer_initialise_to_zero(&(nodes_in_graph->temp_kmer));
+                          // yes, this is the same as above.
                           binary_kmer_assignment_operator(nodes_in_graph->current_kmer,new_path->nodes[i]->kmer);
                           // seed_node->kmer
+
                           int j=0;
                           while(this_coverage){
                             if (this_coverage>nodes_in_graph->best_coverage[j]||
@@ -245,20 +251,26 @@
 void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int min_subgraph_kmers)
 {
   FILE* fp_analysis;
+  FILE* fp_analysis_DIGEST;
   FILE* fp_degrees;
   long int Contig_Branches[MAX_BRANCHES];
   char* seq = calloc(256, 1);
   long int total_nodes = 0;
-  int i;  int j;
+  int i;  int j; float percentage;
 
 
   GraphInfo* nodes_in_graph = calloc(1,sizeof(GraphInfo));
   // need a small function for initialising this?
   nodes_in_graph->largest_subgraph = 0;
   nodes_in_graph->num_subgraphs = 0;
-  for(i=0;i<10;i++){
+  nodes_in_graph->num_subgraphs_2k = 0;
+  for(i=0;i<GRAPH_LOG10_LIMIT;i++){
     nodes_in_graph->subgraph_dist[i]=0;
   }
+  for (i=0; i<5; i++) {
+    nodes_in_graph->best_coverage[i]=0;
+  }
+  nodes_in_graph->branch_nodes_total=0;
 
   // array to bin coverage 0-5, 5-10, 10-15..95-100
   long int Coverage_Dist[COVERAGE_BINS*COVERAGE_BIN_SIZE]; // will this work?
@@ -281,6 +293,15 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
       log_and_screen_printf("ERROR: Can't open analysis file.\n");
       exit(-1);
   }
+
+  /* Open the analysis file */
+  sprintf(analysis_filename, "%s.digest", consensus_contigs_filename);
+  fp_analysis_DIGEST = fopen(analysis_filename, "w");
+  if (!fp_analysis_DIGEST) {
+      log_and_screen_printf("ERROR: Can't open analysis (DIGEST) file.\n");
+      exit(-1);
+  }
+
 
   /* Open the sugraph degree file */
   sprintf(degrees_filename, "%s.degrees", consensus_contigs_filename);
@@ -354,6 +375,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
       nodes_in_graph->total_size = 0;
       nodes_in_graph->branch_nodes = 0;
       nodes_in_graph->end_nodes = 0;
+      nodes_in_graph->highest_cov = 0;
       for(i=0;i<5;i++){
         for(j=0;j<5;j++){
           nodes_in_graph->node_degree[i][j]=0;
@@ -372,27 +394,24 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
         // print out the size of the current subgraph
         log_printf("graph size\t%i\n",nodes_in_graph->total_size);
         fprintf(fp_analysis, "%i\t%i\t",nodes_in_graph->branch_nodes,nodes_in_graph->total_size);
-        for(i=0;i<5;i++){
-          // seq never re-initialised
-          binary_kmer_to_seq(&(nodes_in_graph->kmer[i]), graph->kmer_size, seq);
-          fprintf(fp_analysis, "%s,", seq);
-        }
-        fprintf(fp_analysis, "\n");
-        //binary_kmer_to_seq(&(seed_node->kmer), graph->kmer_size, seq);
-        //fprintf(fp_analysis, "\t%s\n", seq);
+        binary_kmer_to_seq(&nodes_in_graph->highest_cov_in_subgraph, graph->kmer_size, seq);
+        fprintf(fp_analysis, "%s\n", seq);
 
+        // update graph wide stats
         print_degree_stats(nodes_in_graph, fp_degrees);
         if(nodes_in_graph->total_size>nodes_in_graph->largest_subgraph){
           nodes_in_graph->largest_subgraph=nodes_in_graph->total_size;
         }
+        nodes_in_graph->branch_nodes_total=nodes_in_graph->branch_nodes_total+nodes_in_graph->branch_nodes;
         nodes_in_graph->num_subgraphs++;
-
         i=log10(nodes_in_graph->total_size);
-        if(i>=10){
-          i=10-1;
+        if(i>=GRAPH_LOG10_LIMIT){
+          i=GRAPH_LOG10_LIMIT-1;
         }
-        printf("log of graph size %d, %ld\n", i, nodes_in_graph->total_size);
         nodes_in_graph->subgraph_dist[i]++;
+        if(nodes_in_graph->total_size>2000){
+          nodes_in_graph->num_subgraphs_2k++;
+        }
 
       } else {
         // catch graph size of zero? Not sure why this happens - grow-graph must be failing
@@ -414,37 +433,56 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
   // second travesal - build subgraphs out.
 	hash_table_traverse(&explore_node, graph);
+  fclose(fp_analysis);
 
   // Output graph wide stats (coverage)
-  fprintf(fp_analysis, "\n#Complexity_dist of total graph (# X/Y nodes)\t---\n");
+  fprintf(fp_analysis_DIGEST, "\n#Complexity_dist of total graph (# X/Y nodes)\t---\n");
   for(i=0;i<MAX_BRANCHES;i++){
-    fprintf(fp_analysis, "%i\t%li\n",i, Contig_Branches[i]);
+    fprintf(fp_analysis_DIGEST, "%i\t%li\n",i, Contig_Branches[i]);
   }
 
-  fprintf(fp_analysis, "\n#Coverage_dist\t---\n");
+  fprintf(fp_analysis_DIGEST, "\n#Coverage_dist\t---\n");
 
   // first two lines are for 1, 2-4 cov. after that stick revert to cov bin size
-  fprintf(fp_analysis, "#1\t%li\n", Coverage_Dist[0]);
-  fprintf(fp_analysis, "#>1<=4\t%i\n", sum_Coverage_Dist(Coverage_Dist,1,3));
+  fprintf(fp_analysis_DIGEST, "#1\t%li\n", Coverage_Dist[0]);
+  fprintf(fp_analysis_DIGEST, "#2-4\t%i\n", sum_array(Coverage_Dist,1,3));
   if(COVERAGE_BIN_SIZE>4){
-    fprintf(fp_analysis, "#>4<=%i\t%i\n", COVERAGE_BIN_SIZE, sum_Coverage_Dist(Coverage_Dist,4,COVERAGE_BIN_SIZE-1));
+    fprintf(fp_analysis_DIGEST, "#>4<=%i\t%i\n", COVERAGE_BIN_SIZE, sum_array(Coverage_Dist,4,COVERAGE_BIN_SIZE-1));
   }
+  fprintf(fp_analysis_DIGEST, "\n", sum_array(Coverage_Dist,1,3));
 
-  for(i=1;i<(COVERAGE_BINS*COVERAGE_BIN_SIZE-1);i+=COVERAGE_BIN_SIZE){
+  for(i=0;i<(COVERAGE_BINS*COVERAGE_BIN_SIZE-1);i+=COVERAGE_BIN_SIZE){
     if(COVERAGE_BIN_SIZE>1){
-      fprintf(fp_analysis, "#>%i<=%i\t%i\n",(i)*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE, sum_Coverage_Dist(Coverage_Dist, i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE));
+      fprintf(fp_analysis_DIGEST, "#>%i<=%i\t%i\n",(i)*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE, sum_array(Coverage_Dist, i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE));
     }
     else{
-      fprintf(fp_analysis, "#%i\t%li\n",i+1, Coverage_Dist[i]);
+      fprintf(fp_analysis_DIGEST, "#%i\t%li\n",i+1, Coverage_Dist[i]);
     }
   }
-  fprintf(fp_analysis, "#>=%i   \t%li\n",(COVERAGE_BINS)*COVERAGE_BIN_SIZE, Coverage_Dist[(COVERAGE_BINS*COVERAGE_BIN_SIZE)-1]);
+  fprintf(fp_analysis_DIGEST, "#>=%i   \t%li\n",(COVERAGE_BINS)*COVERAGE_BIN_SIZE, Coverage_Dist[(COVERAGE_BINS*COVERAGE_BIN_SIZE)-1]);
 
   // kmer figures
-  fprintf(fp_analysis, "\n\n#kmers\nunique\t%lli\ttotal\t%lli\n",graph->unique_kmers,graph->loaded_kmers);
-  fprintf(fp_analysis, "largest_subgraph\t%i\tnum_subgraphs\t%i\n",nodes_in_graph->largest_subgraph, nodes_in_graph->num_subgraphs);
+  fprintf(fp_analysis_DIGEST, "\n#kmers\nunique\t%lli\ttotal\t%lli\t",graph->unique_kmers,graph->loaded_kmers);
+  percentage=(float)(graph->unique_kmers)/(float)(graph->loaded_kmers);
+  fprintf(fp_analysis_DIGEST, "%%_of_total\t%.2f\n", percentage*100);
+  percentage=(float)(nodes_in_graph->largest_subgraph)/(float)(graph->unique_kmers);
+  fprintf(fp_analysis_DIGEST, "\n#subgraphs\nlargest_subgraph\t%i\t%%_of_total\t%.2f\n",nodes_in_graph->largest_subgraph, percentage*100);
+  fprintf(fp_analysis_DIGEST, "num_subgraphs\t%i\tnum_subgraphs>2k\t%i\n", nodes_in_graph->num_subgraphs, nodes_in_graph->num_subgraphs_2k);
+  fprintf(fp_analysis_DIGEST, "num_subgraphs_per_E^6kmers\t%f\n", (float)(nodes_in_graph->num_subgraphs)/(float)(graph->unique_kmers));
+  fprintf(fp_analysis_DIGEST, "branches\t%i\tper_1000_nodes\t%.2f\n\n#graph size dist:\n", nodes_in_graph->branch_nodes_total, (float)(nodes_in_graph->branch_nodes_total)/1000.0);
+  for(i=0;i<GRAPH_LOG10_LIMIT;i++){
+    fprintf(fp_analysis_DIGEST, "<=E^%i\t%i\n",i,nodes_in_graph->subgraph_dist[i]);
+  }
 
-  fclose(fp_analysis);
+  fprintf(fp_analysis_DIGEST, "\n#highest coverage kmers\n");
+  for(i=0;i<5;i++){
+    // seq never re-initialised
+    binary_kmer_to_seq(&nodes_in_graph->kmer[i], graph->kmer_size, seq);
+    fprintf(fp_analysis_DIGEST, "%d\t%s\n", nodes_in_graph->best_coverage[i], seq);
+  }
+  fprintf(fp_analysis_DIGEST, "\n");
+
+  fclose(fp_analysis_DIGEST);
 
 
   db_graph_reset_flags(graph);
@@ -462,12 +500,12 @@ void print_degree_stats(GraphInfo * nodes_in_graph, FILE* fp_degrees){
   fprintf(fp_degrees,"%d\n", total_nodes);
 }
 
-int sum_Coverage_Dist(long int * Coverage_Dist, int first, int last){
+int sum_array(long int * array, int first, int last){
   int sum = 0;
   int i;
 
   for(i=first; i<=last; i++){
-    sum += Coverage_Dist[i];
+    sum += array[i];
   }
   return sum;
 }
