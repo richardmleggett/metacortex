@@ -120,6 +120,8 @@
                 }
                 if (db_node_check_flag_visited(end_node)) {
                    // need to count back from here to original branching point?
+                   log_and_screen_printf("\nBUBBLE FOUND, path length\t%i\n", new_path->length);
+                   // length of path here? not perfect - if bubble structure is complex, it will only report on the most immediate perfect path size.
                 }
 
                // Now go through all nodes, look for best and mark all as visited
@@ -449,8 +451,9 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   if(COVERAGE_BIN_SIZE>4){
     fprintf(fp_analysis_DIGEST, "#>4<=%i\t%i\n", COVERAGE_BIN_SIZE, sum_array(Coverage_Dist,4,COVERAGE_BIN_SIZE-1));
   }
-  fprintf(fp_analysis_DIGEST, "\n", sum_array(Coverage_Dist,1,3));
+  fprintf(fp_analysis_DIGEST, "\n");
 
+ // now repeat the coverage output, but for every bin
   for(i=0;i<(COVERAGE_BINS*COVERAGE_BIN_SIZE-1);i+=COVERAGE_BIN_SIZE){
     if(COVERAGE_BIN_SIZE>1){
       fprintf(fp_analysis_DIGEST, "#>%i<=%i\t%i\n",(i)*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE, sum_array(Coverage_Dist, i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE));
