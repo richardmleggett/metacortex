@@ -19,6 +19,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <math.h>
+#include <unistd.h>
 #include "global.h"
 #include "binary_kmer.h"
 #include "flags.h"
@@ -487,6 +488,30 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
   fclose(fp_analysis_DIGEST);
 
+
+  // run R script to produce figures for report
+  // will this work? initialising 'cmd' like this?
+  printf("\nPATH : %s\n", getenv("PATH"));
+    //char cmd = printf("Rscript %s %s", <path_to_src>/degree_plots.R, degrees_filename);
+    //system(cmd);  // potential problems with this apparently? is permissions are an initialiseAlignmentSummaryFile
+
+  char command[1024];
+  char cwd[1024];
+   if (getcwd(cwd, sizeof(cwd)) != NULL){
+     sprintf(command, "Rscript /home/aylingm/testgenome/degree_plots.R %s/%s", cwd, degrees_filename);
+
+       //sprintf(command, "Rscript /home/aylingm/testgenome/degree_plots.R /home/aylingm/testgenome/patronol/contigs_46_100k.1_clean.fa.degrees");
+
+     //sprintf(command, "Rscript /home/aylingm/grimoire/metacortex/src/degree_plots.R %s/%s", cwd, degrees_filename);
+     log_and_screen_printf("\n%s\n", command);
+     system(command);
+     log_and_screen_printf("\n");
+   }
+   else{
+     log_and_screen_printf("CWD command reutrned NULL\n");
+   }
+
+  // exec("Rscript <path_to_src>/degree_plots.R degrees_filename")
 
   db_graph_reset_flags(graph);
 }
