@@ -57,9 +57,12 @@
      dBNode* node;
      int orientation;
      int depth;
-     int best_edges = 0;
+     int best_edges[5];
      int i;
      *best_node = 0;
+     for(i=0; i<5; i++){
+       best_edges[i]=0;
+     }
 
      // Nucleotide iterator, used to walk all possible paths from a node
      void walk_if_exists(Nucleotide n) {
@@ -68,6 +71,9 @@
 
          // If there is an edge in any colour for this nucleotide...
          if (db_node_edge_exist_any_colour(node, n, orientation)) {
+
+
+             log_and_screen_printf("\nNEW NODE\n");  // DEBUG BUBBLE BUG
 
              // Get first node along this edge and check we've not already visited it...
              Orientation next_orientation;
@@ -81,6 +87,7 @@
 
              // If not already visited the first node, walk it...
              if (!db_node_check_flag_visited(next_node)) {
+                  log_and_screen_printf("\n\tUNVISITED, WALKING\n");  // DEBUG BUBBLE BUG
                  pathStep first_step;
                  Path * new_path;
                  dBNode* end_node;
@@ -96,7 +103,10 @@
                      exit(-1);
                  }
 
+
+                log_and_screen_printf("\n\tGETTING PERFECT PATH...\n");  // DEBUG BUBBLE BUG
                  db_graph_get_perfect_path_with_first_edge_all_colours(&first_step, &db_node_action_do_nothing, new_path, graph);
+                log_and_screen_printf("\n\t\t...GOT PERFECT PATH\n");  // DEBUG BUBBLE BUG
 
                  // Add end node to list of nodes to visit
                  end_node = new_path->nodes[new_path->length-1];
@@ -114,7 +124,7 @@
                 // check nodes in path now
                 // only really need to check final node as it's a perfect path
                 // is it blunt? has it been seen before?
-                // things I@m dropping for now - loop detection, branch + loop, catching too large a bubble
+                // things I'm dropping for now - loop detection, branch + loop, catching too large a bubble
                 if (db_node_is_blunt_end_all_colours(end_node, end_orientation)) {
                   // DO NOTHING WITH THIS
                   //db_graph_check_and_add_path(merged_path, patharray);
@@ -126,7 +136,10 @@
                 }
 
                // Now go through all nodes, look for best and mark all as visited
+
+              log_and_screen_printf("\n\tCHECKING PERFECT PATH length %d\n", new_path->length);  // DEBUG BUBBLE BUG
                for (i=0; i<new_path->length; i++) {
+                   log_and_screen_printf("\t\tnode %d\n", i);  // DEBUG BUBBLE BUG
                    if (!db_node_check_flag_visited(new_path->nodes[i])) {
                        int this_coverage = element_get_coverage_all_colours(new_path->nodes[i]);
                        int this_FOR_edges = db_node_edges_count_all_colours(new_path->nodes[i], forward);
@@ -138,9 +151,9 @@
                        // if this is the new best node update the other bests
                        if ((best_node[0] == 0) ||
                            (this_coverage > nodes_in_graph->best_coverage[0]) ||
-                           ((this_coverage == nodes_in_graph->best_coverage[0]) && ((this_FOR_edges + this_REV_edges) < best_edges)))
+                           ((this_coverage == nodes_in_graph->best_coverage[0]) && ((this_FOR_edges + this_REV_edges) < best_edges[0])))
                        {
-                           best_edges = (this_FOR_edges + this_REV_edges);
+                           best_edges[0] = (this_FOR_edges + this_REV_edges);
                            *best_node = new_path->nodes[i];
                        }
 
@@ -150,10 +163,11 @@
                           binary_kmer_assignment_operator(nodes_in_graph->highest_cov_in_subgraph,nodes_in_graph->current_kmer);
                        }
 
-                       // if this is better than the lowest good node
+                       // if this is better than the lowest 'good' node (top five coverage)
+                       // NOTE: should top five be an option?
                        if ((best_node == 0) ||
                            (this_coverage > nodes_in_graph->best_coverage[4]) ||
-                           ((this_coverage == nodes_in_graph->best_coverage[4]) && ((this_FOR_edges + this_REV_edges) < best_edges)))
+                           ((this_coverage == nodes_in_graph->best_coverage[4]) && ((this_FOR_edges + this_REV_edges) > best_edges[4])))
                        {
                           // sort algorithm - because I sort as I build array, no need to make more than one pass
                           int temp_cov=0;
@@ -164,19 +178,28 @@
 
                           int j=0;
                           while(this_coverage){
-                            if (this_coverage>nodes_in_graph->best_coverage[j]||
-                            ((this_coverage == nodes_in_graph->best_coverage[j]) && ((this_FOR_edges + this_REV_edges) < best_edges))){
+                            log_and_screen_printf("\n\t\t\tj %d\t%d\t%d\n", j, this_coverage, nodes_in_graph->best_coverage[j]);  // DEBUG BUBBLE BUG
+                            if(j>4){
+                              this_coverage=0;
+                            }
+                            else if (this_coverage>nodes_in_graph->best_coverage[j]||
+                            ((this_coverage == nodes_in_graph->best_coverage[j]) && ((this_FOR_edges + this_REV_edges) > best_edges[j]))){
                               temp_cov = nodes_in_graph->best_coverage[j];
                               nodes_in_graph->best_coverage[j] = this_coverage;
                               this_coverage=temp_cov;
+
+                              // recycle temp_cov for one line
+                              temp_cov=best_edges[j];
+                              best_edges[j] = (this_FOR_edges + this_REV_edges);
+                              // set the current edge count for the rest of the loop
+                              this_FOR_edges=temp_cov;
+                              this_REV_edges=0;
                               temp_cov=0;
 
                               binary_kmer_assignment_operator(nodes_in_graph->temp_kmer,nodes_in_graph->kmer[j]);
                               binary_kmer_assignment_operator(nodes_in_graph->kmer[j],nodes_in_graph->current_kmer);
                               binary_kmer_assignment_operator(nodes_in_graph->current_kmer,nodes_in_graph->temp_kmer);
-                            }
-                            else if(j>4){
-                              this_coverage=0;
+                              j++;
                             }
                             else{
                               j++;
@@ -198,7 +221,7 @@
                        queue_push(graph_queue, new_path->nodes[i]);
                        nodes_in_graph->total_size++;
                    }
-               }
+               } // path->length loop
                // Clean up
                path_destroy(new_path);
              }
@@ -497,11 +520,10 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
   char command[1024];
   char cwd[1024];
+  char r_script_path='/home/aylingm/grimoire/metacortex/';
    if (getcwd(cwd, sizeof(cwd)) != NULL){
-     sprintf(command, "Rscript /home/aylingm/testgenome/degree_plots.R %s/%s", cwd, degrees_filename);
-
-       //sprintf(command, "Rscript /home/aylingm/testgenome/degree_plots.R /home/aylingm/testgenome/patronol/contigs_46_100k.1_clean.fa.degrees");
-
+     sprintf(command, "Rscript %sdegree_plots.R %s/%s", r_script_path, cwd, degrees_filename);
+     //sprintf(command, "Rscript /home/aylingm/testgenome/degree_plots.R /home/aylingm/testgenome/patronol/contigs_46_100k.1_clean.fa.degrees");
      //sprintf(command, "Rscript /home/aylingm/grimoire/metacortex/src/degree_plots.R %s/%s", cwd, degrees_filename);
      log_and_screen_printf("\n%s\n", command);
      system(command);
