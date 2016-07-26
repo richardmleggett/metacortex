@@ -460,6 +460,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   // second travesal - build subgraphs out.
 	hash_table_traverse(&explore_node, graph);
   fclose(fp_analysis);
+  fclose(fp_degrees);
 
   // Output graph wide stats (coverage)
   fprintf(fp_analysis_DIGEST, "\n#Complexity_dist of total graph (# X/Y nodes)\t---\n");
@@ -514,13 +515,15 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
   // run R script to produce figures for report
   // will this work? initialising 'cmd' like this?
-  printf("\nPATH : %s\n", getenv("PATH"));
+  //printf("\nPATH : %s\n", getenv("PATH"));
+
     //char cmd = printf("Rscript %s %s", <path_to_src>/degree_plots.R, degrees_filename);
     //system(cmd);  // potential problems with this apparently? is permissions are an initialiseAlignmentSummaryFile
 
   char command[1024];
   char cwd[1024];
-  char r_script_path='/home/aylingm/grimoire/metacortex/';
+  char r_script_path[]="/home/aylingm/grimoire/metacortex/";
+
    if (getcwd(cwd, sizeof(cwd)) != NULL){
      sprintf(command, "Rscript %sdegree_plots.R %s/%s", r_script_path, cwd, degrees_filename);
      //sprintf(command, "Rscript /home/aylingm/testgenome/degree_plots.R /home/aylingm/testgenome/patronol/contigs_46_100k.1_clean.fa.degrees");
