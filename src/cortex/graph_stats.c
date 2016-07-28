@@ -42,6 +42,7 @@
 #define COVERAGE_BIN_SIZE 1
 #define MAX_BRANCHES 5
 #define GRAPH_LOG10_LIMIT 10 // little hacky to do this here, because it needs to match size of subgraph_dist in graph_stats.h
+#define NUM_BEST_NODES 5
 
 
 /*----------------------------------------------------------------------*
@@ -57,10 +58,10 @@
      dBNode* node;
      int orientation;
      int depth;
-     int best_edges[5];
+     int best_edges[NUM_BEST_NODES];
      int i;
      *best_node = 0;
-     for(i=0; i<5; i++){
+     for(i=0; i<NUM_BEST_NODES; i++){
        best_edges[i]=0;
      }
 
@@ -164,10 +165,9 @@
                        }
 
                        // if this is better than the lowest 'good' node (top five coverage)
-                       // NOTE: should top five be an option?
                        if ((best_node == 0) ||
-                           (this_coverage > nodes_in_graph->best_coverage[4]) ||
-                           ((this_coverage == nodes_in_graph->best_coverage[4]) && ((this_FOR_edges + this_REV_edges) > best_edges[4])))
+                           (this_coverage > nodes_in_graph->best_coverage[NUM_BEST_NODES-1]) ||
+                           ((this_coverage == nodes_in_graph->best_coverage[NUM_BEST_NODES-1]) && ((this_FOR_edges + this_REV_edges) > best_edges[NUM_BEST_NODES-1])))
                        {
                           // sort algorithm - because I sort as I build array, no need to make more than one pass
                           int temp_cov=0;
@@ -179,7 +179,7 @@
                           int j=0;
                           while(this_coverage){
                             log_and_screen_printf("\n\t\t\tj %d\t%d\t%d\n", j, this_coverage, nodes_in_graph->best_coverage[j]);  // DEBUG BUBBLE BUG
-                            if(j>4){
+                            if(j>=NUM_BEST_NODES){
                               this_coverage=0;
                             }
                             else if (this_coverage>nodes_in_graph->best_coverage[j]||
@@ -293,7 +293,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   for(i=0;i<GRAPH_LOG10_LIMIT;i++){
     nodes_in_graph->subgraph_dist[i]=0;
   }
-  for (i=0; i<5; i++) {
+  for (i=0; i<NUM_BEST_NODES; i++) {
     nodes_in_graph->best_coverage[i]=0;
   }
   nodes_in_graph->branch_nodes_total=0;
@@ -503,7 +503,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   }
 
   fprintf(fp_analysis_DIGEST, "\n#highest coverage kmers\n");
-  for(i=0;i<5;i++){
+  for(i=0;i<NUM_BEST_NODES;i++){
     // seq never re-initialised
     binary_kmer_to_seq(&nodes_in_graph->kmer[i], graph->kmer_size, seq);
     fprintf(fp_analysis_DIGEST, "%d\t%s\n", nodes_in_graph->best_coverage[i], seq);
@@ -515,7 +515,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
   // run R script to produce figures for report
   // will this work? initialising 'cmd' like this?
-  //printf("\nPATH : %s\n", getenv("PATH"));
+  printf("\nPATH : %s\n", getenv("R_ENV_PATH"));
 
     //char cmd = printf("Rscript %s %s", <path_to_src>/degree_plots.R, degrees_filename);
     //system(cmd);  // potential problems with this apparently? is permissions are an initialiseAlignmentSummaryFile
