@@ -62,7 +62,7 @@ for (t in 1:4) {
     x_max<-x_low[2]
   }
     
-  degrees_png <- paste(graphsdir, "/", basename(filename) , "_", type,"_degrees.png", sep="");
+  degrees_png <- paste(graphsdir, "/", type,"_degrees.png", sep="");
   png(degrees_png, width=1200, height=800)
   degree_dist<-degree_dist*scaling_factor
   sd_dd<-sd(degree_dist[,1])
@@ -73,20 +73,21 @@ for (t in 1:4) {
           theme(plot.title = element_text(size=title_font))
   garbage <- dev.off()
 }
+
+type="E"
 degrees.not_meaned<-data.frame(degrees[degrees$total>min_graph,-26])
 degrees.m<-data.frame("FOR"=rep(c(0:4),each = 5),"REV"=rep(0:4,5), data.frame(colMeans(degrees[degrees$total>min_graph,-26]*scaling_factor))) # manually 'melt' the average for each point
 names(degrees.m)[3]<-"prob"
-degrees_png <- paste(graphsdir, "/", basename(filename), "_", type,"_heatmap.png", sep="")
+degrees_png <- paste(graphsdir, "/", type,"_heatmap.png", sep="")
 png(degrees_png, width=1200, height=800)
 print(ggplot(degrees.m, aes(x=FOR, y=REV)) + geom_tile(aes(fill = prob), colour = "white") + ggtitle(paste(filename, "_", type,"_heatmap")) + theme(plot.title = element_text(size=title_font)) + scale_fill_gradient(low = "white", high = "steelblue", trans='log'))
 garbage <- dev.off()
-
 
 degrees.not_meaned<-data.frame(degrees[degrees$total>min_graph,-26])
 degrees.not_meaned$for.1.rev.1.<-0
 degrees.m<-data.frame("FOR"=rep(c(0:4),each = 5),"REV"=rep(0:4,5), data.frame(colMeans(degrees.not_meaned*scaling_factor))) # manually 'melt' the average for each point
 names(degrees.m)[3]<-"prob"
-degrees_png <- paste(graphsdir, "/", basename(filename), "_",type,"_heatmap_noI.png", sep="")
+degrees_png <- paste(graphsdir, "/", type,"_heatmap_noI.png", sep="")
 png(degrees_png, width=1200, height=800)
 print(ggplot(degrees.m, aes(x=FOR, y=REV)) + geom_tile(aes(fill = prob), colour = "white")+ ggtitle(paste(filename, "_", type,"_heatmap (ex. I nodes)")) + theme(plot.title = element_text(size=title_font))+ scale_fill_gradient(low = "white", high = "steelblue", trans='log'))
 garbage <- dev.off()
