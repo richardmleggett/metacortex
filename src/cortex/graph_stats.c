@@ -37,6 +37,7 @@
 #include "graph_stats.h"
 #include "cleaning.h"
 #include "metagraphs.h"
+#include "report_output.h"
 
 #define COVERAGE_BINS 10
 #define COVERAGE_BIN_SIZE 1
@@ -277,7 +278,7 @@
 void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int min_subgraph_kmers)
 {
   FILE* fp_analysis;
-  FILE* fp_analysis_DIGEST;
+  FILE* fp_report;
   FILE* fp_degrees;
   long int Contig_Branches[MAX_BRANCHES];
   char* seq = calloc(256, 1);
@@ -321,9 +322,9 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   }
 
   /* Open the analysis file */
-  sprintf(analysis_filename, "%s.digest", consensus_contigs_filename);
-  fp_analysis_DIGEST = fopen(analysis_filename, "w");
-  if (!fp_analysis_DIGEST) {
+  sprintf(analysis_filename, "graphs/%s.tex", consensus_contigs_filename);
+  fp_report = fopen(analysis_filename, "w");
+  if (!fp_report) {
       log_and_screen_printf("ERROR: Can't open analysis (DIGEST) file.\n");
       exit(-1);
   }
@@ -468,78 +469,86 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
   // run R script to produce figures for report
   // will this work? initialising 'cmd' like this?
-  printf("\nPATH : %s\n", getenv("R_ENV_PATH"));
 
     //char cmd = printf("Rscript %s %s", <path_to_src>/degree_plots.R, degrees_filename);
     //system(cmd);  // potential problems with this apparently? is permissions are an initialiseAlignmentSummaryFile
 
   char command[1024];
   char cwd[1024];
-  char r_script_path[]="/home/aylingm/grimoire/metacortex/";
+  //char r_script_path[]="/home/aylingm/grimoire/metacortex/";
+  char * r_script_path=getenv("R_ENV_PATH");
 
-   if (getcwd(cwd, sizeof(cwd)) != NULL){
-     sprintf(command, "Rscript %sdegree_plots.R %s/%s", r_script_path, cwd, degrees_filename);
-     //sprintf(command, "Rscript /home/aylingm/testgenome/degree_plots.R /home/aylingm/testgenome/patronol/contigs_46_100k.1_clean.fa.degrees");
-     //sprintf(command, "Rscript /home/aylingm/grimoire/metacortex/src/degree_plots.R %s/%s", cwd, degrees_filename);
-     log_and_screen_printf("\n%s\n", command);
-     system(command);
-     log_and_screen_printf("\n");
-   }
-   else{
-     log_and_screen_printf("CWD command returned NULL\n");
-   }
+  if (r_script_path==NULL){
+    log_and_screen_printf("\nR_ENV_PATH not set, skipping graphs step...\n\n");
+  }
+  else{
+    printf("\nPATH : %s\n",r_script_path);
+
+    if (getcwd(cwd, sizeof(cwd)) != NULL){
+      sprintf(command, "Rscript %sdegree_plots.R %s/%s", r_script_path, cwd, degrees_filename);
+      log_and_screen_printf("\n%s\n", command);
+      system(command);
+      log_and_screen_printf("\n");
+    }
+    else{
+      log_and_screen_printf("CWD command returned NULL\n");
+    }
+  }
 
 
-   writeLaTeXHeader(fp_analysis_DIGEST, char* consensus_contigs_filename) {
+   writeLaTeXHeader(fp_report, consensus_contigs_filename);
 
-   fprintf(fp_analysis_DIGEST, "\n#Complexity_dist of total graph (# X/Y nodes)\t---\n");
+   fprintf(fp_report, "\n\\textbf{Complexity distribution of total graph (X/Y nodes)}\\\\\n");
    for(i=0;i<MAX_BRANCHES;i++){
-     fprintf(fp_analysis_DIGEST, "%i\t%li\n",i, Contig_Branches[i]);
+     fprintf(fp_report, "%i\\quad %li\\\\\n",i, Contig_Branches[i]);
    }
 
-   fprintf(fp_analysis_DIGEST, "\n#Coverage_dist\t---\n");
+   fprintf(fp_report, "\n\\textbf{Coverage dist}\\\\\n");
 
    // first two lines are for 1, 2-4 cov. after that stick revert to cov bin size
-   fprintf(fp_analysis_DIGEST, "#1\t%li\n", Coverage_Dist[0]);
-   fprintf(fp_analysis_DIGEST, "#2-4\t%i\n", sum_array(Coverage_Dist,1,3));
+   fprintf(fp_report, "1\\quad %li\\\\\n", Coverage_Dist[0]);
+   fprintf(fp_report, "2-4\\quad %i\\\\\n", sum_array(Coverage_Dist,1,3));
    if(COVERAGE_BIN_SIZE>4){
-     fprintf(fp_analysis_DIGEST, "#>4<=%i\t%i\n", COVERAGE_BIN_SIZE, sum_array(Coverage_Dist,4,COVERAGE_BIN_SIZE-1));
+     fprintf(fp_report, ">4\\(\\leq\\)%i\\quad %i\\\\\n", COVERAGE_BIN_SIZE, sum_array(Coverage_Dist,4,COVERAGE_BIN_SIZE-1));
    }
-   fprintf(fp_analysis_DIGEST, "\n");
+   fprintf(fp_report, "\\\\\n");
 
   // now repeat the coverage output, but for every bin
    for(i=0;i<(COVERAGE_BINS*COVERAGE_BIN_SIZE-1);i+=COVERAGE_BIN_SIZE){
      if(COVERAGE_BIN_SIZE>1){
-       fprintf(fp_analysis_DIGEST, "#>%i<=%i\t%i\n",(i)*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE, sum_array(Coverage_Dist, i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE));
+       fprintf(fp_report, ">%i\\(\\leq\\)%i\\quad %i\\\\\n",(i)*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE, sum_array(Coverage_Dist, i*COVERAGE_BIN_SIZE, (i + 1)*COVERAGE_BIN_SIZE));
      }
      else{
-       fprintf(fp_analysis_DIGEST, "#%i\t%li\n",i+1, Coverage_Dist[i]);
+       fprintf(fp_report, "%i\\quad %li\\\\\n",i+1, Coverage_Dist[i]);
      }
    }
-   fprintf(fp_analysis_DIGEST, "#>=%i   \t%li\n",(COVERAGE_BINS)*COVERAGE_BIN_SIZE, Coverage_Dist[(COVERAGE_BINS*COVERAGE_BIN_SIZE)-1]);
+   fprintf(fp_report, "\\(\\geq\\)%i   \\quad %li\\\\\n",(COVERAGE_BINS)*COVERAGE_BIN_SIZE, Coverage_Dist[(COVERAGE_BINS*COVERAGE_BIN_SIZE)-1]);
 
    // kmer figures
-   fprintf(fp_analysis_DIGEST, "\n#kmers\nunique\t%lli\ttotal\t%lli\t",graph->unique_kmers,graph->loaded_kmers);
+   fprintf(fp_report, "\\\\\n\\textbf{kmers}\\\\\nunique\\quad %lli\\quad\\quad total\\quad %lli",graph->unique_kmers,graph->loaded_kmers);
    percentage=(float)(graph->unique_kmers)/(float)(graph->loaded_kmers);
-   fprintf(fp_analysis_DIGEST, "%%_of_total\t%.2f\n", percentage*100);
+   fprintf(fp_report, "\\quad\\quad \\%% of total\\quad %.2f\\\\\n", percentage*100);
    percentage=(float)(nodes_in_graph->largest_subgraph)/(float)(graph->unique_kmers);
-   fprintf(fp_analysis_DIGEST, "\n#subgraphs\nlargest_subgraph\t%i\t%%_of_total\t%.2f\n",nodes_in_graph->largest_subgraph, percentage*100);
-   fprintf(fp_analysis_DIGEST, "num_subgraphs\t%i\tnum_subgraphs>2k\t%i\n", nodes_in_graph->num_subgraphs, nodes_in_graph->num_subgraphs_2k);
-   fprintf(fp_analysis_DIGEST, "num_subgraphs_per_E^6kmers\t%f\n", (float)(nodes_in_graph->num_subgraphs)/(float)(graph->unique_kmers));
-   fprintf(fp_analysis_DIGEST, "branches\t%i\tper_1000_nodes\t%.2f\n\n#graph size dist:\n", nodes_in_graph->branch_nodes_total, (float)(nodes_in_graph->branch_nodes_total)/1000.0);
+   fprintf(fp_report, "\\\\\n\\textbf{subgraphs}\\\\\nlargest subgraph\\quad %i\\quad\\quad  \\%% of total\\quad %.2f\\\\\n",nodes_in_graph->largest_subgraph, percentage*100);
+   fprintf(fp_report, "num subgraphs\\quad %i\\quad num subgraphs\\(>\\)2k\\quad %i\\\\\n", nodes_in_graph->num_subgraphs, nodes_in_graph->num_subgraphs_2k);
+   fprintf(fp_report, "num subgraphs per E\\textsuperscript{6} kmers\\quad %f\\\\\n", (float)(nodes_in_graph->num_subgraphs)/(float)(graph->unique_kmers));
+   fprintf(fp_report, "branches\\quad %i\\quad\\quad per 1000 nodes\\quad %.2f\\\\\n\\\\\n\\textbf{graph size dist:}\\\\\n", nodes_in_graph->branch_nodes_total, (float)(nodes_in_graph->branch_nodes_total)/1000.0);
    for(i=0;i<GRAPH_LOG10_LIMIT;i++){
-     fprintf(fp_analysis_DIGEST, "<=E^%i\t%i\n",i,nodes_in_graph->subgraph_dist[i]);
+     fprintf(fp_report, "\\(\\leq\\)E\\textsuperscript{%i}\\quad %i\\\\\n",i,nodes_in_graph->subgraph_dist[i]);
    }
-
-   fprintf(fp_analysis_DIGEST, "\n#highest coverage kmers\n");
+   fprintf(fp_report, "\\\\\n\\textbf{highest coverage kmers}\\\\\n");
    for(i=0;i<NUM_BEST_NODES;i++){
      // seq never re-initialised
      binary_kmer_to_seq(&nodes_in_graph->kmer[i], graph->kmer_size, seq);
-     fprintf(fp_analysis_DIGEST, "%d\t%s\n", nodes_in_graph->best_coverage[i], seq);
+     fprintf(fp_report, "%d\\quad %s\\\\\n", nodes_in_graph->best_coverage[i], seq);
    }
-   fprintf(fp_analysis_DIGEST, "\n\n\\end{document}");
+   fprintf(fp_report, "\n\\end{document}");
 
-   fclose(fp_analysis_DIGEST);
+   fclose(fp_report);
+
+   sprintf(command, "pdflatex -interaction=nonstopmode %s/%s", cwd, analysis_filename);
+   log_and_screen_printf("\n%s\n", command);
+   system(command);
 
   // exec("Rscript <path_to_src>/degree_plots.R degrees_filename")
 
