@@ -56,6 +56,8 @@
  int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* graph, Queue* graph_queue, GraphInfo* nodes_in_graph)
  {
      Queue* nodes_to_walk;
+      Queue* nodes_start; // not sure that this will work - if the order of the pairs is inconsistent across queues, it won't work.
+      Queue* nodes_end;   // BUT I'd need to come up with all new functions for a queue systems for two items at the same time.
      dBNode* node;
      int orientation;
      int depth;
@@ -65,6 +67,17 @@
      for(i=0; i<NUM_BEST_NODES; i++){
        best_edges[i]=0;
      }
+
+      nodes_start = queue_new(METACORTEX_QUEUE_SIZE);
+      if (!nodes_start) {
+        log_and_screen_printf("Couldn't get memory for node queue (start).\n");
+        exit(-1);
+      }
+      nodes_end = queue_new(METACORTEX_QUEUE_SIZE);
+      if (!nodes_end) {
+        log_and_screen_printf("Couldn't get memory for node queue (end).\n");
+        exit(-1);
+      }
 
      // Nucleotide iterator, used to walk all possible paths from a node
      void walk_if_exists(Nucleotide n) {
@@ -119,6 +132,16 @@
                              log_and_screen_printf("Queue too large. Ending.\n");
                              exit(1);
                          }
+
+                          // Add start node to list of starting nodes
+                          if (queue_push_node(nodes_start, node, 0) == NULL) {
+                              log_and_screen_printf("Queue too large. Ending.\n");
+                              exit(-1);
+                          }
+                         if (queue_push_node(nodes_end, end_node, depth+1) == NULL) {
+                             log_and_screen_printf("Queue too large. Ending.\n");
+                             exit(1);
+                         }
                      }
                  }
 
@@ -141,11 +164,12 @@
 
               log_and_screen_printf("\n\tCHECKING PERFECT PATH length %d\n", new_path->length);  // DEBUG BUBBLE BUG
                for (i=0; i<new_path->length; i++) {
-                   log_and_screen_printf("\t\tnode %d\n", i);  // DEBUG BUBBLE BUG
                    if (!db_node_check_flag_visited(new_path->nodes[i])) {
                        int this_coverage = element_get_coverage_all_colours(new_path->nodes[i]);
                        int this_FOR_edges = db_node_edges_count_all_colours(new_path->nodes[i], forward);
                        int this_REV_edges = db_node_edges_count_all_colours(new_path->nodes[i], reverse);
+
+                       log_and_screen_printf("\t\tnode %d\t%d\n", i, this_coverage);  // DEBUG BUBBLE BUG
 
                        // add node degrees to 2D array of all degrees in subgraph
                        nodes_in_graph->node_degree[this_FOR_edges][this_REV_edges]++;
@@ -243,6 +267,7 @@
          exit(-1);
      }
 
+
      if (db_node_check_flag_visited(start_node)) {
          db_node_action_set_flag_visited(start_node);
          nodes_in_graph->total_size++;
@@ -261,6 +286,9 @@
      }
 
      queue_free(nodes_to_walk);
+
+     // finally, walk through all nodes in star/end queues, looking for start/end pairing occuring twice.
+      // cycle though starts, looking for
 
      // If we didn't find a start node, presumably this is a singleton?
      if (*best_node == 0) {
