@@ -62,7 +62,7 @@
      int orientation;
      int depth;
      int best_edges[NUM_BEST_NODES];
-     int i;
+     int i; int j;
      *best_node = 0;
      for(i=0; i<NUM_BEST_NODES; i++){
        best_edges[i]=0;
@@ -88,7 +88,7 @@
          if (db_node_edge_exist_any_colour(node, n, orientation)) {
 
 
-             log_and_screen_printf("\nNEW NODE\n");  // DEBUG BUBBLE BUG
+             log_printf("\nNEW NODE\n");  // DEBUG BUBBLE BUG
 
              // Get first node along this edge and check we've not already visited it...
              Orientation next_orientation;
@@ -102,7 +102,7 @@
 
              // If not already visited the first node, walk it...
              if (!db_node_check_flag_visited(next_node)) {
-                  log_and_screen_printf("\n\tUNVISITED, WALKING\n");  // DEBUG BUBBLE BUG
+                  log_printf("\n\tUNVISITED, WALKING\n");  // DEBUG BUBBLE BUG
                  pathStep first_step;
                  Path * new_path;
                  dBNode* end_node;
@@ -119,9 +119,9 @@
                  }
 
 
-                log_and_screen_printf("\n\tGETTING PERFECT PATH...\n");  // DEBUG BUBBLE BUG
+                log_printf("\n\tGETTING PERFECT PATH...\n");  // DEBUG BUBBLE BUG
                  db_graph_get_perfect_path_with_first_edge_all_colours(&first_step, &db_node_action_do_nothing, new_path, graph);
-                log_and_screen_printf("\n\t\t...GOT PERFECT PATH\n");  // DEBUG BUBBLE BUG
+                log_printf("\n\t\t...GOT PERFECT PATH\n");  // DEBUG BUBBLE BUG
 
                  // Add end node to list of nodes to visit
                  end_node = new_path->nodes[new_path->length-1];
@@ -156,20 +156,20 @@
                 }
                 if (db_node_check_flag_visited(end_node)) {
                    // need to count back from here to original branching point?
-                   log_and_screen_printf("\nBUBBLE FOUND, path length\t%i\n", new_path->length);
+                   log_printf("\nBUBBLE FOUND, path length\t%i\n", new_path->length);
                    // length of path here? not perfect - if bubble structure is complex, it will only report on the most immediate perfect path size.
                 }
 
                // Now go through all nodes, look for best and mark all as visited
 
-              log_and_screen_printf("\n\tCHECKING PERFECT PATH length %d\n", new_path->length);  // DEBUG BUBBLE BUG
+              log_printf("\n\tCHECKING PERFECT PATH length %d\n", new_path->length);  // DEBUG BUBBLE BUG
                for (i=0; i<new_path->length; i++) {
                    if (!db_node_check_flag_visited(new_path->nodes[i])) {
                        int this_coverage = element_get_coverage_all_colours(new_path->nodes[i]);
                        int this_FOR_edges = db_node_edges_count_all_colours(new_path->nodes[i], forward);
                        int this_REV_edges = db_node_edges_count_all_colours(new_path->nodes[i], reverse);
 
-                       log_and_screen_printf("\t\tnode %d\t%d\n", i, this_coverage);  // DEBUG BUBBLE BUG
+                       log_printf("\t\tnode %d\t%d\n", i, this_coverage);  // DEBUG BUBBLE BUG
 
                        // add node degrees to 2D array of all degrees in subgraph
                        nodes_in_graph->node_degree[this_FOR_edges][this_REV_edges]++;
@@ -203,7 +203,7 @@
 
                           int j=0;
                           while(this_coverage){
-                            log_and_screen_printf("\n\t\t\tj %d\t%d\t%d\n", j, this_coverage, nodes_in_graph->best_coverage[j]);  // DEBUG BUBBLE BUG
+                            log_printf("\n\t\t\tj %d\t%d\t%d\n", j, this_coverage, nodes_in_graph->best_coverage[j]);  // DEBUG BUBBLE BUG
                             if(j>=NUM_BEST_NODES){
                               this_coverage=0;
                             }
@@ -268,7 +268,7 @@
      }
 
 
-     if (db_node_check_flag_visited(start_node)) {
+     if (!db_node_check_flag_visited(start_node)) {
          db_node_action_set_flag_visited(start_node);
          nodes_in_graph->total_size++;
      }
@@ -294,6 +294,44 @@
      if (*best_node == 0) {
          //log_printf("Note: didn't find a best node, setting to start node\n");
          *best_node = start_node;
+     }
+
+     // check for simple bubbles
+     QueueItem* item_start_A = malloc(sizeof(QueueItem));
+     QueueItem* item_start_B = malloc(sizeof(QueueItem));
+     QueueItem* item_end_A = malloc(sizeof(QueueItem));
+     QueueItem* item_end_B = malloc(sizeof(QueueItem));
+
+   	if (!item_start_A) {
+   		return 0;
+   	}
+   	if (!item_start_B) {
+   		return 0;
+   	}
+   	if (!item_end_A) {
+   		return 0;
+   	}
+   	if (!item_end_B) {
+   		return 0;
+   	}
+
+     for (i=0; i<(nodes_start->number_of_items)-1; i++){
+       item_start_A=nodes_start->items[i];
+       item_end_A=nodes_end->items[i];
+       for (j=i+1; j<(nodes_start->number_of_items)-1; j++){
+         item_start_B=nodes_start->items[j];
+         item_end_B=nodes_end->items[j];
+        if ((item_start_A->node==item_start_B->node)&&(item_end_A->node==item_end_B->node)){
+       //if ((nodes_start->items[i]->node==nodes_start->items[j]->node)&&(nodes_end->items[i]->node==nodes_end->items[j]->node)){
+         // print a bubble found
+         log_printf("SIMPLE BUBBLE FOUND.\n");
+        }
+        else if ((item_start_A->node==item_end_B->node)&&(item_start_B->node==item_end_A->node)){
+        //else if ((nodes_start->items[i]->node==nodes_end->items[j]->node)&&(nodes_end->items[i]->node==nodes_start->items[j]->node)){
+           // print a bubble found
+           log_printf("SIMPLE BUBBLE FOUND.\n");
+        }
+      }
      }
 
      return 0;
@@ -348,6 +386,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
       log_and_screen_printf("ERROR: Can't open analysis file.\n");
       exit(-1);
   }
+
+  // NOTE NEED TO ADD MKDIR CHECK HERE
 
   /* Open the analysis file */
   sprintf(analysis_filename, "graphs/%s.tex", consensus_contigs_filename);
