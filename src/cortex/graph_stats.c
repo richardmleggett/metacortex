@@ -68,6 +68,8 @@
        best_edges[i]=0;
      }
 
+     log_printf("\t\t\t\t\tNODES_START AND END INITIALISED\n");
+
       nodes_start = queue_new(METACORTEX_QUEUE_SIZE);
       if (!nodes_start) {
         log_and_screen_printf("Couldn't get memory for node queue (start).\n");
@@ -138,9 +140,15 @@
                               log_and_screen_printf("Queue too large. Ending.\n");
                               exit(-1);
                           }
+                          else{
+                            queue_push_node(nodes_start, node, 0);
+                          }
                          if (queue_push_node(nodes_end, end_node, depth+1) == NULL) {
                              log_and_screen_printf("Queue too large. Ending.\n");
                              exit(1);
+                         }
+                         else{
+                           queue_push_node(nodes_end, end_node, depth+1);
                          }
                      }
                  }
@@ -302,6 +310,13 @@
      QueueItem* item_end_A = malloc(sizeof(QueueItem));
      QueueItem* item_end_B = malloc(sizeof(QueueItem));
 
+
+    // no label for individual nodes, have to use full kmers - will pull into perl later to assign labels or something
+     char* seq_SA = calloc(256, 1);
+     char* seq_EA = calloc(256, 1);
+     char* seq_SB = calloc(256, 1);
+     char* seq_EB = calloc(256, 1);
+
    	if (!item_start_A) {
    		return 0;
    	}
@@ -318,9 +333,18 @@
      for (i=0; i<(nodes_start->number_of_items)-1; i++){
        item_start_A=nodes_start->items[i];
        item_end_A=nodes_end->items[i];
+
+       binary_kmer_to_seq(&item_start_A->node->kmer, graph->kmer_size, seq_SA);
+       binary_kmer_to_seq(&item_end_A->node->kmer, graph->kmer_size, seq_EA);
+       log_printf("KMERS\n(SA) - %s\n(EA) - %s\n", seq_SA, seq_EA);
+
        for (j=i+1; j<(nodes_start->number_of_items)-1; j++){
          item_start_B=nodes_start->items[j];
          item_end_B=nodes_end->items[j];
+         binary_kmer_to_seq(&item_start_B->node->kmer, graph->kmer_size, seq_SB);
+         binary_kmer_to_seq(&item_end_B->node->kmer, graph->kmer_size, seq_EB);
+         log_printf("(SB) - %s\n(EB) - %s\n", seq_SB, seq_EB);
+
         if ((item_start_A->node==item_start_B->node)&&(item_end_A->node==item_end_B->node)){
        //if ((nodes_start->items[i]->node==nodes_start->items[j]->node)&&(nodes_end->items[i]->node==nodes_end->items[j]->node)){
          // print a bubble found
@@ -466,6 +490,9 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 	// Hash table iterator to walk nodes, looking for branches
   void explore_node(dBNode * node) {
     if(db_node_check_for_any_flag(node, PRUNED | VISITED) == false){
+
+      log_printf("\t\t\t\t\tHASH ITERATOR, NEW NODE.\n");
+
       dBNode* seed_node;
       nodes_in_graph->total_size = 0;
       nodes_in_graph->branch_nodes = 0;
