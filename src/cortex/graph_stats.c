@@ -44,6 +44,8 @@
 #define MAX_BRANCHES 5
 #define GRAPH_LOG10_LIMIT 10 // little hacky to do this here, because it needs to match size of subgraph_dist in graph_stats.h
 #define NUM_BEST_NODES 5
+#define MIN_CONTIG_SIZE 10
+#define MIN_SUBGRAPH_SIZE 2000
 
 
 /*----------------------------------------------------------------------*
@@ -130,26 +132,30 @@
            			 end_orientation = new_path->orientations[new_path->length - 1];
                  if (!db_node_check_flag_visited(end_node)) {
                      if (!db_node_is_blunt_end_all_colours(end_node, new_path->orientations[new_path->length-1])) {
-                         if (queue_push_node(nodes_to_walk, end_node, depth+1) == NULL) {
-                             log_and_screen_printf("Queue too large. Ending.\n");
-                             exit(1);
-                         }
+                        if (queue_push_node(nodes_to_walk, end_node, depth+1) == NULL) {
+                           log_and_screen_printf("Queue too large. Ending.\n");
+                           exit(1);
+                        }
 
-                          // Add start node to list of starting nodes
-                          if (queue_push_node(nodes_start, node, 0) == NULL) {
-                              log_and_screen_printf("Queue too large. Ending.\n");
-                              exit(-1);
-                          }
-                          else{
-                            queue_push_node(nodes_start, node, 0);
-                          }
-                         if (queue_push_node(nodes_end, end_node, depth+1) == NULL) {
-                             log_and_screen_printf("Queue too large. Ending.\n");
-                             exit(1);
-                         }
-                         else{
-                           queue_push_node(nodes_end, end_node, depth+1);
-                         }
+                        // Add start node to list of starting nodes
+                        // start searching for all possible eight paths from here - FWD/REV x ACGT
+                        //  if end node for any of those paths is equal, then this is a simple bubble.
+
+                        if (queue_push_node(nodes_start, node, 0) == NULL) {
+                          log_and_screen_printf("Queue too large. Ending.\n");
+                          exit(-1);
+                        }
+                        else{
+                          queue_push_node(nodes_start, node, 0);
+                        }
+
+                        if (queue_push_node(nodes_end, end_node, depth+1) == NULL) {
+                          log_and_screen_printf("Queue too large. Ending.\n");
+                          exit(1);
+                        }
+                        else{
+                         queue_push_node(nodes_end, end_node, depth+1);
+                        }
                      }
                  }
 
@@ -370,11 +376,16 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   FILE* fp_analysis;
   FILE* fp_report;
   FILE* fp_degrees;
+  FILE* fp_contigs;
   long int Contig_Branches[MAX_BRANCHES];
   char* seq = calloc(256, 1);
   long int total_nodes = 0;
   int i;  int j; float percentage;
+  int counter= 0;
 
+  Path *simple_path = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
+  Path *path_fwd = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
+  Path *path_rev = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
 
   GraphInfo* nodes_in_graph = calloc(1,sizeof(GraphInfo));
   // need a small function for initialising this?
@@ -413,11 +424,12 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
   // NOTE NEED TO ADD MKDIR CHECK HERE
 
+
   /* Open the analysis file */
   sprintf(analysis_filename, "graphs/%s.tex", consensus_contigs_filename);
   fp_report = fopen(analysis_filename, "w");
   if (!fp_report) {
-      log_and_screen_printf("ERROR: Can't open analysis (DIGEST) file.\n");
+      log_and_screen_printf("ERROR: Can't open analysis (DIGEST) file.\n\t%s\n", analysis_filename);
       exit(-1);
   }
 
@@ -427,6 +439,13 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   fp_degrees = fopen(degrees_filename, "w");
   if (!fp_degrees) {
       log_and_screen_printf("ERROR: Can't open degrees file.\n");
+      exit(-1);
+  }
+
+  /* Open simple contigs file */
+  fp_contigs = fopen(consensus_contigs_filename, "w");
+  if (!fp_contigs) {
+      log_and_screen_printf("ERROR: Can't open contig file.\n");
       exit(-1);
   }
 
@@ -455,7 +474,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     if(this_coverage>COVERAGE_BINS*COVERAGE_BIN_SIZE-1){
       this_coverage = COVERAGE_BINS*COVERAGE_BIN_SIZE-1;
     }
-      //log_and_screen_printf("WTFCOVDIST\t%i\n", this_coverage);
 
     Coverage_Dist[this_coverage]++;
     total_nodes++;
@@ -531,9 +549,39 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
           i=GRAPH_LOG10_LIMIT-1;
         }
         nodes_in_graph->subgraph_dist[i]++;
-        if(nodes_in_graph->total_size>2000){
+        if(nodes_in_graph->total_size>MIN_SUBGRAPH_SIZE){
           nodes_in_graph->num_subgraphs_2k++;
         }
+
+        /* Simple graph (no branches) and enough nodes to bother with? If so, get consensus contig */
+        if ((nodes_in_graph->branch_nodes==0) && (nodes_in_graph->total_size >= min_subgraph_kmers)) {
+            // should be a perfect path? might be two paths though, if we started in the middle
+            // NOTE: unecessary converage element but repeating the whole path finding without coverage
+            //  is more work than necessary I think. See what processing time it changes?
+
+            coverage_walk_get_path(seed_node, forward, NULL, graph, path_fwd);
+            coverage_walk_get_path(seed_node, reverse, NULL, graph, path_rev);
+            path_reverse(path_fwd, simple_path);
+            path_append(simple_path, path_rev);
+
+            simple_path->id = counter;
+            if (simple_path->length >= (MIN_CONTIG_SIZE - graph->kmer_size)) {
+                log_printf("Write path of size %d\n", simple_path->length);
+                log_printf("graph size\t%i\n",nodes_in_graph->total_size);
+                path_to_fasta(simple_path, fp_contigs);
+                counter++;
+            } else {
+                log_printf("Didn't write path of size %d\n", simple_path->length);
+            }
+
+
+
+            /* Reset paths */
+            path_reset(simple_path);
+        } else {
+            log_printf("  Number of nodes (%i) too small. Not outputting contig.\n", nodes_in_graph);
+        }
+
 
       } else {
         // catch graph size of zero? Not sure why this happens - grow-graph must be failing
