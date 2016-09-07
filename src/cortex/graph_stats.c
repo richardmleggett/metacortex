@@ -19,6 +19,8 @@
 #include <string.h>
 #include <stdint.h>
 #include <math.h>
+#include <sys/stat.h>
+#include <libgen.h>
 #include <unistd.h>
 #include "global.h"
 #include "binary_kmer.h"
@@ -58,28 +60,21 @@
  int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* graph, Queue* graph_queue, GraphInfo* nodes_in_graph)
  {
      Queue* nodes_to_walk;
-      Queue* nodes_start; // not sure that this will work - if the order of the pairs is inconsistent across queues, it won't work.
-      Queue* nodes_end;   // BUT I'd need to come up with all new functions for a queue systems for two items at the same time.
+     Queue* nodes_from_branch;
      dBNode* node;
      int orientation;
      int depth;
      int best_edges[NUM_BEST_NODES];
-     int i; int j;
+     int i;
      *best_node = 0;
      for(i=0; i<NUM_BEST_NODES; i++){
        best_edges[i]=0;
      }
 
-     log_printf("\t\t\t\t\tNODES_START AND END INITIALISED\n");
+      nodes_from_branch = queue_new(8);
 
-      nodes_start = queue_new(METACORTEX_QUEUE_SIZE);
-      if (!nodes_start) {
-        log_and_screen_printf("Couldn't get memory for node queue (start).\n");
-        exit(-1);
-      }
-      nodes_end = queue_new(METACORTEX_QUEUE_SIZE);
-      if (!nodes_end) {
-        log_and_screen_printf("Couldn't get memory for node queue (end).\n");
+      if (!nodes_from_branch) {
+        log_and_screen_printf("Couldn't get memory for nodes_from_branch queue: %x.\n", nodes_from_branch);
         exit(-1);
       }
 
@@ -137,24 +132,13 @@
                            exit(1);
                         }
 
-                        // Add start node to list of starting nodes
-                        // start searching for all possible eight paths from here - FWD/REV x ACGT
-                        //  if end node for any of those paths is equal, then this is a simple bubble.
-
-                        if (queue_push_node(nodes_start, node, 0) == NULL) {
-                          log_and_screen_printf("Queue too large. Ending.\n");
-                          exit(-1);
-                        }
-                        else{
-                          queue_push_node(nodes_start, node, 0);
-                        }
-
-                        if (queue_push_node(nodes_end, end_node, depth+1) == NULL) {
+                        // add node at end of perfect path to nodes list for potential simple bubbles
+                        if (queue_push_node(nodes_from_branch, end_node, depth+1) == NULL) {
                           log_and_screen_printf("Queue too large. Ending.\n");
                           exit(1);
                         }
                         else{
-                         queue_push_node(nodes_end, end_node, depth+1);
+                         queue_push_node(nodes_from_branch, end_node, depth+1);
                         }
                      }
                  }
@@ -287,82 +271,62 @@
          nodes_in_graph->total_size++;
      }
 
+     void simple_bubble_check(Queue* potential_bubbles)
+     {
+      int i, j;
+      char* seq_A = calloc(256, 1);
+      char* seq_B = calloc(256, 1);
+      QueueItem* item_A = malloc(sizeof(QueueItem));
+      QueueItem* item_B = malloc(sizeof(QueueItem));
+      if (!item_A) {
+     		return;
+     	}
+     	if (!item_B) {
+     		return;
+     	}
+
+       for (i=0; i<(potential_bubbles->number_of_items)-1; i++){
+         item_A=potential_bubbles->items[i];
+          binary_kmer_to_seq(&item_A->node->kmer, graph->kmer_size, seq_A);
+          log_printf("KMERS\n(A) - %s\n", seq_A);
+         for (j=i+1; j<(potential_bubbles->number_of_items)-1; j++){
+           item_B=potential_bubbles->items[j];
+           binary_kmer_to_seq(&item_B->node->kmer, graph->kmer_size, seq_B);
+           log_printf("(B) - %s\n", seq_B);
+
+           if (item_A->node==item_B->node){
+          //if ((nodes_start->items[i]->node==nodes_start->items[j]->node)&&(nodes_end->items[i]->node==nodes_end->items[j]->node)){
+            // print a bubble found
+            log_printf("SIMPLE BUBBLE FOUND.\n");
+           }
+           else{
+             // do nothing
+           }
+         }
+       }
+     }
+
      // Now keep visiting nodes and walking paths
      while (nodes_to_walk->number_of_items > 0) {
          // Take top node from list
          node = queue_pop_node(nodes_to_walk, &depth);
+
+         // reset nodes check for simple bubbles
+         // NOTE - better to empty queue than keep creating, filling and destroying?
+
+        queue_free(nodes_from_branch);
+        nodes_from_branch = queue_new(8);
 
          // Look at all paths out from here
          orientation = forward;
          nucleotide_iterator(&walk_if_exists);
          orientation = reverse;
          nucleotide_iterator(&walk_if_exists);
+
+         simple_bubble_check(nodes_from_branch);  // better to pass address?                                                                                                                                                    k[-,;/]
      }
 
      queue_free(nodes_to_walk);
-
-     // finally, walk through all nodes in star/end queues, looking for start/end pairing occuring twice.
-      // cycle though starts, looking for
-
-     // If we didn't find a start node, presumably this is a singleton?
-     if (*best_node == 0) {
-         //log_printf("Note: didn't find a best node, setting to start node\n");
-         *best_node = start_node;
-     }
-
-     // check for simple bubbles
-     QueueItem* item_start_A = malloc(sizeof(QueueItem));
-     QueueItem* item_start_B = malloc(sizeof(QueueItem));
-     QueueItem* item_end_A = malloc(sizeof(QueueItem));
-     QueueItem* item_end_B = malloc(sizeof(QueueItem));
-
-
-    // no label for individual nodes, have to use full kmers - will pull into perl later to assign labels or something
-     char* seq_SA = calloc(256, 1);
-     char* seq_EA = calloc(256, 1);
-     char* seq_SB = calloc(256, 1);
-     char* seq_EB = calloc(256, 1);
-
-   	if (!item_start_A) {
-   		return 0;
-   	}
-   	if (!item_start_B) {
-   		return 0;
-   	}
-   	if (!item_end_A) {
-   		return 0;
-   	}
-   	if (!item_end_B) {
-   		return 0;
-   	}
-
-     for (i=0; i<(nodes_start->number_of_items)-1; i++){
-       item_start_A=nodes_start->items[i];
-       item_end_A=nodes_end->items[i];
-
-       binary_kmer_to_seq(&item_start_A->node->kmer, graph->kmer_size, seq_SA);
-       binary_kmer_to_seq(&item_end_A->node->kmer, graph->kmer_size, seq_EA);
-       log_printf("KMERS\n(SA) - %s\n(EA) - %s\n", seq_SA, seq_EA);
-
-       for (j=i+1; j<(nodes_start->number_of_items)-1; j++){
-         item_start_B=nodes_start->items[j];
-         item_end_B=nodes_end->items[j];
-         binary_kmer_to_seq(&item_start_B->node->kmer, graph->kmer_size, seq_SB);
-         binary_kmer_to_seq(&item_end_B->node->kmer, graph->kmer_size, seq_EB);
-         log_printf("(SB) - %s\n(EB) - %s\n", seq_SB, seq_EB);
-
-        if ((item_start_A->node==item_start_B->node)&&(item_end_A->node==item_end_B->node)){
-       //if ((nodes_start->items[i]->node==nodes_start->items[j]->node)&&(nodes_end->items[i]->node==nodes_end->items[j]->node)){
-         // print a bubble found
-         log_printf("SIMPLE BUBBLE FOUND.\n");
-        }
-        else if ((item_start_A->node==item_end_B->node)&&(item_start_B->node==item_end_A->node)){
-        //else if ((nodes_start->items[i]->node==nodes_end->items[j]->node)&&(nodes_end->items[i]->node==nodes_start->items[j]->node)){
-           // print a bubble found
-           log_printf("SIMPLE BUBBLE FOUND.\n");
-        }
-      }
-     }
 
      return 0;
  }
@@ -383,6 +347,17 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   int i;  int j; float percentage;
   int counter= 0;
 
+  char cwd[1024];
+
+  if (getcwd(cwd, sizeof(cwd)) != NULL){
+    // do NOTHING
+  }
+  else{
+    log_and_screen_printf("CWD command returned NULL\n");
+  }
+
+  char*  graph_wd = calloc(256, 1);
+
   Path *simple_path = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
   Path *path_fwd = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
   Path *path_rev = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
@@ -402,8 +377,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
   // array to bin coverage 0-5, 5-10, 10-15..95-100
   long int Coverage_Dist[COVERAGE_BINS*COVERAGE_BIN_SIZE]; // will this work?
-  char analysis_filename[strlen(consensus_contigs_filename) + 10];
-  char degrees_filename[strlen(consensus_contigs_filename) + 10];
+  char analysis_filename[MAX_EXPLORE_PATH_LENGTH];
+  char degrees_filename[MAX_EXPLORE_PATH_LENGTH];
 
   Queue* graph_queue;
   for(i=0;i<MAX_BRANCHES;i++){
@@ -422,17 +397,36 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
       exit(-1);
   }
 
-  // NOTE NEED TO ADD MKDIR CHECK HERE
+  //log_and_screen_printf("dir\t%s\n%s\ncwd\t%s\n",dirname(consensus_contigs_filename), basename(consensus_contigs_filename),cwd);
 
+  // check for graphs dir existance
+  if (basename(consensus_contigs_filename)==consensus_contigs_filename){
+    log_and_screen_printf("(Relative path for contig output given, prefixing CWD)\n");
+    sprintf(graph_wd, "%s/graphs/", cwd);
+  }
+  else{
+    sprintf(graph_wd, "%s/graphs/", dirname(consensus_contigs_filename));
+  }
 
-  /* Open the analysis file */
-  sprintf(analysis_filename, "graphs/%s.tex", consensus_contigs_filename);
+  if(mkdir(graph_wd, 777)){
+    // runs even if 'graphs' exists
+    //log_and_screen_printf("mkdir works\n");
+  }
+  else{
+    log_and_screen_printf("mkdir failed?\n");
+    exit(-1);
+  }
+
+  sprintf(analysis_filename, "%s%s.tex", graph_wd, basename(consensus_contigs_filename));
+
+  log_and_screen_printf("graphs\t%s\n", analysis_filename);
+
+  /* Open the DIGEST file */
   fp_report = fopen(analysis_filename, "w");
   if (!fp_report) {
       log_and_screen_printf("ERROR: Can't open analysis (DIGEST) file.\n\t%s\n", analysis_filename);
       exit(-1);
   }
-
 
   /* Open the sugraph degree file */
   sprintf(degrees_filename, "%s.degrees", consensus_contigs_filename);
@@ -579,7 +573,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
             /* Reset paths */
             path_reset(simple_path);
         } else {
-            log_printf("  Number of nodes (%i) too small. Not outputting contig.\n", nodes_in_graph);
+            log_printf("  Number of nodes (%i) too small. Not outputting contig.\n", nodes_in_graph->total_size);
         }
 
 
@@ -617,7 +611,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     //system(cmd);  // potential problems with this apparently? is permissions are an initialiseAlignmentSummaryFile
 
   char command[1024];
-  char cwd[1024];
   //char r_script_path[]="/home/aylingm/grimoire/metacortex/";
   char * r_script_path=getenv("R_ENV_PATH");
 
@@ -627,7 +620,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   else{
     printf("\nPATH : %s\n",r_script_path);
 
-    if (getcwd(cwd, sizeof(cwd)) != NULL){
+    if (cwd != NULL){
       sprintf(command, "Rscript %sdegree_plots.R %s/%s", r_script_path, cwd, degrees_filename);
       log_and_screen_printf("\n%s\n", command);
       system(command);
@@ -637,7 +630,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
       log_and_screen_printf("CWD command returned NULL\n");
     }
   }
-
 
    writeLaTeXHeader(fp_report, consensus_contigs_filename);
 
@@ -689,9 +681,15 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
    fclose(fp_report);
 
-   sprintf(command, "pdflatex -interaction=nonstopmode %s/%s", cwd, analysis_filename);
+   //sprintf(command, "pdflatex -interaction=nonstopmode %s", analysis_filename);
+
+
+   // memory issue - analysis_filename is being stomped on at some point
+   log_and_screen_printf("\nanalysis filename\t%s\n", analysis_filename);
+   sprintf(command, "pdflatex -interaction=nonstopmode %s", analysis_filename);
    log_and_screen_printf("\n%s\n", command);
    system(command);
+
 
   // exec("Rscript <path_to_src>/degree_plots.R degrees_filename")
 
