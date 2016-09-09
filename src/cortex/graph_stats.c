@@ -87,7 +87,7 @@
          if (db_node_edge_exist_any_colour(node, n, orientation)) {
 
 
-             log_printf("\nNEW NODE\n");  // DEBUG BUBBLE BUG
+             //log_printf("\nNEW NODE\n");  // DEBUG BUBBLE BUG
 
              // Get first node along this edge and check we've not already visited it...
              Orientation next_orientation;
@@ -101,7 +101,7 @@
 
              // If not already visited the first node, walk it...
              if (!db_node_check_flag_visited(next_node)) {
-                  log_printf("\n\tUNVISITED, WALKING\n");  // DEBUG BUBBLE BUG
+                //  log_printf("\n\tUNVISITED, WALKING\n");  // DEBUG BUBBLE BUG
                  pathStep first_step;
                  Path * new_path;
                  dBNode* end_node;
@@ -118,9 +118,9 @@
                  }
 
 
-                log_printf("\n\tGETTING PERFECT PATH...\n");  // DEBUG BUBBLE BUG
+                //log_printf("\n\tGETTING PERFECT PATH...\n");  // DEBUG BUBBLE BUG
                  db_graph_get_perfect_path_with_first_edge_all_colours(&first_step, &db_node_action_do_nothing, new_path, graph);
-                log_printf("\n\t\t...GOT PERFECT PATH\n");  // DEBUG BUBBLE BUG
+                //log_printf("\n\t\t...GOT PERFECT PATH\n");  // DEBUG BUBBLE BUG
 
                  // Add end node to list of nodes to visit
                  end_node = new_path->nodes[new_path->length-1];
@@ -160,14 +160,14 @@
 
                // Now go through all nodes, look for best and mark all as visited
 
-              log_printf("\n\tCHECKING PERFECT PATH length %d\n", new_path->length);  // DEBUG BUBBLE BUG
+              //log_printf("\n\tCHECKING PERFECT PATH length %d\n", new_path->length);  // DEBUG BUBBLE BUG
                for (i=0; i<new_path->length; i++) {
                    if (!db_node_check_flag_visited(new_path->nodes[i])) {
                        int this_coverage = element_get_coverage_all_colours(new_path->nodes[i]);
                        int this_FOR_edges = db_node_edges_count_all_colours(new_path->nodes[i], forward);
                        int this_REV_edges = db_node_edges_count_all_colours(new_path->nodes[i], reverse);
 
-                       log_printf("\t\tnode %d\t%d\n", i, this_coverage);  // DEBUG BUBBLE BUG
+                       //log_printf("\t\tnode %d\t%d\n", i, this_coverage);  // DEBUG BUBBLE BUG
 
                        // add node degrees to 2D array of all degrees in subgraph
                        nodes_in_graph->node_degree[this_FOR_edges][this_REV_edges]++;
@@ -201,7 +201,7 @@
 
                           int j=0;
                           while(this_coverage){
-                            log_printf("\n\t\t\tj %d\t%d\t%d\n", j, this_coverage, nodes_in_graph->best_coverage[j]);  // DEBUG BUBBLE BUG
+                            //log_printf("\n\t\t\tj %d\t%d\t%d\n", j, this_coverage, nodes_in_graph->best_coverage[j]);  // DEBUG BUBBLE BUG
                             if(j>=NUM_BEST_NODES){
                               this_coverage=0;
                             }
@@ -289,7 +289,7 @@
          item_A=potential_bubbles->items[i];
           binary_kmer_to_seq(&item_A->node->kmer, graph->kmer_size, seq_A);
           log_printf("KMERS\n(A) - %s\n", seq_A);
-         for (j=i+1; j<(potential_bubbles->number_of_items)-1; j++){
+         for (j=i+1; j<(potential_bubbles->number_of_items); j++){
            item_B=potential_bubbles->items[j];
            binary_kmer_to_seq(&item_B->node->kmer, graph->kmer_size, seq_B);
            log_printf("(B) - %s\n", seq_B);
@@ -298,6 +298,7 @@
           //if ((nodes_start->items[i]->node==nodes_start->items[j]->node)&&(nodes_end->items[i]->node==nodes_end->items[j]->node)){
             // print a bubble found
             log_printf("SIMPLE BUBBLE FOUND.\n");
+            nodes_in_graph->simple_bubbles++;
            }
            else{
              // do nothing
@@ -323,7 +324,11 @@
          orientation = reverse;
          nucleotide_iterator(&walk_if_exists);
 
-         simple_bubble_check(nodes_from_branch);  // better to pass address?                                                                                                                                                    k[-,;/]
+
+        if (nodes_from_branch->number_of_items>1){
+          //log_printf("nodes_from_branch nodes\t%i\n", nodes_from_branch->number_of_items);
+          simple_bubble_check(nodes_from_branch);  // better to pass address?
+        }
      }
 
      queue_free(nodes_to_walk);
@@ -367,6 +372,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   nodes_in_graph->largest_subgraph = 0;
   nodes_in_graph->num_subgraphs = 0;
   nodes_in_graph->num_subgraphs_2k = 0;
+  nodes_in_graph->simple_bubbles = 0;
   for(i=0;i<GRAPH_LOG10_LIMIT;i++){
     nodes_in_graph->subgraph_dist[i]=0;
   }
@@ -503,7 +509,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   void explore_node(dBNode * node) {
     if(db_node_check_for_any_flag(node, PRUNED | VISITED) == false){
 
-      log_printf("\t\t\t\t\tHASH ITERATOR, NEW NODE.\n");
+      //log_printf("\t\t\t\t\tHASH ITERATOR, NEW NODE.\n");  // coverage iterator debug text
 
       dBNode* seed_node;
       nodes_in_graph->total_size = 0;
@@ -677,6 +683,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
      binary_kmer_to_seq(&nodes_in_graph->kmer[i], graph->kmer_size, seq);
      fprintf(fp_report, "%d\\quad %s\\\\\n", nodes_in_graph->best_coverage[i], seq);
    }
+   fprintf(fp_report, "\\\\\n\\textbf{num simple graphs}\\quad %i\\\\\n", (nodes_in_graph->simple_bubbles));
+
    fprintf(fp_report, "\n\\end{document}");
 
    fclose(fp_report);

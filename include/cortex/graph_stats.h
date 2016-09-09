@@ -41,6 +41,7 @@ typedef struct {
     int end_nodes;
     int node_degree[5][5];
     int best_coverage[5];
+    int simple_bubbles;
     BinaryKmer kmer[5];
     BinaryKmer temp_kmer;
     BinaryKmer current_kmer;
