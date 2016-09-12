@@ -414,7 +414,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     sprintf(graph_wd, "%s/graphs/", dirname(consensus_contigs_filename));
   }
 
-  mkdir(graph_wd, 777)
+  mkdir(graph_wd, 777);
 
   /*if(mkdir(graph_wd, 777)){
     // runs even if 'graphs' exists
