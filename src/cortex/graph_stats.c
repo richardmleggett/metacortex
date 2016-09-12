@@ -403,7 +403,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
       exit(-1);
   }
 
-  //log_and_screen_printf("dir\t%s\n%s\ncwd\t%s\n",dirname(consensus_contigs_filename), basename(consensus_contigs_filename),cwd);
+  log_and_screen_printf("dir\t%s\nbase<t%s\ncwd\t%s\n",dirname(consensus_contigs_filename), basename(consensus_contigs_filename),cwd);
 
   // check for graphs dir existance
   if (basename(consensus_contigs_filename)==consensus_contigs_filename){
