@@ -46,7 +46,7 @@ typedef enum{
 
 
 
-#define LENGTH_FILENAME 300
+#define LENGTH_FILENAME 1024 // increased from 300 12/9/2016
 #define VERSION 1.00
 #ifndef MAX_READ_LENGTH
 #define MAX_READ_LENGTH 20000
