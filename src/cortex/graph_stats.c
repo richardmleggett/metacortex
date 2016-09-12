@@ -405,6 +405,21 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
   log_and_screen_printf("dir\t%s\nbase\t%s\ncwd\t%s\n",dirname(consensus_contigs_filename), basename(consensus_contigs_filename),cwd);
 
+  /* Open simple contigs file */
+  fp_contigs = fopen(consensus_contigs_filename, "w");
+  if (!fp_contigs) {
+      log_and_screen_printf("ERROR: Can't open contig file.\n%s\n", consensus_contigs_filename);
+      exit(-1);
+  }
+
+  /* Open the sugraph degree file */
+  sprintf(degrees_filename, "%s.degrees", consensus_contigs_filename);
+  fp_degrees = fopen(degrees_filename, "w");
+  if (!fp_degrees) {
+      log_and_screen_printf("ERROR: Can't open degrees file.\n");
+      exit(-1);
+  }
+
   // check for graphs dir existance
   if (basename(consensus_contigs_filename)==consensus_contigs_filename){
     log_and_screen_printf("(Relative path for contig output given, prefixing CWD)\n");
@@ -433,21 +448,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   fp_report = fopen(analysis_filename, "w");
   if (!fp_report) {
       log_and_screen_printf("ERROR: Can't open analysis (DIGEST) file.\n\t%s\n", analysis_filename);
-      exit(-1);
-  }
-
-  /* Open the sugraph degree file */
-  sprintf(degrees_filename, "%s.degrees", consensus_contigs_filename);
-  fp_degrees = fopen(degrees_filename, "w");
-  if (!fp_degrees) {
-      log_and_screen_printf("ERROR: Can't open degrees file.\n");
-      exit(-1);
-  }
-
-  /* Open simple contigs file */
-  fp_contigs = fopen(consensus_contigs_filename, "w");
-  if (!fp_contigs) {
-      log_and_screen_printf("ERROR: Can't open contig file.\n%s\n", consensus_contigs_filename);
       exit(-1);
   }
 
