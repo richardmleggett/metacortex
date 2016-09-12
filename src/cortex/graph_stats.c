@@ -445,7 +445,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   /* Open simple contigs file */
   fp_contigs = fopen(consensus_contigs_filename, "w");
   if (!fp_contigs) {
-      log_and_screen_printf("ERROR: Can't open contig file.\n");
+      log_and_screen_printf("ERROR: Can't open contig file.\n%s\n", consensus_contigs_filename);
       exit(-1);
   }
 
