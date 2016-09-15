@@ -128,13 +128,13 @@
                  if (!db_node_check_flag_visited(end_node)) {
                      if (!db_node_is_blunt_end_all_colours(end_node, new_path->orientations[new_path->length-1])) {
                         if (queue_push_node(nodes_to_walk, end_node, depth+1) == NULL) {
-                           log_and_screen_printf("Queue too large. Ending.\n");
+                           log_and_screen_printf("Queue too large. Ending. (WALK)\n");
                            exit(1);
                         }
 
                         // add node at end of perfect path to nodes list for potential simple bubbles
                         if (queue_push_node(nodes_from_branch, end_node, depth+1) == NULL) {
-                          log_and_screen_printf("Queue too large. Ending.\n");
+                          log_and_screen_printf("Queue too large. Ending. (BRANCH)\n");
                           exit(1);
                         }
                         else{
@@ -288,16 +288,17 @@
        for (i=0; i<(potential_bubbles->number_of_items)-1; i++){
          item_A=potential_bubbles->items[i];
           binary_kmer_to_seq(&item_A->node->kmer, graph->kmer_size, seq_A);
-          log_printf("KMERS\n(A) - %s\n", seq_A);
+          //log_printf("KMERS\n(A) - %s\n", seq_A);
          for (j=i+1; j<(potential_bubbles->number_of_items); j++){
            item_B=potential_bubbles->items[j];
            binary_kmer_to_seq(&item_B->node->kmer, graph->kmer_size, seq_B);
-           log_printf("(B) - %s\n", seq_B);
+           //log_printf("(B) - %s\n", seq_B);
 
            if (item_A->node==item_B->node){
           //if ((nodes_start->items[i]->node==nodes_start->items[j]->node)&&(nodes_end->items[i]->node==nodes_end->items[j]->node)){
             // print a bubble found
-            log_printf("SIMPLE BUBBLE FOUND.\n");
+            //log_printf("SIMPLE BUBBLE FOUND.\n");
+            // need to remove item_B from the loop somehow
             nodes_in_graph->simple_bubbles++;
            }
            else{
@@ -403,9 +404,9 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
       exit(-1);
   }
 
-  log_and_screen_printf("contig name\t%s\n", consensus_contigs_filename);
-  log_and_screen_printf("dir\t%s\nbase\t%s\ncwd\t%s\n",dirname(consensus_contigs_filename), basename(consensus_contigs_filename),cwd);
-  log_and_screen_printf("contig name\t%s\n", consensus_contigs_filename);
+//  log_and_screen_printf("contig name\t%s\n", consensus_contigs_filename);
+//  log_and_screen_printf("dir\t%s\nbase\t%s\ncwd\t%s\n",dirname(consensus_contigs_filename), basename(consensus_contigs_filename),cwd);
+//  log_and_screen_printf("contig name\t%s\n", consensus_contigs_filename);
 
   /* Open simple contigs file */
   fp_contigs = fopen(consensus_contigs_filename, "w");
@@ -422,12 +423,20 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
       exit(-1);
   }
 
+  //log_and_screen_printf("contig name\t%s\n", consensus_contigs_filename);
+  //log_and_screen_printf("dir\t%s\nbase\t%s\ncwd\t%s\n",dirname(consensus_contigs_filename), basename(consensus_contigs_filename),cwd);
+  //log_and_screen_printf("contig name\t%s\n", consensus_contigs_filename);
+
+
   // check for graphs dir existance
   if (basename(consensus_contigs_filename)==consensus_contigs_filename){
     log_and_screen_printf("(Relative path for contig output given, prefixing CWD)\n");
     sprintf(graph_wd, "%s/graphs/", cwd);
+    sprintf(analysis_filename, "%s%s.tex", graph_wd, basename(consensus_contigs_filename));
   }
   else{
+ // dirname modifies 'consensus_contigs_filename' on some platforms, shifted in here to avoid that
+    sprintf(analysis_filename, "%s/graphs/%s.tex", dirname(consensus_contigs_filename), basename(consensus_contigs_filename));
     sprintf(graph_wd, "%s/graphs/", dirname(consensus_contigs_filename));
   }
 
