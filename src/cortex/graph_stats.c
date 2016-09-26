@@ -272,6 +272,8 @@
      }
 
      void simple_bubble_check(Queue* potential_bubbles)
+     // check to see if a simple bubble occurs from this branch point - one that
+     //   does rejoin, and has no further branching in between
      {
       int i, j;
       char* seq_A = calloc(256, 1);
@@ -317,7 +319,7 @@
          // NOTE - better to empty queue than keep creating, filling and destroying?
 
         queue_free(nodes_from_branch);
-        nodes_from_branch = queue_new(8);
+        nodes_from_branch = queue_new(9);
 
          // Look at all paths out from here
          orientation = forward;

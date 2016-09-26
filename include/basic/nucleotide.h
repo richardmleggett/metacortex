@@ -11,3 +11,5 @@ typedef enum {
 
 
 #endif
+
+// maybe multistae chars here W=AT, S=CG, M=AC, K=GT, R=AG, Y=CT
