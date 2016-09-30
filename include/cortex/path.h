@@ -120,7 +120,7 @@ typedef struct {
 	dBNode * node;
 	Orientation orientation;
 	Nucleotide label;
-	Nucleotide alternate_label;
+	Nucleotide alt_label;
     Flags flags;//This should be used as read only, it reflects the status of the flag when the step was queried from the path. Whe a step path is added, The flags are added to whatever flags set internally would be used.
     Path * path;//Pointer to the path to which the step belongs, if any. If NULL, it doesnt really matters.
 } pathStep;

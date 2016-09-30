@@ -71,7 +71,7 @@
        best_edges[i]=0;
      }
 
-      nodes_from_branch = queue_new(8);
+      nodes_from_branch = queue_new(9);
 
       if (!nodes_from_branch) {
         log_and_screen_printf("Couldn't get memory for nodes_from_branch queue: %x.\n", nodes_from_branch);
@@ -132,13 +132,14 @@
                            exit(1);
                         }
 
-                        // add node at end of perfect path to nodes list for potential simple bubbles
+                        // add node at end of perfect path to nodes list for potential simple bubbles or exit
                         if (queue_push_node(nodes_from_branch, end_node, depth+1) == NULL) {
                           log_and_screen_printf("Queue too large. Ending. (BRANCH)\n");
                           exit(1);
                         }
                         else{
                          queue_push_node(nodes_from_branch, end_node, depth+1);
+                         // also, hold the alternate_label herefor that path
                         }
                      }
                  }
@@ -569,7 +570,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
         }
 
         /* Simple graph (no branches) and enough nodes to bother with? If so, get consensus contig */
-        if ((nodes_in_graph->branch_nodes==0) && (nodes_in_graph->total_size >= min_subgraph_kmers)) {
+        //if ((nodes_in_graph->branch_nodes==0) && (nodes_in_graph->total_size >= min_subgraph_kmers)) {
+        if (nodes_in_graph->total_size >= min_subgraph_kmers) {
             // should be a perfect path? might be two paths though, if we started in the middle
             // NOTE: unecessary converage element but repeating the whole path finding without coverage
             //  is more work than necessary I think. See what processing time it changes?
@@ -593,7 +595,9 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
             /* Reset paths */
             path_reset(simple_path);
-        } else {
+        //} else if (nodes_in_graph->branch_nodes>0) {
+        //    log_printf("  Too complicated a graph (%i branch nodes). Not outputting contig.\n", nodes_in_graph->branch_nodes);
+        } else  {
             log_printf("  Number of nodes (%i) too small. Not outputting contig.\n", nodes_in_graph->total_size);
         }
 
