@@ -129,6 +129,7 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * first_step, dBNode* no
 	  Nucleotide alt_label = Undefined;
     int highest_coverage = 0;
 		int all_coverages[4] = {0};	// initialises all elements to zero
+		dBNode * nodes[4];	// legal? pointing to other nodes that already exist
 
 		// check a node for edges
 		// if more than one, walk each path
@@ -138,33 +139,39 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * first_step, dBNode* no
 			// NOTE: only two paths allowed here. Extend later
 		//
 
-		/*void simple_bubble_check(Queue* potential_bubbles)
+		void bubble_check()
 		// check to see if a simple bubble occurs from this branch point - one that
 		//   does rejoin, and has no further branching in between
 		{
 		 int i, j;
-		 QueueItem* item_A = malloc(sizeof(QueueItem));
-		 QueueItem* item_B = malloc(sizeof(QueueItem));
-		 if (!item_A) {
-			 return;
-		 }
-		 if (!item_B) {
-			 return;
-		 }
 
-			for (i=0; i<(potential_bubbles->number_of_items)-1; i++){
-				item_A=potential_bubbles->items[i];
-				for (j=i+1; j<(potential_bubbles->number_of_items); j++){
-					item_B=potential_bubbles->items[j];
-					if (item_A->node==item_B->node){
+			for (i=0; i<4; i++){
+				for (j=i+1; j<4; j++){
+					if ((all_coverages[i]>0)&&(all_coverages[j]>0)&&(nodes[i]==nodes[j])){
+						log_printf("BUBBLE FOUND IN COVERAGE WALK\n");
+						if (all_coverages[i]+all_coverages[j]>highest_coverage){
+							// if the merged bubble is the best route
+							if (all_coverages[i]>all_coverages[j]){
+								first_step->label=i;
+								first_step->alt_label=j;
+							}
+							else{
+								first_step->label=j;
+								first_step->alt_label=i;
+							}
+							highest_coverage=all_coverages[i]+all_coverages[j];
 
-					}
+						}
+						else{
+							// leave highest coverage as it is, ignore bubble
+						}
+					} // bubble>highest_cov
 					else{
 						// do nothing
-					}
-				}
-			}
-		}*/
+					} // i&j exists
+				} // j
+			} // i
+		}
 
 
     void check_edge(Nucleotide nucleotide) {
@@ -172,6 +179,7 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * first_step, dBNode* no
             pathStep step, reverse_step, next_step;
 						Path * new_path;
             int coverage;
+						int MAX_BRANCH_LENGTH=(db_graph->kmer_size)*2;
 
             step.node = node;
             step.label = nucleotide;
@@ -179,38 +187,25 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * first_step, dBNode* no
             db_graph_get_next_step(&step, &next_step, &reverse_step, db_graph);
             all_coverages[nucleotide] = element_get_coverage_all_colours(next_step.node);
 
-						/*int MAX_BRANCH_LENGTH=(db_graph->kmer_size)*2;
 						new_path = path_new(MAX_BRANCH_LENGTH, db_graph->kmer_size);
-						db_graph_get_perfect_path_with_first_edge_all_colours(&first_step, &db_node_action_do_nothing, new_path, db_graph);
-						*/
+						db_graph_get_perfect_path_with_first_edge_all_colours(&step, &db_node_action_do_nothing, new_path, db_graph);
 
-             // Add end node to list of nodes to visit
-             /*
-						 end_node = new_path->nodes[new_path->length-1];
-       			 end_orientation = new_path->orientations[new_path->length - 1];
-						 */
+						nodes[nucleotide] = new_path->nodes[new_path->length-1];
+            // Add end node to list of nodes to visit
         }
     }
 
-		// check for more than one edge first.
-
+		// check for single best edge first
     void check_coverages(Nucleotide nucleotide) {
 			if (all_coverages[nucleotide]>=highest_coverage){
 				highest_coverage=all_coverages[nucleotide];
-				label=nucleotide;
+				first_step->label=nucleotide;
 			}
 		}
 
     nucleotide_iterator(&check_edge);
-    nucleotide_iterator(&check_coverages);
-
-		first_step->label=label;
-
-    //if (debugme) log_printf("  Coverage %i\n", coverage);
-    /*if (coverage > highest_coverage) {
-        label = nucleotide;
-        highest_coverage = coverage;
-    }*/
+    nucleotide_iterator(&check_coverages); // check coverages as individual edges first
+		bubble_check();
 
 	return 0;
 }
