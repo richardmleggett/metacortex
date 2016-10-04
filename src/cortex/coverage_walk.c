@@ -122,14 +122,15 @@ Nucleotide coverage_walk_get_best_label(dBNode* node, Orientation orientation, d
  * Params:                                                              *
  * Returns:                                                             *
  *----------------------------------------------------------------------*/
-Nucleotide coverage_walk_get_best_label_bubble(pathStep * first_step, dBNode* node, Orientation orientation, dBGraph* db_graph)
+Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Orientation orientation, dBGraph* db_graph)
 {
-	//
-    Nucleotide label = Undefined;
-	  Nucleotide alt_label = Undefined;
     int highest_coverage = 0;
 		int all_coverages[4] = {0};	// initialises all elements to zero
 		dBNode * nodes[4];	// legal? pointing to other nodes that already exist
+
+
+		step->label=Undefined;
+		step->alt_label=Undefined;
 
 		// check a node for edges
 		// if more than one, walk each path
@@ -149,15 +150,15 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * first_step, dBNode* no
 				for (j=i+1; j<4; j++){
 					if ((all_coverages[i]>0)&&(all_coverages[j]>0)&&(nodes[i]==nodes[j])){
 						log_printf("BUBBLE FOUND IN COVERAGE WALK\n");
-						if (all_coverages[i]+all_coverages[j]>highest_coverage){
+						if ((all_coverages[i]+all_coverages[j])>highest_coverage){
 							// if the merged bubble is the best route
 							if (all_coverages[i]>all_coverages[j]){
-								first_step->label=i;
-								first_step->alt_label=j;
+								step->label=i;
+								step->alt_label=j;
 							}
 							else{
-								first_step->label=j;
-								first_step->alt_label=i;
+								step->label=j;
+								step->alt_label=i;
 							}
 							highest_coverage=all_coverages[i]+all_coverages[j];
 
@@ -176,19 +177,19 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * first_step, dBNode* no
 
     void check_edge(Nucleotide nucleotide) {
         if (db_node_edge_exist_any_colour(node, nucleotide, orientation)) {
-            pathStep step, reverse_step, next_step;
+            pathStep current_step, reverse_step, next_step;
 						Path * new_path;
             int coverage;
 						int MAX_BRANCH_LENGTH=(db_graph->kmer_size)*2;
 
-            step.node = node;
-            step.label = nucleotide;
-            step.orientation = orientation;
-            db_graph_get_next_step(&step, &next_step, &reverse_step, db_graph);
+            current_step.node = node;
+            current_step.label = nucleotide;
+            current_step.orientation = orientation;
+            db_graph_get_next_step(&current_step, &next_step, &reverse_step, db_graph);
             all_coverages[nucleotide] = element_get_coverage_all_colours(next_step.node);
 
 						new_path = path_new(MAX_BRANCH_LENGTH, db_graph->kmer_size);
-						db_graph_get_perfect_path_with_first_edge_all_colours(&step, &db_node_action_do_nothing, new_path, db_graph);
+						db_graph_get_perfect_path_with_first_edge_all_colours(&current_step, &db_node_action_do_nothing, new_path, db_graph);
 
 						nodes[nucleotide] = new_path->nodes[new_path->length-1];
             // Add end node to list of nodes to visit
@@ -199,7 +200,7 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * first_step, dBNode* no
     void check_coverages(Nucleotide nucleotide) {
 			if (all_coverages[nucleotide]>=highest_coverage){
 				highest_coverage=all_coverages[nucleotide];
-				first_step->label=nucleotide;
+				step->label=nucleotide;
 			}
 		}
 
@@ -220,6 +221,8 @@ pathStep* coverage_walk_get_first_label(pathStep * first_step, dBGraph * db_grap
 {
     //char seq[1024];
     //debugme = 1;
+    first_step->label = Undefined;
+		first_step->alt_label = Undefined;
 
 		if (db_node_edges_count_all_colours(first_step->node, first_step->orientation)==1){ // for simple, non-branching nodes
 			first_step->label = coverage_walk_get_best_label(first_step->node, first_step->orientation, db_graph);
@@ -245,6 +248,7 @@ static pathStep *coverage_walk_get_next_step(pathStep * current_step, pathStep *
 	db_graph_get_next_step(current_step, next_step, reverse_step, db_graph);
     assert(next_step != NULL);
     next_step->label = Undefined;
+		next_step->alt_label = Undefined;
 
     if (db_node_edges_count_all_colours(next_step->node, next_step->orientation) == 1) {
         next_step->label = coverage_walk_get_best_label(next_step->node, next_step->orientation, db_graph);

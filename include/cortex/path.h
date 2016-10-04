@@ -92,6 +92,7 @@ typedef struct {
 	dBNode * * nodes;
 	Orientation * orientations;
 	Nucleotide * labels;
+	Nucleotide * alt_labels;
   Flags * step_flags;
 
 	int max_length;

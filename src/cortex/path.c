@@ -59,6 +59,7 @@ Path *path_new(int max_length, short kmer_size)
 	path->nodes = calloc(max_length, sizeof(dBNode *));
 	path->orientations = calloc(max_length, sizeof(Orientation));
 	path->labels = calloc(max_length + 1, sizeof(Nucleotide));
+	path->alt_labels = calloc(max_length + 1, sizeof(Nucleotide));
 	path->seq = calloc(max_length + 1 + kmer_size, sizeof(char));
 	path->in_nodes = calloc(PATH_MAX_IN_NODES, sizeof(int));
     path->step_flags = calloc(max_length, sizeof(Flags));
@@ -78,6 +79,11 @@ Path *path_new(int max_length, short kmer_size)
 		exit(-1);
 	}
 
+	if(path->alt_labels == NULL){
+		fprintf(stderr, "[path_new]Unable to allocate alt_labels\n");
+		exit(-1);
+	}
+
 	if(path->seq == NULL){
 		fprintf(stderr, "[path_new]Unable to allocate seq\n");
 		exit(-1);
@@ -89,7 +95,7 @@ Path *path_new(int max_length, short kmer_size)
 	}
 
 	path->in_nodes_capacity = PATH_MAX_IN_NODES;
-    path->in_nodes_count = 0;
+  path->in_nodes_count = 0;
 	path->max_length = max_length;
 	flags_action_unset_flag(IS_CYCLE, &(path->flags));
 	flags_action_set_flag(PRINT_FIRST, &(path->flags));
@@ -116,6 +122,7 @@ void path_destroy(Path * path)
 	free(path->nodes);
 	free(path->orientations);
 	free(path->labels);
+	free(path->alt_labels);
 	free(path->seq);
 	free(path->in_nodes);
     free(path->step_flags);
@@ -430,6 +437,7 @@ boolean path_add_node(pathStep * step, Path * path)
 	}
 	Orientation orientation = step->orientation;
 	Nucleotide nucleotide = step->label;
+	Nucleotide alt_nucleotide = step->alt_label;
 	pathStep first;
 	if(path->length > 0){
 		path_get_step_at_index(0, &first, path);
@@ -466,6 +474,13 @@ boolean path_add_node(pathStep * step, Path * path)
 	}
     path->seq[path->length] = nucleotide == Undefined ? '\0'
 	    : binary_nucleotide_to_char(nucleotide);
+
+		if(alt_nucleotide!=Undefined){	// DEBUG
+			log_printf("FOUND ALT LABEL (1)\n");
+		}
+		path->alt_labels[path->length] = alt_nucleotide;
+		//printf("%i\n",path->alt_labels[path->length]);
+
 	path->seq[path->length + 1] = '\0';
 
 	path->length++;
@@ -836,6 +851,10 @@ void path_to_fasta(Path * path, FILE * fout)
         } else {
             fprintf(fout, "%c",  path->seq[i]);
         }
+				if(path->alt_labels[i]!=Undefined){
+					log_printf("FOUND ALT LABEL (2)\n");
+            //fprintf(fout, "|%c",  binary_nucleotide_to_char(path->alt_labels[i]));
+				}
 
 		if(current % PATH_FASTA_LINE == 0) {
 			fprintf(fout, "\n");
