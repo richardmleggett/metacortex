@@ -162,8 +162,10 @@ void path_reset(Path * path)
 	}
 
 	path->seq[0] = '\0';
+	path->labels[0] = Undefined;
+	path->alt_labels[0] = Undefined;
 	path->in_nodes_count = 0;
-    path->out_nodes_count = 0;
+  path->out_nodes_count = 0;
 	path->length = 0;
     path->new_nodes = 0;
 	//  path->depth = -1;
@@ -504,6 +506,12 @@ Nucleotide path_last_nucleotide(Path * path)
 {
 	return (path->length <= 0) ? Undefined : path->labels[path->length - 1];
 }
+
+Nucleotide path_last_alt_nucleotide(Path * path)
+{
+	return (path->length <= 0) ? Undefined : path->alt_labels[path->length - 1];
+}
+
 
 Flags path_last_flags(Path * path)
 {
@@ -1064,6 +1072,7 @@ void path_iterator_from_index(int index, void (*step_action) (pathStep * step), 
 	for (i = index; i < path->length; i++) {
 		ps.node = path->nodes[i];
 		ps.label = path->labels[i];
+		ps.alt_label = path->alt_labels[i];
 		ps.orientation = path->orientations[i];
 		step_action(&ps);
 	}
@@ -1078,6 +1087,7 @@ void path_inner_iterator(void (*step_action) (pathStep * step), Path * path)
 	for (i = 1; i < path->length - 1; i++) {
 		ps.node = path->nodes[i];
 		ps.label = path->labels[i];
+		ps.alt_label = path->alt_labels[i];
 		ps.orientation = path->orientations[i];
 		step_action(&ps);
 	}
@@ -1090,6 +1100,7 @@ void path_iterator(void (*step_action) (pathStep * step), Path * path)
 	for (i = 0; i < path->length; i++) {
 		ps.node = path->nodes[i];
 		ps.label = path->labels[i];
+		ps.alt_label = path->alt_labels[i];
 		ps.orientation = path->orientations[i];
 		step_action(&ps);
 	}
@@ -1102,6 +1113,7 @@ void path_iterator_with_args(void (*step_action) (pathStep * , void *),void * ar
 	for (i = 0; i < path->length; i++) {
 		ps.node = path->nodes[i];
 		ps.label = path->labels[i];
+		ps.alt_label = path->alt_labels[i];
 		ps.orientation = path->orientations[i];
 		step_action(&ps, args);
 	}
@@ -1171,6 +1183,7 @@ void path_iterator_reverse(void (*step_action) (pathStep * step), Path * path)
 	for (i = path->length - 1; i >= 0; i--) {
 		ps.node = path->nodes[i];
 		ps.label = path->labels[i];
+		ps.alt_label = path->alt_labels[i];
 		ps.orientation = path->orientations[i];
 		step_action(&ps);
 	}
@@ -1185,6 +1198,7 @@ void path_iterator_with_index(void (*step_action) (int index, pathStep * step), 
 		ps.node = path->nodes[i];
 
 		ps.label = path->labels[i];
+		ps.alt_label = path->alt_labels[i];
 
 		ps.orientation = path->orientations[i];
 
@@ -1277,6 +1291,7 @@ pathStep *path_get_step_at_index(int index, pathStep * step, Path * path)
 	step->node = path->nodes[index];
 	step->orientation = path->orientations[index];
 	step->label = path->labels[index];
+	step->alt_label = path->alt_labels[index];
     step->flags = path->step_flags[index];
     step->path = path;
 	return step;
@@ -1392,6 +1407,7 @@ pathStep *path_get_last_step(pathStep * ps, Path * path)
 	ps->node = path_last_node(path);
 	ps->orientation = path_last_orientation(path);
 	ps->label = path_last_nucleotide(path);
+	ps->alt_label = path_last_alt_nucleotide(path);
     ps->flags = path_last_flags(path);
 	return ps;
 }
@@ -1543,6 +1559,7 @@ void path_remove_last(Path * path)
 	path->nodes[path->length] = NULL;
 	path->orientations[path->length] = 0;
 	path->labels[path->length] = 0;
+	path->alt_labels[path->length] = 0;
     path->step_flags[path->length] = 0;
 	if ((path->in_nodes > 0) && (path->in_nodes_count > 0)) {
 		if (path->in_nodes[path->in_nodes_count-1] == path->length){
@@ -1577,6 +1594,7 @@ boolean path_to_retry(Path * path)
 void path_step_assign(pathStep * to, pathStep * from)
 {
 	to->label = from->label;
+	to->alt_label = from->alt_label;
 	to->node = from->node;
 	to->orientation = from->orientation;
     to->path = from->path;
@@ -1760,15 +1778,16 @@ boolean path_append(Path * destination, Path * source){
 		new_step.node = source->nodes[i];
 		new_step.orientation = source->orientations[i];
 		new_step.label = source->labels[i];
-        new_step.flags = source->step_flags[i];
+		new_step.alt_label = source->alt_labels[i];
+    new_step.flags = source->step_flags[i];
 		if (!path_add_node(&new_step, destination)) {
 			success = false;
 			break;
 		} else {
-            // Update step flags - could be more elegant
-            //destination->step_flags[destination->length - 1] = source->step_flags[i];
-						//destination->in_nodes[destination->length - 1] = source->in_nodes[i];
-        }
+      // Update step flags - could be more elegant
+      //destination->step_flags[destination->length - 1] = source->step_flags[i];
+			//destination->in_nodes[destination->length - 1] = source->in_nodes[i];
+    }
 	}
 
 	return success;

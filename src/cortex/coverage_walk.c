@@ -98,6 +98,7 @@ Nucleotide coverage_walk_get_best_label(dBNode* node, Orientation orientation, d
 
             step.node = node;
             step.label = nucleotide;
+            step.alt_label = Undefined;
             step.orientation = orientation;
             db_graph_get_next_step(&step, &next_step, &reverse_step, db_graph);
             coverage = element_get_coverage_all_colours(next_step.node);
@@ -137,8 +138,7 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Or
 		// are final (branching) nodes the same? then this is a bubble.
 		// is sum(coverage) for both paths equal to or highest coverage?
 		// keep highest coverage as label, and next highest as alt_label
-			// NOTE: only two paths allowed here. Extend later
-		//
+		// NOTE: only two paths allowed here. Extend later
 
 		void bubble_check()
 		// check to see if a simple bubble occurs from this branch point - one that
@@ -184,6 +184,7 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Or
 
             current_step.node = node;
             current_step.label = nucleotide;
+            current_step.alt_label = Undefined;
             current_step.orientation = orientation;
             db_graph_get_next_step(&current_step, &next_step, &reverse_step, db_graph);
             all_coverages[nucleotide] = element_get_coverage_all_colours(next_step.node);
@@ -360,6 +361,7 @@ int coverage_walk_get_path_with_callback(dBNode * node, Orientation orientation,
 	first.node = node;
 	first.orientation = orientation;
 	first.label = Undefined;
+	first.alt_label = Undefined;
 	wf.get_starting_step = &coverage_walk_get_first_label;
 
     // Setup step action to include passed in node action
@@ -411,6 +413,7 @@ int coverage_walk_get_path(dBNode * node, Orientation orientation, void (*node_a
 		path_copy(path, p);
 	}
 
+		log_printf("\t[NEW-NODE in coverage walk]\n");
 	coverage_walk_get_path_with_callback(node, orientation,	node_action, &copy_path, db_graph);
 
 	return path_get_edges_count(path);

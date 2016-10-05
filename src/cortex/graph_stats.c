@@ -86,9 +86,6 @@
          // If there is an edge in any colour for this nucleotide...
          if (db_node_edge_exist_any_colour(node, n, orientation)) {
 
-
-             //log_printf("\nNEW NODE\n");  // DEBUG BUBBLE BUG
-
              // Get first node along this edge and check we've not already visited it...
              Orientation next_orientation;
              Nucleotide reverse_nucleotide;
@@ -101,7 +98,6 @@
 
              // If not already visited the first node, walk it...
              if (!db_node_check_flag_visited(next_node)) {
-                //  log_printf("\n\tUNVISITED, WALKING\n");  // DEBUG BUBBLE BUG
                  pathStep first_step;
                  Path * new_path;
                  dBNode* end_node;
@@ -111,6 +107,7 @@
                  first_step.node = node;
                  first_step.orientation = orientation;
                  first_step.label = n;
+                 first_step.alt_label = Undefined;
                  new_path = path_new(MAX_EXPLORE_NODES, graph->kmer_size);
                  if (!new_path) {
                      log_and_screen_printf("ERROR: Not enough memory to allocate new path.\n");
@@ -275,7 +272,7 @@
      void simple_bubble_check(Queue* potential_bubbles)
      // check to see if a simple bubble occurs from this branch point - one that
      //   does rejoin, and has no further branching in between
-     {
+     {/*
       int i, j;
       char* seq_A = calloc(256, 1);
       char* seq_B = calloc(256, 1);
@@ -308,8 +305,9 @@
              // do nothing
            }
          }
-       }
+       }*/
      }
+
 
      // Now keep visiting nodes and walking paths
      while (nodes_to_walk->number_of_items > 0) {
@@ -621,6 +619,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   fprintf(fp_analysis, "\n#Subgraph sizes\n");
 
   // second travesal - build subgraphs out.
+  //log_printf("\t2ND TRAVERSAL?\n");
 	hash_table_traverse(&explore_node, graph);
   fclose(fp_analysis);
   fclose(fp_degrees);
