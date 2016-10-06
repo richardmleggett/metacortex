@@ -94,7 +94,7 @@ typedef uint16_t Flags;
 #define  X_NODE			 	  (1 << 5)  //x0020
 #define  END_NODE_FORWARD  	  (1 << 6)  //x0040
 #define  END_NODE_REVERSE  	  (1 << 7)  //x0080
-#define  STARTING_FORWARD	  (1 << 8)  //x0100 Used to mark where a new SOLiD read starts. 
+#define  STARTING_FORWARD	  (1 << 8)  //x0100 Used to mark where a new SOLiD read starts.
 #define  TIP_START            (1 << 9)  //x0200 To mark where the tip clip starts
 #define  IGNORE_START_NODE	  (1 << 10) //x0400
 #define  CURRENT_PATH_FORWARD (1 << 11) //x0800
@@ -104,7 +104,8 @@ typedef uint16_t Flags;
 #define  VISITED_REVERSE  	  (1 << 15) //x8000
 #endif
 
-
+// Remove STARTING_FORWARD???
+#define POLYMORPHISM STARTING_FORWARD
 
 
 

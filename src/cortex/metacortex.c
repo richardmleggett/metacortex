@@ -172,8 +172,8 @@ int main(int argc, char **argv)
     long long seq_length = 0;
     int n_file_list = 0;
     int i;
-    int total_max_length = TOTAL_MAX_LENGTH;
-    int bubble_max_depth = BUBBLE_MAX_DEPTH;
+    //int total_max_length = TOTAL_MAX_LENGTH;
+    //int bubble_max_depth = BUBBLE_MAX_DEPTH;
 
     log_and_screen_printf("\nMetaCortex ");
     log_and_screen_printf(METACORTEX_VERSION);

@@ -96,8 +96,9 @@ boolean db_node_check_for_flag_ALL_OFF(dBNode * node);
 Orientation db_node_get_orientation(BinaryKmer*, dBNode *, short kmer_size);
 
 //add an edge between nodes -- NB: it adds both edges: forward and reverse
-boolean db_node_add_edge(dBNode *, dBNode *, Orientation, Orientation,
-		short kmer_size, short);
+boolean db_node_add_edge(dBNode *, dBNode *, Orientation, Orientation, short kmer_size, short);
+
+void db_node_add_alt_labelled_edge(dBNode* e, Orientation o, Nucleotide base);
 
 //returns true if the node side defined by the orientation is a conflict 
 //or doesn't have any outgoing edge
@@ -116,11 +117,9 @@ boolean db_node_has_precisely_one_edge_all_colours(dBNode *, Orientation, Nucleo
 
 //returns the label of the "two edges"
 //defined by orientation. 
-boolean db_node_has_precisely_two_edges(dBNode *, Orientation,
-		Nucleotide *, Nucleotide *);
+boolean db_node_has_precisely_two_edges(dBNode *, Orientation, Nucleotide *, Nucleotide *);
 
-boolean db_node_has_unvisited_edge(dBNode * node, Orientation orientation,
-		Nucleotide * nucleotide);
+boolean db_node_has_unvisited_edge(dBNode * node, Orientation orientation, Nucleotide * nucleotide);
 
 Edges db_node_get_edges(dBNode * node);
 
@@ -145,8 +144,7 @@ void db_node_reset_edge_all_colours(dBNode *, Orientation, Nucleotide);
 //set every edge in 'edges' 
 void db_node_set_edges(dBNode * node, short colour, Edges edges);
 
-boolean db_node_edge_has_single_coverage(dBNode * element, Nucleotide base,
-		Orientation orientation);
+boolean db_node_edge_has_single_coverage(dBNode * element, Nucleotide base, Orientation orientation);
 
 int db_node_count_number_of_colours_out(dBNode *node, Orientation orientation);
 
@@ -185,8 +183,7 @@ void clear_visited_count(void);
 
 Flags db_node_get_flags(dBNode * node, Flags f);
 #ifndef SHORT_FLAGS
-void db_node_action_set_visited(dBNode * node, Orientation o, Nucleotide n,
-		Nucleotide n_r);
+void db_node_action_set_visited(dBNode * node, Orientation o, Nucleotide n, Nucleotide n_r);
 
 void db_node_action_unset_visited(dBNode * node, Orientation o);
 
@@ -218,8 +215,7 @@ int db_node_edges_count_all_colours(dBNode * node, Orientation orientation);
 
 boolean db_node_condition_always_true(dBNode* node);
 
-boolean db_node_is_visited_on_all_the_paths(dBNode * node,
-		Orientation orientation);
+boolean db_node_is_visited_on_all_the_paths(dBNode * node, Orientation orientation);
 
 Edges db_node_get_edges_for_orientation_by_colour(dBNode * node, Orientation orientation, short colour);
 
@@ -232,8 +228,7 @@ Edges db_node_get_edges_for_orientation(dBNode * node, Orientation orientation);
  * doesn't have any effect and the returned value is the stored orientation.
  */
 #ifndef SHORT_FLAGS
-Flags db_node_set_print_orientation(Orientation current_orientation,
-		dBNode * current_node);
+Flags db_node_set_print_orientation(Orientation current_orientation, dBNode * current_node);
 #endif
 boolean element_check_for_flag_ALL_OFF(Element * node);
 

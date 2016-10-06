@@ -107,7 +107,6 @@
                  first_step.node = node;
                  first_step.orientation = orientation;
                  first_step.label = n;
-                 first_step.alt_label = Undefined;
                  new_path = path_new(MAX_EXPLORE_NODES, graph->kmer_size);
                  if (!new_path) {
                      log_and_screen_printf("ERROR: Not enough memory to allocate new path.\n");
@@ -583,7 +582,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
             if (simple_path->length >= (MIN_CONTIG_SIZE - graph->kmer_size)) {
                 log_printf("Write path of size %d\n", simple_path->length);
                 log_printf("graph size\t%i\n",nodes_in_graph->total_size);
-                path_to_fasta(simple_path, fp_contigs);
+                path_to_fasta_metacortex(simple_path, fp_contigs, graph);
                 counter++;
             } else {
                 log_printf("Didn't write path of size %d\n", simple_path->length);
