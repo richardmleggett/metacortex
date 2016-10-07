@@ -168,7 +168,7 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Or
                         } else {
                             bubble_edge = j;
                         }
-                        highest_coverage=all_coverages[i]+all_coverages[j];
+                        highest_coverage = all_coverages[i]+all_coverages[j];
                     } else {
                         // leave highest coverage as it is, ignore bubble
                     }

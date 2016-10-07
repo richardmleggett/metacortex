@@ -785,11 +785,13 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     
     // Now to work out the difference between the paths.
     // Start at end and find point paths differ
+    p=1;
     while (keep_going && (differ_pos == -1)) {
         for (j=0; j<4; j++) {
             if (paths[j] != 0) {
                 if (p > paths[j]->length) {
                     keep_going = false;
+                    differ_pos = p;
                     break;
                 } else {
                     if (j != chosen_edge) {
@@ -821,8 +823,10 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
             }
             strncpy(tempseq, paths[j]->seq, paths[j]->length - differ_pos + 1);
             tempseq[paths[j]->length - differ_pos + 1] = 0;
-            output_seq_with_line_breaks(tempseq, fout, current);
-            count++;
+            if (strlen(tempseq) > 0) {
+                output_seq_with_line_breaks(tempseq, fout, current);
+                count++;
+            }
         }
     }
     
@@ -839,6 +843,38 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
         if (paths[j] != 0) path_destroy(paths[j]);
     }
     
+    // Go through path, making Edge array, one entry for each polymorphism
+    //
+    
+    // typedef struct {
+    //     Nucleotide labels[MAX_LENGTH] ; String of labels
+    //     boolean is_highest_coverage;
+    // } PolyQueueItem;
+    // for (i=0; i<path->length; i++) {
+    //     if (node has POLYMORPHISM set) {
+    //          Make a list of valid bubble edges in "edges"
+    //          if (queue is empty) {
+    //              create new items in queue and mark which is highest coverage
+    //          } else {
+    //              for each item in queue {
+    //                  remove item from queue;
+    //                  for each label that is part of edges {
+    //                      add label to item and add back to queue
+    //                      if (item->is_highest_coverage) {
+    //                          if (label is not highest coverage) {
+    //                              item->is_highest_coverage = false;
+    //                          }
+    //                      }
+    //                  }
+    //              }
+    //          }
+    //     }
+    // }
+    
+    // Then to output
+    // Loop through each item in queue
+    // Output path, using the bases in the item
+
     return true;
 }
 

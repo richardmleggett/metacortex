@@ -1,4 +1,4 @@
-Thu Oct  6 17:48:46 2016 Log started
+Fri Oct  7 11:15:30 2016 Log started
 
 MetaCortex v0.2
 
@@ -7,13 +7,13 @@ Unit size: 16
 Max k: 31
 
 -----
-Thu Oct  6 17:48:46 2016
+Fri Oct  7 11:15:30 2016
 
 Input file of filenames: allfiles.txt
 Kmer size: 31 Hash table size (15 bits): 32,768 Hash table bucket size: 100 Total size: 3,276,800
 
 -----
-Thu Oct  6 17:48:46 2016
+Fri Oct  7 11:15:30 2016
 
 Table created: 32,768
 dBGraph:
@@ -34,7 +34,7 @@ Hash:
 	 tries 0: 280
 
 -----
-Thu Oct  6 17:48:46 2016
+Fri Oct  7 11:15:30 2016
 
 Read of file 1 complete. Total kmers: 201 Bad reads: 0 Seq length: 400 Total seq length: 400
 
@@ -54,7 +54,7 @@ Hash:
 	 tries 0: 280
 
 -----
-Thu Oct  6 17:48:46 2016
+Fri Oct  7 11:15:30 2016
 
 Dumping graph: all.ctx
 201 kmers dumped
@@ -70,7 +70,7 @@ BUBBLE FOUND IN COVERAGE WALK
 	[NEW-NODE in coverage walk]
 Write path of size 170
 graph size	201
-GOT POLYMORPHISM
+Found polymorphism to output.
 Got matching path
 
 Rscript ../degree_plots.R /Users/leggettr/Documents/ProgramsAndTools/MartinMetacortex/metacortex/testset/contigs.fa.degrees
@@ -81,7 +81,7 @@ analysis filename	./graphs/contigs.fa.tex
 pdflatex -interaction=nonstopmode ./graphs/contigs.fa.tex
 
 -----
-Thu Oct  6 17:48:48 2016
+Fri Oct  7 11:15:31 2016
 
 
 DONE
