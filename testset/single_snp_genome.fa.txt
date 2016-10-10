@@ -1,19 +1,19 @@
-Mon Oct 10 18:35:09 2016 Log started
+Mon Oct 10 18:39:41 2016 Log started
 
 MetaCortex v0.2
 
-Command: ../bin/metacortex_k31 -k 31 -n 15 -b 100 -i allfiles.txt -t fasta -o all.ctx -f contigs.fa -g 100 -l log.txt -S 
+Command: ../bin/metacortex_k31 -k 31 -n 15 -b 100 -i allfiles.txt -t fasta -o single_snp_genome.fa.ctx -f single_snp_genome.fa.fa -g 100 -l single_snp_genome.fa.txt -S 
 Unit size: 16
 Max k: 31
 
 -----
-Mon Oct 10 18:35:09 2016
+Mon Oct 10 18:39:41 2016
 
 Input file of filenames: allfiles.txt
 Kmer size: 31 Hash table size (15 bits): 32,768 Hash table bucket size: 100 Total size: 3,276,800
 
 -----
-Mon Oct 10 18:35:09 2016
+Mon Oct 10 18:39:41 2016
 
 Table created: 32,768
 dBGraph:
@@ -34,7 +34,7 @@ Hash:
 	 tries 0: 280
 
 -----
-Mon Oct 10 18:35:09 2016
+Mon Oct 10 18:39:41 2016
 
 Read of file 1 complete. Total kmers: 201 Bad reads: 0 Seq length: 400 Total seq length: 400
 
@@ -54,14 +54,14 @@ Hash:
 	 tries 0: 280
 
 -----
-Mon Oct 10 18:35:09 2016
+Mon Oct 10 18:39:41 2016
 
-Dumping graph: all.ctx
+Dumping graph: single_snp_genome.fa.ctx
 201 kmers dumped
 
 Searching graph for stats...
 (Relative path for contig output given, prefixing CWD)
-graphs	/home/aylingm/grimoire/metacortex/testset/graphs/contigs.fa.tex
+graphs	/home/aylingm/grimoire/metacortex/testset/graphs/single_snp_genome.fa.fa.tex
 Growing graph from node
 
 BUBBLE FOUND, path length	33
@@ -74,15 +74,15 @@ graph size	201
 Found polymorphism to output.
 Got matching path
 
-Rscript ../degree_plots.R /home/aylingm/grimoire/metacortex/testset/contigs.fa.degrees
+Rscript ../degree_plots.R /home/aylingm/grimoire/metacortex/testset/single_snp_genome.fa.fa.degrees
 
 
-analysis filename	/home/aylingm/grimoire/metacortex/testset/graphs/contigs.fa.tex
+analysis filename	/home/aylingm/grimoire/metacortex/testset/graphs/single_snp_genome.fa.fa.tex
 
-pdflatex -interaction=nonstopmode /home/aylingm/grimoire/metacortex/testset/graphs/contigs.fa.tex
+pdflatex -interaction=nonstopmode /home/aylingm/grimoire/metacortex/testset/graphs/single_snp_genome.fa.fa.tex
 
 -----
-Mon Oct 10 18:35:12 2016
+Mon Oct 10 18:39:44 2016
 
 
 DONE

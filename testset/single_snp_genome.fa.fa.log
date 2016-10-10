@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.7.20)  10 OCT 2016 18:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.7.20)  10 OCT 2016 18:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**/home/aylingm/grimoire/metacortex/testset/graphs/contigs.fa.tex
-(/home/aylingm/grimoire/metacortex/testset/graphs/contigs.fa.tex
+**/home/aylingm/grimoire/metacortex/testset/graphs/single_snp_genome.fa.fa.tex
+(/home/aylingm/grimoire/metacortex/testset/graphs/single_snp_genome.fa.fa.tex
 LaTeX2e <2016/02/01>
 Babel <3.9q> and hyphenation patterns for 3 language(s) loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
@@ -178,8 +178,8 @@ Package: subcaption 2016/02/20 v1.1-142 Sub-captions (AR)
 \c@subfigure=\count105
 \c@subtable=\count106
 )
-No file contigs.fa.aux.
-\openout1 = `contigs.fa.aux'.
+No file single_snp_genome.fa.fa.aux.
+\openout1 = `single_snp_genome.fa.fa.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
 LaTeX Font Info:    ... okay on input line 12.
@@ -287,6 +287,44 @@ e
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.13 \maketitle
+               
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Extra }, or forgotten $.
+\@title ...ge {MetaCortex single_snp_genome.fa.fa}
+                                                  
+l.13 \maketitle
+               
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.13 \maketitle
+               
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.13 \maketitle
+               
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
 
 LaTeX Warning: No \author given.
 
@@ -370,29 +408,30 @@ Underfull \hbox (badness 10000) in paragraph at lines 58--102
 
  []
 
-[2] [3] (./contigs.fa.aux)
+[2] [3] (./single_snp_genome.fa.fa.aux)
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
  4143 strings out of 494953
- 61355 string characters out of 6180977
- 131812 words of memory out of 5000000
+ 61446 string characters out of 6180977
+ 131825 words of memory out of 5000000
  7383 multiletter control sequences out of 15000+600000
  9320 words of font info for 34 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,7n,39p,291b,474s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,7n,39p,304b,474s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on contigs.fa.pdf (3 pages, 148269 bytes).
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmsy10.pfb>
+Output written on single_snp_genome.fa.fa.pdf (3 pages, 158724 bytes).
 PDF statistics:
- 48 PDF objects out of 1000 (max. 8388607)
- 26 compressed objects within 1 object stream
+ 52 PDF objects out of 1000 (max. 8388607)
+ 29 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
