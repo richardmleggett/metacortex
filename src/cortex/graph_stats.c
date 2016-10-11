@@ -431,7 +431,16 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   // check for graphs dir existance
   if (basename(consensus_contigs_filename)==consensus_contigs_filename){
     log_and_screen_printf("(Relative path for contig output given, prefixing CWD)\n");
-    sprintf(graph_wd, "%s/graphs/", cwd);
+    /*if (cwd=='.'){
+      graph_wd="graphs/";
+    }
+    else{
+    // NOTE: this breaks, rather than returning the full path sometimes.
+    */
+    // returns '.' which breaks other paths later on
+      sprintf(graph_wd, "%s/graphs/", cwd);
+    //}
+    //graph_wd="graphs/";
     sprintf(analysis_filename, "%s%s.tex", graph_wd, basename(consensus_contigs_filename));
   }
   else{
@@ -569,6 +578,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
         /* Simple graph (no branches) and enough nodes to bother with? If so, get consensus contig */
         //if ((nodes_in_graph->branch_nodes==0) && (nodes_in_graph->total_size >= min_subgraph_kmers)) {
         if (nodes_in_graph->total_size >= min_subgraph_kmers) {
+
             // should be a perfect path? might be two paths though, if we started in the middle
             // NOTE: unecessary converage element but repeating the whole path finding without coverage
             //  is more work than necessary I think. See what processing time it changes?
@@ -612,14 +622,18 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
 
   // check each node in the graph, FLAG X&Y nodes (mark all nodes as visited)
+  log_and_screen_printf("Stats traversal started...");
 	hash_table_traverse(&identify_branch_nodes, graph);
+  log_and_screen_printf("DONE\n");
 
   // first line for stats output file
   fprintf(fp_analysis, "\n#Subgraph sizes\n");
 
   // second travesal - build subgraphs out.
   //log_printf("\t2ND TRAVERSAL?\n");
+  log_and_screen_printf("Full traversal started...");
 	hash_table_traverse(&explore_node, graph);
+  log_and_screen_printf("DONE\n");
   fclose(fp_analysis);
   fclose(fp_degrees);
 

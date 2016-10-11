@@ -1,0 +1,2924 @@
+digraph finite_state_machine {
+	graph [bb="0,0,67391,607.95",
+		fontsize=18,
+		rankdir=LR,
+		size="12,8"
+	];
+	node [label="\N",
+		shape=circle
+	];
+	ATTTCCGCTTTGCACTTCATAAAAATGCGCG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATTTCCGCTTTGCACTTCATAAAAATGCGCG</font></td></tr><tr><td><font color="red">CGCGCATTTTTATGAAGTGCAAAGCGGAAAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="214.25,84.477",
+		shape=ellipse,
+		width=5.9515];
+	TCGCGCATTTTTATGAAGTGCAAAGCGGAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TCGCGCATTTTTATGAAGTGCAAAGCGGAAA</font></td></tr><tr><td><font color="red">TTTCCGCTTTGCACTTCATAAAAATGCGCGA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="689.47,135.48",
+		shape=ellipse,
+		width=5.9515];
+	ATTTCCGCTTTGCACTTCATAAAAATGCGCG -> TCGCGCATTTTTATGAAGTGCAAAGCGGAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="451.51,127.98",
+		pos="e,486.36,123.39 371.45,109.94 396.5,113.5 422.18,116.84 446.51,119.48 456.24,120.53 466.2,121.53 476.26,122.47"];
+	GCGCATTTTTATGAAGTGCAAAGCGGAAATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GCGCATTTTTATGAAGTGCAAAGCGGAAATA</font></td></tr><tr><td><font color="red">TATTTCCGCTTTGCACTTCATAAAAATGCGC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="689.47,37.477",
+		shape=ellipse,
+		width=5.9711];
+	ATTTCCGCTTTGCACTTCATAAAAATGCGCG -> GCGCATTTTTATGAAGTGCAAAGCGGAAATA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="451.51,68.977",
+		pos="e,502.17,55.98 400.92,66.036 430.82,63.067 461.85,59.985 491.99,56.991"];
+	TCGCGCATTTTTATGAAGTGCAAAGCGGAAA -> ATTTCCGCTTTGCACTTCATAAAAATGCGCG	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="451.51,107.98",
+		pos="e,417.1,96.608 531.79,110.02 506.66,106.46 480.9,103.12 456.51,100.48 446.88,99.433 437.03,98.448 427.08,97.519"];
+	ATCGCGCATTTTTATGAAGTGCAAAGCGGAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATCGCGCATTTTTATGAAGTGCAAAGCGGAA</font></td></tr><tr><td><font color="red">TTCCGCTTTGCACTTCATAAAAATGCGCGAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="1165.4,143.48",
+		shape=ellipse,
+		width=5.9515];
+	TCGCGCATTTTTATGAAGTGCAAAGCGGAAA -> ATCGCGCATTTTTATGAAGTGCAAAGCGGAA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="927.43,146.98",
+		pos="e,952.11,139.89 902.82,139.06 915.74,139.28 928.77,139.5 941.73,139.72"];
+	GCGCATTTTTATGAAGTGCAAAGCGGAAATA -> ATTTCCGCTTTGCACTTCATAAAAATGCGCG	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="451.51,49.977",
+		pos="e,352.62,55.822 474.94,40.032 465.32,40.732 455.81,41.542 446.51,42.477 419.3,45.211 390.48,49.393 362.77,54.076"];
+	CGCATTTTTATGAAGTGCAAAGCGGAAATAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CGCATTTTTATGAAGTGCAAAGCGGAAATAA</font></td></tr><tr><td><font color="red">TTATTTCCGCTTTGCACTTCATAAAAATGCG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="1165.4,43.477",
+		shape=ellipse,
+		width=5.9711];
+	GCGCATTTTTATGAAGTGCAAAGCGGAAATA -> CGCATTTTTATGAAGTGCAAAGCGGAAATAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="927.43,53.977",
+		pos="e,950.64,45.834 900.03,45.033 907.59,45.201 915.07,45.35 922.43,45.477 928.35,45.579 934.35,45.663 940.4,45.733"];
+	AAATCGAAGGTATCATCATGAGTTTAACTCA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAATCGAAGGTATCATCATGAGTTTAACTCA</font></td></tr><tr><td><font color="red">TGAGTTAAACTCATGATGATACCTTCGATTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="32617,377.48",
+		shape=ellipse,
+		width=5.9318];
+	AATCGAAGGTATCATCATGAGTTTAACTCAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AATCGAAGGTATCATCATGAGTTTAACTCAT</font></td></tr><tr><td><font color="red">ATGAGTTAAACTCATGATGATACCTTCGATT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="32146,377.48",
+		shape=ellipse,
+		width=5.8926];
+	AAATCGAAGGTATCATCATGAGTTTAACTCA -> AATCGAAGGTATCATCATGAGTTTAACTCAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="32381,350.98",
+		pos="e,32300,351.61 32482,348.28 32448,343.55 32411,340.93 32376,343.48 32355,345.06 32332,347.47 32310,350.29"];
+	GAAATCGAAGGTATCATCATGAGTTTAACTC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GAAATCGAAGGTATCATCATGAGTTTAACTC</font></td></tr><tr><td><font color="red">GAGTTAAACTCATGATGATACCTTCGATTTC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="33090,381.48",
+		shape=ellipse,
+		width=5.9318];
+	AAATCGAAGGTATCATCATGAGTTTAACTCA -> GAAATCGAAGGTATCATCATGAGTTTAACTC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="32853,386.98",
+		pos="e,32876,379.67 32830,379.28 32842,379.38 32854,379.49 32866,379.59"];
+	AATCGAAGGTATCATCATGAGTTTAACTCAT -> AAATCGAAGGTATCATCATGAGTTTAACTCA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="32381,384.98",
+		pos="e,32403,377.48 32358,377.48 32370,377.48 32381,377.48 32393,377.48"];
+	ATCGAAGGTATCATCATGAGTTTAACTCATG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATCGAAGGTATCATCATGAGTTTAACTCATG</font></td></tr><tr><td><font color="red">CATGAGTTAAACTCATGATGATACCTTCGAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="31676,377.48",
+		shape=ellipse,
+		width=5.8926];
+	AATCGAAGGTATCATCATGAGTTTAACTCAT -> ATCGAAGGTATCATCATGAGTTTAACTCATG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="31911,365.98",
+		pos="e,31859,358.43 31956,360.6 31943,359.75 31929,359.03 31916,358.48 31901,357.85 31885,357.78 31869,358.14"];
+	GAAATCGAAGGTATCATCATGAGTTTAACTC -> AAATCGAAGGTATCATCATGAGTTTAACTCA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="32853,367.98",
+		pos="e,32806,359.99 32903,363.1 32888,362.05 32873,361.14 32858,360.48 32844,359.85 32830,359.67 32816,359.82"];
+	AGAAATCGAAGGTATCATCATGAGTTTAACT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGAAATCGAAGGTATCATCATGAGTTTAACT</font></td></tr><tr><td><font color="red">AGTTAAACTCATGATGATACCTTCGATTTCT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="33563,379.48",
+		shape=ellipse,
+		width=5.9318];
+	GAAATCGAAGGTATCATCATGAGTTTAACTC -> AGAAATCGAAGGTATCATCATGAGTTTAACT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="33326,387.98",
+		pos="e,33349,380.38 33303,380.57 33315,380.52 33327,380.47 33339,380.42"];
+	AAGAGAAATCGAAGGTATCATCATAAGTTTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAGAGAAATCGAAGGTATCATCATAAGTTTA</font></td></tr><tr><td><font color="red">TAAACTTATGATGATACCTTCGATTTCTCTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="41695,561.48",
+		shape=ellipse,
+		width=5.9908];
+	AGAGAAATCGAAGGTATCATCATAAGTTTAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGAGAAATCGAAGGTATCATCATAAGTTTAA</font></td></tr><tr><td><font color="red">TTAAACTTATGATGATACCTTCGATTTCTCT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="42175,560.48",
+		shape=ellipse,
+		width=5.9908];
+	AAGAGAAATCGAAGGTATCATCATAAGTTTA -> AGAGAAATCGAAGGTATCATCATAAGTTTAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="41936,567.98",
+		pos="e,41960,560.93 41911,561.03 41924,561 41937,560.97 41950,560.95"];
+	AAACTTATGATGATACCTTCGATTTCTCTTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAACTTATGATGATACCTTCGATTTCTCTTA</font></td></tr><tr><td><font color="red">TAAGAGAAATCGAAGGTATCATCATAAGTTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="41214,562.48",
+		shape=ellipse,
+		width=5.9515];
+	AAGAGAAATCGAAGGTATCATCATAAGTTTA -> AAACTTATGATGATACCTTCGATTTCTCTTA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="41454,532.98",
+		pos="e,41363,535.51 41565,531.55 41528,525.88 41487,522.52 41449,525.48 41425,527.42 41399,530.49 41373,534.07"];
+	AGAGAAATCGAAGGTATCATCATAAGTTTAA -> AAGAGAAATCGAAGGTATCATCATAAGTTTA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="41936,548.98",
+		pos="e,41879,541.65 41983,543.6 41969,542.75 41955,542.03 41941,541.48 41924,540.79 41907,540.8 41889,541.3"];
+	AAACTTATGATGATACCTTCGATTTCTCTTA -> AAGAGAAATCGAAGGTATCATCATAAGTTTA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="41454,568.98",
+		pos="e,41479,561.92 41428,562.03 41442,562 41455,561.97 41469,561.95"];
+	AACTTATGATGATACCTTCGATTTCTCTTAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AACTTATGATGATACCTTCGATTTCTCTTAT</font></td></tr><tr><td><font color="red">ATAAGAGAAATCGAAGGTATCATCATAAGTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="40732,562.48",
+		shape=ellipse,
+		width=5.9908];
+	AAACTTATGATGATACCTTCGATTTCTCTTA -> AACTTATGATGATACCTTCGATTTCTCTTAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="40973,532.98",
+		pos="e,40882,535.47 41087,532.27 41049,526.17 41007,522.44 40968,525.48 40943,527.41 40917,530.47 40892,534.03"];
+	ATTTTGTTTGTATGAATTTAGCCATGAGTTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATTTTGTTTGTATGAATTTAGCCATGAGTTA</font></td></tr><tr><td><font color="red">TAACTCATGGCTAAATTCATACAAACAAAAT</font></td></tr><tr><td><font color="black">2</font> </td></tr></table>>,
+		pos="21314,325.48",
+		shape=ellipse,
+		width=5.9318];
+	TTAACTCATGGCTAAATTCATACAAACAAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TTAACTCATGGCTAAATTCATACAAACAAAA</font></td></tr><tr><td><font color="red">TTTTGTTTGTATGAATTTAGCCATGAGTTAA</font></td></tr><tr><td><font color="black">2</font> </td></tr></table>>,
+		pos="21787,325.48",
+		shape=ellipse,
+		width=5.9318];
+	ATTTTGTTTGTATGAATTTAGCCATGAGTTA -> TTAACTCATGGCTAAATTCATACAAACAAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="21551,332.98",
+		pos="e,21574,325.48 21528,325.48 21540,325.48 21552,325.48 21563,325.48"];
+	AACTCATGGCTAAATTCATACAAACAAAATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AACTCATGGCTAAATTCATACAAACAAAATA</font></td></tr><tr><td><font color="red">TATTTTGTTTGTATGAATTTAGCCATGAGTT</font></td></tr><tr><td><font color="black">2</font> </td></tr></table>>,
+		pos="20840,325.48",
+		shape=ellipse,
+		width=5.9711];
+	ATTTTGTTTGTATGAATTTAGCCATGAGTTA -> AACTCATGGCTAAATTCATACAAACAAAATA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="21078,314.98",
+		pos="e,21028,307.34 21121,309.35 21108,308.6 21095,307.97 21083,307.48 21068,306.91 21053,306.82 21038,307.09"];
+	TTAACTCATGGCTAAATTCATACAAACAAAA -> ATTTTGTTTGTATGAATTTAGCCATGAGTTA	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="21551,313.98",
+		pos="e,21505,308.58 21603,306.43 21584,305.78 21564,305.71 21546,306.48 21536,306.89 21526,307.39 21515,307.98"];
+	TTTAACTCATGGCTAAATTCATACAAACAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TTTAACTCATGGCTAAATTCATACAAACAAA</font></td></tr><tr><td><font color="red">TTTGTTTGTATGAATTTAGCCATGAGTTAAA</font></td></tr><tr><td><font color="black">2</font> </td></tr></table>>,
+		pos="22260,325.48",
+		shape=ellipse,
+		width=5.9122];
+	TTAACTCATGGCTAAATTCATACAAACAAAA -> TTTAACTCATGGCTAAATTCATACAAACAAA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="22024,332.98",
+		pos="e,22047,325.48 22001,325.48 22013,325.48 22025,325.48 22036,325.48"];
+	AACTCATGGCTAAATTCATACAAACAAAATA -> ATTTTGTTTGTATGAATTTAGCCATGAGTTA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="21078,332.98",
+		pos="e,21100,325.48 21055,325.48 21067,325.48 21078,325.48 21090,325.48"];
+	ACTCATGGCTAAATTCATACAAACAAAATAC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ACTCATGGCTAAATTCATACAAACAAAATAC</font></td></tr><tr><td><font color="red">GTATTTTGTTTGTATGAATTTAGCCATGAGT</font></td></tr><tr><td><font color="black">2</font> </td></tr></table>>,
+		pos="20365,325.48",
+		shape=ellipse,
+		width=5.9515];
+	AACTCATGGCTAAATTCATACAAACAAAATA -> ACTCATGGCTAAATTCATACAAACAAAATAC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="20602,314.98",
+		pos="e,20558,309.35 20652,307.34 20633,306.81 20615,306.79 20597,307.48 20587,307.84 20578,308.28 20568,308.79"];
+	TGGCTTTATTTCCGCTTTGCACTTCATAAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TGGCTTTATTTCCGCTTTGCACTTCATAAAA</font></td></tr><tr><td><font color="red">TTTTATGAAGTGCAAAGCGGAAATAAAGCCA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="3549.9,78.477",
+		shape=ellipse,
+		width=5.9908];
+	GGCTTTATTTCCGCTTTGCACTTCATAAAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GGCTTTATTTCCGCTTTGCACTTCATAAAAA</font></td></tr><tr><td><font color="red">TTTTTATGAAGTGCAAAGCGGAAATAAAGCC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="3073.3,71.477",
+		shape=ellipse,
+		width=5.9711];
+	TGGCTTTATTTCCGCTTTGCACTTCATAAAA -> GGCTTTATTTCCGCTTTGCACTTCATAAAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="3311.3,72.977",
+		pos="e,3285.1,64.929 3345.6,66.454 3335.7,66.075 3325.9,65.745 3316.3,65.477 3309.4,65.286 3302.5,65.143 3295.5,65.044"];
+	ATGGCTTTATTTCCGCTTTGCACTTCATAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATGGCTTTATTTCCGCTTTGCACTTCATAAA</font></td></tr><tr><td><font color="red">TTTATGAAGTGCAAAGCGGAAATAAAGCCAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="4027.3,85.477",
+		shape=ellipse,
+		width=5.9908];
+	TGGCTTTATTTCCGCTTTGCACTTCATAAAA -> ATGGCTTTATTTCCGCTTTGCACTTCATAAA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="3788.6,95.977",
+		pos="e,3811.9,87.884 3760.2,86.954 3768.1,87.152 3775.9,87.328 3783.6,87.477 3789.5,87.591 3795.6,87.688 3801.6,87.767"];
+	GGCTTTATTTCCGCTTTGCACTTCATAAAAA -> TGGCTTTATTTCCGCTTTGCACTTCATAAAA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="3311.3,88.977",
+		pos="e,3334.6,80.885 3282.9,79.954 3290.8,80.152 3298.6,80.328 3306.3,80.477 3312.2,80.592 3318.2,80.688 3324.3,80.768"];
+	ATTTTTATGAAGTGCAAAGCGGAAATAAAGC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATTTTTATGAAGTGCAAAGCGGAAATAAAGC</font></td></tr><tr><td><font color="red">GCTTTATTTCCGCTTTGCACTTCATAAAAAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="2596.7,64.477",
+		shape=ellipse,
+		width=5.9908];
+	GGCTTTATTTCCGCTTTGCACTTCATAAAAA -> ATTTTTATGAAGTGCAAAGCGGAAATAAAGC	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="2835.4,61.977",
+		pos="e,2803.5,53.78 2877.2,56.141 2864.7,55.483 2852.4,54.916 2840.4,54.477 2831.6,54.157 2822.7,53.955 2813.7,53.853"];
+	ATGGCTTTATTTCCGCTTTGCACTTCATAAA -> TGGCTTTATTTCCGCTTTGCACTTCATAAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="3788.6,75.977",
+		pos="e,3756.8,67.783 3830.2,70.125 3817.8,69.473 3805.5,68.912 3793.6,68.477 3784.9,68.158 3776,67.957 3767,67.856"];
+	GATGGCTTTATTTCCGCTTTGCACTTCATAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GATGGCTTTATTTCCGCTTTGCACTTCATAA</font></td></tr><tr><td><font color="red">TTATGAAGTGCAAAGCGGAAATAAAGCCATC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="4505.3,92.477",
+		shape=ellipse,
+		width=6.0104];
+	ATGGCTTTATTTCCGCTTTGCACTTCATAAA -> GATGGCTTTATTTCCGCTTTGCACTTCATAA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="4265.9,102.98",
+		pos="e,4289.3,94.885 4237.5,93.954 4245.4,94.152 4253.3,94.328 4260.9,94.477 4266.9,94.592 4272.9,94.688 4279,94.768"];
+	ATGAAGTGCAAAGCGGAAATAAAGCCATCAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATGAAGTGCAAAGCGGAAATAAAGCCATCAT</font></td></tr><tr><td><font color="red">ATGATGGCTTTATTTCCGCTTTGCACTTCAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="5467.1,106.48",
+		shape=ellipse,
+		width=6.0497];
+	TATGATGGCTTTATTTCCGCTTTGCACTTCA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TATGATGGCTTTATTTCCGCTTTGCACTTCA</font></td></tr><tr><td><font color="red">TGAAGTGCAAAGCGGAAATAAAGCCATCATA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="5948.6,113.48",
+		shape=ellipse,
+		width=6.0497];
+	ATGAAGTGCAAAGCGGAAATAAAGCCATCAT -> TATGATGGCTTTATTTCCGCTTTGCACTTCA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="5707.9,123.98",
+		pos="e,5731.1,115.88 5679.2,114.95 5687.2,115.15 5695.1,115.33 5702.9,115.48 5708.8,115.59 5714.8,115.69 5720.8,115.76"];
+	TATGAAGTGCAAAGCGGAAATAAAGCCATCA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TATGAAGTGCAAAGCGGAAATAAAGCCATCA</font></td></tr><tr><td><font color="red">TGATGGCTTTATTTCCGCTTTGCACTTCATA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="4985.5,99.477",
+		shape=ellipse,
+		width=6.0497];
+	ATGAAGTGCAAAGCGGAAATAAAGCCATCAT -> TATGAAGTGCAAAGCGGAAATAAAGCCATCA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="5226.3,100.98",
+		pos="e,5200.1,92.93 5260.6,94.442 5250.7,94.068 5240.9,93.742 5231.3,93.477 5224.4,93.287 5217.5,93.145 5210.4,93.046"];
+	TATGATGGCTTTATTTCCGCTTTGCACTTCA -> ATGAAGTGCAAAGCGGAAATAAAGCCATCAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="5707.9,103.98",
+		pos="e,5676.1,95.784 5749.8,98.125 5737.3,97.473 5724.9,96.912 5712.9,96.477 5704.1,96.161 5695.2,95.961 5686.2,95.859"];
+	GAAGTGCAAAGCGGAAATAAAGCCATCATAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GAAGTGCAAAGCGGAAATAAAGCCATCATAA</font></td></tr><tr><td><font color="red">TTATGATGGCTTTATTTCCGCTTTGCACTTC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="6430.9,120.48",
+		shape=ellipse,
+		width=6.0693];
+	TATGATGGCTTTATTTCCGCTTTGCACTTCA -> GAAGTGCAAAGCGGAAATAAAGCCATCATAA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="6189.4,130.98",
+		pos="e,6212.7,122.88 6160.8,121.95 6168.8,122.15 6176.7,122.33 6184.4,122.48 6190.4,122.59 6196.4,122.69 6202.5,122.76"];
+	TATGAAGTGCAAAGCGGAAATAAAGCCATCA -> ATGAAGTGCAAAGCGGAAATAAAGCCATCAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="5226.3,116.98",
+		pos="e,5249.5,108.88 5197.7,107.95 5205.6,108.15 5213.5,108.33 5221.3,108.48 5227.2,108.59 5233.2,108.69 5239.2,108.76"];
+	TATGAAGTGCAAAGCGGAAATAAAGCCATCA -> GATGGCTTTATTTCCGCTTTGCACTTCATAA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="4744.7,93.977",
+		pos="e,4719.4,86.774 4780.8,86.621 4766.9,86.371 4753.1,86.304 4739.7,86.477 4736.4,86.52 4733,86.566 4729.6,86.616"];
+	AATACGGCAAAAAAATCGCGCATTTTTATGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AATACGGCAAAAAAATCGCGCATTTTTATGA</font></td></tr><tr><td><font color="red">TCATAAAAATGCGCGATTTTTTTGCCGTATT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="7877.8,241.48",
+		shape=ellipse,
+		width=5.9515];
+	ATACGGCAAAAAAATCGCGCATTTTTATGAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATACGGCAAAAAAATCGCGCATTTTTATGAA</font></td></tr><tr><td><font color="red">TTCATAAAAATGCGCGATTTTTTTGCCGTAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="7396.2,234.48",
+		shape=ellipse,
+		width=5.9515];
+	AATACGGCAAAAAAATCGCGCATTTTTATGA -> ATACGGCAAAAAAATCGCGCATTTTTATGAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="7637,219.98",
+		pos="e,7569.6,212.42 7709.3,218.25 7686.7,215.86 7663.8,213.82 7642,212.48 7621.9,211.24 7600.8,211.21 7579.9,211.98"];
+	AAATACGGCAAAAAAATCGCGCATTTTTATG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAATACGGCAAAAAAATCGCGCATTTTTATG</font></td></tr><tr><td><font color="red">CATAAAAATGCGCGATTTTTTTGCCGTATTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="8357.9,248.48",
+		shape=ellipse,
+		width=5.9515];
+	AATACGGCAAAAAAATCGCGCATTTTTATGA -> AAATACGGCAAAAAAATCGCGCATTTTTATG	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="8118.6,252.98",
+		pos="e,8144.2,245.36 8091.3,244.59 8105.4,244.79 8119.7,245 8133.9,245.21"];
+	ATACGGCAAAAAAATCGCGCATTTTTATGAA -> AATACGGCAAAAAAATCGCGCATTTTTATGA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="7637,245.98",
+		pos="e,7663.9,238.37 7610,237.58 7624.5,237.79 7639.2,238.01 7653.8,238.22"];
+	CTTCATAAAAATGCGCGATTTTTTTGCCGTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CTTCATAAAAATGCGCGATTTTTTTGCCGTA</font></td></tr><tr><td><font color="red">TACGGCAAAAAAATCGCGCATTTTTATGAAG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="6913.9,227.48",
+		shape=ellipse,
+		width=5.9515];
+	ATACGGCAAAAAAATCGCGCATTTTTATGAA -> CTTCATAAAAATGCGCGATTTTTTTGCCGTA	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="7155.4,219.98",
+		pos="e,7108.5,211.75 7211.1,215.58 7194,214.32 7176.9,213.25 7160.4,212.48 7146.9,211.84 7132.9,211.6 7118.8,211.65"];
+	AAATACGGCAAAAAAATCGCGCATTTTTATG -> AATACGGCAAAAAAATCGCGCATTTTTATGA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="8118.6,233.98",
+		pos="e,8072.5,225.73 8173,229.51 8156.3,228.28 8139.6,227.23 8123.6,226.48 8110.2,225.85 8096.5,225.6 8082.6,225.65"];
+	AAAATACGGCAAAAAAATCGCGCATTTTTAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAAATACGGCAAAAAAATCGCGCATTTTTAT</font></td></tr><tr><td><font color="red">ATAAAAATGCGCGATTTTTTTGCCGTATTTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="8838.1,255.48",
+		shape=ellipse,
+		width=5.9515];
+	AAATACGGCAAAAAAATCGCGCATTTTTATG -> AAAATACGGCAAAAAAATCGCGCATTTTTAT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="8597.3,259.98",
+		pos="e,8624.4,252.36 8571.5,251.59 8585.6,251.79 8599.9,252 8614.1,252.21"];
+	AATATAAGAGAAATCGAAGGTATCATCATAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AATATAAGAGAAATCGAAGGTATCATCATAA</font></td></tr><tr><td><font color="red">TTATGATGATACCTTCGATTTCTCTTATATT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="39290,565.48",
+		shape=ellipse,
+		width=6.0104];
+	ATATAAGAGAAATCGAAGGTATCATCATAAG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATATAAGAGAAATCGAAGGTATCATCATAAG</font></td></tr><tr><td><font color="red">CTTATGATGATACCTTCGATTTCTCTTATAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="39770,565.48",
+		shape=ellipse,
+		width=6.0104];
+	AATATAAGAGAAATCGAAGGTATCATCATAA -> ATATAAGAGAAATCGAAGGTATCATCATAAG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="39530,572.98",
+		pos="e,39553,565.48 39507,565.48 39519,565.48 39531,565.48 39543,565.48"];
+	TAATATAAGAGAAATCGAAGGTATCATCATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TAATATAAGAGAAATCGAAGGTATCATCATA</font></td></tr><tr><td><font color="red">TATGATGATACCTTCGATTTCTCTTATATTA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="38811,570.48",
+		shape=ellipse,
+		width=5.9908];
+	AATATAAGAGAAATCGAAGGTATCATCATAA -> TAATATAAGAGAAATCGAAGGTATCATCATA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="39051,540.98",
+		pos="e,38961,543.37 39150,536.98 39116,532.88 39080,530.82 39046,533.48 39021,535.4 38996,538.43 38971,541.95"];
+	ATATAAGAGAAATCGAAGGTATCATCATAAG -> AATATAAGAGAAATCGAAGGTATCATCATAA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="39530,553.98",
+		pos="e,39483,548.58 39583,546.44 39563,545.78 39544,545.7 39525,546.48 39514,546.89 39504,547.4 39494,547.99"];
+	ACTTATGATGATACCTTCGATTTCTCTTATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ACTTATGATGATACCTTCGATTTCTCTTATA</font></td></tr><tr><td><font color="red">TATAAGAGAAATCGAAGGTATCATCATAAGT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="40251,565.48",
+		shape=ellipse,
+		width=5.9908];
+	ATATAAGAGAAATCGAAGGTATCATCATAAG -> ACTTATGATGATACCTTCGATTTCTCTTATA	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="40010,572.98",
+		pos="e,40035,565.48 39986,565.48 39999,565.48 40012,565.48 40025,565.48"];
+	TAATATAAGAGAAATCGAAGGTATCATCATA -> AATATAAGAGAAATCGAAGGTATCATCATAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="39051,574.98",
+		pos="e,39074,567.73 39027,568.23 39039,568.1 39051,567.97 39064,567.84"];
+	ATAATATAAGAGAAATCGAAGGTATCATCAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATAATATAAGAGAAATCGAAGGTATCATCAT</font></td></tr><tr><td><font color="red">ATGATGATACCTTCGATTTCTCTTATATTAT</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="38333,505.48",
+		shape=ellipse,
+		width=5.9908];
+	TAATATAAGAGAAATCGAAGGTATCATCATA -> ATAATATAAGAGAAATCGAAGGTATCATCAT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="38572,544.98",
+		pos="e,38503,528.53 38641,547.42 38600,541.74 38555,535.64 38513,529.9"];
+	AGAAATCGAAGGTATCATCATGAAGTTTAAC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGAAATCGAAGGTATCATCATGAAGTTTAAC</font></td></tr><tr><td><font color="red">GTTAAACTTCATGATGATACCTTCGATTTCT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="41214,374.48",
+		shape=ellipse,
+		width=5.9711];
+	AGTTAAACTTCATGATGATACCTTCGATTTC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGTTAAACTTCATGATGATACCTTCGATTTC</font></td></tr><tr><td><font color="red">GAAATCGAAGGTATCATCATGAAGTTTAACT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="41695,375.48",
+		shape=ellipse,
+		width=5.9318];
+	AGAAATCGAAGGTATCATCATGAAGTTTAAC -> AGTTAAACTTCATGATGATACCTTCGATTTC	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="41454,381.98",
+		pos="e,41481,375.03 41429,374.92 41443,374.95 41457,374.98 41471,375.01"];
+	GAGAAATCGAAGGTATCATCATGAAGTTTAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GAGAAATCGAAGGTATCATCATGAAGTTTAA</font></td></tr><tr><td><font color="red">TTAAACTTCATGATGATACCTTCGATTTCTC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="40732,374.48",
+		shape=ellipse,
+		width=5.9908];
+	AGAAATCGAAGGTATCATCATGAAGTTTAAC -> GAGAAATCGAAGGTATCATCATGAAGTTTAA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="40973,366.98",
+		pos="e,40929,359.23 41013,360.86 41001,360.31 40989,359.84 40978,359.48 40965,359.07 40952,358.97 40939,359.09"];
+	AGTTAAACTTCATGATGATACCTTCGATTTC -> AGAAATCGAAGGTATCATCATGAAGTTTAAC	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="41454,362.98",
+		pos="e,41399,355.42 41506,358.02 41490,356.99 41475,356.12 41459,355.48 41443,354.78 41426,354.72 41409,355.13"];
+	AAATCGAAGGTATCATCATGAAGTTTAACTC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAATCGAAGGTATCATCATGAAGTTTAACTC</font></td></tr><tr><td><font color="red">GAGTTAAACTTCATGATGATACCTTCGATTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="42175,374.48",
+		shape=ellipse,
+		width=5.9318];
+	AGTTAAACTTCATGATGATACCTTCGATTTC -> AAATCGAAGGTATCATCATGAAGTTTAACTC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="41936,381.98",
+		pos="e,41962,374.92 41909,375.03 41923,375 41937,374.97 41951,374.94"];
+	GAGAAATCGAAGGTATCATCATGAAGTTTAA -> AGAAATCGAAGGTATCATCATGAAGTTTAAC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="40973,381.98",
+		pos="e,40999,374.48 40948,374.48 40961,374.48 40975,374.48 40988,374.48"];
+	AGAGAAATCGAAGGTATCATCATGAAGTTTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGAGAAATCGAAGGTATCATCATGAAGTTTA</font></td></tr><tr><td><font color="red">TAAACTTCATGATGATACCTTCGATTTCTCT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="40251,375.48",
+		shape=ellipse,
+		width=5.9908];
+	GAGAAATCGAAGGTATCATCATGAAGTTTAA -> AGAGAAATCGAAGGTATCATCATGAAGTTTA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="40491,355.98",
+		pos="e,40425,353.29 40570,349.82 40542,347.73 40513,346.93 40486,348.48 40470,349.43 40452,350.77 40435,352.34"];
+	ATATCGCTACTTCTTTAGGGGATAATATAAG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATATCGCTACTTCTTTAGGGGATAATATAAG</font></td></tr><tr><td><font color="red">CTTATATTATCCCCTAAAGAAGTAGCGATAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="48340,472.48",
+		shape=ellipse,
+		width=5.8729];
+	TATCGCTACTTCTTTAGGGGATAATATAAGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TATCGCTACTTCTTTAGGGGATAATATAAGA</font></td></tr><tr><td><font color="red">TCTTATATTATCCCCTAAAGAAGTAGCGATA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="47870,480.48",
+		shape=ellipse,
+		width=5.8729];
+	ATATCGCTACTTCTTTAGGGGATAATATAAG -> TATCGCTACTTCTTTAGGGGATAATATAAGA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="48106,459.98",
+		pos="e,48038,457.72 48163,451.96 48142,451.22 48121,451.25 48101,452.48 48084,453.51 48066,454.97 48049,456.69"];
+	TATATCGCTACTTCTTTAGGGGATAATATAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TATATCGCTACTTCTTTAGGGGATAATATAA</font></td></tr><tr><td><font color="red">TTATATTATCCCCTAAAGAAGTAGCGATATA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="48810,471.48",
+		shape=ellipse,
+		width=5.8926];
+	ATATCGCTACTTCTTTAGGGGATAATATAAG -> TATATCGCTACTTCTTTAGGGGATAATATAA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="48575,478.98",
+		pos="e,48598,471.93 48552,472.03 48564,472 48576,471.98 48587,471.95"];
+	TATCGCTACTTCTTTAGGGGATAATATAAGA -> ATATCGCTACTTCTTTAGGGGATAATATAAG	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="48106,483.98",
+		pos="e,48130,476.06 48081,476.9 48094,476.68 48107,476.46 48119,476.24"];
+	ATCGCTACTTCTTTAGGGGATAATATAAGAG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATCGCTACTTCTTTAGGGGATAATATAAGAG</font></td></tr><tr><td><font color="red">CTCTTATATTATCCCCTAAAGAAGTAGCGAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="47399,473.48",
+		shape=ellipse,
+		width=5.9122];
+	TATCGCTACTTCTTTAGGGGATAATATAAGA -> ATCGCTACTTCTTTAGGGGATAATATAAGAG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="47634,455.98",
+		pos="e,47560,449.03 47712,455.63 47688,452.66 47663,450.11 47639,448.48 47617,446.93 47594,447.12 47570,448.4"];
+	TATATCGCTACTTCTTTAGGGGATAATATAA -> ATATCGCTACTTCTTTAGGGGATAATATAAG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="48575,459.98",
+		pos="e,48527,454.86 48627,452.35 48608,451.71 48589,451.66 48570,452.48 48559,452.94 48548,453.53 48537,454.21"];
+	CTATATCGCTACTTCTTTAGGGGATAATATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CTATATCGCTACTTCTTTAGGGGATAATATA</font></td></tr><tr><td><font color="red">TATATTATCCCCTAAAGAAGTAGCGATATAG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="49282,479.48",
+		shape=ellipse,
+		width=5.9318];
+	TATATCGCTACTTCTTTAGGGGATAATATAA -> CTATATCGCTACTTCTTTAGGGGATAATATA	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="49045,482.98",
+		pos="e,49069,475.87 49022,475.06 49034,475.27 49046,475.48 49059,475.69"];
+	ATTTTTATGAAGTGCAAAGCGGAAATAAAGC -> GGCTTTATTTCCGCTTTGCACTTCATAAAAA	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="2835.4,81.977",
+		pos="e,2858.4,73.389 2806.5,73.327 2817.9,73.468 2829.3,73.524 2840.4,73.477 2843,73.465 2845.6,73.454 2848.2,73.441"];
+	CATTTTTATGAAGTGCAAAGCGGAAATAAAG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CATTTTTATGAAGTGCAAAGCGGAAATAAAG</font></td></tr><tr><td><font color="red">CTTTATTTCCGCTTTGCACTTCATAAAAATG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="2119.4,57.477",
+		shape=ellipse,
+		width=5.9908];
+	ATTTTTATGAAGTGCAAAGCGGAAATAAAGC -> CATTTTTATGAAGTGCAAAGCGGAAATAAAG	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="2358,58.977",
+		pos="e,2331.8,50.927 2392.4,52.454 2382.4,52.075 2372.6,51.745 2363,51.477 2356.2,51.285 2349.2,51.142 2342.1,51.043"];
+	CATTTTTATGAAGTGCAAAGCGGAAATAAAG -> ATTTTTATGAAGTGCAAAGCGGAAATAAAGC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="2358,74.977",
+		pos="e,2381.3,66.884 2329.6,65.954 2337.5,66.152 2345.3,66.328 2353,66.477 2359,66.591 2365,66.688 2371,66.767"];
+	GCATTTTTATGAAGTGCAAAGCGGAAATAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GCATTTTTATGAAGTGCAAAGCGGAAATAAA</font></td></tr><tr><td><font color="red">TTTATTTCCGCTTTGCACTTCATAAAAATGC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="1642,50.477",
+		shape=ellipse,
+		width=5.9908];
+	CATTTTTATGAAGTGCAAAGCGGAAATAAAG -> GCATTTTTATGAAGTGCAAAGCGGAAATAAA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="1880.7,47.977",
+		pos="e,1848.9,39.783 1922.3,42.125 1909.9,41.473 1897.6,40.912 1885.7,40.477 1877,40.158 1868.1,39.957 1859.1,39.856"];
+	ATCGAAGGTATCATCATGAGTTTAACTCATG -> AATCGAAGGTATCATCATGAGTTTAACTCAT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="31911,384.98",
+		pos="e,31933,377.48 31888,377.48 31900,377.48 31911,377.48 31923,377.48"];
+	CCATGAGTTAAACTCATGATGATACCTTCGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CCATGAGTTAAACTCATGATGATACCTTCGA</font></td></tr><tr><td><font color="red">TCGAAGGTATCATCATGAGTTTAACTCATGG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="31205,377.48",
+		shape=ellipse,
+		width=5.8926];
+	ATCGAAGGTATCATCATGAGTTTAACTCATG -> CCATGAGTTAAACTCATGATGATACCTTCGA	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="31441,350.98",
+		pos="e,31359,351.61 31542,348.33 31507,343.57 31470,340.92 31436,343.48 31414,345.06 31392,347.47 31369,350.29"];
+	CCATGAGTTAAACTCATGATGATACCTTCGA -> ATCGAAGGTATCATCATGAGTTTAACTCATG	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="31441,384.98",
+		pos="e,31463,377.48 31418,377.48 31429,377.48 31441,377.48 31453,377.48"];
+	CGAAGGTATCATCATGAGTTTAACTCATGGC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CGAAGGTATCATCATGAGTTTAACTCATGGC</font></td></tr><tr><td><font color="red">GCCATGAGTTAAACTCATGATGATACCTTCG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="30734,378.48",
+		shape=ellipse,
+		width=5.9122];
+	CCATGAGTTAAACTCATGATGATACCTTCGA -> CGAAGGTATCATCATGAGTTTAACTCATGGC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="30970,351.98",
+		pos="e,30869,349.38 31049,352.06 31024,348.91 30999,346.19 30975,344.48 30944,342.24 30911,344.18 30879,348.05"];
+	ATACAAACAAAATACGGCAAAAAAATCGCGC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATACAAACAAAATACGGCAAAAAAATCGCGC</font></td></tr><tr><td><font color="red">GCGCGATTTTTTTGCCGTATTTTGTTTGTAT</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="12693,311.48",
+		shape=ellipse,
+		width=6.0693];
+	TACAAACAAAATACGGCAAAAAAATCGCGCA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TACAAACAAAATACGGCAAAAAAATCGCGCA</font></td></tr><tr><td><font color="red">TGCGCGATTTTTTTGCCGTATTTTGTTTGTA</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="12210,304.48",
+		shape=ellipse,
+		width=6.0693];
+	ATACAAACAAAATACGGCAAAAAAATCGCGC -> TACAAACAAAATACGGCAAAAAAATCGCGCA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="12451,289.98",
+		pos="e,12386,282.31 12522,288.05 12500,285.74 12478,283.78 12456,282.48 12437,281.28 12417,281.21 12396,281.9"];
+	CATACAAACAAAATACGGCAAAAAAATCGCG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CATACAAACAAAATACGGCAAAAAAATCGCG</font></td></tr><tr><td><font color="red">CGCGATTTTTTTGCCGTATTTTGTTTGTATG</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="13176,318.48",
+		shape=ellipse,
+		width=6.0693];
+	ATACAAACAAAATACGGCAAAAAAATCGCGC -> CATACAAACAAAATACGGCAAAAAAATCGCG	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="12934,322.98",
+		pos="e,12958,315.32 12911,314.63 12923,314.81 12935,314.99 12948,315.17"];
+	TACAAACAAAATACGGCAAAAAAATCGCGCA -> ATACAAACAAAATACGGCAAAAAAATCGCGC	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="12451,315.98",
+		pos="e,12475,308.32 12428,307.63 12440,307.81 12452,307.99 12465,308.17"];
+	ACAAACAAAATACGGCAAAAAAATCGCGCAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ACAAACAAAATACGGCAAAAAAATCGCGCAT</font></td></tr><tr><td><font color="red">ATGCGCGATTTTTTTGCCGTATTTTGTTTGT</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="11727,297.48",
+		shape=ellipse,
+		width=6.0693];
+	TACAAACAAAATACGGCAAAAAAATCGCGCA -> ACAAACAAAATACGGCAAAAAAATCGCGCAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="11968,282.98",
+		pos="e,11903,275.31 12039,281.05 12017,278.74 11995,276.78 11973,275.48 11954,274.28 11934,274.21 11913,274.9"];
+	CATACAAACAAAATACGGCAAAAAAATCGCG -> ATACAAACAAAATACGGCAAAAAAATCGCGC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="12934,303.98",
+		pos="e,12891,295.71 12988,299.39 12971,298.21 12955,297.21 12939,296.48 12927,295.9 12914,295.65 12901,295.65"];
+	GCGATTTTTTTGCCGTATTTTGTTTGTATGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GCGATTTTTTTGCCGTATTTTGTTTGTATGA</font></td></tr><tr><td><font color="red">TCATACAAACAAAATACGGCAAAAAAATCGC</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="13658,325.48",
+		shape=ellipse,
+		width=6.0497];
+	CATACAAACAAAATACGGCAAAAAAATCGCG -> GCGATTTTTTTGCCGTATTTTGTTTGTATGA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="13417,329.98",
+		pos="e,13441,322.33 13394,321.64 13406,321.82 13418,322 13431,322.18"];
+	AAATCGAAGGTATCATCATGAAGTTTAACTC -> AGTTAAACTTCATGATGATACCTTCGATTTC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="41936,362.98",
+		pos="e,41877,355.72 41984,357.72 41970,356.82 41955,356.05 41941,355.48 41924,354.76 41905,354.8 41887,355.35"];
+	AATCGAAGGTATCATCATGAAGTTTAACTCA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AATCGAAGGTATCATCATGAAGTTTAACTCA</font></td></tr><tr><td><font color="red">TGAGTTAAACTTCATGATGATACCTTCGATT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="42655,374.48",
+		shape=ellipse,
+		width=5.9318];
+	AAATCGAAGGTATCATCATGAAGTTTAACTC -> AATCGAAGGTATCATCATGAAGTTTAACTCA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="42415,381.98",
+		pos="e,42441,374.48 42389,374.48 42403,374.48 42417,374.48 42431,374.48"];
+	CTATATCGCTACTTCTTTAGGGGATAATATA -> TATATCGCTACTTCTTTAGGGGATAATATAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="49045,463.98",
+		pos="e,49003,455.65 49100,459.72 49083,458.4 49066,457.28 49050,456.48 49038,455.87 49025,455.6 49013,455.6"];
+	ACTATATCGCTACTTCTTTAGGGGATAATAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ACTATATCGCTACTTCTTTAGGGGATAATAT</font></td></tr><tr><td><font color="red">ATATTATCCCCTAAAGAAGTAGCGATATAGT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="49755,481.48",
+		shape=ellipse,
+		width=5.9318];
+	CTATATCGCTACTTCTTTAGGGGATAATATA -> ACTATATCGCTACTTCTTTAGGGGATAATAT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="49518,487.98",
+		pos="e,49541,480.57 49496,480.38 49507,480.43 49519,480.48 49531,480.53"];
+	ATCAATCTTTCTAATGATATTATAAACTATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATCAATCTTTCTAATGATATTATAAACTATA</font></td></tr><tr><td><font color="red">TATAGTTTATAATATCATTAGAAAGATTGAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="61549,478.48",
+		shape=ellipse,
+		width=5.8729];
+	ATATAGTTTATAATATCATTAGAAAGATTGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATATAGTTTATAATATCATTAGAAAGATTGA</font></td></tr><tr><td><font color="red">TCAATCTTTCTAATGATATTATAAACTATAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="61080,478.48",
+		shape=ellipse,
+		width=5.8926];
+	ATCAATCTTTCTAATGATATTATAAACTATA -> ATATAGTTTATAATATCATTAGAAAGATTGA	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="61315,467.98",
+		pos="e,61266,460.33 61358,462.36 61345,461.61 61332,460.97 61319,460.48 61305,459.92 61291,459.83 61276,460.09"];
+	ATAGTTTATAATATCATTAGAAAGATTGATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATAGTTTATAATATCATTAGAAAGATTGATA</font></td></tr><tr><td><font color="red">TATCAATCTTTCTAATGATATTATAAACTAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="62018,478.48",
+		shape=ellipse,
+		width=5.8926];
+	ATCAATCTTTCTAATGATATTATAAACTATA -> ATAGTTTATAATATCATTAGAAAGATTGATA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="61783,485.98",
+		pos="e,61806,478.48 61760,478.48 61772,478.48 61784,478.48 61796,478.48"];
+	ATATAGTTTATAATATCATTAGAAAGATTGA -> ATCAATCTTTCTAATGATATTATAAACTATA	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="61315,485.98",
+		pos="e,61337,478.48 61293,478.48 61304,478.48 61316,478.48 61327,478.48"];
+	CAATCTTTCTAATGATATTATAAACTATATC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CAATCTTTCTAATGATATTATAAACTATATC</font></td></tr><tr><td><font color="red">GATATAGTTTATAATATCATTAGAAAGATTG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="60610,478.48",
+		shape=ellipse,
+		width=5.8926];
+	ATATAGTTTATAATATCATTAGAAAGATTGA -> CAATCTTTCTAATGATATTATAAACTATATC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="60845,467.98",
+		pos="e,60802,462.36 60894,460.34 60876,459.82 60858,459.79 60840,460.48 60831,460.84 60821,461.29 60812,461.81"];
+	ATAGTTTATAATATCATTAGAAAGATTGATA -> ATCAATCTTTCTAATGATATTATAAACTATA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="61783,466.98",
+		pos="e,61738,461.6 61836,459.44 61816,458.78 61797,458.7 61778,459.48 61768,459.89 61758,460.4 61748,460.99"];
+	ATATCAATCTTTCTAATGATATTATAAACTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATATCAATCTTTCTAATGATATTATAAACTA</font></td></tr><tr><td><font color="red">TAGTTTATAATATCATTAGAAAGATTGATAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="62487,478.48",
+		shape=ellipse,
+		width=5.8729];
+	ATAGTTTATAATATCATTAGAAAGATTGATA -> ATATCAATCTTTCTAATGATATTATAAACTA	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="62253,485.98",
+		pos="e,62275,478.48 62231,478.48 62242,478.48 62254,478.48 62265,478.48"];
+	AAGTGCAAAGCGGAAATAAAGCCATCATAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAGTGCAAAGCGGAAATAAAGCCATCATAAA</font></td></tr><tr><td><font color="red">TTTATGATGGCTTTATTTCCGCTTTGCACTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="6913.9,127.48",
+		shape=ellipse,
+		width=6.0693];
+	AGTGCAAAGCGGAAATAAAGCCATCATAAAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGTGCAAAGCGGAAATAAAGCCATCATAAAT</font></td></tr><tr><td><font color="red">ATTTATGATGGCTTTATTTCCGCTTTGCACT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="7396.2,134.48",
+		shape=ellipse,
+		width=6.0497];
+	AAGTGCAAAGCGGAAATAAAGCCATCATAAA -> AGTGCAAAGCGGAAATAAAGCCATCATAAAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="7155.4,144.98",
+		pos="e,7178.7,136.39 7126.5,136.33 7138,136.47 7149.3,136.52 7160.4,136.48 7163.1,136.47 7165.9,136.45 7168.6,136.44"];
+	AAGTGCAAAGCGGAAATAAAGCCATCATAAA -> GAAGTGCAAAGCGGAAATAAAGCCATCATAA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="6672.4,121.98",
+		pos="e,6646.2,113.93 6706.8,115.44 6696.9,115.07 6687,114.74 6677.4,114.48 6670.5,114.29 6663.6,114.15 6656.5,114.05"];
+	AGTGCAAAGCGGAAATAAAGCCATCATAAAT -> AAGTGCAAAGCGGAAATAAAGCCATCATAAA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="7155.4,124.98",
+		pos="e,7123.5,116.78 7197.3,119.12 7184.8,118.47 7172.5,117.91 7160.4,117.48 7151.7,117.16 7142.7,116.96 7133.7,116.86"];
+	GTGCAAAGCGGAAATAAAGCCATCATAAATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GTGCAAAGCGGAAATAAAGCCATCATAAATA</font></td></tr><tr><td><font color="red">TATTTATGATGGCTTTATTTCCGCTTTGCAC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="7877.8,141.48",
+		shape=ellipse,
+		width=6.0497];
+	AGTGCAAAGCGGAAATAAAGCCATCATAAAT -> GTGCAAAGCGGAAATAAAGCCATCATAAATA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="7637,151.98",
+		pos="e,7660.2,143.88 7608.4,142.95 7616.3,143.15 7624.2,143.33 7632,143.48 7637.9,143.59 7643.9,143.69 7650,143.76"];
+	GAAGTGCAAAGCGGAAATAAAGCCATCATAA -> TATGATGGCTTTATTTCCGCTTTGCACTTCA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="6189.4,114.98",
+		pos="e,6163.2,106.93 6223.8,108.44 6213.9,108.07 6204,107.74 6194.4,107.48 6187.6,107.29 6180.6,107.15 6173.6,107.05"];
+	GAAGTGCAAAGCGGAAATAAAGCCATCATAA -> AAGTGCAAAGCGGAAATAAAGCCATCATAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="6672.4,137.98",
+		pos="e,6695.7,129.88 6644.1,128.96 6651.9,129.16 6659.7,129.33 6667.4,129.48 6673.4,129.59 6679.4,129.69 6685.4,129.76"];
+	GATTTCTCTTATATTATCCCCTAAAGAAGTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GATTTCTCTTATATTATCCCCTAAAGAAGTA</font></td></tr><tr><td><font color="red">TACTTCTTTAGGGGATAATATAAGAGAAATC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="45034,482.48",
+		shape=ellipse,
+		width=5.9318];
+	ATTTCTCTTATATTATCCCCTAAAGAAGTAG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATTTCTCTTATATTATCCCCTAAAGAAGTAG</font></td></tr><tr><td><font color="red">CTACTTCTTTAGGGGATAATATAAGAGAAAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="45507,482.48",
+		shape=ellipse,
+		width=5.9318];
+	GATTTCTCTTATATTATCCCCTAAAGAAGTA -> ATTTCTCTTATATTATCCCCTAAAGAAGTAG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="45270,489.98",
+		pos="e,45293,482.48 45248,482.48 45259,482.48 45271,482.48 45283,482.48"];
+	ACTTCTTTAGGGGATAATATAAGAGAAATCG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ACTTCTTTAGGGGATAATATAAGAGAAATCG</font></td></tr><tr><td><font color="red">CGATTTCTCTTATATTATCCCCTAAAGAAGT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="44560,484.48",
+		shape=ellipse,
+		width=5.9515];
+	GATTTCTCTTATATTATCCCCTAAAGAAGTA -> ACTTCTTTAGGGGATAATATAAGAGAAATCG	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="44797,464.98",
+		pos="e,44719,459.26 44857,461.43 44839,459.81 44820,458.44 44802,457.48 44778,456.19 44753,456.79 44729,458.5"];
+	ATTTCTCTTATATTATCCCCTAAAGAAGTAG -> GATTTCTCTTATATTATCCCCTAAAGAAGTA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="45270,470.98",
+		pos="e,45225,465.58 45323,463.43 45303,462.78 45284,462.71 45265,463.48 45255,463.89 45245,464.39 45235,464.98"];
+	GCTACTTCTTTAGGGGATAATATAAGAGAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GCTACTTCTTTAGGGGATAATATAAGAGAAA</font></td></tr><tr><td><font color="red">TTTCTCTTATATTATCCCCTAAAGAAGTAGC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="45981,481.48",
+		shape=ellipse,
+		width=5.9515];
+	ATTTCTCTTATATTATCCCCTAAAGAAGTAG -> GCTACTTCTTTAGGGGATAATATAAGAGAAA	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="45743,488.98",
+		pos="e,45766,481.93 45721,482.03 45732,482 45744,481.98 45756,481.95"];
+	ACTTCTTTAGGGGATAATATAAGAGAAATCG -> GATTTCTCTTATATTATCCCCTAAAGAAGTA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="44797,490.98",
+		pos="e,44820,483.38 44774,483.57 44786,483.52 44798,483.47 44810,483.42"];
+	CTTCTTTAGGGGATAATATAAGAGAAATCGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CTTCTTTAGGGGATAATATAAGAGAAATCGA</font></td></tr><tr><td><font color="red">TCGATTTCTCTTATATTATCCCCTAAAGAAG</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="44085,486.48",
+		shape=ellipse,
+		width=5.9515];
+	ACTTCTTTAGGGGATAATATAAGAGAAATCG -> CTTCTTTAGGGGATAATATAAGAGAAATCGA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="44323,473.98",
+		pos="e,44275,468.84 44373,466.19 44354,465.69 44336,465.71 44318,466.48 44307,466.94 44296,467.52 44285,468.19"];
+	CTTCGATTTCTCTTATATTATCCCCTAAAGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CTTCGATTTCTCTTATATTATCCCCTAAAGA</font></td></tr><tr><td><font color="red">TCTTTAGGGGATAATATAAGAGAAATCGAAG</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="43134,481.48",
+		shape=ellipse,
+		width=5.9908];
+	TTCGATTTCTCTTATATTATCCCCTAAAGAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TTCGATTTCTCTTATATTATCCCCTAAAGAA</font></td></tr><tr><td><font color="red">TTCTTTAGGGGATAATATAAGAGAAATCGAA</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="43610,482.48",
+		shape=ellipse,
+		width=5.9711];
+	CTTCGATTTCTCTTATATTATCCCCTAAAGA -> TTCGATTTCTCTTATATTATCCCCTAAAGAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="43372,488.98",
+		pos="e,43395,482.03 43349,481.93 43361,481.95 43373,481.98 43385,482"];
+	CCTTCGATTTCTCTTATATTATCCCCTAAAG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CCTTCGATTTCTCTTATATTATCCCCTAAAG</font></td></tr><tr><td><font color="red">CTTTAGGGGATAATATAAGAGAAATCGAAGG</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="42655,467.48",
+		shape=ellipse,
+		width=6.03];
+	CTTCGATTTCTCTTATATTATCCCCTAAAGA -> CCTTCGATTTCTCTTATATTATCCCCTAAAG	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="42895,456.98",
+		pos="e,42841,448.28 42972,456.52 42948,453.6 42923,451.08 42900,449.48 42884,448.4 42868,448.01 42852,448.14"];
+	TTCGATTTCTCTTATATTATCCCCTAAAGAA -> CTTCGATTTCTCTTATATTATCCCCTAAAGA	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="43372,469.98",
+		pos="e,43319,462.34 43420,464.84 43406,463.89 43391,463.08 43377,462.48 43362,461.81 43346,461.72 43329,462.07"];
+	TTCGATTTCTCTTATATTATCCCCTAAAGAA -> CTTCTTTAGGGGATAATATAAGAGAAATCGA	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="43848,491.98",
+		pos="e,43871,484.68 43825,484.28 43837,484.39 43849,484.49 43861,484.59"];
+	CCTTCGATTTCTCTTATATTATCCCCTAAAG -> CTTCGATTTCTCTTATATTATCCCCTAAAGA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="42895,481.98",
+		pos="e,42921,475.25 42869,473.74 42883,474.14 42897,474.55 42911,474.96"];
+	ACCTTCGATTTCTCTTATATTATCCCCTAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ACCTTCGATTTCTCTTATATTATCCCCTAAA</font></td></tr><tr><td><font color="red">TTTAGGGGATAATATAAGAGAAATCGAAGGT</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="42175,467.48",
+		shape=ellipse,
+		width=6.0104];
+	CCTTCGATTTCTCTTATATTATCCCCTAAAG -> ACCTTCGATTTCTCTTATATTATCCCCTAAA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="42415,437.98",
+		pos="e,42325,440.33 42527,437.11 42490,431.1 42448,427.46 42410,430.48 42386,432.39 42360,435.4 42335,438.91"];
+	TGAGTTTAACTCATGGCTAAATTCATACAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TGAGTTTAACTCATGGCTAAATTCATACAAA</font></td></tr><tr><td><font color="red">TTTGTATGAATTTAGCCATGAGTTAAACTCA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="24146,377.48",
+		shape=ellipse,
+		width=5.8926];
+	GAGTTTAACTCATGGCTAAATTCATACAAAC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GAGTTTAACTCATGGCTAAATTCATACAAAC</font></td></tr><tr><td><font color="red">GTTTGTATGAATTTAGCCATGAGTTAAACTC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="23675,378.48",
+		shape=ellipse,
+		width=5.9122];
+	TGAGTTTAACTCATGGCTAAATTCATACAAA -> GAGTTTAACTCATGGCTAAATTCATACAAAC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="23911,351.98",
+		pos="e,23809,349.38 23989,352.06 23965,348.91 23940,346.19 23916,344.48 23884,342.24 23851,344.18 23819,348.05"];
+	ATGAGTTTAACTCATGGCTAAATTCATACAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATGAGTTTAACTCATGGCTAAATTCATACAA</font></td></tr><tr><td><font color="red">TTGTATGAATTTAGCCATGAGTTAAACTCAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="24616,377.48",
+		shape=ellipse,
+		width=5.8926];
+	TGAGTTTAACTCATGGCTAAATTCATACAAA -> ATGAGTTTAACTCATGGCTAAATTCATACAA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="24381,384.98",
+		pos="e,24404,377.48 24358,377.48 24370,377.48 24381,377.48 24393,377.48"];
+	GAGTTTAACTCATGGCTAAATTCATACAAAC -> TGAGTTTAACTCATGGCTAAATTCATACAAA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="23911,384.98",
+		pos="e,23934,377.93 23888,378.02 23900,378 23912,377.97 23924,377.95"];
+	AGTTTAACTCATGGCTAAATTCATACAAACA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGTTTAACTCATGGCTAAATTCATACAAACA</font></td></tr><tr><td><font color="red">TGTTTGTATGAATTTAGCCATGAGTTAAACT</font></td></tr><tr><td><font color="black">2</font> </td></tr></table>>,
+		pos="23203,325.48",
+		shape=ellipse,
+		width=5.9122];
+	GAGTTTAACTCATGGCTAAATTCATACAAAC -> AGTTTAACTCATGGCTAAATTCATACAAACA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="23439,350.98",
+		pos="e,23402,339.09 23518,353.1 23493,349.55 23468,346.2 23444,343.48 23433,342.28 23423,341.14 23412,340.06"];
+	ATGAGTTTAACTCATGGCTAAATTCATACAA -> TGAGTTTAACTCATGGCTAAATTCATACAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="24381,365.98",
+		pos="e,24329,358.43 24427,360.6 24413,359.75 24399,359.03 24386,358.48 24371,357.85 24355,357.78 24339,358.14"];
+	CATGAGTTTAACTCATGGCTAAATTCATACA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CATGAGTTTAACTCATGGCTAAATTCATACA</font></td></tr><tr><td><font color="red">TGTATGAATTTAGCCATGAGTTAAACTCATG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="25086,377.48",
+		shape=ellipse,
+		width=5.8729];
+	ATGAGTTTAACTCATGGCTAAATTCATACAA -> CATGAGTTTAACTCATGGCTAAATTCATACA	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="24851,384.98",
+		pos="e,24874,377.48 24828,377.48 24840,377.48 24852,377.48 24864,377.48"];
+	AATATCATTAGAAAGATTGATATCGTTAAAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AATATCATTAGAAAGATTGATATCGTTAAAT</font></td></tr><tr><td><font color="red">ATTTAACGATATCAATCTTTCTAATGATATT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="66242,478.48",
+		shape=ellipse,
+		width=5.9122];
+	AATTTAACGATATCAATCTTTCTAATGATAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AATTTAACGATATCAATCTTTCTAATGATAT</font></td></tr><tr><td><font color="red">ATATCATTAGAAAGATTGATATCGTTAAATT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="66711,478.48",
+		shape=ellipse,
+		width=5.8729];
+	AATATCATTAGAAAGATTGATATCGTTAAAT -> AATTTAACGATATCAATCTTTCTAATGATAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="66477,485.98",
+		pos="e,66500,478.48 66455,478.48 66466,478.48 66478,478.48 66490,478.48"];
+	TAATATCATTAGAAAGATTGATATCGTTAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TAATATCATTAGAAAGATTGATATCGTTAAA</font></td></tr><tr><td><font color="red">TTTAACGATATCAATCTTTCTAATGATATTA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="65770,478.48",
+		shape=ellipse,
+		width=5.9122];
+	AATATCATTAGAAAGATTGATATCGTTAAAT -> TAATATCATTAGAAAGATTGATATCGTTAAA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="66006,467.98",
+		pos="e,65962,462.36 66055,460.34 66037,459.82 66019,459.79 66001,460.48 65992,460.84 65982,461.29 65972,461.81"];
+	AATTTAACGATATCAATCTTTCTAATGATAT -> AATATCATTAGAAAGATTGATATCGTTAAAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="66477,466.98",
+		pos="e,66425,459.41 66522,461.6 66509,460.75 66495,460.03 66482,459.48 66467,458.85 66451,458.78 66436,459.12"];
+	GAATTTAACGATATCAATCTTTCTAATGATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GAATTTAACGATATCAATCTTTCTAATGATA</font></td></tr><tr><td><font color="red">TATCATTAGAAAGATTGATATCGTTAAATTC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="67180,478.48",
+		shape=ellipse,
+		width=5.8729];
+	AATTTAACGATATCAATCTTTCTAATGATAT -> GAATTTAACGATATCAATCTTTCTAATGATA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="66946,485.98",
+		pos="e,66969,478.48 66923,478.48 66935,478.48 66947,478.48 66959,478.48"];
+	TAATATCATTAGAAAGATTGATATCGTTAAA -> AATATCATTAGAAAGATTGATATCGTTAAAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="66006,485.98",
+		pos="e,66029,478.48 65983,478.48 65995,478.48 66007,478.48 66018,478.48"];
+	ATAATATCATTAGAAAGATTGATATCGTTAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATAATATCATTAGAAAGATTGATATCGTTAA</font></td></tr><tr><td><font color="red">TTAACGATATCAATCTTTCTAATGATATTAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="65299,478.48",
+		shape=ellipse,
+		width=5.9122];
+	TAATATCATTAGAAAGATTGATATCGTTAAA -> ATAATATCATTAGAAAGATTGATATCGTTAA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="65534,466.98",
+		pos="e,65482,459.43 65580,461.58 65566,460.74 65553,460.02 65539,459.48 65524,458.85 65508,458.79 65493,459.14"];
+	GCTACTTCTTTAGGGGATAATATAAGAGAAA -> ATTTCTCTTATATTATCCCCTAAAGAAGTAG	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="45743,469.98",
+		pos="e,45696,464.84 45796,462.35 45777,461.72 45757,461.66 45738,462.48 45728,462.94 45717,463.52 45706,464.19"];
+	CGCTACTTCTTTAGGGGATAATATAAGAGAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CGCTACTTCTTTAGGGGATAATATAAGAGAA</font></td></tr><tr><td><font color="red">TTCTCTTATATTATCCCCTAAAGAAGTAGCG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="46454,480.48",
+		shape=ellipse,
+		width=5.9318];
+	GCTACTTCTTTAGGGGATAATATAAGAGAAA -> CGCTACTTCTTTAGGGGATAATATAAGAGAA	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="46218,487.98",
+		pos="e,46241,480.93 46195,481.02 46207,481 46219,480.97 46230,480.95"];
+	CGGAAATAAAGCCATCATAAATATACAAGCA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CGGAAATAAAGCCATCATAAATATACAAGCA</font></td></tr><tr><td><font color="red">TGCTTGTATATTTATGATGGCTTTATTTCCG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="11727,197.48",
+		shape=ellipse,
+		width=6.03];
+	GGAAATAAAGCCATCATAAATATACAAGCAC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GGAAATAAAGCCATCATAAATATACAAGCAC</font></td></tr><tr><td><font color="red">GTGCTTGTATATTTATGATGGCTTTATTTCC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="12210,204.48",
+		shape=ellipse,
+		width=6.03];
+	CGGAAATAAAGCCATCATAAATATACAAGCA -> GGAAATAAAGCCATCATAAATATACAAGCAC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="11968,214.98",
+		pos="e,11993,206.89 11938,205.92 11947,206.13 11955,206.32 11963,206.48 11970,206.6 11976,206.7 11983,206.78"];
+	GCGGAAATAAAGCCATCATAAATATACAAGC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GCGGAAATAAAGCCATCATAAATATACAAGC</font></td></tr><tr><td><font color="red">GCTTGTATATTTATGATGGCTTTATTTCCGC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="11245,190.48",
+		shape=ellipse,
+		width=6.03];
+	CGGAAATAAAGCCATCATAAATATACAAGCA -> GCGGAAATAAAGCCATCATAAATATACAAGC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="11485,191.98",
+		pos="e,11459,183.93 11521,185.49 11511,185.1 11500,184.75 11490,184.48 11483,184.28 11476,184.13 11469,184.03"];
+	GGAAATAAAGCCATCATAAATATACAAGCAC -> CGGAAATAAAGCCATCATAAATATACAAGCA	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="11968,194.98",
+		pos="e,11935,186.78 12011,189.17 11999,188.5 11986,187.92 11973,187.48 11964,187.15 11955,186.94 11945,186.85"];
+	GAAATAAAGCCATCATAAATATACAAGCACA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GAAATAAAGCCATCATAAATATACAAGCACA</font></td></tr><tr><td><font color="red">TGTGCTTGTATATTTATGATGGCTTTATTTC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="12693,211.48",
+		shape=ellipse,
+		width=6.03];
+	GGAAATAAAGCCATCATAAATATACAAGCAC -> GAAATAAAGCCATCATAAATATACAAGCACA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="12451,221.98",
+		pos="e,12476,213.89 12421,212.92 12430,213.13 12438,213.32 12446,213.48 12453,213.6 12459,213.7 12466,213.78"];
+	GCGGAAATAAAGCCATCATAAATATACAAGC -> CGGAAATAAAGCCATCATAAATATACAAGCA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="11485,207.98",
+		pos="e,11510,199.89 11456,198.94 11464,199.14 11472,199.32 11480,199.48 11487,199.6 11493,199.7 11500,199.78"];
+	AGCGGAAATAAAGCCATCATAAATATACAAG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGCGGAAATAAAGCCATCATAAATATACAAG</font></td></tr><tr><td><font color="red">CTTGTATATTTATGATGGCTTTATTTCCGCT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="10763,183.48",
+		shape=ellipse,
+		width=6.0497];
+	GCGGAAATAAAGCCATCATAAATATACAAGC -> AGCGGAAATAAAGCCATCATAAATATACAAG	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="11004,184.98",
+		pos="e,10978,176.93 11039,178.47 11029,178.08 11019,177.75 11009,177.48 11002,177.29 10995,177.15 10988,177.05"];
+	ACTATATCGCTACTTCTTTAGGGGATAATAT -> CTATATCGCTACTTCTTTAGGGGATAATATA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="49518,468.98",
+		pos="e,49468,461.19 49566,463.84 49552,462.89 49537,462.08 49523,461.48 49509,460.85 49494,460.72 49479,460.97"];
+	AACTATATCGCTACTTCTTTAGGGGATAATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AACTATATCGCTACTTCTTTAGGGGATAATA</font></td></tr><tr><td><font color="red">TATTATCCCCTAAAGAAGTAGCGATATAGTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="50226,487.48",
+		shape=ellipse,
+		width=5.8926];
+	ACTATATCGCTACTTCTTTAGGGGATAATAT -> AACTATATCGCTACTTCTTTAGGGGATAATA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="49991,491.98",
+		pos="e,50015,484.78 49968,484.19 49980,484.34 49992,484.5 50005,484.65"];
+	ATCATGAAGTTTAACTCATGGCTAAATTCAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATCATGAAGTTTAACTCATGGCTAAATTCAT</font></td></tr><tr><td><font color="red">ATGAATTTAGCCATGAGTTAAACTTCATGAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="48810,376.48",
+		shape=ellipse,
+		width=5.8729];
+	TATGAATTTAGCCATGAGTTAAACTTCATGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TATGAATTTAGCCATGAGTTAAACTTCATGA</font></td></tr><tr><td><font color="red">TCATGAAGTTTAACTCATGGCTAAATTCATA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="49282,377.48",
+		shape=ellipse,
+		width=5.8729];
+	ATCATGAAGTTTAACTCATGGCTAAATTCAT -> TATGAATTTAGCCATGAGTTAAACTTCATGA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="49045,383.98",
+		pos="e,49070,377.03 49022,376.92 49034,376.95 49047,376.98 49060,377.01"];
+	CATCATGAAGTTTAACTCATGGCTAAATTCA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CATCATGAAGTTTAACTCATGGCTAAATTCA</font></td></tr><tr><td><font color="red">TGAATTTAGCCATGAGTTAAACTTCATGATG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="48340,376.48",
+		shape=ellipse,
+		width=5.8729];
+	ATCATGAAGTTTAACTCATGGCTAAATTCAT -> CATCATGAAGTTTAACTCATGGCTAAATTCA	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="48575,357.98",
+		pos="e,48513,354.82 48650,351.84 48624,349.79 48596,349 48570,350.48 48555,351.33 48539,352.51 48523,353.89"];
+	TATGAATTTAGCCATGAGTTAAACTTCATGA -> ATCATGAAGTTTAACTCATGGCTAAATTCAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="49045,364.98",
+		pos="e,48999,359.62 49102,357.67 49081,356.83 49060,356.64 49040,357.48 49030,357.9 49020,358.42 49009,359.02"];
+	CATGAAGTTTAACTCATGGCTAAATTCATAC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CATGAAGTTTAACTCATGGCTAAATTCATAC</font></td></tr><tr><td><font color="red">GTATGAATTTAGCCATGAGTTAAACTTCATG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="49755,382.48",
+		shape=ellipse,
+		width=5.8729];
+	TATGAATTTAGCCATGAGTTAAACTTCATGA -> CATGAAGTTTAACTCATGGCTAAATTCATAC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="49518,386.98",
+		pos="e,49544,380.25 49493,379.71 49506,379.85 49520,379.99 49533,380.14"];
+	CATCATGAAGTTTAACTCATGGCTAAATTCA -> ATCATGAAGTTTAACTCATGGCTAAATTCAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="48575,383.98",
+		pos="e,48598,376.48 48552,376.48 48564,376.48 48576,376.48 48588,376.48"];
+	GAATTTAGCCATGAGTTAAACTTCATGATGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GAATTTAGCCATGAGTTAAACTTCATGATGA</font></td></tr><tr><td><font color="red">TCATCATGAAGTTTAACTCATGGCTAAATTC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="47870,383.48",
+		shape=ellipse,
+		width=5.9122];
+	CATCATGAAGTTTAACTCATGGCTAAATTCA -> GAATTTAGCCATGAGTTAAACTTCATGATGA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="48106,373.98",
+		pos="e,48061,366.77 48136,367.1 48127,366.86 48119,366.65 48111,366.48 48098,366.19 48085,366.23 48071,366.51"];
+	CATGAAGTTTAACTCATGGCTAAATTCATAC -> TATGAATTTAGCCATGAGTTAAACTTCATGA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="49518,361.98",
+		pos="e,49450,354.75 49587,359.76 49565,357.58 49544,355.72 49523,354.48 49503,353.24 49481,353.31 49460,354.25"];
+	ATGAAGTTTAACTCATGGCTAAATTCATACA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATGAAGTTTAACTCATGGCTAAATTCATACA</font></td></tr><tr><td><font color="red">TGTATGAATTTAGCCATGAGTTAAACTTCAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="50226,394.48",
+		shape=ellipse,
+		width=5.8926];
+	CATGAAGTTTAACTCATGGCTAAATTCATAC -> ATGAAGTTTAACTCATGGCTAAATTCATACA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="49991,395.98",
+		pos="e,50016,389.13 49964,387.8 49978,388.16 49992,388.52 50006,388.87"];
+	ATGAAGTTTAACTCATGGCTAAATTCATACA -> CATGAAGTTTAACTCATGGCTAAATTCATAC	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="49991,376.98",
+		pos="e,49951,368.36 50051,373.43 50032,371.81 50014,370.44 49996,369.48 49985,368.85 49973,368.51 49961,368.4"];
+	TGAAGTTTAACTCATGGCTAAATTCATACAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TGAAGTTTAACTCATGGCTAAATTCATACAA</font></td></tr><tr><td><font color="red">TTGTATGAATTTAGCCATGAGTTAAACTTCA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="50697,377.48",
+		shape=ellipse,
+		width=5.8926];
+	ATGAAGTTTAACTCATGGCTAAATTCATACA -> TGAAGTTTAACTCATGGCTAAATTCATACAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="50462,392.98",
+		pos="e,50489,384.99 50435,386.96 50449,386.43 50464,385.89 50479,385.36"];
+	CTTCTTTAGGGGATAATATAAGAGAAATCGA -> ACTTCTTTAGGGGATAATATAAGAGAAATCG	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="44323,492.98",
+		pos="e,44346,485.38 44300,485.57 44312,485.52 44323,485.47 44335,485.42"];
+	CTTCTTTAGGGGATAATATAAGAGAAATCGA -> TTCGATTTCTCTTATATTATCCCCTAAAGAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="43848,472.98",
+		pos="e,43800,464.98 43898,468.1 43883,467.05 43868,466.14 43853,465.48 43839,464.85 43825,464.66 43810,464.82"];
+	ATATAAGAGAAATCGAAGGTATCATCATGAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATATAAGAGAAATCGAAGGTATCATCATGAA</font></td></tr><tr><td><font color="red">TTCATGATGATACCTTCGATTTCTCTTATAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="37854,378.48",
+		shape=ellipse,
+		width=6.0104];
+	CTTCATGATGATACCTTCGATTTCTCTTATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CTTCATGATGATACCTTCGATTTCTCTTATA</font></td></tr><tr><td><font color="red">TATAAGAGAAATCGAAGGTATCATCATGAAG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="38333,410.48",
+		shape=ellipse,
+		width=6.0104];
+	ATATAAGAGAAATCGAAGGTATCATCATGAA -> CTTCATGATGATACCTTCGATTTCTCTTATA	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="38093,401.98",
+		pos="e,38131,396.98 38056,391.98 38077,393.41 38099,394.86 38121,396.3"];
+	AATATAAGAGAAATCGAAGGTATCATCATGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AATATAAGAGAAATCGAAGGTATCATCATGA</font></td></tr><tr><td><font color="red">TCATGATGATACCTTCGATTTCTCTTATATT</font></td></tr><tr><td><font color="black">2</font> </td></tr></table>>,
+		pos="37375,405.48",
+		shape=ellipse,
+		width=6.0104];
+	ATATAAGAGAAATCGAAGGTATCATCATGAA -> AATATAAGAGAAATCGAAGGTATCATCATGA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="37615,374.98",
+		pos="e,37522,377.97 37651,365.44 37637,365.74 37623,366.39 37610,367.48 37585,369.5 37558,372.72 37533,376.46"];
+	CTTCATGATGATACCTTCGATTTCTCTTATA -> ATATAAGAGAAATCGAAGGTATCATCATGAA	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="38093,382.98",
+		pos="e,38069,373.75 38178,384.15 38152,380.54 38124,377.41 38098,375.48 38092,375 38086,374.59 38079,374.25"];
+	ACTTCATGATGATACCTTCGATTTCTCTTAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ACTTCATGATGATACCTTCGATTTCTCTTAT</font></td></tr><tr><td><font color="red">ATAAGAGAAATCGAAGGTATCATCATGAAGT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="38811,384.48",
+		shape=ellipse,
+		width=6.0104];
+	CTTCATGATGATACCTTCGATTTCTCTTATA -> ACTTCATGATGATACCTTCGATTTCTCTTAT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="38572,404.98",
+		pos="e,38605,395.7 38539,399.26 38558,398.26 38576,397.25 38595,396.25"];
+	AATATAAGAGAAATCGAAGGTATCATCATGA -> ATATAAGAGAAATCGAAGGTATCATCATGAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="37615,398.98",
+		pos="e,37648,390.07 37581,393.87 37600,392.8 37619,391.72 37638,390.65"];
+	ATATAAGAGAAATCGAAGGTATCATCATGAG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATATAAGAGAAATCGAAGGTATCATCATGAG</font></td></tr><tr><td><font color="red">CTCATGATGATACCTTCGATTTCTCTTATAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="36896,382.48",
+		shape=ellipse,
+		width=6.0104];
+	AATATAAGAGAAATCGAAGGTATCATCATGA -> ATATAAGAGAAATCGAAGGTATCATCATGAG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="37136,389.98",
+		pos="e,37113,381.34 37191,385.72 37174,384.4 37157,383.28 37141,382.48 37135,382.19 37129,381.93 37123,381.7"];
+	CATGATGATACCTTCGATTTCTCTTATATTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CATGATGATACCTTCGATTTCTCTTATATTA</font></td></tr><tr><td><font color="red">TAATATAAGAGAAATCGAAGGTATCATCATG</font></td></tr><tr><td><font color="black">2</font> </td></tr></table>>,
+		pos="37854,473.48",
+		shape=ellipse,
+		width=5.9908];
+	AATATAAGAGAAATCGAAGGTATCATCATGA -> CATGATGATACCTTCGATTTCTCTTATATTA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="37615,465.98",
+		pos="e,37647,463.09 37496,436.6 37532,444.95 37572,453.14 37610,458.48 37618,459.75 37627,460.91 37637,461.97"];
+	AGCGATATAGTTTATAATATCATTAGAAAGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGCGATATAGTTTATAATATCATTAGAAAGA</font></td></tr><tr><td><font color="red">TCTTTCTAATGATATTATAAACTATATCGCT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="59199,478.48",
+		shape=ellipse,
+		width=5.9318];
+	ATCTTTCTAATGATATTATAAACTATATCGC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATCTTTCTAATGATATTATAAACTATATCGC</font></td></tr><tr><td><font color="red">GCGATATAGTTTATAATATCATTAGAAAGAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="59670,478.48",
+		shape=ellipse,
+		width=5.9122];
+	AGCGATATAGTTTATAATATCATTAGAAAGA -> ATCTTTCTAATGATATTATAAACTATATCGC	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="59435,485.98",
+		pos="e,59457,478.48 59412,478.48 59424,478.48 59435,478.48 59447,478.48"];
+	CTTTCTAATGATATTATAAACTATATCGCTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CTTTCTAATGATATTATAAACTATATCGCTA</font></td></tr><tr><td><font color="red">TAGCGATATAGTTTATAATATCATTAGAAAG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="58726,478.48",
+		shape=ellipse,
+		width=5.9122];
+	AGCGATATAGTTTATAATATCATTAGAAAGA -> CTTTCTAATGATATTATAAACTATATCGCTA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="58962,467.98",
+		pos="e,58919,462.36 59012,460.34 58993,459.81 58975,459.79 58957,460.48 58948,460.84 58938,461.29 58929,461.81"];
+	ATCTTTCTAATGATATTATAAACTATATCGC -> AGCGATATAGTTTATAATATCATTAGAAAGA	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="59435,466.98",
+		pos="e,59383,459.41 59480,461.58 59466,460.74 59452,460.02 59439,459.48 59424,458.86 59409,458.79 59393,459.13"];
+	AATCTTTCTAATGATATTATAAACTATATCG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AATCTTTCTAATGATATTATAAACTATATCG</font></td></tr><tr><td><font color="red">CGATATAGTTTATAATATCATTAGAAAGATT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="60140,478.48",
+		shape=ellipse,
+		width=5.8729];
+	ATCTTTCTAATGATATTATAAACTATATCGC -> AATCTTTCTAATGATATTATAAACTATATCG	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="59906,485.98",
+		pos="e,59929,478.48 59883,478.48 59895,478.48 59907,478.48 59919,478.48"];
+	CTTTCTAATGATATTATAAACTATATCGCTA -> AGCGATATAGTTTATAATATCATTAGAAAGA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="58962,485.98",
+		pos="e,58985,478.48 58939,478.48 58951,478.48 58963,478.48 58975,478.48"];
+	GTAGCGATATAGTTTATAATATCATTAGAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GTAGCGATATAGTTTATAATATCATTAGAAA</font></td></tr><tr><td><font color="red">TTTCTAATGATATTATAAACTATATCGCTAC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="58255,478.48",
+		shape=ellipse,
+		width=5.9122];
+	CTTTCTAATGATATTATAAACTATATCGCTA -> GTAGCGATATAGTTTATAATATCATTAGAAA	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="58490,467.98",
+		pos="e,58447,462.36 58540,460.34 58521,459.82 58503,459.79 58485,460.48 58476,460.84 58467,461.29 58457,461.81"];
+	AGTAGCGATATAGTTTATAATATCATTAGAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGTAGCGATATAGTTTATAATATCATTAGAA</font></td></tr><tr><td><font color="red">TTCTAATGATATTATAAACTATATCGCTACT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="57783,478.48",
+		shape=ellipse,
+		width=5.9122];
+	AGTAGCGATATAGTTTATAATATCATTAGAA -> GTAGCGATATAGTTTATAATATCATTAGAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="58019,485.98",
+		pos="e,58041,478.48 57996,478.48 58008,478.48 58020,478.48 58031,478.48"];
+	AAGTAGCGATATAGTTTATAATATCATTAGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAGTAGCGATATAGTTTATAATATCATTAGA</font></td></tr><tr><td><font color="red">TCTAATGATATTATAAACTATATCGCTACTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="57311,478.48",
+		shape=ellipse,
+		width=5.9122];
+	AGTAGCGATATAGTTTATAATATCATTAGAA -> AAGTAGCGATATAGTTTATAATATCATTAGA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="57547,467.98",
+		pos="e,57503,462.36 57596,460.34 57578,459.82 57560,459.79 57542,460.48 57533,460.84 57523,461.29 57514,461.81"];
+	GTAGCGATATAGTTTATAATATCATTAGAAA -> CTTTCTAATGATATTATAAACTATATCGCTA	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="58490,485.98",
+		pos="e,58513,478.48 58468,478.48 58479,478.48 58491,478.48 58503,478.48"];
+	GTAGCGATATAGTTTATAATATCATTAGAAA -> AGTAGCGATATAGTTTATAATATCATTAGAA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="58019,466.98",
+		pos="e,57973,461.58 58071,459.43 58052,458.78 58032,458.71 58014,459.48 58004,459.89 57994,460.39 57984,460.98"];
+	AAGTAGCGATATAGTTTATAATATCATTAGA -> AGTAGCGATATAGTTTATAATATCATTAGAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="57547,485.98",
+		pos="e,57570,478.48 57524,478.48 57536,478.48 57548,478.48 57560,478.48"];
+	CTAATGATATTATAAACTATATCGCTACTTC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CTAATGATATTATAAACTATATCGCTACTTC</font></td></tr><tr><td><font color="red">GAAGTAGCGATATAGTTTATAATATCATTAG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="56840,478.48",
+		shape=ellipse,
+		width=5.9122];
+	AAGTAGCGATATAGTTTATAATATCATTAGA -> CTAATGATATTATAAACTATATCGCTACTTC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="57075,466.98",
+		pos="e,57023,459.43 57121,461.58 57107,460.74 57094,460.02 57080,459.48 57065,458.85 57049,458.79 57034,459.14"];
+	ATCATCATGAGTTTAACTCATGGCTAAATTC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATCATCATGAGTTTAACTCATGGCTAAATTC</font></td></tr><tr><td><font color="red">GAATTTAGCCATGAGTTAAACTCATGATGAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="27440,377.48",
+		shape=ellipse,
+		width=5.9122];
+	TCATCATGAGTTTAACTCATGGCTAAATTCA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TCATCATGAGTTTAACTCATGGCTAAATTCA</font></td></tr><tr><td><font color="red">TGAATTTAGCCATGAGTTAAACTCATGATGA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="26968,378.48",
+		shape=ellipse,
+		width=5.9122];
+	ATCATCATGAGTTTAACTCATGGCTAAATTC -> TCATCATGAGTTTAACTCATGGCTAAATTCA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="27204,351.98",
+		pos="e,27122,352.61 27303,348.71 27269,344.34 27233,341.99 27199,344.48 27177,346.06 27155,348.47 27133,351.29"];
+	AATTTAGCCATGAGTTAAACTCATGATGATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AATTTAGCCATGAGTTAAACTCATGATGATA</font></td></tr><tr><td><font color="red">TATCATCATGAGTTTAACTCATGGCTAAATT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="27911,377.48",
+		shape=ellipse,
+		width=5.9122];
+	ATCATCATGAGTTTAACTCATGGCTAAATTC -> AATTTAGCCATGAGTTAAACTCATGATGATA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="27676,384.98",
+		pos="e,27698,377.48 27653,377.48 27665,377.48 27676,377.48 27688,377.48"];
+	TCATCATGAGTTTAACTCATGGCTAAATTCA -> ATCATCATGAGTTTAACTCATGGCTAAATTC	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="27204,384.98",
+		pos="e,27227,377.93 27181,378.03 27193,378 27204,377.98 27216,377.95"];
+	ATGAATTTAGCCATGAGTTAAACTCATGATG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATGAATTTAGCCATGAGTTAAACTCATGATG</font></td></tr><tr><td><font color="red">CATCATGAGTTTAACTCATGGCTAAATTCAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="26496,378.48",
+		shape=ellipse,
+		width=5.9122];
+	TCATCATGAGTTTAACTCATGGCTAAATTCA -> ATGAATTTAGCCATGAGTTAAACTCATGATG	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="26732,352.98",
+		pos="e,26634,349.77 26811,353.06 26787,349.91 26761,347.19 26737,345.48 26707,343.31 26674,345.01 26644,348.56"];
+	AATTTAGCCATGAGTTAAACTCATGATGATA -> ATCATCATGAGTTTAACTCATGGCTAAATTC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="27676,365.98",
+		pos="e,27630,360.58 27728,358.43 27709,357.78 27689,357.71 27671,358.48 27661,358.89 27651,359.39 27640,359.98"];
+	ATTTAGCCATGAGTTAAACTCATGATGATAC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATTTAGCCATGAGTTAAACTCATGATGATAC</font></td></tr><tr><td><font color="red">GTATCATCATGAGTTTAACTCATGGCTAAAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="28382,377.48",
+		shape=ellipse,
+		width=5.8926];
+	AATTTAGCCATGAGTTAAACTCATGATGATA -> ATTTAGCCATGAGTTAAACTCATGATGATAC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="28147,384.98",
+		pos="e,28170,377.48 28124,377.48 28136,377.48 28148,377.48 28160,377.48"];
+	AAATTCATACAAACAAAATACGGCAAAAAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAATTCATACAAACAAAATACGGCAAAAAAA</font></td></tr><tr><td><font color="red">TTTTTTTGCCGTATTTTGTTTGTATGAATTT</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="15581,325.48",
+		shape=ellipse,
+		width=6.0693];
+	AATTCATACAAACAAAATACGGCAAAAAAAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AATTCATACAAACAAAATACGGCAAAAAAAT</font></td></tr><tr><td><font color="red">ATTTTTTTGCCGTATTTTGTTTGTATGAATT</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="15100,325.48",
+		shape=ellipse,
+		width=6.0497];
+	AAATTCATACAAACAAAATACGGCAAAAAAA -> AATTCATACAAACAAAATACGGCAAAAAAAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="15340,314.98",
+		pos="e,15297,309.35 15390,307.31 15372,306.82 15353,306.81 15336,307.48 15326,307.84 15317,308.28 15307,308.79"];
+	TAAATTCATACAAACAAAATACGGCAAAAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TAAATTCATACAAACAAAATACGGCAAAAAA</font></td></tr><tr><td><font color="red">TTTTTTGCCGTATTTTGTTTGTATGAATTTA</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="16064,325.48",
+		shape=ellipse,
+		width=6.0497];
+	AAATTCATACAAACAAAATACGGCAAAAAAA -> TAAATTCATACAAACAAAATACGGCAAAAAA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="15823,332.98",
+		pos="e,15846,325.48 15800,325.48 15812,325.48 15823,325.48 15835,325.48"];
+	AATTCATACAAACAAAATACGGCAAAAAAAT -> AAATTCATACAAACAAAATACGGCAAAAAAA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="15340,332.98",
+		pos="e,15363,325.48 15318,325.48 15329,325.48 15341,325.48 15353,325.48"];
+	ATTCATACAAACAAAATACGGCAAAAAAATC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATTCATACAAACAAAATACGGCAAAAAAATC</font></td></tr><tr><td><font color="red">GATTTTTTTGCCGTATTTTGTTTGTATGAAT</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="14619,325.48",
+		shape=ellipse,
+		width=6.03];
+	AATTCATACAAACAAAATACGGCAAAAAAAT -> ATTCATACAAACAAAATACGGCAAAAAAATC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="14859,314.98",
+		pos="e,14815,309.35 14909,307.33 14891,306.81 14872,306.79 14854,307.48 14845,307.84 14835,308.28 14825,308.79"];
+	TAAATTCATACAAACAAAATACGGCAAAAAA -> AAATTCATACAAACAAAATACGGCAAAAAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="15823,313.98",
+		pos="e,15770,306.42 15869,308.56 15855,307.73 15841,307.02 15828,306.48 15812,305.84 15796,305.78 15780,306.14"];
+	CTAAATTCATACAAACAAAATACGGCAAAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CTAAATTCATACAAACAAAATACGGCAAAAA</font></td></tr><tr><td><font color="red">TTTTTGCCGTATTTTGTTTGTATGAATTTAG</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="16544,325.48",
+		shape=ellipse,
+		width=6.03];
+	TAAATTCATACAAACAAAATACGGCAAAAAA -> CTAAATTCATACAAACAAAATACGGCAAAAA	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="16304,332.98",
+		pos="e,16327,325.48 16282,325.48 16293,325.48 16305,325.48 16317,325.48"];
+	GAAATAAAGCCATCATAAATATACAAGCACA -> GGAAATAAAGCCATCATAAATATACAAGCAC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="12451,205.98",
+		pos="e,12424,197.92 12487,199.49 12477,199.1 12466,198.75 12456,198.48 12449,198.27 12441,198.12 12434,198.02"];
+	AAATAAAGCCATCATAAATATACAAGCACAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAATAAAGCCATCATAAATATACAAGCACAA</font></td></tr><tr><td><font color="red">TTGTGCTTGTATATTTATGATGGCTTTATTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="13176,218.48",
+		shape=ellipse,
+		width=6.03];
+	GAAATAAAGCCATCATAAATATACAAGCACA -> AAATAAAGCCATCATAAATATACAAGCACAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="12934,228.98",
+		pos="e,12959,220.89 12904,219.92 12913,220.13 12921,220.32 12929,220.48 12936,220.6 12942,220.7 12949,220.78"];
+	AAATAAAGCCATCATAAATATACAAGCACAA -> GAAATAAAGCCATCATAAATATACAAGCACA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="12934,208.98",
+		pos="e,12901,200.78 12977,203.17 12964,202.5 12952,201.92 12939,201.48 12930,201.15 12921,200.94 12911,200.85"];
+	AATAAAGCCATCATAAATATACAAGCACAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AATAAAGCCATCATAAATATACAAGCACAAA</font></td></tr><tr><td><font color="red">TTTGTGCTTGTATATTTATGATGGCTTTATT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="13658,225.48",
+		shape=ellipse,
+		width=6.03];
+	AAATAAAGCCATCATAAATATACAAGCACAA -> AATAAAGCCATCATAAATATACAAGCACAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="13417,235.98",
+		pos="e,13441,227.39 13387,227.32 13399,227.46 13411,227.53 13422,227.48 13425,227.46 13428,227.45 13431,227.44"];
+	AAAGCGGAAATAAAGCCATCATAAATATACA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAAGCGGAAATAAAGCCATCATAAATATACA</font></td></tr><tr><td><font color="red">TGTATATTTATGATGGCTTTATTTCCGCTTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="9799.8,169.48",
+		shape=ellipse,
+		width=6.0497];
+	AAGCGGAAATAAAGCCATCATAAATATACAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAGCGGAAATAAAGCCATCATAAATATACAA</font></td></tr><tr><td><font color="red">TTGTATATTTATGATGGCTTTATTTCCGCTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="10281,176.48",
+		shape=ellipse,
+		width=6.0497];
+	AAAGCGGAAATAAAGCCATCATAAATATACA -> AAGCGGAAATAAAGCCATCATAAATATACAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="10041,186.98",
+		pos="e,10064,178.88 10012,177.95 10020,178.15 10028,178.33 10036,178.48 10042,178.59 10048,178.69 10054,178.76"];
+	CAAAGCGGAAATAAAGCCATCATAAATATAC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CAAAGCGGAAATAAAGCCATCATAAATATAC</font></td></tr><tr><td><font color="red">GTATATTTATGATGGCTTTATTTCCGCTTTG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="9319,162.48",
+		shape=ellipse,
+		width=6.03];
+	AAAGCGGAAATAAAGCCATCATAAATATACA -> CAAAGCGGAAATAAAGCCATCATAAATATAC	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="9559.1,163.98",
+		pos="e,9533,155.93 9593.4,157.44 9583.5,157.07 9573.6,156.74 9564.1,156.48 9557.2,156.29 9550.3,156.15 9543.3,156.05"];
+	AAGCGGAAATAAAGCCATCATAAATATACAA -> AAAGCGGAAATAAAGCCATCATAAATATACA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="10041,166.98",
+		pos="e,10009,158.78 10083,161.12 10070,160.47 10058,159.91 10046,159.48 10037,159.16 10028,158.96 10019,158.86"];
+	AAGCGGAAATAAAGCCATCATAAATATACAA -> AGCGGAAATAAAGCCATCATAAATATACAAG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="10522,193.98",
+		pos="e,10545,185.88 10494,184.95 10502,185.15 10509,185.33 10517,185.48 10523,185.59 10529,185.69 10535,185.76"];
+	CAAAGCGGAAATAAAGCCATCATAAATATAC -> AAAGCGGAAATAAAGCCATCATAAATATACA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="9559.1,179.98",
+		pos="e,9582.3,171.88 9530.5,170.95 9538.5,171.15 9546.3,171.33 9554.1,171.48 9560,171.59 9566,171.69 9572,171.76"];
+	GCAAAGCGGAAATAAAGCCATCATAAATATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GCAAAGCGGAAATAAAGCCATCATAAATATA</font></td></tr><tr><td><font color="red">TATATTTATGATGGCTTTATTTCCGCTTTGC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="8838.1,155.48",
+		shape=ellipse,
+		width=6.0497];
+	CAAAGCGGAAATAAAGCCATCATAAATATAC -> GCAAAGCGGAAATAAAGCCATCATAAATATA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="9078.9,156.98",
+		pos="e,9052.7,148.93 9113.1,150.44 9103.2,150.07 9093.5,149.74 9083.9,149.48 9077,149.29 9070.1,149.14 9063.1,149.04"];
+	AATAAAGCCATCATAAATATACAAGCACAAA -> AAATAAAGCCATCATAAATATACAAGCACAA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="13417,215.98",
+		pos="e,13384,207.78 13460,210.16 13447,209.49 13435,208.92 13422,208.48 13413,208.15 13404,207.94 13394,207.84"];
+	AGAGAAATCGAAGGTATCATCATGAGTTTAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGAGAAATCGAAGGTATCATCATGAGTTTAA</font></td></tr><tr><td><font color="red">TTAAACTCATGATGATACCTTCGATTTCTCT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="34514,378.48",
+		shape=ellipse,
+		width=5.9908];
+	GAGAAATCGAAGGTATCATCATGAGTTTAAC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GAGAAATCGAAGGTATCATCATGAGTTTAAC</font></td></tr><tr><td><font color="red">GTTAAACTCATGATGATACCTTCGATTTCTC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="34037,378.48",
+		shape=ellipse,
+		width=5.9711];
+	AGAGAAATCGAAGGTATCATCATGAGTTTAA -> GAGAAATCGAAGGTATCATCATGAGTTTAAC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="34275,352.98",
+		pos="e,34195,353.06 34375,349.77 34341,345.41 34304,343.07 34270,345.48 34249,346.96 34227,349.2 34205,351.82"];
+	AAGAGAAATCGAAGGTATCATCATGAGTTTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAGAGAAATCGAAGGTATCATCATGAGTTTA</font></td></tr><tr><td><font color="red">TAAACTCATGATGATACCTTCGATTTCTCTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="34991,377.48",
+		shape=ellipse,
+		width=5.9908];
+	AGAGAAATCGAAGGTATCATCATGAGTTTAA -> AAGAGAAATCGAAGGTATCATCATGAGTTTA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="34753,384.98",
+		pos="e,34776,377.93 34730,378.02 34742,378 34754,377.97 34765,377.95"];
+	GAGAAATCGAAGGTATCATCATGAGTTTAAC -> AGAGAAATCGAAGGTATCATCATGAGTTTAA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="34275,385.98",
+		pos="e,34298,378.48 34252,378.48 34264,378.48 34276,378.48 34288,378.48"];
+	GAGAAATCGAAGGTATCATCATGAGTTTAAC -> AGAAATCGAAGGTATCATCATGAGTTTAACT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="33799,366.98",
+		pos="e,33751,361.84 33852,359.35 33833,358.71 33813,358.66 33794,359.48 33784,359.94 33773,360.52 33762,361.19"];
+	AAGAGAAATCGAAGGTATCATCATGAGTTTA -> AGAGAAATCGAAGGTATCATCATGAGTTTAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="34753,365.98",
+		pos="e,34704,360.84 34806,358.35 34786,357.72 34766,357.67 34748,358.48 34737,358.94 34726,359.52 34715,360.19"];
+	AAACTCATGATGATACCTTCGATTTCTCTTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAACTCATGATGATACCTTCGATTTCTCTTA</font></td></tr><tr><td><font color="red">TAAGAGAAATCGAAGGTATCATCATGAGTTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="35467,377.48",
+		shape=ellipse,
+		width=5.9515];
+	AAGAGAAATCGAAGGTATCATCATGAGTTTA -> AAACTCATGATGATACCTTCGATTTCTCTTA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="35230,384.98",
+		pos="e,35253,377.48 35207,377.48 35219,377.48 35231,377.48 35242,377.48"];
+	GATAATATAAGAGAAATCGAAGGTATCATCA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GATAATATAAGAGAAATCGAAGGTATCATCA</font></td></tr><tr><td><font color="red">TGATGATACCTTCGATTTCTCTTATATTATC</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="38811,477.48",
+		shape=ellipse,
+		width=6.0104];
+	GATAATATAAGAGAAATCGAAGGTATCATCA -> ATAATATAAGAGAAATCGAAGGTATCATCAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="38572,470.98",
+		pos="e,38471,476.62 38616,461.2 38600,461.35 38583,462.05 38567,463.48 38539,465.98 38509,470.15 38481,474.91"];
+	GATGATACCTTCGATTTCTCTTATATTATCC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GATGATACCTTCGATTTCTCTTATATTATCC</font></td></tr><tr><td><font color="red">GGATAATATAAGAGAAATCGAAGGTATCATC</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="39290,472.48",
+		shape=ellipse,
+		width=6.0104];
+	GATAATATAAGAGAAATCGAAGGTATCATCA -> GATGATACCTTCGATTTCTCTTATATTATCC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="39051,481.98",
+		pos="e,39074,474.73 39027,475.22 39040,475.1 39052,474.97 39064,474.84"];
+	ATAATATAAGAGAAATCGAAGGTATCATCAT -> TAATATAAGAGAAATCGAAGGTATCATCATA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="38572,561.98",
+		pos="e,38606,559.12 38461,535.65 38495,542.81 38533,549.74 38567,554.48 38576,555.76 38586,556.94 38596,558.02"];
+	ATAATATAAGAGAAATCGAAGGTATCATCAT -> GATAATATAAGAGAAATCGAAGGTATCATCA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="38572,498.98",
+		pos="e,38606,489.46 38537,493.52 38557,492.38 38577,491.21 38596,490.06"];
+	ATAATATAAGAGAAATCGAAGGTATCATCAT -> CATGATGATACCTTCGATTTCTCTTATATTA	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="38093,477.98",
+		pos="e,38068,468.72 38179,479.19 38152,475.56 38124,472.42 38098,470.48 38092,469.98 38085,469.56 38078,469.2"];
+	GATGATACCTTCGATTTCTCTTATATTATCC -> GATAATATAAGAGAAATCGAAGGTATCATCA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="39051,462.98",
+		pos="e,38998,458.39 39099,454.91 39081,454.54 39063,454.67 39046,455.48 39034,456.05 39021,456.8 39008,457.67"];
+	ATGATACCTTCGATTTCTCTTATATTATCCC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATGATACCTTCGATTTCTCTTATATTATCCC</font></td></tr><tr><td><font color="red">GGGATAATATAAGAGAAATCGAAGGTATCAT</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="39770,472.48",
+		shape=ellipse,
+		width=6.03];
+	GATGATACCTTCGATTTCTCTTATATTATCC -> ATGATACCTTCGATTTCTCTTATATTATCCC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="39530,479.98",
+		pos="e,39552,472.48 39507,472.48 39519,472.48 39530,472.48 39542,472.48"];
+	AGAAGTAGCGATATAGTTTATAATATCATTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGAAGTAGCGATATAGTTTATAATATCATTA</font></td></tr><tr><td><font color="red">TAATGATATTATAAACTATATCGCTACTTCT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="56368,478.48",
+		shape=ellipse,
+		width=5.9122];
+	AGAAGTAGCGATATAGTTTATAATATCATTA -> CTAATGATATTATAAACTATATCGCTACTTC	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="56604,485.98",
+		pos="e,56626,478.48 56581,478.48 56593,478.48 56604,478.48 56616,478.48"];
+	AAGAAGTAGCGATATAGTTTATAATATCATT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAGAAGTAGCGATATAGTTTATAATATCATT</font></td></tr><tr><td><font color="red">AATGATATTATAAACTATATCGCTACTTCTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="55896,478.48",
+		shape=ellipse,
+		width=5.9122];
+	AGAAGTAGCGATATAGTTTATAATATCATTA -> AAGAAGTAGCGATATAGTTTATAATATCATT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="56132,467.98",
+		pos="e,56088,462.36 56181,460.34 56163,459.82 56145,459.79 56127,460.48 56118,460.84 56108,461.29 56099,461.81"];
+	CTAATGATATTATAAACTATATCGCTACTTC -> AAGTAGCGATATAGTTTATAATATCATTAGA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="57075,485.98",
+		pos="e,57098,478.48 57053,478.48 57064,478.48 57076,478.48 57088,478.48"];
+	CTAATGATATTATAAACTATATCGCTACTTC -> AGAAGTAGCGATATAGTTTATAATATCATTA	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="56604,466.98",
+		pos="e,56552,459.43 56649,461.58 56636,460.74 56622,460.02 56609,459.48 56594,458.85 56578,458.79 56562,459.14"];
+	AAGAAGTAGCGATATAGTTTATAATATCATT -> AGAAGTAGCGATATAGTTTATAATATCATTA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="56132,485.98",
+		pos="e,56155,478.48 56109,478.48 56121,478.48 56133,478.48 56144,478.48"];
+	AAAGAAGTAGCGATATAGTTTATAATATCAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAAGAAGTAGCGATATAGTTTATAATATCAT</font></td></tr><tr><td><font color="red">ATGATATTATAAACTATATCGCTACTTCTTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="55425,478.48",
+		shape=ellipse,
+		width=5.9318];
+	AAGAAGTAGCGATATAGTTTATAATATCATT -> AAAGAAGTAGCGATATAGTTTATAATATCAT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="55661,467.98",
+		pos="e,55612,460.33 55704,462.36 55691,461.61 55678,460.97 55665,460.48 55651,459.92 55637,459.83 55622,460.09"];
+	AGAAATCGAAGGTATCATCATGAGTTTAACT -> GAAATCGAAGGTATCATCATGAGTTTAACTC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="33326,358.98",
+		pos="e,33254,357.55 33409,353.36 33380,350.74 33350,349.63 33321,351.48 33303,352.68 33283,354.41 33264,356.46"];
+	AGAAATCGAAGGTATCATCATGAGTTTAACT -> GAGAAATCGAAGGTATCATCATGAGTTTAAC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="33799,385.98",
+		pos="e,33822,378.93 33777,379.03 33788,379 33800,378.98 33812,378.95"];
+	AACTATATCGCTACTTCTTTAGGGGATAATA -> ACTATATCGCTACTTCTTTAGGGGATAATAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="49991,460.98",
+		pos="e,49907,455.09 50073,461.61 50047,458.23 50021,455.3 49996,453.48 49971,451.58 49943,452.2 49917,454.24"];
+	AAACTATATCGCTACTTCTTTAGGGGATAAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAACTATATCGCTACTTCTTTAGGGGATAAT</font></td></tr><tr><td><font color="red">ATTATCCCCTAAAGAAGTAGCGATATAGTTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="50697,476.48",
+		shape=ellipse,
+		width=5.8926];
+	AACTATATCGCTACTTCTTTAGGGGATAATA -> AAACTATATCGCTACTTCTTTAGGGGATAAT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="50462,488.98",
+		pos="e,50486,481.39 50437,482.56 50450,482.25 50463,481.94 50476,481.63"];
+	AAACTATATCGCTACTTCTTTAGGGGATAAT -> AACTATATCGCTACTTCTTTAGGGGATAATA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="50462,469.98",
+		pos="e,50402,466.43 50502,461.43 50487,461.36 50471,461.67 50457,462.48 50442,463.26 50427,464.31 50412,465.55"];
+	TAAACTATATCGCTACTTCTTTAGGGGATAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TAAACTATATCGCTACTTCTTTAGGGGATAA</font></td></tr><tr><td><font color="red">TTATCCCCTAAAGAAGTAGCGATATAGTTTA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="51168,478.48",
+		shape=ellipse,
+		width=5.8926];
+	AAACTATATCGCTACTTCTTTAGGGGATAAT -> TAAACTATATCGCTACTTCTTTAGGGGATAA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="50932,484.98",
+		pos="e,50956,477.58 50909,477.38 50921,477.43 50934,477.48 50946,477.53"];
+	GCGATTTTTTTGCCGTATTTTGTTTGTATGA -> CATACAAACAAAATACGGCAAAAAAATCGCG	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="13417,310.98",
+		pos="e,13374,302.7 13470,306.39 13454,305.21 13438,304.21 13422,303.48 13410,302.9 13397,302.64 13384,302.65"];
+	CGATTTTTTTGCCGTATTTTGTTTGTATGAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CGATTTTTTTGCCGTATTTTGTTTGTATGAA</font></td></tr><tr><td><font color="red">TTCATACAAACAAAATACGGCAAAAAAATCG</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="14139,325.48",
+		shape=ellipse,
+		width=6.03];
+	GCGATTTTTTTGCCGTATTTTGTTTGTATGA -> CGATTTTTTTGCCGTATTTTGTTTGTATGAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="13899,332.98",
+		pos="e,13922,325.48 13876,325.48 13888,325.48 13900,325.48 13911,325.48"];
+	AAAATCGCGCATTTTTATGAAGTGCAAAGCG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAAATCGCGCATTTTTATGAAGTGCAAAGCG</font></td></tr><tr><td><font color="red">CGCTTTGCACTTCATAAAAATGCGCGATTTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="2596.7,164.48",
+		shape=ellipse,
+		width=5.9515];
+	AAATCGCGCATTTTTATGAAGTGCAAAGCGG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAATCGCGCATTTTTATGAAGTGCAAAGCGG</font></td></tr><tr><td><font color="red">CCGCTTTGCACTTCATAAAAATGCGCGATTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="2119.4,157.48",
+		shape=ellipse,
+		width=5.9515];
+	AAAATCGCGCATTTTTATGAAGTGCAAAGCG -> AAATCGCGCATTTTTATGAAGTGCAAAGCGG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="2358,142.98",
+		pos="e,2292.6,135.36 2428.8,141.15 2406.7,138.8 2384.3,136.8 2363,135.48 2343.5,134.27 2323.1,134.21 2302.9,134.93"];
+	AAAAATCGCGCATTTTTATGAAGTGCAAAGC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAAAATCGCGCATTTTTATGAAGTGCAAAGC</font></td></tr><tr><td><font color="red">GCTTTGCACTTCATAAAAATGCGCGATTTTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="3073.3,171.48",
+		shape=ellipse,
+		width=5.9515];
+	AAAATCGCGCATTTTTATGAAGTGCAAAGCG -> AAAAATCGCGCATTTTTATGAAGTGCAAAGC	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="2835.4,175.98",
+		pos="e,2859.7,168.34 2810.4,167.61 2823.4,167.81 2836.6,168 2849.7,168.19"];
+	AAATCGCGCATTTTTATGAAGTGCAAAGCGG -> AAAATCGCGCATTTTTATGAAGTGCAAAGCG	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="2358,168.98",
+		pos="e,2382.8,161.34 2333,160.61 2346.2,160.8 2359.5,161 2372.7,161.19"];
+	AATCGCGCATTTTTATGAAGTGCAAAGCGGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AATCGCGCATTTTTATGAAGTGCAAAGCGGA</font></td></tr><tr><td><font color="red">TCCGCTTTGCACTTCATAAAAATGCGCGATT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="1642,150.48",
+		shape=ellipse,
+		width=5.9515];
+	AAATCGCGCATTTTTATGAAGTGCAAAGCGG -> AATCGCGCATTTTTATGAAGTGCAAAGCGGA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="1880.7,142.98",
+		pos="e,1836.7,134.72 1934.6,138.48 1918.1,137.26 1901.6,136.23 1885.7,135.48 1873,134.88 1859.9,134.63 1846.8,134.65"];
+	AAAAATCGCGCATTTTTATGAAGTGCAAAGC -> AAAATCGCGCATTTTTATGAAGTGCAAAGCG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="2835.4,156.98",
+		pos="e,2791.4,148.72 2888.5,152.44 2872.2,151.24 2856,150.22 2840.4,149.48 2827.7,148.88 2814.6,148.62 2801.5,148.65"];
+	AAAAAATCGCGCATTTTTATGAAGTGCAAAG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAAAAATCGCGCATTTTTATGAAGTGCAAAG</font></td></tr><tr><td><font color="red">CTTTGCACTTCATAAAAATGCGCGATTTTTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="3549.9,178.48",
+		shape=ellipse,
+		width=5.9711];
+	AAAAATCGCGCATTTTTATGAAGTGCAAAGC -> AAAAAATCGCGCATTTTTATGAAGTGCAAAG	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="3311.3,182.98",
+		pos="e,3335.6,175.33 3287,174.61 3299.7,174.8 3312.6,174.99 3325.4,175.18"];
+	CAAAATACGGCAAAAAAATCGCGCATTTTTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CAAAATACGGCAAAAAAATCGCGCATTTTTA</font></td></tr><tr><td><font color="red">TAAAAATGCGCGATTTTTTTGCCGTATTTTG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="9319,262.48",
+		shape=ellipse,
+		width=5.9711];
+	CAAAATACGGCAAAAAAATCGCGCATTTTTA -> AAAATACGGCAAAAAAATCGCGCATTTTTAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="9078.9,240.98",
+		pos="e,9011.5,233.41 9150.4,239.18 9128.1,236.82 9105.5,234.81 9083.9,233.48 9063.8,232.23 9042.7,232.2 9021.8,232.97"];
+	AAAAATGCGCGATTTTTTTGCCGTATTTTGT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAAAATGCGCGATTTTTTTGCCGTATTTTGT</font></td></tr><tr><td><font color="red">ACAAAATACGGCAAAAAAATCGCGCATTTTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="9799.8,269.48",
+		shape=ellipse,
+		width=5.9711];
+	CAAAATACGGCAAAAAAATCGCGCATTTTTA -> AAAAATGCGCGATTTTTTTGCCGTATTTTGT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="9559.1,273.98",
+		pos="e,9585.3,266.36 9533.5,265.6 9547.4,265.8 9561.3,266 9575.2,266.21"];
+	AAAATACGGCAAAAAAATCGCGCATTTTTAT -> AAATACGGCAAAAAAATCGCGCATTTTTATG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="8597.3,233.98",
+		pos="e,8531.4,226.39 8669.6,232.25 8647.1,229.86 8624.1,227.82 8602.3,226.48 8582.6,225.26 8562,225.22 8541.4,225.96"];
+	AAAATACGGCAAAAAAATCGCGCATTTTTAT -> CAAAATACGGCAAAAAAATCGCGCATTTTTA	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="9078.9,266.98",
+		pos="e,9104.6,259.36 9051.9,258.59 9066,258.79 9080.2,259 9094.3,259.21"];
+	AAAAATGCGCGATTTTTTTGCCGTATTTTGT -> CAAAATACGGCAAAAAAATCGCGCATTTTTA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="9559.1,254.98",
+		pos="e,9514.1,246.74 9614.1,250.53 9597.2,249.29 9580.3,248.24 9564.1,247.48 9551.1,246.87 9537.8,246.62 9524.4,246.66"];
+	AAAATGCGCGATTTTTTTGCCGTATTTTGTT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAAATGCGCGATTTTTTTGCCGTATTTTGTT</font></td></tr><tr><td><font color="red">AACAAAATACGGCAAAAAAATCGCGCATTTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="10281,276.48",
+		shape=ellipse,
+		width=5.9908];
+	AAAAATGCGCGATTTTTTTGCCGTATTTTGT -> AAAATGCGCGATTTTTTTGCCGTATTTTGTT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="10041,280.98",
+		pos="e,10066,273.35 10014,272.59 10028,272.8 10042,273 10056,273.2"];
+	GGTATCATCATGAGTTTAACTCATGGCTAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GGTATCATCATGAGTTTAACTCATGGCTAAA</font></td></tr><tr><td><font color="red">TTTAGCCATGAGTTAAACTCATGATGATACC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="28853,377.48",
+		shape=ellipse,
+		width=5.8926];
+	GGTATCATCATGAGTTTAACTCATGGCTAAA -> ATTTAGCCATGAGTTAAACTCATGATGATAC	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="28618,366.98",
+		pos="e,28574,361.36 28667,359.34 28648,358.82 28630,358.79 28613,359.48 28603,359.84 28594,360.29 28584,360.81"];
+	AGGTATCATCATGAGTTTAACTCATGGCTAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGGTATCATCATGAGTTTAACTCATGGCTAA</font></td></tr><tr><td><font color="red">TTAGCCATGAGTTAAACTCATGATGATACCT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="29323,381.48",
+		shape=ellipse,
+		width=5.8926];
+	GGTATCATCATGAGTTTAACTCATGGCTAAA -> AGGTATCATCATGAGTTTAACTCATGGCTAA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="29088,386.98",
+		pos="e,29111,379.67 29065,379.28 29077,379.38 29089,379.49 29101,379.59"];
+	ATTTAGCCATGAGTTAAACTCATGATGATAC -> AATTTAGCCATGAGTTAAACTCATGATGATA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="28147,350.98",
+		pos="e,28046,348.32 28229,351.61 28203,348.23 28177,345.3 28152,343.48 28121,341.17 28087,343.1 28056,346.99"];
+	ATTTAGCCATGAGTTAAACTCATGATGATAC -> GGTATCATCATGAGTTTAACTCATGGCTAAA	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="28618,384.98",
+		pos="e,28640,377.48 28595,377.48 28606,377.48 28618,377.48 28630,377.48"];
+	AGGTATCATCATGAGTTTAACTCATGGCTAA -> GGTATCATCATGAGTTTAACTCATGGCTAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="29088,367.98",
+		pos="e,29041,359.99 29138,363.13 29123,362.06 29107,361.15 29093,360.48 29079,359.85 29065,359.67 29051,359.82"];
+	AAGGTATCATCATGAGTTTAACTCATGGCTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAGGTATCATCATGAGTTTAACTCATGGCTA</font></td></tr><tr><td><font color="red">TAGCCATGAGTTAAACTCATGATGATACCTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="29793,379.48",
+		shape=ellipse,
+		width=5.8926];
+	AGGTATCATCATGAGTTTAACTCATGGCTAA -> AAGGTATCATCATGAGTTTAACTCATGGCTA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="29558,387.98",
+		pos="e,29581,380.38 29535,380.57 29547,380.52 29559,380.47 29571,380.42"];
+	ACGATATCAATCTTTCTAATGATATTATAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ACGATATCAATCTTTCTAATGATATTATAAA</font></td></tr><tr><td><font color="red">TTTATAATATCATTAGAAAGATTGATATCGT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="63893,478.48",
+		shape=ellipse,
+		width=5.8533];
+	CGATATCAATCTTTCTAATGATATTATAAAC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CGATATCAATCTTTCTAATGATATTATAAAC</font></td></tr><tr><td><font color="red">GTTTATAATATCATTAGAAAGATTGATATCG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="63425,478.48",
+		shape=ellipse,
+		width=5.8729];
+	ACGATATCAATCTTTCTAATGATATTATAAA -> CGATATCAATCTTTCTAATGATATTATAAAC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="63659,467.98",
+		pos="e,63610,460.35 63702,462.36 63689,461.61 63676,460.97 63664,460.48 63650,459.91 63635,459.83 63620,460.1"];
+	AACGATATCAATCTTTCTAATGATATTATAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AACGATATCAATCTTTCTAATGATATTATAA</font></td></tr><tr><td><font color="red">TTATAATATCATTAGAAAGATTGATATCGTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="64360,478.48",
+		shape=ellipse,
+		width=5.8533];
+	ACGATATCAATCTTTCTAATGATATTATAAA -> AACGATATCAATCTTTCTAATGATATTATAA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="64126,485.98",
+		pos="e,64149,478.48 64104,478.48 64115,478.48 64127,478.48 64139,478.48"];
+	CGATATCAATCTTTCTAATGATATTATAAAC -> ACGATATCAATCTTTCTAATGATATTATAAA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="63659,485.98",
+		pos="e,63682,478.48 63636,478.48 63648,478.48 63660,478.48 63671,478.48"];
+	AGTTTATAATATCATTAGAAAGATTGATATC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGTTTATAATATCATTAGAAAGATTGATATC</font></td></tr><tr><td><font color="red">GATATCAATCTTTCTAATGATATTATAAACT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="62956,478.48",
+		shape=ellipse,
+		width=5.8729];
+	CGATATCAATCTTTCTAATGATATTATAAAC -> AGTTTATAATATCATTAGAAAGATTGATATC	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="63190,466.98",
+		pos="e,63138,459.44 63236,461.6 63222,460.75 63208,460.03 63195,459.48 63180,458.84 63164,458.78 63148,459.14"];
+	AACGATATCAATCTTTCTAATGATATTATAA -> ACGATATCAATCTTTCTAATGATATTATAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="64126,466.98",
+		pos="e,64074,459.44 64172,461.6 64158,460.75 64145,460.03 64131,459.48 64116,458.84 64100,458.78 64085,459.14"];
+	TAACGATATCAATCTTTCTAATGATATTATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TAACGATATCAATCTTTCTAATGATATTATA</font></td></tr><tr><td><font color="red">TATAATATCATTAGAAAGATTGATATCGTTA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="64828,478.48",
+		shape=ellipse,
+		width=5.8729];
+	AACGATATCAATCTTTCTAATGATATTATAA -> TAACGATATCAATCTTTCTAATGATATTATA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="64594,485.98",
+		pos="e,64617,478.48 64571,478.48 64583,478.48 64595,478.48 64607,478.48"];
+	ACCTTCGATTTCTCTTATATTATCCCCTAAA -> CCTTCGATTTCTCTTATATTATCCCCTAAAG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="42415,474.98",
+		pos="e,42437,467.48 42392,467.48 42404,467.48 42416,467.48 42427,467.48"];
+	TACCTTCGATTTCTCTTATATTATCCCCTAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TACCTTCGATTTCTCTTATATTATCCCCTAA</font></td></tr><tr><td><font color="red">TTAGGGGATAATATAAGAGAAATCGAAGGTA</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="41695,468.48",
+		shape=ellipse,
+		width=6.0497];
+	ACCTTCGATTTCTCTTATATTATCCCCTAAA -> TACCTTCGATTTCTCTTATATTATCCCCTAA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="41936,455.98",
+		pos="e,41880,448.6 41982,450.58 41968,449.74 41954,449.02 41941,448.48 41925,447.8 41907,447.8 41890,448.27"];
+	AATCGAAGGTATCATCATGAAGTTTAACTCA -> AAATCGAAGGTATCATCATGAAGTTTAACTC	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="42415,362.98",
+		pos="e,42366,357.72 42470,355.51 42450,354.79 42429,354.68 42410,355.48 42399,355.92 42388,356.47 42377,357.11"];
+	ATCGAAGGTATCATCATGAAGTTTAACTCAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATCGAAGGTATCATCATGAAGTTTAACTCAT</font></td></tr><tr><td><font color="red">ATGAGTTAAACTTCATGATGATACCTTCGAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="43134,379.48",
+		shape=ellipse,
+		width=5.8926];
+	AATCGAAGGTATCATCATGAAGTTTAACTCA -> ATCGAAGGTATCATCATGAAGTTTAACTCAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="42895,383.98",
+		pos="e,42922,377.26 42868,376.7 42883,376.85 42897,377.01 42912,377.16"];
+	AAAAAAATCGCGCATTTTTATGAAGTGCAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAAAAAATCGCGCATTTTTATGAAGTGCAAA</font></td></tr><tr><td><font color="red">TTTGCACTTCATAAAAATGCGCGATTTTTTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="4027.3,185.48",
+		shape=ellipse,
+		width=5.9711];
+	AAAAAAATCGCGCATTTTTATGAAGTGCAAA -> AAAAAATCGCGCATTTTTATGAAGTGCAAAG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="3788.6,163.98",
+		pos="e,3723.5,156.34 3859.1,162.11 3837.1,159.78 3814.8,157.79 3793.6,156.48 3774.2,155.27 3753.9,155.21 3733.7,155.92"];
+	CAAAAAAATCGCGCATTTTTATGAAGTGCAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CAAAAAAATCGCGCATTTTTATGAAGTGCAA</font></td></tr><tr><td><font color="red">TTGCACTTCATAAAAATGCGCGATTTTTTTG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="4505.3,192.48",
+		shape=ellipse,
+		width=5.9515];
+	AAAAAAATCGCGCATTTTTATGAAGTGCAAA -> CAAAAAAATCGCGCATTTTTATGAAGTGCAA	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="4265.9,196.98",
+		pos="e,4291.5,189.35 4241.6,188.61 4254.8,188.81 4268.1,189 4281.3,189.2"];
+	AAAAAATCGCGCATTTTTATGAAGTGCAAAG -> AAAAATCGCGCATTTTTATGAAGTGCAAAGC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="3311.3,163.98",
+		pos="e,3267.8,155.72 3364.6,159.44 3348.3,158.24 3332,157.22 3316.3,156.48 3303.8,155.89 3291,155.64 3278.1,155.65"];
+	AAAAAATCGCGCATTTTTATGAAGTGCAAAG -> AAAAAAATCGCGCATTTTTATGAAGTGCAAA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="3788.6,189.98",
+		pos="e,3812.9,182.33 3764.3,181.62 3777,181.81 3789.9,182 3802.7,182.18"];
+	CAAAAAAATCGCGCATTTTTATGAAGTGCAA -> AAAAAAATCGCGCATTTTTATGAAGTGCAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="4265.9,177.98",
+		pos="e,4222.6,169.72 4320.4,173.51 4303.7,172.28 4287,171.23 4270.9,170.48 4258.6,169.89 4245.8,169.64 4233,169.65"];
+	GCAAAAAAATCGCGCATTTTTATGAAGTGCA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GCAAAAAAATCGCGCATTTTTATGAAGTGCA</font></td></tr><tr><td><font color="red">TGCACTTCATAAAAATGCGCGATTTTTTTGC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="4985.5,199.48",
+		shape=ellipse,
+		width=5.9515];
+	CAAAAAAATCGCGCATTTTTATGAAGTGCAA -> GCAAAAAAATCGCGCATTTTTATGAAGTGCA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="4744.7,203.98",
+		pos="e,4771.8,196.36 4718.8,195.59 4733,195.79 4747.3,196 4761.5,196.21"];
+	AGCCATGAGTTAAACTCATGATGATACCTTC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGCCATGAGTTAAACTCATGATGATACCTTC</font></td></tr><tr><td><font color="red">GAAGGTATCATCATGAGTTTAACTCATGGCT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="30263,378.48",
+		shape=ellipse,
+		width=5.8926];
+	AGCCATGAGTTAAACTCATGATGATACCTTC -> CGAAGGTATCATCATGAGTTTAACTCATGGC	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="30499,385.98",
+		pos="e,30521,378.48 30476,378.48 30487,378.48 30499,378.48 30511,378.48"];
+	AGCCATGAGTTAAACTCATGATGATACCTTC -> AAGGTATCATCATGAGTTTAACTCATGGCTA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="30028,354.98",
+		pos="e,29952,354.56 30120,350.71 30089,347.08 30055,345.29 30023,347.48 30003,348.86 29982,350.93 29962,353.34"];
+	CGAAGGTATCATCATGAGTTTAACTCATGGC -> CCATGAGTTAAACTCATGATGATACCTTCGA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="30970,384.98",
+		pos="e,30993,377.93 30947,378.02 30959,378 30971,377.97 30983,377.95"];
+	CGAAGGTATCATCATGAGTTTAACTCATGGC -> AGCCATGAGTTAAACTCATGATGATACCTTC	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="30499,366.98",
+		pos="e,30453,361.6 30551,359.43 30532,358.78 30512,358.71 30494,359.48 30484,359.89 30473,360.41 30463,361.01"];
+	AAGGTATCATCATGAGTTTAACTCATGGCTA -> AGGTATCATCATGAGTTTAACTCATGGCTAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="29558,368.98",
+		pos="e,29510,363.86 29608,361.2 29589,360.69 29571,360.7 29553,361.48 29542,361.94 29531,362.53 29520,363.21"];
+	AAGGTATCATCATGAGTTTAACTCATGGCTA -> AGCCATGAGTTAAACTCATGATGATACCTTC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="30028,385.98",
+		pos="e,30051,378.93 30005,379.03 30017,379 30029,378.98 30041,378.95"];
+	ATCGAAGGTATCATCATGAAGTTTAACTCAT -> AATCGAAGGTATCATCATGAAGTTTAACTCA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="42895,355.98",
+		pos="e,42815,349.59 42972,355.23 42948,352.42 42923,350.02 42900,348.48 42876,346.86 42850,347.27 42825,348.89"];
+	CATGAGTTAAACTTCATGATGATACCTTCGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CATGAGTTAAACTTCATGATGATACCTTCGA</font></td></tr><tr><td><font color="red">TCGAAGGTATCATCATGAAGTTTAACTCATG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="43610,377.48",
+		shape=ellipse,
+		width=5.8926];
+	ATCGAAGGTATCATCATGAAGTTTAACTCAT -> CATGAGTTAAACTTCATGATGATACCTTCGA	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="43372,385.98",
+		pos="e,43398,378.37 43346,378.59 43360,378.53 43374,378.47 43388,378.41"];
+	CATGAGTTAAACTTCATGATGATACCTTCGA -> ATCGAAGGTATCATCATGAAGTTTAACTCAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="43372,366.98",
+		pos="e,43314,359.78 43418,361.47 43404,360.67 43391,359.99 43377,359.48 43360,358.82 43343,358.86 43325,359.4"];
+	CCATGAGTTAAACTTCATGATGATACCTTCG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CCATGAGTTAAACTTCATGATGATACCTTCG</font></td></tr><tr><td><font color="red">CGAAGGTATCATCATGAAGTTTAACTCATGG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="44085,380.48",
+		shape=ellipse,
+		width=5.9318];
+	CATGAGTTAAACTTCATGATGATACCTTCGA -> CCATGAGTTAAACTTCATGATGATACCTTCG	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="43848,385.98",
+		pos="e,43872,379.13 43822,378.81 43835,378.9 43849,378.98 43862,379.07"];
+	TAACGATATCAATCTTTCTAATGATATTATA -> AACGATATCAATCTTTCTAATGATATTATAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="64594,467.98",
+		pos="e,64551,462.36 64643,460.35 64625,459.81 64606,459.78 64589,460.48 64580,460.84 64570,461.29 64561,461.81"];
+	TAACGATATCAATCTTTCTAATGATATTATA -> ATAATATCATTAGAAAGATTGATATCGTTAA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="65063,485.98",
+		pos="e,65085,478.48 65040,478.48 65052,478.48 65063,478.48 65075,478.48"];
+	ATAATATCATTAGAAAGATTGATATCGTTAA -> TAATATCATTAGAAAGATTGATATCGTTAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="65534,485.98",
+		pos="e,65557,478.48 65512,478.48 65523,478.48 65535,478.48 65547,478.48"];
+	ATAATATCATTAGAAAGATTGATATCGTTAA -> TAACGATATCAATCTTTCTAATGATATTATA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="65063,466.98",
+		pos="e,65017,461.6 65115,459.42 65096,458.78 65076,458.71 65058,459.48 65048,459.89 65038,460.4 65027,460.99"];
+	CGATTTTTTTGCCGTATTTTGTTTGTATGAA -> GCGATTTTTTTGCCGTATTTTGTTTGTATGA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="13899,313.98",
+		pos="e,13846,306.42 13945,308.58 13931,307.74 13917,307.02 13904,306.48 13888,305.84 13872,305.78 13856,306.14"];
+	CGATTTTTTTGCCGTATTTTGTTTGTATGAA -> ATTCATACAAACAAAATACGGCAAAAAAATC	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="14379,332.98",
+		pos="e,14402,325.48 14356,325.48 14368,325.48 14380,325.48 14391,325.48"];
+	ATCGCTACTTCTTTAGGGGATAATATAAGAG -> TATCGCTACTTCTTTAGGGGATAATATAAGA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="47634,483.98",
+		pos="e,47659,477.35 47611,476.62 47623,476.81 47636,477.01 47649,477.2"];
+	TCGCTACTTCTTTAGGGGATAATATAAGAGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TCGCTACTTCTTTAGGGGATAATATAAGAGA</font></td></tr><tr><td><font color="red">TCTCTTATATTATCCCCTAAAGAAGTAGCGA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="46927,482.48",
+		shape=ellipse,
+		width=5.9122];
+	ATCGCTACTTCTTTAGGGGATAATATAAGAG -> TCGCTACTTCTTTAGGGGATAATATAAGAGA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="47163,465.98",
+		pos="e,47106,462.07 47206,457.57 47190,457.41 47173,457.66 47158,458.48 47144,459.19 47130,460.13 47116,461.23"];
+	ATCGCGCATTTTTATGAAGTGCAAAGCGGAA -> TCGCGCATTTTTATGAAGTGCAAAGCGGAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="927.43,121.98",
+		pos="e,865.5,114.1 997.69,120.11 975.78,117.78 953.59,115.79 932.43,114.48 913.97,113.33 894.74,113.19 875.54,113.75"];
+	ATCGCGCATTTTTATGAAGTGCAAAGCGGAA -> AATCGCGCATTTTTATGAAGTGCAAAGCGGA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="1403.3,154.98",
+		pos="e,1428.4,147.34 1379.1,146.61 1392.1,146.81 1405.3,147 1418.4,147.19"];
+	AATCGCGCATTTTTATGAAGTGCAAAGCGGA -> AAATCGCGCATTTTTATGAAGTGCAAAGCGG	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="1880.7,161.98",
+		pos="e,1905.5,154.34 1855.7,153.61 1868.9,153.8 1882.2,154 1895.4,154.19"];
+	AATCGCGCATTTTTATGAAGTGCAAAGCGGA -> ATCGCGCATTTTTATGAAGTGCAAAGCGGAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="1403.3,135.98",
+		pos="e,1359.8,127.72 1457.3,131.48 1440.8,130.26 1424.3,129.23 1408.3,128.48 1395.9,127.89 1383.1,127.64 1370.2,127.65"];
+	ATCCCCTAAAGAAGTAGCGATATAGTTTATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATCCCCTAAAGAAGTAGCGATATAGTTTATA</font></td></tr><tr><td><font color="red">TATAAACTATATCGCTACTTCTTTAGGGGAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="52113,478.48",
+		shape=ellipse,
+		width=5.9318];
+	TCCCCTAAAGAAGTAGCGATATAGTTTATAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TCCCCTAAAGAAGTAGCGATATAGTTTATAA</font></td></tr><tr><td><font color="red">TTATAAACTATATCGCTACTTCTTTAGGGGA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="52586,478.48",
+		shape=ellipse,
+		width=5.9318];
+	ATCCCCTAAAGAAGTAGCGATATAGTTTATA -> TCCCCTAAAGAAGTAGCGATATAGTTTATAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="52350,485.98",
+		pos="e,52372,478.48 52327,478.48 52339,478.48 52350,478.48 52362,478.48"];
+	ATAAACTATATCGCTACTTCTTTAGGGGATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATAAACTATATCGCTACTTCTTTAGGGGATA</font></td></tr><tr><td><font color="red">TATCCCCTAAAGAAGTAGCGATATAGTTTAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="51641,478.48",
+		shape=ellipse,
+		width=5.8926];
+	ATCCCCTAAAGAAGTAGCGATATAGTTTATA -> ATAAACTATATCGCTACTTCTTTAGGGGATA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="51877,467.98",
+		pos="e,51833,462.38 51926,460.34 51908,459.81 51889,459.79 51872,460.48 51862,460.85 51853,461.3 51843,461.82"];
+	TCCCCTAAAGAAGTAGCGATATAGTTTATAA -> ATCCCCTAAAGAAGTAGCGATATAGTTTATA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="52350,466.98",
+		pos="e,52304,461.58 52402,459.43 52383,458.78 52363,458.71 52345,459.48 52335,459.89 52325,460.39 52314,460.98"];
+	ATTATAAACTATATCGCTACTTCTTTAGGGG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATTATAAACTATATCGCTACTTCTTTAGGGG</font></td></tr><tr><td><font color="red">CCCCTAAAGAAGTAGCGATATAGTTTATAAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="53059,478.48",
+		shape=ellipse,
+		width=5.9318];
+	TCCCCTAAAGAAGTAGCGATATAGTTTATAA -> ATTATAAACTATATCGCTACTTCTTTAGGGG	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="52823,485.98",
+		pos="e,52846,478.48 52800,478.48 52812,478.48 52824,478.48 52835,478.48"];
+	ATAAACTATATCGCTACTTCTTTAGGGGATA -> ATCCCCTAAAGAAGTAGCGATATAGTTTATA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="51877,485.98",
+		pos="e,51900,478.48 51853,478.48 51865,478.48 51877,478.48 51889,478.48"];
+	ATAAACTATATCGCTACTTCTTTAGGGGATA -> TAAACTATATCGCTACTTCTTTAGGGGATAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="51405,466.98",
+		pos="e,51352,459.46 51451,461.62 51437,460.76 51423,460.03 51410,459.48 51394,458.83 51378,458.78 51362,459.16"];
+	GCAAAGCGGAAATAAAGCCATCATAAATATA -> CAAAGCGGAAATAAAGCCATCATAAATATAC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="9078.9,172.98",
+		pos="e,9102.1,164.39 9050.1,164.33 9061.5,164.47 9072.8,164.52 9083.9,164.48 9086.6,164.47 9089.3,164.45 9092.1,164.44"];
+	ATATTTATGATGGCTTTATTTCCGCTTTGCA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATATTTATGATGGCTTTATTTCCGCTTTGCA</font></td></tr><tr><td><font color="red">TGCAAAGCGGAAATAAAGCCATCATAAATAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="8357.9,148.48",
+		shape=ellipse,
+		width=6.0104];
+	GCAAAGCGGAAATAAAGCCATCATAAATATA -> ATATTTATGATGGCTTTATTTCCGCTTTGCA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="8597.3,145.98",
+		pos="e,8567.6,139.09 8643.1,138.76 8625.9,138.27 8608.8,138.12 8592.3,138.48 8587.5,138.58 8582.6,138.69 8577.7,138.82"];
+	ATATAAGAGAAATCGAAGGTATCATCATGAG -> AATATAAGAGAAATCGAAGGTATCATCATGA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="37136,404.98",
+		pos="e,37162,398.9 37099,395.82 37110,396.41 37120,396.97 37131,397.48 37138,397.81 37145,398.13 37152,398.45"];
+	ACTCATGATGATACCTTCGATTTCTCTTATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ACTCATGATGATACCTTCGATTTCTCTTATA</font></td></tr><tr><td><font color="red">TATAAGAGAAATCGAAGGTATCATCATGAGT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="36419,377.48",
+		shape=ellipse,
+		width=5.9908];
+	ATATAAGAGAAATCGAAGGTATCATCATGAG -> ACTCATGATGATACCTTCGATTTCTCTTATA	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="36658,367.98",
+		pos="e,36610,359.91 36710,363.39 36694,362.21 36678,361.21 36662,360.48 36648,359.84 36634,359.63 36620,359.76"];
+	CATGATGATACCTTCGATTTCTCTTATATTA -> AATATAAGAGAAATCGAAGGTATCATCATGA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="37615,446.98",
+		pos="e,37544,428.85 37689,449.39 37665,446.04 37642,442.66 37620,439.48 37599,436.47 37576,433.35 37555,430.26"];
+	CATGATGATACCTTCGATTTCTCTTATATTA -> ATAATATAAGAGAAATCGAAGGTATCATCAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="38093,496.98",
+		pos="e,38131,492.02 38055,486.93 38077,488.39 38099,489.88 38121,491.35"];
+	ACAAACAAAATACGGCAAAAAAATCGCGCAT -> TACAAACAAAATACGGCAAAAAAATCGCGCA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="11968,308.98",
+		pos="e,11992,301.32 11945,300.63 11957,300.81 11969,300.99 11982,301.17"];
+	AATGCGCGATTTTTTTGCCGTATTTTGTTTG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AATGCGCGATTTTTTTGCCGTATTTTGTTTG</font></td></tr><tr><td><font color="red">CAAACAAAATACGGCAAAAAAATCGCGCATT</font></td></tr><tr><td><font color="black">2</font> </td></tr></table>>,
+		pos="11245,290.48",
+		shape=ellipse,
+		width=6.0497];
+	ACAAACAAAATACGGCAAAAAAATCGCGCAT -> AATGCGCGATTTTTTTGCCGTATTTTGTTTG	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="11485,275.98",
+		pos="e,11420,268.32 11556,274.05 11534,271.74 11512,269.78 11490,268.48 11471,267.29 11451,267.22 11431,267.91"];
+	AAACAAAATACGGCAAAAAAATCGCGCATTT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAACAAAATACGGCAAAAAAATCGCGCATTT</font></td></tr><tr><td><font color="red">AAATGCGCGATTTTTTTGCCGTATTTTGTTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="10763,283.48",
+		shape=ellipse,
+		width=6.03];
+	AAACAAAATACGGCAAAAAAATCGCGCATTT -> AAAATGCGCGATTTTTTTGCCGTATTTTGTT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="10522,261.98",
+		pos="e,10456,254.37 10593,260.11 10571,257.78 10549,255.79 10527,254.48 10507,253.26 10487,253.21 10466,253.95"];
+	AAACAAAATACGGCAAAAAAATCGCGCATTT -> AATGCGCGATTTTTTTGCCGTATTTTGTTTG	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="11004,294.98",
+		pos="e,11028,287.32 10980,286.62 10992,286.81 11005,286.99 11017,287.18"];
+	AAAATGCGCGATTTTTTTGCCGTATTTTGTT -> AAAAATGCGCGATTTTTTTGCCGTATTTTGT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="10041,261.98",
+		pos="e,9995.2,253.73 10095,257.51 10079,256.28 10062,255.23 10046,254.48 10033,253.87 10019,253.62 10006,253.65"];
+	AAAATGCGCGATTTTTTTGCCGTATTTTGTT -> AAACAAAATACGGCAAAAAAATCGCGCATTT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="10522,287.98",
+		pos="e,10547,280.33 10497,279.6 10510,279.8 10523,279.99 10536,280.18"];
+	AATGCGCGATTTTTTTGCCGTATTTTGTTTG -> ACAAACAAAATACGGCAAAAAAATCGCGCAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="11485,301.98",
+		pos="e,11509,294.32 11462,293.63 11474,293.81 11486,293.99 11499,294.17"];
+	AATGCGCGATTTTTTTGCCGTATTTTGTTTG -> AAACAAAATACGGCAAAAAAATCGCGCATTT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="11004,275.98",
+		pos="e,10960,267.71 11057,271.39 11041,270.21 11024,269.21 11009,268.48 10996,267.89 10983,267.63 10970,267.65"];
+	TACCTTCGATTTCTCTTATATTATCCCCTAA -> ACCTTCGATTTCTCTTATATTATCCCCTAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="41936,474.98",
+		pos="e,41959,467.93 41913,468.02 41925,468 41937,467.97 41949,467.95"];
+	ATACCTTCGATTTCTCTTATATTATCCCCTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATACCTTCGATTTCTCTTATATTATCCCCTA</font></td></tr><tr><td><font color="red">TAGGGGATAATATAAGAGAAATCGAAGGTAT</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="41214,469.48",
+		shape=ellipse,
+		width=6.0497];
+	TACCTTCGATTTCTCTTATATTATCCCCTAA -> ATACCTTCGATTTCTCTTATATTATCCCCTA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="41454,447.98",
+		pos="e,41384,446.05 41538,442.41 41509,439.81 41478,438.7 41449,440.48 41432,441.58 41413,443.16 41394,445.02"];
+	ATACCTTCGATTTCTCTTATATTATCCCCTA -> TACCTTCGATTTCTCTTATATTATCCCCTAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="41454,475.98",
+		pos="e,41477,468.93 41432,469.02 41443,469 41455,468.98 41467,468.95"];
+	AGGGGATAATATAAGAGAAATCGAAGGTATC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGGGGATAATATAAGAGAAATCGAAGGTATC</font></td></tr><tr><td><font color="red">GATACCTTCGATTTCTCTTATATTATCCCCT</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="40732,469.48",
+		shape=ellipse,
+		width=6.0497];
+	ATACCTTCGATTTCTCTTATATTATCCCCTA -> AGGGGATAATATAAGAGAAATCGAAGGTATC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="40973,457.98",
+		pos="e,40927,452.56 41026,450.42 41006,449.78 40987,449.72 40968,450.48 40958,450.89 40947,451.4 40937,451.98"];
+	AAACTCATGATGATACCTTCGATTTCTCTTA -> AAGAGAAATCGAAGGTATCATCATGAGTTTA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="35230,365.98",
+		pos="e,35177,358.42 35276,360.58 35262,359.74 35248,359.02 35235,358.48 35219,357.84 35203,357.78 35187,358.14"];
+	AACTCATGATGATACCTTCGATTTCTCTTAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AACTCATGATGATACCTTCGATTTCTCTTAT</font></td></tr><tr><td><font color="red">ATAAGAGAAATCGAAGGTATCATCATGAGTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="35942,380.48",
+		shape=ellipse,
+		width=5.9908];
+	AAACTCATGATGATACCTTCGATTTCTCTTA -> AACTCATGATGATACCTTCGATTTCTCTTAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="35704,385.98",
+		pos="e,35726,379.11 35681,378.83 35693,378.9 35705,378.98 35716,379.05"];
+	TGGCTAAATTCATACAAACAAAATACGGCAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TGGCTAAATTCATACAAACAAAATACGGCAA</font></td></tr><tr><td><font color="red">TTGCCGTATTTTGTTTGTATGAATTTAGCCA</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="17984,325.48",
+		shape=ellipse,
+		width=5.9908];
+	GGCTAAATTCATACAAACAAAATACGGCAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GGCTAAATTCATACAAACAAAATACGGCAAA</font></td></tr><tr><td><font color="red">TTTGCCGTATTTTGTTTGTATGAATTTAGCC</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="17505,325.48",
+		shape=ellipse,
+		width=6.03];
+	TGGCTAAATTCATACAAACAAAATACGGCAA -> GGCTAAATTCATACAAACAAAATACGGCAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="17745,314.98",
+		pos="e,17695,307.33 17789,309.35 17776,308.6 17763,307.97 17750,307.48 17735,306.92 17720,306.83 17705,307.09"];
+	ATGGCTAAATTCATACAAACAAAATACGGCA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATGGCTAAATTCATACAAACAAAATACGGCA</font></td></tr><tr><td><font color="red">TGCCGTATTTTGTTTGTATGAATTTAGCCAT</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="18461,325.48",
+		shape=ellipse,
+		width=5.9908];
+	TGGCTAAATTCATACAAACAAAATACGGCAA -> ATGGCTAAATTCATACAAACAAAATACGGCA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="18222,332.98",
+		pos="e,18245,325.48 18199,325.48 18211,325.48 18223,325.48 18235,325.48"];
+	GGCTAAATTCATACAAACAAAATACGGCAAA -> TGGCTAAATTCATACAAACAAAATACGGCAA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="17745,332.98",
+		pos="e,17768,325.48 17722,325.48 17734,325.48 17746,325.48 17757,325.48"];
+	GCTAAATTCATACAAACAAAATACGGCAAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GCTAAATTCATACAAACAAAATACGGCAAAA</font></td></tr><tr><td><font color="red">TTTTGCCGTATTTTGTTTGTATGAATTTAGC</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="17025,325.48",
+		shape=ellipse,
+		width=6.03];
+	GGCTAAATTCATACAAACAAAATACGGCAAA -> GCTAAATTCATACAAACAAAATACGGCAAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="17265,313.98",
+		pos="e,17218,308.58 17318,306.42 17298,305.78 17279,305.72 17260,306.48 17250,306.89 17239,307.4 17229,307.99"];
+	ATGGCTAAATTCATACAAACAAAATACGGCA -> TGGCTAAATTCATACAAACAAAATACGGCAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="18222,313.98",
+		pos="e,18176,308.58 18275,306.43 18256,305.79 18236,305.71 18217,306.48 18207,306.89 18197,307.4 18186,307.99"];
+	CATGGCTAAATTCATACAAACAAAATACGGC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CATGGCTAAATTCATACAAACAAAATACGGC</font></td></tr><tr><td><font color="red">GCCGTATTTTGTTTGTATGAATTTAGCCATG</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="18938,325.48",
+		shape=ellipse,
+		width=5.9908];
+	ATGGCTAAATTCATACAAACAAAATACGGCA -> CATGGCTAAATTCATACAAACAAAATACGGC	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="18700,332.98",
+		pos="e,18722,325.48 18677,325.48 18689,325.48 18701,325.48 18712,325.48"];
+	CATGGCTAAATTCATACAAACAAAATACGGC -> ATGGCTAAATTCATACAAACAAAATACGGCA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="18700,314.98",
+		pos="e,18656,309.35 18749,307.34 18731,306.82 18712,306.79 18695,307.48 18685,307.84 18676,308.28 18666,308.79"];
+	CCGTATTTTGTTTGTATGAATTTAGCCATGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CCGTATTTTGTTTGTATGAATTTAGCCATGA</font></td></tr><tr><td><font color="red">TCATGGCTAAATTCATACAAACAAAATACGG</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="19415,325.48",
+		shape=ellipse,
+		width=5.9711];
+	CATGGCTAAATTCATACAAACAAAATACGGC -> CCGTATTTTGTTTGTATGAATTTAGCCATGA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="19177,332.98",
+		pos="e,19200,325.48 19154,325.48 19166,325.48 19178,325.48 19190,325.48"];
+	CCGTATTTTGTTTGTATGAATTTAGCCATGA -> CATGGCTAAATTCATACAAACAAAATACGGC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="19177,313.98",
+		pos="e,19124,306.43 19223,308.58 19209,307.74 19195,307.02 19182,306.48 19166,305.84 19150,305.78 19134,306.15"];
+	CGTATTTTGTTTGTATGAATTTAGCCATGAG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CGTATTTTGTTTGTATGAATTTAGCCATGAG</font></td></tr><tr><td><font color="red">CTCATGGCTAAATTCATACAAACAAAATACG</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="19890,325.48",
+		shape=ellipse,
+		width=5.9515];
+	CCGTATTTTGTTTGTATGAATTTAGCCATGA -> CGTATTTTGTTTGTATGAATTTAGCCATGAG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="19653,332.98",
+		pos="e,19676,325.48 19630,325.48 19642,325.48 19654,325.48 19665,325.48"];
+	ATATTTATGATGGCTTTATTTCCGCTTTGCA -> GCAAAGCGGAAATAAAGCCATCATAAATATA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="8597.3,165.98",
+		pos="e,8620.5,157.88 8568.8,156.95 8576.8,157.15 8584.6,157.33 8592.3,157.48 8598.2,157.59 8604.2,157.69 8610.3,157.77"];
+	ATATTTATGATGGCTTTATTTCCGCTTTGCA -> GTGCAAAGCGGAAATAAAGCCATCATAAATA	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="8118.6,142.98",
+		pos="e,8092.4,134.93 8152.7,136.44 8142.8,136.07 8133.1,135.74 8123.6,135.48 8116.7,135.29 8109.8,135.14 8102.7,135.04"];
+	GTGCAAAGCGGAAATAAAGCCATCATAAATA -> AGTGCAAAGCGGAAATAAAGCCATCATAAAT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="7637,131.98",
+		pos="e,7605.2,123.78 7678.9,126.12 7666.4,125.47 7654,124.91 7642,124.48 7633.3,124.16 7624.4,123.96 7615.4,123.86"];
+	GTGCAAAGCGGAAATAAAGCCATCATAAATA -> ATATTTATGATGGCTTTATTTCCGCTTTGCA	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="8118.6,158.98",
+		pos="e,8141.7,150.39 8089.7,150.33 8101.2,150.47 8112.5,150.52 8123.6,150.48 8126.2,150.47 8128.8,150.45 8131.5,150.44"];
+	CGCTACTTCTTTAGGGGATAATATAAGAGAA -> GCTACTTCTTTAGGGGATAATATAAGAGAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="46218,468.98",
+		pos="e,46162,461.62 46264,463.58 46250,462.74 46236,462.02 46223,461.48 46207,460.8 46190,460.8 46172,461.28"];
+	CGCTACTTCTTTAGGGGATAATATAAGAGAA -> TCGCTACTTCTTTAGGGGATAATATAAGAGA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="46691,488.98",
+		pos="e,46714,481.57 46668,481.38 46680,481.43 46692,481.48 46704,481.53"];
+	AAAGAAGTAGCGATATAGTTTATAATATCAT -> AAGAAGTAGCGATATAGTTTATAATATCATT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="55661,485.98",
+		pos="e,55683,478.48 55639,478.48 55650,478.48 55662,478.48 55673,478.48"];
+	TAAAGAAGTAGCGATATAGTTTATAATATCA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">TAAAGAAGTAGCGATATAGTTTATAATATCA</font></td></tr><tr><td><font color="red">TGATATTATAAACTATATCGCTACTTCTTTA</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="54952,478.48",
+		shape=ellipse,
+		width=5.9318];
+	AAAGAAGTAGCGATATAGTTTATAATATCAT -> TAAAGAAGTAGCGATATAGTTTATAATATCA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="55188,466.98",
+		pos="e,55143,461.58 55241,459.43 55221,458.78 55202,458.71 55183,459.48 55173,459.89 55163,460.39 55153,460.98"];
+	GCATTTTTATGAAGTGCAAAGCGGAAATAAA -> CATTTTTATGAAGTGCAAAGCGGAAATAAAG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="1880.7,67.977",
+		pos="e,1904,59.884 1852.3,58.954 1860.2,59.152 1868,59.328 1875.7,59.477 1881.6,59.591 1887.6,59.688 1893.7,59.767"];
+	GCATTTTTATGAAGTGCAAAGCGGAAATAAA -> CGCATTTTTATGAAGTGCAAAGCGGAAATAA	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="1403.3,44.977",
+		pos="e,1377.2,36.929 1437.7,38.454 1427.8,38.075 1418,37.745 1408.3,37.477 1401.5,37.286 1394.6,37.143 1387.5,37.044"];
+	CGCATTTTTATGAAGTGCAAAGCGGAAATAA -> GCGCATTTTTATGAAGTGCAAAGCGGAAATA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="927.43,33.977",
+		pos="e,893.76,25.816 969.23,28.141 956.78,27.483 944.43,26.916 932.43,26.477 923.07,26.134 913.51,25.935 903.86,25.856"];
+	CGCATTTTTATGAAGTGCAAAGCGGAAATAA -> GCATTTTTATGAAGTGCAAAGCGGAAATAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="1403.3,60.977",
+		pos="e,1426.6,52.885 1375,51.954 1382.9,52.152 1390.7,52.328 1398.3,52.477 1404.3,52.592 1410.3,52.688 1416.4,52.768"];
+	AACTTCATGATGATACCTTCGATTTCTCTTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AACTTCATGATGATACCTTCGATTTCTCTTA</font></td></tr><tr><td><font color="red">TAAGAGAAATCGAAGGTATCATCATGAAGTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="39290,374.48",
+		shape=ellipse,
+		width=5.9908];
+	AACTTCATGATGATACCTTCGATTTCTCTTA -> ACTTCATGATGATACCTTCGATTTCTCTTAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="39051,374.98",
+		pos="e,39009,369.12 39079,366.71 39068,366.84 39057,367.08 39046,367.48 39037,367.79 39028,368.18 39019,368.61"];
+	AAACTTCATGATGATACCTTCGATTTCTCTT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAACTTCATGATGATACCTTCGATTTCTCTT</font></td></tr><tr><td><font color="red">AAGAGAAATCGAAGGTATCATCATGAAGTTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="39770,374.48",
+		shape=ellipse,
+		width=5.9908];
+	AACTTCATGATGATACCTTCGATTTCTCTTA -> AAACTTCATGATGATACCTTCGATTTCTCTT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="39530,381.98",
+		pos="e,39554,374.48 39506,374.48 39519,374.48 39531,374.48 39544,374.48"];
+	ACTTCATGATGATACCTTCGATTTCTCTTAT -> CTTCATGATGATACCTTCGATTTCTCTTATA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="38572,385.98",
+		pos="e,38494,385.52 38599,376.88 38588,377.24 38578,377.76 38567,378.48 38547,379.86 38525,381.93 38504,384.35"];
+	ACTTCATGATGATACCTTCGATTTCTCTTAT -> AACTTCATGATGATACCTTCGATTTCTCTTA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="39051,389.98",
+		pos="e,39079,381.95 39028,383.01 39037,382.85 39047,382.67 39056,382.48 39060,382.39 39064,382.29 39069,382.19"];
+	AAACTTCATGATGATACCTTCGATTTCTCTT -> AACTTCATGATGATACCTTCGATTTCTCTTA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="39530,362.98",
+		pos="e,39483,357.6 39584,355.45 39564,354.78 39544,354.7 39525,355.48 39514,355.89 39504,356.41 39493,357.01"];
+	AAACTTCATGATGATACCTTCGATTTCTCTT -> AGAGAAATCGAAGGTATCATCATGAAGTTTA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="40010,381.98",
+		pos="e,40035,375.03 39986,374.93 39998,374.95 40011,374.98 40024,375.01"];
+	GCACTTCATAAAAATGCGCGATTTTTTTGCC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GCACTTCATAAAAATGCGCGATTTTTTTGCC</font></td></tr><tr><td><font color="red">GGCAAAAAAATCGCGCATTTTTATGAAGTGC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="5467.1,206.48",
+		shape=ellipse,
+		width=5.9515];
+	CACTTCATAAAAATGCGCGATTTTTTTGCCG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CACTTCATAAAAATGCGCGATTTTTTTGCCG</font></td></tr><tr><td><font color="red">CGGCAAAAAAATCGCGCATTTTTATGAAGTG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="5948.6,213.48",
+		shape=ellipse,
+		width=5.9515];
+	GCACTTCATAAAAATGCGCGATTTTTTTGCC -> CACTTCATAAAAATGCGCGATTTTTTTGCCG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="5707.9,217.98",
+		pos="e,5734.8,210.37 5680.9,209.58 5695.4,209.79 5710.1,210.01 5724.7,210.22"];
+	GCACTTCATAAAAATGCGCGATTTTTTTGCC -> GCAAAAAAATCGCGCATTTTTATGAAGTGCA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="5226.3,184.98",
+		pos="e,5158.9,177.42 5298.6,183.25 5276,180.86 5253.1,178.82 5231.3,177.48 5211.1,176.24 5190.1,176.21 5169.2,176.98"];
+	CACTTCATAAAAATGCGCGATTTTTTTGCCG -> GCACTTCATAAAAATGCGCGATTTTTTTGCC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="5707.9,198.98",
+		pos="e,5661.8,190.74 5763.5,194.58 5746.4,193.32 5729.3,192.25 5712.9,191.48 5699.5,190.85 5685.7,190.61 5671.9,190.66"];
+	ACGGCAAAAAAATCGCGCATTTTTATGAAGT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ACGGCAAAAAAATCGCGCATTTTTATGAAGT</font></td></tr><tr><td><font color="red">ACTTCATAAAAATGCGCGATTTTTTTGCCGT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="6430.9,220.48",
+		shape=ellipse,
+		width=5.9515];
+	CACTTCATAAAAATGCGCGATTTTTTTGCCG -> ACGGCAAAAAAATCGCGCATTTTTATGAAGT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="6189.4,224.98",
+		pos="e,6217.2,217.38 6162.4,216.58 6177.2,216.79 6192.1,217.01 6206.9,217.23"];
+	GCAAAAAAATCGCGCATTTTTATGAAGTGCA -> CAAAAAAATCGCGCATTTTTATGAAGTGCAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="4744.7,177.98",
+		pos="e,4678.7,170.39 4817,176.25 4794.4,173.86 4771.5,171.82 4749.7,170.48 4730,169.26 4709.3,169.22 4688.8,169.96"];
+	GCAAAAAAATCGCGCATTTTTATGAAGTGCA -> GCACTTCATAAAAATGCGCGATTTTTTTGCC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="5226.3,210.98",
+		pos="e,5253.2,203.37 5199.3,202.58 5213.8,202.79 5228.5,203.01 5243.1,203.22"];
+	TAAAGAAGTAGCGATATAGTTTATAATATCA -> AAAGAAGTAGCGATATAGTTTATAATATCAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="55188,485.98",
+		pos="e,55211,478.48 55166,478.48 55177,478.48 55189,478.48 55201,478.48"];
+	CTAAAGAAGTAGCGATATAGTTTATAATATC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CTAAAGAAGTAGCGATATAGTTTATAATATC</font></td></tr><tr><td><font color="red">GATATTATAAACTATATCGCTACTTCTTTAG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="54479,478.48",
+		shape=ellipse,
+		width=5.9318];
+	TAAAGAAGTAGCGATATAGTTTATAATATCA -> CTAAAGAAGTAGCGATATAGTTTATAATATC	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="54715,467.98",
+		pos="e,54672,462.35 54765,460.34 54746,459.82 54728,459.79 54710,460.48 54701,460.84 54691,461.28 54682,461.79"];
+	CTAAAGAAGTAGCGATATAGTTTATAATATC -> TAAAGAAGTAGCGATATAGTTTATAATATCA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="54715,485.98",
+		pos="e,54738,478.48 54692,478.48 54704,478.48 54716,478.48 54728,478.48"];
+	ATATTATAAACTATATCGCTACTTCTTTAGG	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATATTATAAACTATATCGCTACTTCTTTAGG</font></td></tr><tr><td><font color="red">CCTAAAGAAGTAGCGATATAGTTTATAATAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="54006,478.48",
+		shape=ellipse,
+		width=5.9318];
+	CTAAAGAAGTAGCGATATAGTTTATAATATC -> ATATTATAAACTATATCGCTACTTCTTTAGG	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="54242,467.98",
+		pos="e,54199,462.35 54292,460.34 54273,459.82 54255,459.79 54237,460.48 54228,460.84 54218,461.28 54209,461.79"];
+	TCGCTACTTCTTTAGGGGATAATATAAGAGA -> ATCGCTACTTCTTTAGGGGATAATATAAGAG	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="47163,484.98",
+		pos="e,47187,477.52 47139,478.44 47151,478.2 47164,477.95 47177,477.71"];
+	TCGCTACTTCTTTAGGGGATAATATAAGAGA -> CGCTACTTCTTTAGGGGATAATATAAGAGAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="46691,469.98",
+		pos="e,46641,462.2 46739,464.84 46724,463.89 46710,463.08 46696,462.48 46681,461.84 46666,461.71 46651,461.97"];
+	AGGGGATAATATAAGAGAAATCGAAGGTATC -> ATACCTTCGATTTCTCTTATATTATCCCCTA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="40973,476.98",
+		pos="e,40996,469.48 40950,469.48 40962,469.48 40974,469.48 40985,469.48"];
+	GGGGATAATATAAGAGAAATCGAAGGTATCA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GGGGATAATATAAGAGAAATCGAAGGTATCA</font></td></tr><tr><td><font color="red">TGATACCTTCGATTTCTCTTATATTATCCCC</font></td></tr><tr><td><font color="black">3</font> </td></tr></table>>,
+		pos="40251,472.48",
+		shape=ellipse,
+		width=6.0497];
+	AGGGGATAATATAAGAGAAATCGAAGGTATC -> GGGGATAATATAAGAGAAATCGAAGGTATCA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="40491,450.98",
+		pos="e,40421,449.05 40569,444.58 40541,442.55 40513,441.83 40486,443.48 40468,444.58 40450,446.16 40431,448.02"];
+	GGGGATAATATAAGAGAAATCGAAGGTATCA -> AGGGGATAATATAAGAGAAATCGAAGGTATC	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="40491,477.98",
+		pos="e,40514,470.83 40469,471.12 40480,471.04 40492,470.97 40504,470.89"];
+	GGGGATAATATAAGAGAAATCGAAGGTATCA -> ATGATACCTTCGATTTCTCTTATATTATCCC	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="40010,450.98",
+		pos="e,39940,449.05 40097,445.87 40067,442.96 40035,441.63 40005,443.48 39987,444.58 39968,446.16 39950,448.02"];
+	ACTCATGGCTAAATTCATACAAACAAAATAC -> AACTCATGGCTAAATTCATACAAACAAAATA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="20602,332.98",
+		pos="e,20625,325.48 20579,325.48 20591,325.48 20603,325.48 20614,325.48"];
+	ACTCATGGCTAAATTCATACAAACAAAATAC -> CGTATTTTGTTTGTATGAATTTAGCCATGAG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="20127,314.98",
+		pos="e,20084,309.35 20177,307.34 20158,306.82 20140,306.79 20122,307.48 20113,307.84 20103,308.28 20094,308.79"];
+	CGTATTTTGTTTGTATGAATTTAGCCATGAG -> CCGTATTTTGTTTGTATGAATTTAGCCATGA	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="19653,313.98",
+		pos="e,19600,306.43 19699,308.58 19685,307.74 19671,307.02 19658,306.48 19642,305.84 19626,305.78 19610,306.15"];
+	CGTATTTTGTTTGTATGAATTTAGCCATGAG -> ACTCATGGCTAAATTCATACAAACAAAATAC	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="20127,332.98",
+		pos="e,20150,325.48 20105,325.48 20116,325.48 20128,325.48 20140,325.48"];
+	ATGAATTTAGCCATGAGTTAAACTCATGATG -> TCATCATGAGTTTAACTCATGGCTAAATTCA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="26732,385.98",
+		pos="e,26755,378.48 26710,378.48 26721,378.48 26733,378.48 26745,378.48"];
+	ATCATGAGTTTAACTCATGGCTAAATTCATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATCATGAGTTTAACTCATGGCTAAATTCATA</font></td></tr><tr><td><font color="red">TATGAATTTAGCCATGAGTTAAACTCATGAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="26026,379.48",
+		shape=ellipse,
+		width=5.8729];
+	ATGAATTTAGCCATGAGTTAAACTCATGATG -> ATCATGAGTTTAACTCATGGCTAAATTCATA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="26261,366.98",
+		pos="e,26213,361.86 26313,359.35 26294,358.71 26274,358.66 26256,359.48 26245,359.94 26234,360.53 26223,361.21"];
+	GCTAAATTCATACAAACAAAATACGGCAAAA -> GGCTAAATTCATACAAACAAAATACGGCAAA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="17265,332.98",
+		pos="e,17287,325.48 17242,325.48 17254,325.48 17265,325.48 17277,325.48"];
+	GCTAAATTCATACAAACAAAATACGGCAAAA -> CTAAATTCATACAAACAAAATACGGCAAAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="16785,314.98",
+		pos="e,16735,307.34 16829,309.35 16815,308.6 16802,307.97 16790,307.48 16775,306.92 16760,306.83 16745,307.1"];
+	CTAAATTCATACAAACAAAATACGGCAAAAA -> TAAATTCATACAAACAAAATACGGCAAAAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="16304,314.98",
+		pos="e,16254,307.33 16348,309.35 16335,308.6 16322,307.97 16309,307.48 16295,306.91 16280,306.83 16264,307.1"];
+	CTAAATTCATACAAACAAAATACGGCAAAAA -> GCTAAATTCATACAAACAAAATACGGCAAAA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="16785,332.98",
+		pos="e,16807,325.48 16762,325.48 16773,325.48 16785,325.48 16797,325.48"];
+	GTATCATCATGAAGTTTAACTCATGGCTAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GTATCATCATGAAGTTTAACTCATGGCTAAA</font></td></tr><tr><td><font color="red">TTTAGCCATGAGTTAAACTTCATGATGATAC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="46454,380.48",
+		shape=ellipse,
+		width=5.8926];
+	ATTTAGCCATGAGTTAAACTTCATGATGATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">ATTTAGCCATGAGTTAAACTTCATGATGATA</font></td></tr><tr><td><font color="red">TATCATCATGAAGTTTAACTCATGGCTAAAT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="46927,389.48",
+		shape=ellipse,
+		width=5.8729];
+	GTATCATCATGAAGTTTAACTCATGGCTAAA -> ATTTAGCCATGAGTTAAACTTCATGATGATA	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="46691,391.98",
+		pos="e,46716,385.47 46666,384.5 46679,384.75 46693,385.01 46706,385.27"];
+	GGTATCATCATGAAGTTTAACTCATGGCTAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GGTATCATCATGAAGTTTAACTCATGGCTAA</font></td></tr><tr><td><font color="red">TTAGCCATGAGTTAAACTTCATGATGATACC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="45981,377.48",
+		shape=ellipse,
+		width=5.8926];
+	GTATCATCATGAAGTTTAACTCATGGCTAAA -> GGTATCATCATGAAGTTTAACTCATGGCTAA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="46218,362.98",
+		pos="e,46154,355.68 46278,359.49 46260,357.85 46241,356.45 46223,355.48 46204,354.44 46184,354.47 46164,355.23"];
+	ATTTAGCCATGAGTTAAACTTCATGATGATA -> GTATCATCATGAAGTTTAACTCATGGCTAAA	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="46691,372.98",
+		pos="e,46647,364.57 46749,369.14 46731,367.65 46713,366.37 46696,365.48 46683,364.81 46670,364.52 46657,364.52"];
+	AATTTAGCCATGAGTTAAACTTCATGATGAT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AATTTAGCCATGAGTTAAACTTCATGATGAT</font></td></tr><tr><td><font color="red">ATCATCATGAAGTTTAACTCATGGCTAAATT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="47399,376.48",
+		shape=ellipse,
+		width=5.8729];
+	ATTTAGCCATGAGTTAAACTTCATGATGATA -> AATTTAGCCATGAGTTAAACTTCATGATGAT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="47163,389.98",
+		pos="e,47190,382.23 47136,383.72 47150,383.32 47165,382.91 47179,382.51"];
+	GGTATCATCATGAAGTTTAACTCATGGCTAA -> GTATCATCATGAAGTTTAACTCATGGCTAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="46218,385.98",
+		pos="e,46242,379.13 46193,378.82 46206,378.9 46219,378.99 46232,379.07"];
+	AGGTATCATCATGAAGTTTAACTCATGGCTA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AGGTATCATCATGAAGTTTAACTCATGGCTA</font></td></tr><tr><td><font color="red">TAGCCATGAGTTAAACTTCATGATGATACCT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="45507,379.48",
+		shape=ellipse,
+		width=5.8926];
+	GGTATCATCATGAAGTTTAACTCATGGCTAA -> AGGTATCATCATGAAGTTTAACTCATGGCTA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="45743,376.98",
+		pos="e,45712,370.14 45774,369.14 45762,369.12 45750,369.23 45738,369.48 45733,369.59 45728,369.72 45723,369.85"];
+	AATCTTTCTAATGATATTATAAACTATATCG -> ATCTTTCTAATGATATTATAAACTATATCGC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="59906,466.98",
+		pos="e,59854,459.42 59952,461.6 59938,460.75 59924,460.03 59911,459.48 59896,458.84 59880,458.78 59864,459.13"];
+	AATCTTTCTAATGATATTATAAACTATATCG -> CAATCTTTCTAATGATATTATAAACTATATC	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="60375,485.98",
+		pos="e,60397,478.48 60352,478.48 60364,478.48 60375,478.48 60387,478.48"];
+	AGAGAAATCGAAGGTATCATCATGAAGTTTA -> GAGAAATCGAAGGTATCATCATGAAGTTTAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="40491,381.98",
+		pos="e,40516,374.92 40466,375.03 40480,375 40493,374.97 40506,374.95"];
+	AGAGAAATCGAAGGTATCATCATGAAGTTTA -> AAACTTCATGATGATACCTTCGATTTCTCTT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="40010,362.98",
+		pos="e,39963,357.64 40067,355.66 40046,354.83 40025,354.66 40005,355.48 39994,355.9 39983,356.44 39973,357.05"];
+	ACTTATGATGATACCTTCGATTTCTCTTATA -> ATATAAGAGAAATCGAAGGTATCATCATAAG	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="40010,553.98",
+		pos="e,39963,548.6 40065,546.47 40044,545.79 40024,545.69 40005,546.48 39994,546.89 39984,547.41 39973,548.01"];
+	ACTTATGATGATACCTTCGATTTCTCTTATA -> AACTTATGATGATACCTTCGATTTCTCTTAT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="40491,570.98",
+		pos="e,40516,563.82 40466,564.13 40479,564.05 40493,563.97 40506,563.88"];
+	GATGGCTTTATTTCCGCTTTGCACTTCATAA -> ATGGCTTTATTTCCGCTTTGCACTTCATAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="4265.9,82.977",
+		pos="e,4234.1,74.786 4307.7,77.125 4295.2,76.473 4282.9,75.912 4270.9,75.477 4262.2,75.159 4253.3,74.959 4244.3,74.858"];
+	GATGGCTTTATTTCCGCTTTGCACTTCATAA -> TATGAAGTGCAAAGCGGAAATAAAGCCATCA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="4744.7,109.98",
+		pos="e,4767.9,101.88 4716.2,100.95 4724.1,101.15 4732,101.33 4739.7,101.48 4745.6,101.59 4751.6,101.69 4757.7,101.77"];
+	AACTTATGATGATACCTTCGATTTCTCTTAT -> AAACTTATGATGATACCTTCGATTTCTCTTA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="40973,569.98",
+		pos="e,40999,562.48 40948,562.48 40962,562.48 40976,562.48 40989,562.48"];
+	AACTTATGATGATACCTTCGATTTCTCTTAT -> ACTTATGATGATACCTTCGATTTCTCTTATA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="40491,551.98",
+		pos="e,40439,547.19 40544,544.16 40524,543.62 40505,543.65 40486,544.48 40474,545.02 40462,545.71 40449,546.52"];
+	ATTCATACAAACAAAATACGGCAAAAAAATC -> AATTCATACAAACAAAATACGGCAAAAAAAT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="14859,332.98",
+		pos="e,14882,325.48 14836,325.48 14848,325.48 14860,325.48 14872,325.48"];
+	ATTCATACAAACAAAATACGGCAAAAAAATC -> CGATTTTTTTGCCGTATTTTGTTTGTATGAA	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="14379,313.98",
+		pos="e,14333,308.58 14432,306.42 14412,305.78 14393,305.72 14374,306.48 14364,306.89 14353,307.4 14343,307.99"];
+	AGCGGAAATAAAGCCATCATAAATATACAAG -> GCGGAAATAAAGCCATCATAAATATACAAGC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="11004,200.98",
+		pos="e,11028,192.89 10975,191.95 10983,192.15 10991,192.33 10999,192.48 11005,192.6 11011,192.69 11018,192.77"];
+	AGCGGAAATAAAGCCATCATAAATATACAAG -> AAGCGGAAATAAAGCCATCATAAATATACAA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="10522,173.98",
+		pos="e,10490,165.78 10564,168.12 10552,167.47 10539,166.91 10527,166.48 10518,166.16 10510,165.96 10501,165.86"];
+	ACTCATGATGATACCTTCGATTTCTCTTATA -> ATATAAGAGAAATCGAAGGTATCATCATGAG	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="36658,386.98",
+		pos="e,36680,380.21 36635,379.74 36647,379.86 36658,379.98 36670,380.1"];
+	ACTCATGATGATACCTTCGATTTCTCTTATA -> AACTCATGATGATACCTTCGATTTCTCTTAT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="36181,350.98",
+		pos="e,36091,353.33 36285,348.16 36249,343.32 36211,340.68 36176,343.48 36152,345.38 36126,348.38 36102,351.86"];
+	AACTCATGATGATACCTTCGATTTCTCTTAT -> AAACTCATGATGATACCTTCGATTTCTCTTA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="35704,366.98",
+		pos="e,35661,361.35 35762,359.86 35741,358.94 35720,358.69 35699,359.48 35690,359.84 35681,360.28 35671,360.79"];
+	AACTCATGATGATACCTTCGATTTCTCTTAT -> ACTCATGATGATACCTTCGATTTCTCTTATA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="36181,385.98",
+		pos="e,36204,378.83 36158,379.12 36170,379.05 36182,378.97 36194,378.9"];
+	GTATGAATTTAGCCATGAGTTAAACTCATGA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GTATGAATTTAGCCATGAGTTAAACTCATGA</font></td></tr><tr><td><font color="red">TCATGAGTTTAACTCATGGCTAAATTCATAC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="25556,381.48",
+		shape=ellipse,
+		width=5.9122];
+	GTATGAATTTAGCCATGAGTTAAACTCATGA -> ATCATGAGTTTAACTCATGGCTAAATTCATA	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="25792,387.98",
+		pos="e,25815,380.38 25769,380.57 25781,380.52 25793,380.47 25805,380.42"];
+	GTATGAATTTAGCCATGAGTTAAACTCATGA -> CATGAGTTTAACTCATGGCTAAATTCATACA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="25320,367.98",
+		pos="e,25279,362.14 25378,360.97 25356,360.01 25335,359.72 25315,360.48 25306,360.8 25298,361.18 25289,361.62"];
+	ATCATGAGTTTAACTCATGGCTAAATTCATA -> ATGAATTTAGCCATGAGTTAAACTCATGATG	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="26261,385.98",
+		pos="e,26283,378.93 26238,379.03 26249,379 26261,378.98 26273,378.95"];
+	ATCATGAGTTTAACTCATGGCTAAATTCATA -> GTATGAATTTAGCCATGAGTTAAACTCATGA	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="25792,368.98",
+		pos="e,25737,361.68 25835,363.36 25822,362.61 25809,361.97 25797,361.48 25781,360.84 25764,360.85 25747,361.33"];
+	CATGAGTTTAACTCATGGCTAAATTCATACA -> ATGAGTTTAACTCATGGCTAAATTCATACAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="24851,350.98",
+		pos="e,24750,348.32 24932,351.61 24907,348.23 24881,345.3 24856,343.48 24825,341.17 24792,343.1 24760,346.99"];
+	CATGAGTTTAACTCATGGCTAAATTCATACA -> GTATGAATTTAGCCATGAGTTAAACTCATGA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="25320,386.98",
+		pos="e,25343,379.67 25297,379.27 25309,379.38 25321,379.48 25333,379.58"];
+	ATTATAAACTATATCGCTACTTCTTTAGGGG -> TCCCCTAAAGAAGTAGCGATATAGTTTATAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="52823,467.98",
+		pos="e,52779,462.35 52872,460.34 52854,459.82 52836,459.79 52818,460.48 52809,460.84 52799,461.28 52789,461.79"];
+	CCCTAAAGAAGTAGCGATATAGTTTATAATA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">CCCTAAAGAAGTAGCGATATAGTTTATAATA</font></td></tr><tr><td><font color="red">TATTATAAACTATATCGCTACTTCTTTAGGG</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="53532,478.48",
+		shape=ellipse,
+		width=5.9318];
+	ATTATAAACTATATCGCTACTTCTTTAGGGG -> CCCTAAAGAAGTAGCGATATAGTTTATAATA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="53296,485.98",
+		pos="e,53319,478.48 53273,478.48 53285,478.48 53297,478.48 53308,478.48"];
+	CCCTAAAGAAGTAGCGATATAGTTTATAATA -> ATTATAAACTATATCGCTACTTCTTTAGGGG	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="53296,466.98",
+		pos="e,53244,459.43 53342,461.58 53328,460.74 53314,460.02 53301,459.48 53286,458.85 53270,458.79 53254,459.14"];
+	CCCTAAAGAAGTAGCGATATAGTTTATAATA -> ATATTATAAACTATATCGCTACTTCTTTAGG	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="53769,485.98",
+		pos="e,53792,478.48 53746,478.48 53758,478.48 53770,478.48 53781,478.48"];
+	AGTTTATAATATCATTAGAAAGATTGATATC -> CGATATCAATCTTTCTAATGATATTATAAAC	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="63190,485.98",
+		pos="e,63213,478.48 63167,478.48 63179,478.48 63191,478.48 63203,478.48"];
+	AGTTTATAATATCATTAGAAAGATTGATATC -> ATATCAATCTTTCTAATGATATTATAAACTA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="62721,467.98",
+		pos="e,62678,462.36 62771,460.35 62752,459.82 62734,459.78 62716,460.48 62707,460.84 62697,461.29 62688,461.81"];
+	ATATCAATCTTTCTAATGATATTATAAACTA -> ATAGTTTATAATATCATTAGAAAGATTGATA	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="62253,466.98",
+		pos="e,62201,459.41 62298,461.6 62284,460.75 62271,460.03 62257,459.48 62242,458.86 62227,458.79 62211,459.13"];
+	ATATCAATCTTTCTAATGATATTATAAACTA -> AGTTTATAATATCATTAGAAAGATTGATATC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="62721,485.98",
+		pos="e,62744,478.48 62698,478.48 62710,478.48 62722,478.48 62734,478.48"];
+	CCATGAGTTAAACTTCATGATGATACCTTCG -> CATGAGTTAAACTTCATGATGATACCTTCGA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="43848,363.98",
+		pos="e,43786,356.54 43906,360.09 43888,358.62 43870,357.36 43853,356.48 43835,355.52 43816,355.51 43796,356.15"];
+	GAAGGTATCATCATGAAGTTTAACTCATGGC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GAAGGTATCATCATGAAGTTTAACTCATGGC</font></td></tr><tr><td><font color="red">GCCATGAGTTAAACTTCATGATGATACCTTC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="44560,377.48",
+		shape=ellipse,
+		width=5.9318];
+	CCATGAGTTAAACTTCATGATGATACCTTCG -> GAAGGTATCATCATGAAGTTTAACTCATGGC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="44323,385.98",
+		pos="e,44346,378.83 44299,379.13 44311,379.05 44324,378.97 44336,378.89"];
+	GAAGGTATCATCATGAAGTTTAACTCATGGC -> CCATGAGTTAAACTTCATGATGATACCTTCG	 [color=red,
+		label=<<font color="green">G</font>>,
+		lp="44323,366.98",
+		pos="e,44272,362.15 44374,359.14 44355,358.62 44336,358.65 44318,359.48 44306,360 44294,360.68 44282,361.46"];
+	AAGGTATCATCATGAAGTTTAACTCATGGCT	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAGGTATCATCATGAAGTTTAACTCATGGCT</font></td></tr><tr><td><font color="red">AGCCATGAGTTAAACTTCATGATGATACCTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="45034,377.48",
+		shape=ellipse,
+		width=5.8926];
+	GAAGGTATCATCATGAAGTTTAACTCATGGC -> AAGGTATCATCATGAAGTTTAACTCATGGCT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="44797,384.98",
+		pos="e,44822,377.48 44774,377.48 44786,377.48 44799,377.48 44811,377.48"];
+	GTTTAACTCATGGCTAAATTCATACAAACAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GTTTAACTCATGGCTAAATTCATACAAACAA</font></td></tr><tr><td><font color="red">TTGTTTGTATGAATTTAGCCATGAGTTAAAC</font></td></tr><tr><td><font color="black">2</font> </td></tr></table>>,
+		pos="22731,325.48",
+		shape=ellipse,
+		width=5.9122];
+	GTTTAACTCATGGCTAAATTCATACAAACAA -> TTTAACTCATGGCTAAATTCATACAAACAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="22496,314.98",
+		pos="e,22452,309.36 22545,307.34 22527,306.82 22508,306.79 22491,307.48 22481,307.84 22472,308.29 22462,308.81"];
+	GTTTAACTCATGGCTAAATTCATACAAACAA -> AGTTTAACTCATGGCTAAATTCATACAAACA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="22967,332.98",
+		pos="e,22990,325.48 22945,325.48 22956,325.48 22968,325.48 22980,325.48"];
+	TTTAACTCATGGCTAAATTCATACAAACAAA -> TTAACTCATGGCTAAATTCATACAAACAAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="22024,314.98",
+		pos="e,21974,307.34 22068,309.36 22055,308.61 22042,307.97 22029,307.48 22015,306.92 22000,306.83 21985,307.1"];
+	TTTAACTCATGGCTAAATTCATACAAACAAA -> GTTTAACTCATGGCTAAATTCATACAAACAA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="22496,332.98",
+		pos="e,22518,325.48 22473,325.48 22485,325.48 22496,325.48 22508,325.48"];
+	AGTTTAACTCATGGCTAAATTCATACAAACA -> GAGTTTAACTCATGGCTAAATTCATACAAAC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="23439,366.98",
+		pos="e,23480,363.31 23365,349.82 23388,352.95 23412,355.94 23434,358.48 23446,359.8 23458,361.08 23470,362.29"];
+	AGTTTAACTCATGGCTAAATTCATACAAACA -> GTTTAACTCATGGCTAAATTCATACAAACAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="22967,313.98",
+		pos="e,22915,306.43 23013,308.58 22999,307.74 22985,307.02 22972,306.48 22957,305.85 22941,305.79 22925,306.14"];
+	AAGTTTAACTCATGGCTAAATTCATACAAAC	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">AAGTTTAACTCATGGCTAAATTCATACAAAC</font></td></tr><tr><td><font color="red">GTTTGTATGAATTTAGCCATGAGTTAAACTT</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="51641,325.48",
+		shape=ellipse,
+		width=5.9122];
+	AGTTTAACTCATGGCTAAATTCATACAAACA -> AAGTTTAACTCATGGCTAAATTCATACAAAC	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="37375,316.98",
+		pos="e,51436,315.5 23408,315.49 23491,312.25 23587,309.48 23674,309.48 23674,309.48 23674,309.48 51169,309.48 51253,309.48 51345,312.04 \
+51425,315.11"];
+	ACGGCAAAAAAATCGCGCATTTTTATGAAGT -> CACTTCATAAAAATGCGCGATTTTTTTGCCG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="6189.4,205.98",
+		pos="e,6143.4,197.75 6245.6,201.6 6228.3,200.33 6211,199.25 6194.4,198.48 6181.1,197.85 6167.3,197.61 6153.5,197.66"];
+	ACGGCAAAAAAATCGCGCATTTTTATGAAGT -> CTTCATAAAAATGCGCGATTTTTTTGCCGTA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="6672.4,231.98",
+		pos="e,6700.3,224.38 6644.6,223.57 6659.7,223.79 6674.8,224.01 6689.9,224.23"];
+	CTTCATAAAAATGCGCGATTTTTTTGCCGTA -> ATACGGCAAAAAAATCGCGCATTTTTATGAA	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="7155.4,238.98",
+		pos="e,7182.5,231.38 7127.7,230.58 7142.5,230.79 7157.4,231.01 7172.2,231.23"];
+	CTTCATAAAAATGCGCGATTTTTTTGCCGTA -> ACGGCAAAAAAATCGCGCATTTTTATGAAGT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="6672.4,212.98",
+		pos="e,6625.5,204.75 6728.6,208.6 6711.3,207.33 6694,206.25 6677.4,205.48 6663.9,204.84 6649.9,204.6 6635.8,204.66"];
+	AGGTATCATCATGAAGTTTAACTCATGGCTA -> GGTATCATCATGAAGTTTAACTCATGGCTAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="45743,391.98",
+		pos="e,45772,384.56 45717,384.22 45725,384.31 45732,384.4 45738,384.48 45746,384.56 45754,384.6 45762,384.59"];
+	AGGTATCATCATGAAGTTTAACTCATGGCTA -> AAGGTATCATCATGAAGTTTAACTCATGGCT	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="45270,366.98",
+		pos="e,45219,359.23 45319,361.92 45305,360.94 45290,360.1 45275,359.48 45260,358.83 45245,358.71 45229,358.99"];
+	AAGGTATCATCATGAAGTTTAACTCATGGCT -> GAAGGTATCATCATGAAGTTTAACTCATGGC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="44797,365.98",
+		pos="e,44744,358.45 44844,360.66 44830,359.79 44816,359.04 44802,358.48 44787,357.83 44770,357.78 44754,358.16"];
+	AAGGTATCATCATGAAGTTTAACTCATGGCT -> AGGTATCATCATGAAGTTTAACTCATGGCTA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="45270,385.98",
+		pos="e,45295,378.58 45246,378.37 45259,378.43 45271,378.48 45284,378.54"];
+	AATTTAGCCATGAGTTAAACTTCATGATGAT -> ATTTAGCCATGAGTTAAACTTCATGATGATA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="47163,370.98",
+		pos="e,47100,367.88 47203,362.3 47187,362.3 47172,362.66 47158,363.48 47142,364.35 47126,365.56 47110,366.97"];
+	AATTTAGCCATGAGTTAAACTTCATGATGAT -> GAATTTAGCCATGAGTTAAACTTCATGATGA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="47634,387.98",
+		pos="e,47658,380.89 47609,380.17 47616,380.27 47623,380.38 47629,380.48 47635,380.57 47641,380.65 47647,380.74"];
+	GAATTTAACGATATCAATCTTTCTAATGATA -> AATTTAACGATATCAATCTTTCTAATGATAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="66946,466.98",
+		pos="e,66893,459.44 66991,461.6 66977,460.75 66964,460.03 66951,459.48 66935,458.84 66920,458.78 66904,459.14"];
+	CAATCTTTCTAATGATATTATAAACTATATC -> ATATAGTTTATAATATCATTAGAAAGATTGA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="60845,485.98",
+		pos="e,60868,478.48 60822,478.48 60834,478.48 60846,478.48 60857,478.48"];
+	CAATCTTTCTAATGATATTATAAACTATATC -> AATCTTTCTAATGATATTATAAACTATATCG	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="60375,466.98",
+		pos="e,60329,461.6 60427,459.44 60408,458.78 60388,458.7 60370,459.48 60360,459.89 60350,460.4 60339,460.99"];
+	TGAAGTTTAACTCATGGCTAAATTCATACAA -> ATGAAGTTTAACTCATGGCTAAATTCATACA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="50462,376.98",
+		pos="e,50402,373.43 50491,368.26 50479,368.48 50468,368.87 50457,369.48 50442,370.26 50427,371.31 50412,372.55"];
+	GAAGTTTAACTCATGGCTAAATTCATACAAA	 [color=black,
+		height=1.041,
+		label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td><font color="blue">GAAGTTTAACTCATGGCTAAATTCATACAAA</font></td></tr><tr><td><font color="red">TTTGTATGAATTTAGCCATGAGTTAAACTTC</font></td></tr><tr><td><font color="black">1</font> </td></tr></table>>,
+		pos="51168,377.48",
+		shape=ellipse,
+		width=5.9318];
+	TGAAGTTTAACTCATGGCTAAATTCATACAA -> GAAGTTTAACTCATGGCTAAATTCATACAAA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="50932,386.98",
+		pos="e,50955,379.54 50909,379.39 50915,379.42 50921,379.45 50927,379.48 50933,379.5 50939,379.52 50945,379.53"];
+	GAAGTTTAACTCATGGCTAAATTCATACAAA -> TGAAGTTTAACTCATGGCTAAATTCATACAA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="50932,367.98",
+		pos="e,50891,362.14 50978,360.27 50961,359.85 50944,359.86 50927,360.48 50918,360.8 50909,361.18 50901,361.62"];
+	GAAGTTTAACTCATGGCTAAATTCATACAAA -> AAGTTTAACTCATGGCTAAATTCATACAAAC	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="51405,366.98",
+		pos="e,51479,349.91 51366,363.01 51381,361.59 51396,360.07 51410,358.48 51429,356.35 51449,353.87 51469,351.25"];
+	ATATTATAAACTATATCGCTACTTCTTTAGG -> CTAAAGAAGTAGCGATATAGTTTATAATATC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="54242,485.98",
+		pos="e,54265,478.48 54219,478.48 54231,478.48 54243,478.48 54255,478.48"];
+	ATATTATAAACTATATCGCTACTTCTTTAGG -> CCCTAAAGAAGTAGCGATATAGTTTATAATA	 [color=blue,
+		label=<<font color="green">G</font>>,
+		lp="53769,466.98",
+		pos="e,53723,461.58 53821,459.43 53802,458.78 53783,458.71 53764,459.48 53754,459.89 53744,460.39 53734,460.98"];
+	TAAACTATATCGCTACTTCTTTAGGGGATAA -> AAACTATATCGCTACTTCTTTAGGGGATAAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="50932,457.98",
+		pos="e,50870,454.82 51014,452.68 50985,450.06 50955,448.87 50927,450.48 50912,451.33 50896,452.51 50880,453.89"];
+	TAAACTATATCGCTACTTCTTTAGGGGATAA -> ATAAACTATATCGCTACTTCTTTAGGGGATA	 [color=red,
+		label=<<font color="green">T</font>>,
+		lp="51405,485.98",
+		pos="e,51429,478.48 51381,478.48 51393,478.48 51406,478.48 51419,478.48"];
+	GAATTTAGCCATGAGTTAAACTTCATGATGA -> CATCATGAAGTTTAACTCATGGCTAAATTCA	 [color=red,
+		label=<<font color="green">A</font>>,
+		lp="48106,388.98",
+		pos="e,48131,381.16 48083,381.87 48093,381.74 48102,381.62 48111,381.48 48114,381.43 48117,381.38 48121,381.33"];
+	GAATTTAGCCATGAGTTAAACTTCATGATGA -> AATTTAGCCATGAGTTAAACTTCATGATGAT	 [color=blue,
+		label=<<font color="green">T</font>>,
+		lp="47634,368.98",
+		pos="e,47591,360.73 47687,364.41 47671,363.23 47655,362.21 47639,361.48 47627,360.87 47614,360.62 47601,360.65"];
+	ATGATACCTTCGATTTCTCTTATATTATCCC -> GATGATACCTTCGATTTCTCTTATATTATCC	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="39530,450.98",
+		pos="e,39459,449.08 39617,445.87 39586,442.96 39554,441.63 39525,443.48 39507,444.59 39488,446.18 39469,448.05"];
+	ATGATACCTTCGATTTCTCTTATATTATCCC -> GGGGATAATATAAGAGAAATCGAAGGTATCA	 [color=blue,
+		label=<<font color="green">C</font>>,
+		lp="40010,479.98",
+		pos="e,40032,472.48 39987,472.48 39999,472.48 40010,472.48 40022,472.48"];
+	AAGTTTAACTCATGGCTAAATTCATACAAAC -> AGTTTAACTCATGGCTAAATTCATACAAACA	 [color=blue,
+		label=<<font color="green">A</font>>,
+		lp="37375,265.98",
+		pos="e,23337,296.28 51507,296.33 51413,278.26 51284,258.48 51169,258.48 23674,258.48 23674,258.48 23674,258.48 23563,258.48 23440,276.86 \
+23347,294.37"];
+	AAGTTTAACTCATGGCTAAATTCATACAAAC -> GAAGTTTAACTCATGGCTAAATTCATACAAA	 [color=red,
+		label=<<font color="green">C</font>>,
+		lp="51405,346.98",
+		pos="e,51318,350.65 51436,335.88 51424,336.97 51412,338.16 51400,339.48 51377,342.08 51352,345.45 51328,349.12"];
+}

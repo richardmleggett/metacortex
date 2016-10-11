@@ -1,8 +1,8 @@
 /*
- * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo 
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
  * **********************************************************************
@@ -24,7 +24,7 @@
  *
  * **********************************************************************
  */
- 
+
 #ifndef DB_GRAPH_H_
 #define DB_GRAPH_H_
 
@@ -83,11 +83,11 @@ typedef struct {
 	boolean (*continue_traversing)(pathStep * current_step, pathStep * next_step, pathStep * reverse_step, Path * path,  dBGraph * db_graph);
 	void (* output_callback)(Path * path);
 	PathArray * buffers;
-    
+
     PathStepActionCallbackArray step_actions;
     PathCallbackArray   path_callbacks;
     NodeActionCallbackArray node_callbacks;
-    dBGraph * db_graph; 
+    dBGraph * db_graph;
 } WalkingFunctions;
 
 boolean db_graph_remove_path_callback(WalkingFunctions * wf, void * funct);
@@ -140,7 +140,7 @@ int db_graph_get_perfect_path(dBNode * node, Orientation orientation,
 
 boolean db_graph_path_splits(dBNode * node, Orientation o, dBGraph * db_graph,
 		int limit);
-		
+
 double db_graph_get_average_coverage(dBGraph * db_graph);
 
 Orientation db_graph_get_reverse_edge_between(dBNode * src, dBNode * tgt,
@@ -157,7 +157,7 @@ Orientation db_graph_get_reverse_edge_between(dBNode * src, dBNode * tgt,
 
 boolean db_graph_detect_bubble(dBNode * node, Orientation orientation,
 							   PathArray * pa, dBGraph * db_graph);
-							   
+
 boolean db_graph_db_node_smooth_bubble(dBNode * node, Orientation orientation,
 		int limit, int coverage_limit, void(*node_action)(dBNode * node),
 		dBGraph * db_graph);
@@ -175,7 +175,7 @@ void printNode(dBNode * dbn, short int kmerSize);
 int db_graph_db_node_clip_tip_with_orientation(dBNode * node,
 		Orientation orientation, int limit, void(*node_action)(dBNode * node),
 		dBGraph * db_graph);
-		
+
 int db_graph_db_node_clip_tip(dBNode * node, int limit, void(*node_action)(
 		dBNode * node), dBGraph * db_graph);
 
@@ -229,7 +229,7 @@ void db_graph_print_coverage(FILE * f, dBGraph * db_graph);
 
 void db_graph_print_kmer_coverage(FILE * out, dBGraph * db_graph);
 
-int db_graph_clip_tips(int threshold, dBGraph * db_graph); 
+int db_graph_clip_tips(int threshold, dBGraph * db_graph);
 
 //int db_graph_remove_low_coverage_nodes(int coverage, dBGraph * db_graph);
 
@@ -265,11 +265,11 @@ void db_graph_get_supernode_length_marking_it_as_visited(dBGraph* db_graph,
 int db_graph_db_node_clip_tip(dBNode * node, int limit,
 			      void (*node_action)(dBNode * node),
 			      dBGraph * db_graph);
-			      
-dBNode * db_graph_get_next_node(dBNode * current_node, Orientation current_orientation, 
+
+dBNode * db_graph_get_next_node(dBNode * current_node, Orientation current_orientation,
 			       Orientation * next_orientation,
 			       Nucleotide edge, Nucleotide * reverse_edge,dBGraph * db_graph);
-			       
+
 void db_graph_write_graphviz_file(char * filename, dBGraph * db_graph);
 
 int db_graph_get_neighbouring_nodes_all_colours(dBNode* start, Orientation orientation, dBNode* neighbours[], Nucleotide labels[], dBGraph * db_graph);

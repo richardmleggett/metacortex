@@ -7,9 +7,10 @@ b=100
 n=15
 
 #filename="reads/basic_genome.fa"
-filename="reads/single_snp_genome.fa"
-#filename="reads/single_insert_genome.fa"
+#filename="reads/single_snp_genome.fa"
+filename="reads/single_insert_genome.fa"
 #filename="reads/single_del_genome.fa"
+
 name=`basename ${filename}`
 name=`echo ${name%.*}`
 
@@ -29,4 +30,4 @@ mkdir graphs; chmod 755 graphs
 
 echo ${filename} > ${file_list}
 
-${meta_p} -k ${kmer} -n ${n} -b ${b} -i ${file_list} -t fasta -o ${cortex_file} -f ${contig_file} -g 100 -l ${log_file}  -S
+${meta_p} -k ${kmer} -n ${n} -b ${b} -i ${file_list} -t fasta -o ${cortex_file} -f ${contig_file} -g 100 -l ${log_file}  -S -G graph_out

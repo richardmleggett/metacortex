@@ -75,7 +75,7 @@ pathStep *db_graph_get_next_step(pathStep * current_step, pathStep * next_step, 
 	rev_step->node = current_step->node;
     next_step->flags = 0;
     rev_step->flags = current_step->flags & PATH_STEP_MASK_VISITED;
-    
+
 	BinaryKmer local_copy_of_kmer;
 	binary_kmer_assignment_operator(local_copy_of_kmer,	current_step->node->kmer);
 
