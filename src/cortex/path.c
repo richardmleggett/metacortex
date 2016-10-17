@@ -831,12 +831,13 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     count = 0;
     for (j=0; j<4; j++) {
         if (paths[j] != 0) {
-            if (count > 0) {
-                output_seq_with_line_breaks("|", fout, current);
-            }
             strncpy(tempseq, paths[j]->seq, paths[j]->length - differ_pos + 1);
             tempseq[paths[j]->length - differ_pos + 1] = 0;
+
             if (strlen(tempseq) > 0) {
+                if (count > 0) {
+                  output_seq_with_line_breaks("|", fout, current);
+                }
                 output_seq_with_line_breaks(tempseq, fout, current);
                 count++;
             }
@@ -1168,10 +1169,6 @@ void path_to_fasta(Path * path, FILE * fout)
         } else {
             fprintf(fout, "%c",  path->seq[i]);
         }
-        //	if(path->alt_labels[i]!=Undefined){
-        //		log_printf("FOUND ALT LABEL (2)\n");
-        //fprintf(fout, "|%c",  binary_nucleotide_to_char(path->alt_labels[i]));
-        //	}
 
         if(current % PATH_FASTA_LINE == 0) {
             fprintf(fout, "\n");

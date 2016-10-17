@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.7.20)  11 OCT 2016 16:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.7.20)  17 OCT 2016 15:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -178,7 +178,11 @@ Package: subcaption 2016/02/20 v1.1-142 Sub-captions (AR)
 \c@subfigure=\count105
 \c@subtable=\count106
 )
-No file single_snp_genome.fa.aux.
+(./single_snp_genome.fa.aux
+
+LaTeX Warning: Label `fig:E_and_I' multiply defined.
+
+)
 \openout1 = `single_snp_genome.fa.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
@@ -193,6 +197,7 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 12.
 LaTeX Font Info:    ... okay on input line 12.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
 LaTeX Font Info:    ... okay on input line 12.
+
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -410,13 +415,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 58--102
 
 [2] [3] (./single_snp_genome.fa.aux)
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 4143 strings out of 494953
- 61425 string characters out of 6180977
- 131822 words of memory out of 5000000
+ 4145 strings out of 494953
+ 61475 string characters out of 6180977
+ 131971 words of memory out of 5000000
  7383 multiletter control sequences out of 15000+600000
  9320 words of font info for 34 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191

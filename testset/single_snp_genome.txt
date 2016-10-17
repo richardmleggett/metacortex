@@ -1,19 +1,19 @@
-Tue Oct 11 16:08:54 2016 Log started
+Mon Oct 17 15:23:09 2016 Log started
 
 MetaCortex v0.2
 
-Command: ../bin/metacortex_k31 -k 31 -n 15 -b 100 -i allfiles.txt -t fasta -o single_snp_genome.ctx -f single_snp_genome.fa -g 100 -l single_snp_genome.txt -S 
+Command: ../bin/metacortex_k31 -k 31 -n 15 -b 100 -i allfiles.txt -t fasta -o single_snp_genome.ctx -f single_snp_genome.fa -g 100 -l single_snp_genome.txt -S -G graph_out.gv 
 Unit size: 16
 Max k: 31
 
 -----
-Tue Oct 11 16:08:54 2016
+Mon Oct 17 15:23:09 2016
 
 Input file of filenames: allfiles.txt
 Kmer size: 31 Hash table size (15 bits): 32,768 Hash table bucket size: 100 Total size: 3,276,800
 
 -----
-Tue Oct 11 16:08:54 2016
+Mon Oct 17 15:23:09 2016
 
 Table created: 32,768
 dBGraph:
@@ -34,7 +34,7 @@ Hash:
 	 tries 0: 280
 
 -----
-Tue Oct 11 16:08:54 2016
+Mon Oct 17 15:23:09 2016
 
 Read of file 1 complete. Total kmers: 201 Bad reads: 0 Seq length: 400 Total seq length: 400
 
@@ -54,7 +54,7 @@ Hash:
 	 tries 0: 280
 
 -----
-Tue Oct 11 16:08:54 2016
+Mon Oct 17 15:23:09 2016
 
 Dumping graph: single_snp_genome.ctx
 201 kmers dumped
@@ -75,10 +75,12 @@ Polymorphism end node AGTTTAACTCATGGCTAAATTCATACAAACA
 Write path of size 170
 graph size	201
 Found polymorphism to output at node AGTTTAACTCATGGCTAAATTCATACAAACA
-Got matching path
+Got matching path at end node ATAATATAAGAGAAATCGAAGGTATCATCAT
 Paths to compare:
 1	CATGATGATACCTTCGATTTCTCTTATATTAT
 3E	TATGATGATACCTTCGATTTCTCTTATATTAT
+snp section length	-	1
+snp section length	-	1
 DONE
 
 Rscript ../degree_plots.R /home/aylingm/grimoire/metacortex/testset/single_snp_genome.fa.degrees
@@ -89,7 +91,10 @@ analysis filename	/home/aylingm/grimoire/metacortex/testset/graphs/single_snp_ge
 pdflatex -interaction=nonstopmode /home/aylingm/grimoire/metacortex/testset/graphs/single_snp_genome.fa.tex
 
 -----
-Tue Oct 11 16:08:56 2016
+Mon Oct 17 15:23:11 2016
+
+-----
+Mon Oct 17 15:23:11 2016
 
 
 DONE
