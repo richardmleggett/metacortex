@@ -828,16 +828,43 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     // Now output difference in square brackets
     output_seq_with_line_breaks("[", fout, current);
 
+    // check through paths - is this a snp, an indel?
     count = 0;
+    int insert_size=0;
+    for (j=0; j<4; j++) {
+        if (paths[j] != 0) {
+            strncpy(tempseq, paths[j]->seq, paths[j]->length - differ_pos + 1);
+            tempseq[paths[j]->length - differ_pos + 1] = 0;
+            if (strlen(tempseq) > 0) {
+                count++;
+                if (strlen(tempseq) > insert_size) {
+                  insert_size=strlen(tempseq);
+                }
+            }
+        }
+    }
+
+    if (insert_size==1){
+      output_seq_with_line_breaks("1:alt:allele|", fout, current);
+    }
+    else if (insert_size>1){
+      output_seq_with_line_breaks("1:alt|", fout, current);
+    }
+    else{
+      // shouldn't happen - insert_size<1?
+    }
+
+
+
     for (j=0; j<4; j++) {
         if (paths[j] != 0) {
             strncpy(tempseq, paths[j]->seq, paths[j]->length - differ_pos + 1);
             tempseq[paths[j]->length - differ_pos + 1] = 0;
 
             if (strlen(tempseq) > 0) {
-                if (count > 0) {
-                  output_seq_with_line_breaks("|", fout, current);
-                }
+                //if (count > 0) {
+                  output_seq_with_line_breaks(",", fout, current);
+                //}
                 output_seq_with_line_breaks(tempseq, fout, current);
                 count++;
             }
