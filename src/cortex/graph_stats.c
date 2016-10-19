@@ -346,7 +346,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
   FILE* fp_analysis;
   FILE* fp_report;
   FILE* fp_degrees;
-  FILE* fp_contigs;
+  FILE* fp_contigs_fasta;
+  FILE* fp_contigs_fastg;
   long int Contig_Branches[MAX_BRANCHES];
   char* seq = calloc(256, 1);
   long int total_nodes = 0;
@@ -384,6 +385,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
   // array to bin coverage 0-5, 5-10, 10-15..95-100
   long int Coverage_Dist[COVERAGE_BINS*COVERAGE_BIN_SIZE]; // will this work?
+  char fastg_filename[MAX_EXPLORE_PATH_LENGTH];
   char analysis_filename[MAX_EXPLORE_PATH_LENGTH];
   char degrees_filename[MAX_EXPLORE_PATH_LENGTH];
 
@@ -409,9 +411,17 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 //  log_and_screen_printf("contig name\t%s\n", consensus_contigs_filename);
 
   /* Open simple contigs file */
-  fp_contigs = fopen(consensus_contigs_filename, "w");
-  if (!fp_contigs) {
+  fp_contigs_fasta = fopen(consensus_contigs_filename, "w");
+  if (!fp_contigs_fasta) {
       log_and_screen_printf("ERROR: Can't open contig file.\n%s\n", consensus_contigs_filename);
+      exit(-1);
+  }
+
+  /* Open fastg contigs file */
+  sprintf(fastg_filename, "%sstg", consensus_contigs_filename);
+  fp_contigs_fastg = fopen(fastg_filename, "w");
+  if (!fp_contigs_fastg) {
+      log_and_screen_printf("ERROR: Can't open contig (fastg) file.\n%s\n", fastg_filename);
       exit(-1);
   }
 
@@ -592,7 +602,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
             if (simple_path->length >= (MIN_CONTIG_SIZE - graph->kmer_size)) {
                 log_printf("Write path of size %d\n", simple_path->length);
                 log_printf("graph size\t%i\n",nodes_in_graph->total_size);
-                path_to_fasta_metacortex(simple_path, fp_contigs, graph);
+                path_to_fasta(simple_path, fp_contigs_fasta);
+                path_to_fasta_metacortex(simple_path, fp_contigs_fastg, graph);
                 counter++;
             } else {
                 log_printf("Didn't write path of size %d\n", simple_path->length);
