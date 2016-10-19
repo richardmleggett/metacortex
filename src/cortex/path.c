@@ -825,10 +825,9 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
         exit(1);
     }
 
-    // Now output difference in square brackets
-    output_seq_with_line_breaks("[", fout, current);
 
     // check through paths - is this a snp, an indel?
+    // NOTE: FOR FUTURE, NEED TO ARRANGE THE PATHS BY COVERAGE
     count = 0;
     int insert_size=0;
     for (j=0; j<4; j++) {
@@ -843,6 +842,21 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
             }
         }
     }
+
+    // Output the highest coverage alternative state BEFORE the brackets
+    j=0;
+    while(strlen(tempseq) < 1) {
+      strncpy(tempseq, paths[j]->seq, paths[j]->length - differ_pos + 1);
+      j++;
+      if (j>3) {
+          printf("Error: Something went wrong looking at path lengths!");
+          exit(1);
+      }
+    }
+    output_seq_with_line_breaks(tempseq, fout, current);
+
+    // Now output difference in square brackets
+    output_seq_with_line_breaks("[", fout, current);
 
     if (insert_size==1){
       output_seq_with_line_breaks("1:alt:allele|", fout, current);
@@ -862,9 +876,7 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
             tempseq[paths[j]->length - differ_pos + 1] = 0;
 
             if (strlen(tempseq) > 0) {
-                //if (count > 0) {
-                  output_seq_with_line_breaks(",", fout, current);
-                //}
+                output_seq_with_line_breaks(",", fout, current);
                 output_seq_with_line_breaks(tempseq, fout, current);
                 count++;
             }
@@ -2375,10 +2387,10 @@ void path_pairs_to_fasta(PathArray* pa, int distances[], FILE* fout) {
 
         // Print rest
         for (j=0; j<strlen(path->seq); j++, current++) {
-            if (path->step_flags[i] & PRINT_LABEL_AS_N) {
+            if (path->step_flags[j] & PRINT_LABEL_AS_N) {
                 fprintf(fout, "N");
             } else {
-                fprintf(fout, "%c",  path->seq[i]);
+                fprintf(fout, "%c",  path->seq[j]);
             }
             if(current % PATH_FASTA_LINE == 0){
                 fprintf(fout, "\n");
