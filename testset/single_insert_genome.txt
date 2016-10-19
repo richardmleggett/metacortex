@@ -1,4 +1,4 @@
-Wed Oct 19 15:57:51 2016 Log started
+Wed Oct 19 16:51:16 2016 Log started
 
 MetaCortex v0.2
 
@@ -7,13 +7,13 @@ Unit size: 16
 Max k: 31
 
 -----
-Wed Oct 19 15:57:51 2016
+Wed Oct 19 16:51:16 2016
 
 Input file of filenames: allfiles.txt
 Kmer size: 31 Hash table size (15 bits): 32,768 Hash table bucket size: 100 Total size: 3,276,800
 
 -----
-Wed Oct 19 15:57:51 2016
+Wed Oct 19 16:51:16 2016
 
 Table created: 32,768
 dBGraph:
@@ -34,7 +34,7 @@ Hash:
 	 tries 0: 280
 
 -----
-Wed Oct 19 15:57:51 2016
+Wed Oct 19 16:51:16 2016
 
 Read of file 1 complete. Total kmers: 209 Bad reads: 0 Seq length: 400 Total seq length: 400
 
@@ -54,7 +54,7 @@ Hash:
 	 tries 0: 280
 
 -----
-Wed Oct 19 15:57:51 2016
+Wed Oct 19 16:51:16 2016
 
 Dumping graph: single_insert_genome.ctx
 209 kmers dumped
@@ -89,10 +89,10 @@ analysis filename	/home/aylingm/grimoire/metacortex/testset/graphs/single_insert
 pdflatex -interaction=nonstopmode /home/aylingm/grimoire/metacortex/testset/graphs/single_insert_genome.fa.tex
 
 -----
-Wed Oct 19 15:57:53 2016
+Wed Oct 19 16:51:18 2016
 
 -----
-Wed Oct 19 15:57:53 2016
+Wed Oct 19 16:51:18 2016
 
 
 DONE
