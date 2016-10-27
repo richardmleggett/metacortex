@@ -827,15 +827,28 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
 
 
     // check through paths - is this a snp, an indel?
-    // NOTE: FOR FUTURE, NEED TO ARRANGE THE PATHS BY COVERAGE
     count = 0;
     int insert_size=0;
+    int bubble_max_coverage=0;
+    int max_coverage_nucleotide=0;
+
     for (j=0; j<4; j++) {
         if (paths[j] != 0) {
             strncpy(tempseq, paths[j]->seq, paths[j]->length - differ_pos + 1);
             tempseq[paths[j]->length - differ_pos + 1] = 0;
             if (strlen(tempseq) > 0) {
                 count++;
+
+                // is this the highest coverage path?
+                double avg_coverage=0;
+                int min_coverage=0;
+                int max_coverage=0;
+                path_get_statistics(&avg_coverage, &min_coverage, &max_coverage, paths[j]);
+                if(avg_coverage>bubble_max_coverage){
+                  max_coverage_nucleotide=j;
+                }
+
+                // is the the longest insert?
                 if (strlen(tempseq) > insert_size) {
                   insert_size=strlen(tempseq);
                 }
@@ -844,15 +857,16 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     }
 
     // Output the highest coverage alternative state BEFORE the brackets
-    j=0;
+    /*j=0;
     while(strlen(tempseq) < 1) {
-      strncpy(tempseq, paths[j]->seq, paths[j]->length - differ_pos + 1);
+      strncpy(tempseq, paths[max_coverage_nucleotide]->seq, paths[max_coverage_nucleotide]->length - differ_pos + 1);
       j++;
       if (j>3) {
-          printf("Error: Something went wrong looking at path lengths!");
+          printf("Error: Something went wrong looking at bubble path lengths!");
           exit(1);
       }
-    }
+    }*/
+    strncpy(tempseq, paths[max_coverage_nucleotide]->seq, paths[max_coverage_nucleotide]->length - differ_pos + 1);
     output_seq_with_line_breaks(tempseq, fout, current);
 
     // Now output difference in square brackets
@@ -965,6 +979,7 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, HashTable* graph)
     int min_coverage;
     int max_coverage;
     path_get_statistics(&avg_coverage, &min_coverage, &max_coverage, path);
+
 
     // Get orientation of first and last node
     Orientation fst_orientation;
