@@ -1,0 +1,67 @@
+Mon Nov 14 15:47:26 2016 Log started
+
+MetaCortex v0.2
+
+Command: /home/aylingm/grimoire/metacortex/bin/metacortex_k31 -k 31 -n 15 -b 100 -i /home/aylingm/testgenome/testdata/gdb_files.txt -t fastq -o temp.ctx -f temp.fa -g 100 -l temp.txt -S 
+Unit size: 16
+Max k: 31
+Quality score offset: 33 (Sanger format)
+Quality score threshold: 0
+
+-----
+Mon Nov 14 15:47:26 2016
+
+Input file of filenames: /home/aylingm/testgenome/testdata/gdb_files.txt
+Kmer size: 31 Hash table size (15 bits): 32,768 Hash table bucket size: 100 Total size: 3,276,800
+
+-----
+Mon Nov 14 15:47:26 2016
+
+Table created: 32,768
+dBGraph:
+ unique kmers: 0
+ Capacity: 3,276,800 
+ Occupied: 0.000000%
+
+Reading fastq file 1: /home/aylingm/testgenome/testdata/LIB45_2_5k.fastq
+
+Loading reads from: /home/aylingm/testgenome/testdata/LIB45_2_5k.fastq
+Hash:
+ unique kmers: 460,651
+ Capacity: 3,276,800 
+ Occupied: 14.06%
+ Pruned: 0 (0.00%)
+ Collisions:
+	 tries 0: 680,431
+
+-----
+Mon Nov 14 15:47:26 2016
+
+Read of file 1 complete. Total kmers: 460,651 Bad reads: 0 Seq length: 755,445 Total seq length: 755,445
+
+Hash:
+ unique kmers: 460,651
+ Capacity: 3,276,800 
+ Occupied: 14.06%
+ Pruned: 0 (0.00%)
+ Collisions:
+	 tries 0: 680,431
+Hash:
+ unique kmers: 460,651
+ Capacity: 3,276,800 
+ Occupied: 14.06%
+ Pruned: 0 (0.00%)
+ Collisions:
+	 tries 0: 680,431
+
+-----
+Mon Nov 14 15:47:26 2016
+
+Dumping graph: temp.ctx
+460,651 kmers dumped
+
+Searching graph for stats...
+(Relative path for contig output given, prefixing CWD)
+graphs	/home/aylingm/grimoire/metacortex/graphs/temp.fa.tex
+ERROR: Can't open analysis (DIGEST) file.
+	/home/aylingm/grimoire/metacortex/graphs/temp.fa.tex
