@@ -560,6 +560,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
       // now with a subgraph, walk the graph looking counting degrees by graph and overal
       grow_graph_from_node_stats(node, &seed_node, graph, graph_queue, nodes_in_graph);
+
+
       if (seed_node == NULL) {
         printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph->total_size);
       } else if (nodes_in_graph->total_size) {
@@ -593,10 +595,14 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
             // NOTE: unecessary converage element but repeating the whole path finding without coverage
             //  is more work than necessary I think. See what processing time it changes?
 
+                log_and_screen_printf("[WALKING PATH]]\n");
             coverage_walk_get_path(seed_node, forward, NULL, graph, path_fwd);
+                log_and_screen_printf("[WALKING REV PATH]]\n");
             coverage_walk_get_path(seed_node, reverse, NULL, graph, path_rev);
             path_reverse(path_fwd, simple_path);
             path_append(simple_path, path_rev);
+                log_and_screen_printf("\t[PATH WALKED AND APPENDED]]\n");
+                log_and_screen_printf("Couldn't get memory for graph queue.\n");
 
             simple_path->id = counter;
             if (simple_path->length >= (MIN_CONTIG_SIZE - graph->kmer_size)) {
