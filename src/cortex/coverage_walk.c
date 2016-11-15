@@ -128,32 +128,32 @@ Nucleotide coverage_walk_get_best_label(dBNode* node, Orientation orientation, d
 Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Orientation orientation, dBGraph* db_graph)
 {
     int highest_coverage = 0;
-    int all_coverages[4] = {0};	// initialises all elements to zero
+    int all_coverages[4] = {0, 0, 0, 0};	// initialises all elements to zero
     int bubble_edge = -1;
     dBNode * nodes[4];	// legal? pointing to other nodes that already exist
     Path* paths[4];
     int i;
-
+    
     // Clear path array
     for (i=0; i<4; i++) {
         paths[i] = 0;
     }
-
+    
     step->label=Undefined;
-
+    
     // check a node for edges
     // if more than one, walk each path
     // are final (branching) nodes the same? then this is a bubble.
     // is sum(coverage) for both paths equal to or highest coverage?
     // keep highest coverage as label, and next highest as alt_label
     // NOTE: only two paths allowed here. Extend later
-
+    
     // check to see if a simple bubble occurs from this branch point - one that
     //   does rejoin, and has no further branching in between
     void bubble_check()
     {
         int i, j;
-
+        
         for (i=0; i<4; i++){
             for (j=i+1; j<4; j++){
                 if ((all_coverages[i] > 0) &&
@@ -177,21 +177,21 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Or
                 } // i&j exists
             } // j
         } // i
-
-				// DOES THIS WORK WITH BUBBLES THAT DON'T HAVE HIGHEST COVERAGE?
-				if (bubble_edge>-1) {
-					char seq[1024];
-
-	        step->label = bubble_edge;
-	        db_node_action_set_flag(step->node, POLYMORPHISM);
-	        db_node_action_set_flag(paths[bubble_edge]->nodes[paths[bubble_edge]->length - 1], POLYMORPHISM);
-
-					binary_kmer_to_seq(&(step->node->kmer), db_graph->kmer_size, seq);
-					log_printf("Polymorphism start node %s\n", seq);
-
-					binary_kmer_to_seq(&(paths[bubble_edge]->nodes[paths[bubble_edge]->length - 1]->kmer), db_graph->kmer_size, seq);
-					log_printf("Polymorphism end node %s\n", seq);
-				}
+        
+        // DOES THIS WORK WITH BUBBLES THAT DON'T HAVE HIGHEST COVERAGE?
+        if (bubble_edge>-1) {
+            char seq[1024];
+            
+            step->label = bubble_edge;
+            db_node_action_set_flag(step->node, POLYMORPHISM);
+            db_node_action_set_flag(paths[bubble_edge]->nodes[paths[bubble_edge]->length - 1], POLYMORPHISM);
+            
+            binary_kmer_to_seq(&(step->node->kmer), db_graph->kmer_size, seq);
+            log_printf("Polymorphism start node %s\n", seq);
+            
+            binary_kmer_to_seq(&(paths[bubble_edge]->nodes[paths[bubble_edge]->length - 1]->kmer), db_graph->kmer_size, seq);
+            log_printf("Polymorphism end node %s\n", seq);
+        }
     }
 
 
@@ -217,7 +217,8 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Or
 
     // check for single best edge first
     void check_coverages(Nucleotide nucleotide) {
-        if (all_coverages[nucleotide] >= highest_coverage){
+        if ((all_coverages[nucleotide] >= highest_coverage) &&
+            (all_coverages[nucleotide] >= 1)) {
             highest_coverage=all_coverages[nucleotide];
             step->label=nucleotide;
         }
@@ -270,14 +271,16 @@ static pathStep *coverage_walk_get_next_step(pathStep * current_step, pathStep *
     assert(next_step != NULL);
     next_step->label = Undefined;
 
-    if (db_node_edges_count_all_colours(next_step->node, next_step->orientation) == 1) {
-        next_step->label = coverage_walk_get_best_label(next_step->node, next_step->orientation, db_graph);
-    } else if (db_node_edges_count_all_colours(next_step->node, next_step->orientation) > 1) {
-        coverage_walk_get_best_label_bubble(next_step, next_step->node, next_step->orientation, db_graph);
-    } else {
-        //char seq[1024];
-        //binary_kmer_to_seq(&(next_step->node->kmer), db_graph->kmer_size, seq);
-        //log_printf("  No edge at %s orientation %s\n", seq, next_step->orientation == forward ? "Fwd":"Rev");
+    if (next_step->node != NULL) {
+        if (db_node_edges_count_all_colours(next_step->node, next_step->orientation) == 1) {
+            next_step->label = coverage_walk_get_best_label(next_step->node, next_step->orientation, db_graph);
+        } else if (db_node_edges_count_all_colours(next_step->node, next_step->orientation) > 1) {
+            coverage_walk_get_best_label_bubble(next_step, next_step->node, next_step->orientation, db_graph);
+        } //else {
+            //char seq[1024];
+            //binary_kmer_to_seq(&(next_step->node->kmer), db_graph->kmer_size, seq);
+            //printf("  No edge at %s orientation %s\n", seq, next_step->orientation == forward ? "Fwd":"Rev");
+        //}
     }
 
     return next_step;
@@ -301,7 +304,7 @@ static boolean coverage_walk_continue_traversing(pathStep * current_step,
     cont = current_step->label != Undefined;
 
     /* We don't do these checks for the first node - in case it's a Y node */
-    if(temp_path->length > 1) {
+    if (temp_path->length > 1) {
         /* Check for a cycle - as this is a perfect path, we only need to check the first node. If we come
          back in at one of the other nodes, then it will result in two edges in one orientation */
         path_get_step_at_index(0, &first, temp_path);
@@ -322,7 +325,7 @@ static boolean coverage_walk_continue_traversing(pathStep * current_step,
         if (db_node_edges_count_all_colours(current_step->node, current_step->orientation) == 0) {
             //char seq[1024];
             //binary_kmer_to_seq(&(current_step->node->kmer), db_graph->kmer_size, seq);
-            //log_printf("  Stopped for blunt end at %s\n", seq);
+            //printf("  Stopped for blunt end at %s\n", seq);
             path_add_stop_reason(LAST, PATH_FLAG_STOP_BLUNT_END, temp_path);
             cont = false;
         }
@@ -336,7 +339,7 @@ static boolean coverage_walk_continue_traversing(pathStep * current_step,
             cont = false;
         }
     }
-
+    
     return cont;
 }
 

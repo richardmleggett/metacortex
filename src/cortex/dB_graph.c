@@ -63,7 +63,6 @@
  */
 pathStep *db_graph_get_next_step(pathStep * current_step, pathStep * next_step, pathStep * rev_step, dBGraph * db_graph)
 {
-
 	assert(current_step != NULL);
 	assert(next_step != NULL);
 	assert(rev_step != NULL);
@@ -83,8 +82,7 @@ pathStep *db_graph_get_next_step(pathStep * current_step, pathStep * next_step, 
 	//dBNode * next_node = NULL;
 
 	// after the following line tmp_kmer and rev_kmer are pointing to the same B Kmer
-	BinaryKmer *rev_kmer =
-    binary_kmer_reverse_complement(&local_copy_of_kmer, db_graph->kmer_size, &tmp_kmer);
+	BinaryKmer *rev_kmer = binary_kmer_reverse_complement(&local_copy_of_kmer, db_graph->kmer_size, &tmp_kmer);
 
 	if (current_step->orientation == reverse) {
 		rev_step->label = binary_kmer_get_last_nucleotide(&local_copy_of_kmer);
@@ -108,8 +106,7 @@ pathStep *db_graph_get_next_step(pathStep * current_step, pathStep * next_step, 
         //		if (DEBUG) {
         //
         char tmpseq[db_graph->kmer_size];
-        printf("[db_graph_get_next_step] Cannot find %s so get a NULL node\n",
-               binary_kmer_to_seq(&tmp_kmer, db_graph->kmer_size, tmpseq));
+        printf("[db_graph_get_next_step] Cannot find %s so get a NULL node\n", binary_kmer_to_seq(&tmp_kmer, db_graph->kmer_size, tmpseq));
         //Commented by ricardo, to reduce the log as for the traversing
         //      algorithm relays on having this as null
         //		}
@@ -117,6 +114,7 @@ pathStep *db_graph_get_next_step(pathStep * current_step, pathStep * next_step, 
     //#endif
 
 	next_step->label = Undefined;
+    
 	return next_step;
 }
 
@@ -1082,7 +1080,7 @@ int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions *
 
             added = false;
             if (current_step.label != Undefined) {
-                functions->get_next_step(&current_step,&next_step, &rev_step,db_graph);
+                functions->get_next_step(&current_step, &next_step, &rev_step, db_graph);
             }
 
             if (added == false) {

@@ -631,6 +631,8 @@ int db_node_edges_count_all_colours(dBNode * node, Orientation orientation)
     int count = 0;
     int i;
     
+    assert(node != 0);
+    
     // OR together edges for different colours
     for (i = 0; i < NUMBER_OF_COLOURS; i++)
         edges |= db_node_get_edges_by_colour(node, i);
