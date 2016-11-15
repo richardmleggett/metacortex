@@ -68,6 +68,7 @@ Queue* queue_new(int n)
 void* queue_push(Queue* q, void* item)
 {
 	if (q->number_of_items == q->max_size) {
+        printf("Reached max items %d of size %d\n", q->number_of_items, q->max_size);
 		return NULL;
 	}
 	

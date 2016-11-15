@@ -602,7 +602,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
                     path_reverse(path_fwd, simple_path);
                     path_append(simple_path, path_rev);
                     log_and_screen_printf("\t[PATH WALKED AND APPENDED]]\n");
-                    log_and_screen_printf("Couldn't get memory for graph queue.\n");
+                    //log_and_screen_printf("Couldn't get memory for graph queue.\n");
                     
                     simple_path->id = counter;
                     if (simple_path->length >= (MIN_CONTIG_SIZE - graph->kmer_size)) {
