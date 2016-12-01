@@ -350,23 +350,6 @@ int main(int argc, char **argv)
         hash_table_print_stats(db_graph);
 	}
 
-    /* Prototype code */
-    if (cmd_line.remove_spurious_links) {
-		timestamp();
-		log_and_screen_printf("\nRemoving spurious links\n");
-		fflush(stdout);
-		int links_removed = cleaning_remove_spurious_links(cmd_line.remove_spurious_links_max_difference, cmd_line.remove_spurious_links_min_coverage, db_graph);
-		log_and_screen_printf("%'d links removed\n", links_removed);
-        hash_table_print_stats(db_graph);
-        if (cmd_line.tip_clip) {
-            timestamp();
-            log_and_screen_printf("\nClip tips\n");
-            fflush(stdout);
-            log_and_screen_printf("%'d tips clipped\n", cleaning_remove_tips(cmd_line.tip_length, cmd_line.tip_clip_iterations ,db_graph));
-            hash_table_print_stats(db_graph);
-        }
-    }
-
 	if (cmd_line.remove_bubbles) {
 		timestamp();
 		log_and_screen_printf("\nRemoving bubbles\n");
