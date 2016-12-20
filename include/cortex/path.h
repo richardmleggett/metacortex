@@ -177,7 +177,7 @@ void path_increase_id(Path * path);
 
 void path_to_fasta(Path * path, FILE * fout);
 
-void path_to_fasta_metacortex(Path * path, FILE * fout, HashTable* graph);
+void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable* graph);
 
 void path_to_fasta_debug(Path * path, FILE * fout);
 

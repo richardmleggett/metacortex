@@ -720,8 +720,17 @@ void output_seq_with_line_breaks(char* seq, FILE* fout, int* current)
         *current = * current + 1;
     }
 }
+void output_seq_without_line_breaks(char* seq, FILE* fout, int* current)
+{
+    int i;
 
-boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fout, int* current)
+    for (i=0; i <strlen(seq); i++) {
+        fprintf(fout, "%c", seq[i]);
+        *current = * current + 1;
+    }
+}
+
+boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fout, FILE* fout2, int* current)
 {
     Path* paths[4];
     dBNode* current_node = path->nodes[*path_pos];
@@ -857,17 +866,17 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     }
 
     // Output the highest coverage alternative state BEFORE the brackets
-    /*j=0;
-    while(strlen(tempseq) < 1) {
-      strncpy(tempseq, paths[max_coverage_nucleotide]->seq, paths[max_coverage_nucleotide]->length - differ_pos + 1);
-      j++;
-      if (j>3) {
-          printf("Error: Something went wrong looking at bubble path lengths!");
-          exit(1);
-      }
-    }*/
     strncpy(tempseq, paths[max_coverage_nucleotide]->seq, paths[max_coverage_nucleotide]->length - differ_pos + 1);
-    output_seq_with_line_breaks(tempseq, fout, current);
+    if (strlen(tempseq) < 1){
+      printf("Error: Something went wrong looking at bubble path lengths!");
+      exit(1);
+    }
+    else{
+      output_seq_with_line_breaks(tempseq, fout, current);
+      if(fout2!=NULL){
+        output_seq_without_line_breaks(tempseq, fout2, current);
+      }
+    }
 
     // Now output difference in square brackets
     output_seq_with_line_breaks("[", fout, current);
@@ -883,6 +892,11 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     }
 
 
+    // Now start new segment lines for gfa file
+    if(fout2!=NULL){
+      output_seq_without_line_breaks('\nS ', fout, current);
+    }
+
 
     for (j=0; j<4; j++) {
         if (paths[j] != 0) {
@@ -892,6 +906,14 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
             if (strlen(tempseq) > 0) {
                 output_seq_with_line_breaks(",", fout, current);
                 output_seq_with_line_breaks(tempseq, fout, current);
+
+                if(fout2!=NULL){
+                  // really want to include whole of kmer here instead, and overlap
+                  printf(fout2, "\nS ");
+                  output_seq_with_line_breaks(tempseq, fout2, current);
+                  //printf(fout2, "L %qd\n",count);
+                }
+
                 count++;
             }
         }
@@ -899,8 +921,17 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
 
     output_seq_with_line_breaks("]", fout, current);
 
+    if(fout2!=NULL){
+      printf(fout2, "\n");
+    }
+
     strcpy(tempseq, paths[chosen_edge]->seq + (paths[chosen_edge]->length - differ_pos + 1));
     output_seq_with_line_breaks(tempseq, fout, current);
+
+    if(fout2!=NULL){
+      printf(fout2, "S %qd\n",count);
+      output_seq_without_line_breaks(tempseq, fout2, current);
+    }
 
     // Update path pos
     *path_pos = *path_pos + paths[chosen_edge]->length;
@@ -945,12 +976,13 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     return true;
 }
 
-void path_to_fasta_metacortex(Path * path, FILE * fout, HashTable* graph)
+void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable* graph)
 {
     short kmer_size = path->kmer_size;
     int length = path->length;
     int max_length = path->max_length;
     int path_pos = 0;
+    // gfa S,L,P counts
 
     // Sanity checking
     if (path == NULL) {
@@ -1033,15 +1065,6 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, HashTable* graph)
         printf("[path_to_fasta] First kmer: %s\n", fst_seq);
     }
 
-    // Get the last kmer sequence (or complement)
-    //BinaryKmer lst_kmer;
-    //binary_kmer_assignment_operator(lst_kmer, *(element_get_kmer(lst_node)));
-    //if (lst_orientation == reverse) {
-    //	binary_kmer_reverse_complement(&lst_kmer, kmer_size, &tmp_kmer);
-    //	binary_kmer_assignment_operator(lst_kmer, tmp_kmer);
-    //}
-    //binary_kmer_to_seq(&lst_kmer, kmer_size, lst_seq);
-
     // Output to file
     fprintf(fout,
             ">node_%qd length:%i average_coverage:%.2f min_coverage:%i max_coverage:%i fst_coverage:%i fst_r:%s fst_f:%s lst_coverage:%i lst_r:%s lst_f:%s\n",
@@ -1056,6 +1079,13 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, HashTable* graph)
             (lst_orientation == forward ? lst_r : lst_f),
             (lst_orientation == forward ? lst_f : lst_r));
 
+
+    // Output to gfa file, start of first segment
+    if(fout2!=NULL){
+      fprintf(fout2, "S 1 ");
+    }
+
+    // generate the initial kmer in the path
     binary_kmer_to_seq(&fst_kmer, flags_check_for_flag(PRINT_FIRST,	&(path->flags)) ? kmer_size : kmer_size - 1, fst_seq);
 
     int i, current= 1;
@@ -1067,6 +1097,14 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, HashTable* graph)
         }
     }
 
+
+    if(fout2!=NULL){
+      for(i = 0, current = 1 ; i < path->kmer_size; i++, current++) {
+          fprintf(fout, "%c", fst_seq[i]);
+          // never have a line break
+      }
+    }
+
     path_pos = 0;
     while (path_pos < strlen(path->seq)) {
         boolean skip_this = false;
@@ -1076,11 +1114,15 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, HashTable* graph)
 						binary_kmer_to_seq(&(path->nodes[path_pos]->kmer), graph->kmer_size, seq);
             log_printf("Found polymorphism to output at node %s\n", seq);
 
-            skip_this = output_polymorphism(path, &path_pos, graph, fout, &current);
+            skip_this = output_polymorphism(path, &path_pos, graph, fout, fout2, &current);
         }
 
         if (skip_this == false) {
             fprintf(fout, "%c",  path->seq[path_pos]);
+
+            if(fout2!=NULL){
+              printf(fout2, "%c",  path->seq[path_pos]);
+            }
 
             if (current % PATH_FASTA_LINE == 0) {
                 fprintf(fout, "\n");
@@ -1093,6 +1135,11 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, HashTable* graph)
 
     fprintf(fout, "\n");
     fflush(fout);
+
+    if(fout2!=NULL){
+      fprintf(fout2, "\n");
+      fflush(fout2);
+    }
 }
 
 void path_to_fasta(Path * path, FILE * fout)

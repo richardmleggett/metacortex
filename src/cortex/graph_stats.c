@@ -278,6 +278,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     FILE* fp_contigs_fasta;
     FILE* fp_contigs_fasta_high_conf;
     FILE* fp_contigs_fastg;
+    FILE* fp_contigs_gfa;
     long int Contig_Branches[MAX_BRANCHES];
     char* seq = calloc(256, 1);
     long int total_nodes = 0;
@@ -318,6 +319,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     // array to bin coverage 0-5, 5-10, 10-15..95-100
     long int Coverage_Dist[COVERAGE_BINS*COVERAGE_BIN_SIZE]; // will this work?
     char fastg_filename[MAX_EXPLORE_PATH_LENGTH];
+    char gfa_filename[MAX_EXPLORE_PATH_LENGTH];
     char fasta_high_conf_filename[MAX_EXPLORE_PATH_LENGTH];
     char analysis_filename[MAX_EXPLORE_PATH_LENGTH];
     char degrees_filename[MAX_EXPLORE_PATH_LENGTH];
@@ -359,6 +361,14 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     fp_contigs_fastg = fopen(fastg_filename, "w");
     if (!fp_contigs_fastg) {
         log_and_screen_printf("ERROR: Can't open contig (fastg) file.\n%s\n", fastg_filename);
+        exit(-1);
+    }
+
+    /* Open gfa contigs file */
+    sprintf(gfa_filename, "%s.gfa", basename(consensus_contigs_filename));
+    fp_contigs_gfa = fopen(gfa_filename, "w");
+    if (!fp_contigs_gfa) {
+        log_and_screen_printf("ERROR: Can't open contig (gfa) file.\n%s\n", gfa_filename);
         exit(-1);
     }
 
@@ -550,13 +560,19 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
                         int max_coverage=0;
                         path_get_statistics(&average_coverage, &min_coverage, &max_coverage, simple_path);
                         // NOTE: decision - minimum cov or average cov dictates confidence threshold met?
-                        if (average_coverage>COVERAGE_THRESHOLD){
+                        if (min_coverage>COVERAGE_THRESHOLD){
                           path_to_fasta(simple_path, fp_contigs_fasta_high_conf);
                         }
                         else{
                           path_to_fasta(simple_path, fp_contigs_fasta);
                         }
-                        path_to_fasta_metacortex(simple_path, fp_contigs_fastg, graph);
+                        // Output to file2
+                        if(fp_contigs_gfa!=NULL){
+                          fprintf(fp_contigs_gfa,
+                                  "H %qd\n",
+                                  simple_path->id);
+                        }
+                        path_to_fasta_metacortex(simple_path, fp_contigs_fastg, fp_contigs_gfa, graph);
                         counter++;
                     } else {
                         log_printf("Didn't write path of size %d\n", simple_path->length);
