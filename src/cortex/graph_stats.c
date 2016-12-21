@@ -639,8 +639,12 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
         if (cwd != NULL){
             sprintf(command, "Rscript %sdegree_plots.R %s/%s", r_script_path, cwd, degrees_filename);
-            log_and_screen_printf("\n%s\n", command);
-            system(command);
+            log_and_screen_printf("\n%s\n", command);            
+            int systemRet = system(command);
+            if(systemRet == -1){
+              // The system method failed
+              log_and_screen_printf("Failed call to system?\n");
+            }
             log_and_screen_printf("\n");
         }
         else{
@@ -707,7 +711,11 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     log_and_screen_printf("\nanalysis filename\t%s\n", analysis_filename);
     sprintf(command, "pdflatex -interaction=nonstopmode %s", analysis_filename);
     log_and_screen_printf("\n%s\n", command);
-    system(command);
+    int systemRet = system(command);
+    if(systemRet == -1){
+      // The system method failed
+      log_and_screen_printf("Failed call to system?\n");
+    }
 
 
     // exec("Rscript <path_to_src>/degree_plots.R degrees_filename")

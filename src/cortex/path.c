@@ -894,7 +894,9 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
 
     // Now start new segment lines for gfa file
     if(fout2!=NULL){
-      output_seq_without_line_breaks('\nS ', fout, current);
+
+      fprintf(fout2, "\n");
+      output_seq_without_line_breaks("S ", fout, current);
     }
 
 
@@ -909,9 +911,9 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
 
                 if(fout2!=NULL){
                   // really want to include whole of kmer here instead, and overlap
-                  printf(fout2, "\nS ");
+                  fprintf(fout2, "\nS ");
                   output_seq_with_line_breaks(tempseq, fout2, current);
-                  //printf(fout2, "L %qd\n",count);
+                  //fprintf(fout2, "L %qd\n",count);
                 }
 
                 count++;
@@ -922,14 +924,14 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     output_seq_with_line_breaks("]", fout, current);
 
     if(fout2!=NULL){
-      printf(fout2, "\n");
+      fprintf(fout2, "\n");
     }
 
     strcpy(tempseq, paths[chosen_edge]->seq + (paths[chosen_edge]->length - differ_pos + 1));
     output_seq_with_line_breaks(tempseq, fout, current);
 
     if(fout2!=NULL){
-      printf(fout2, "S %qd\n",count);
+      fprintf(fout2, "S %d\n",count);
       output_seq_without_line_breaks(tempseq, fout2, current);
     }
 
@@ -1121,7 +1123,7 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable*
             fprintf(fout, "%c",  path->seq[path_pos]);
 
             if(fout2!=NULL){
-              printf(fout2, "%c",  path->seq[path_pos]);
+              fprintf(fout2, "%c",  path->seq[path_pos]);
             }
 
             if (current % PATH_FASTA_LINE == 0) {
