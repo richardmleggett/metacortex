@@ -568,9 +568,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
                         }
                         // Output to file2
                         if(fp_contigs_gfa!=NULL){
-                          fprintf(fp_contigs_gfa,
-                                  "H %qd\n",
-                                  simple_path->id);
+                          fprintf(fp_contigs_gfa, "H %qd\n", simple_path->id);
                         }
                         path_to_fasta_metacortex(simple_path, fp_contigs_fastg, fp_contigs_gfa, graph);
                         counter++;
@@ -639,7 +637,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
         if (cwd != NULL){
             sprintf(command, "Rscript %sdegree_plots.R %s/%s", r_script_path, cwd, degrees_filename);
-            log_and_screen_printf("\n%s\n", command);            
+            log_and_screen_printf("\n%s\n", command);
             int systemRet = system(command);
             if(systemRet == -1){
               // The system method failed

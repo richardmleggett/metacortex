@@ -159,6 +159,14 @@ typedef struct { // Is max path length here
 } PolyQueueItem;
 
 
+
+typedef struct {
+    int S_count;
+    int L_count;
+    int P_count;
+    boolean new_gfa_S;
+} gfa_stats;
+
 void path_counts_reset(PathCounts * pc);
 
 void path_counts_add(Path * p, PathCounts * pc);
@@ -375,5 +383,7 @@ boolean is_step_marked_as_uncertain(int i, Path * path);
 void path_mark_as_visited(Path* path);
 
 void path_pairs_to_fasta(PathArray* pa, int distances[], FILE* fout);
+
+void * initalise_gfa_stats(gfa_stats * gfa_count);
 
 #endif /* PATH_H_ */

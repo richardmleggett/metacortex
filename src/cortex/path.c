@@ -720,17 +720,16 @@ void output_seq_with_line_breaks(char* seq, FILE* fout, int* current)
         *current = * current + 1;
     }
 }
-void output_seq_without_line_breaks(char* seq, FILE* fout, int* current)
+void output_seq_without_line_breaks(char* seq, FILE* fout)
 {
     int i;
 
     for (i=0; i <strlen(seq); i++) {
         fprintf(fout, "%c", seq[i]);
-        *current = * current + 1;
     }
 }
 
-boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fout, FILE* fout2, int* current)
+boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fout, FILE* fout2, int* current, gfa_stats * gfa_count)
 {
     Path* paths[4];
     dBNode* current_node = path->nodes[*path_pos];
@@ -874,7 +873,8 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     else{
       output_seq_with_line_breaks(tempseq, fout, current);
       if(fout2!=NULL){
-        output_seq_without_line_breaks(tempseq, fout2, current);
+        output_seq_without_line_breaks(tempseq, fout2);
+        fprintf(fout2, "\n");
       }
     }
 
@@ -892,12 +892,12 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     }
 
 
+/*
     // Now start new segment lines for gfa file
     if(fout2!=NULL){
-
-      fprintf(fout2, "\n");
-      output_seq_without_line_breaks("S ", fout, current);
-    }
+      fprintf(fout2, "S with fprint %d", (int) gfa_S);
+      //output_seq_without_line_breaks("S ", fout);
+    }*/
 
 
     for (j=0; j<4; j++) {
@@ -911,8 +911,10 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
 
                 if(fout2!=NULL){
                   // really want to include whole of kmer here instead, and overlap
-                  fprintf(fout2, "\nS ");
+                  gfa_count->S_count++;
+                  fprintf(fout2, "S with fprint %d ", gfa_count->S_count);
                   output_seq_with_line_breaks(tempseq, fout2, current);
+                  fprintf(fout2, "\n");
                   //fprintf(fout2, "L %qd\n",count);
                 }
 
@@ -923,16 +925,14 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
 
     output_seq_with_line_breaks("]", fout, current);
 
-    if(fout2!=NULL){
-      fprintf(fout2, "\n");
-    }
-
     strcpy(tempseq, paths[chosen_edge]->seq + (paths[chosen_edge]->length - differ_pos + 1));
     output_seq_with_line_breaks(tempseq, fout, current);
 
     if(fout2!=NULL){
-      fprintf(fout2, "S %d\n",count);
-      output_seq_without_line_breaks(tempseq, fout2, current);
+      gfa_count->S_count++;
+      fprintf(fout2, "S %d ",gfa_count->S_count);
+      output_seq_without_line_breaks(tempseq, fout2);
+      fprintf(fout2, "\n");
     }
 
     // Update path pos
@@ -978,13 +978,27 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     return true;
 }
 
+
+void * initalise_gfa_stats(gfa_stats * gfa_count){
+  gfa_count->S_count=0;
+  gfa_count->L_count=0;
+  gfa_count->P_count=0;
+  gfa_count->new_gfa_S = false;
+
+  return 0; // Right?
+}
+
 void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable* graph)
 {
     short kmer_size = path->kmer_size;
     int length = path->length;
     int max_length = path->max_length;
     int path_pos = 0;
-    // gfa S,L,P counts
+    gfa_stats * gfa_count = malloc(sizeof(gfa_stats));;
+
+    initalise_gfa_stats(gfa_count);
+
+
 
     // Sanity checking
     if (path == NULL) {
@@ -1084,7 +1098,8 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable*
 
     // Output to gfa file, start of first segment
     if(fout2!=NULL){
-      fprintf(fout2, "S 1 ");
+      gfa_count->S_count++;
+      fprintf(fout2, "S %d ", gfa_count->S_count);
     }
 
     // generate the initial kmer in the path
@@ -1108,16 +1123,27 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable*
     }
 
     path_pos = 0;
+    gfa_count->new_gfa_S = false;
     while (path_pos < strlen(path->seq)) {
         boolean skip_this = false;
+
+        // output a new S for a section of sequence, (following a polymorphism)
+        if ((fout2!=NULL) && (gfa_count->new_gfa_S == true)){
+          gfa_count->S_count++;
+          fprintf(fout2, "S %d ", gfa_count->S_count);
+          gfa_count->new_gfa_S = false;
+        }
 
         if (path->nodes[path_pos]->flags & POLYMORPHISM) {
             char seq[1024];
 						binary_kmer_to_seq(&(path->nodes[path_pos]->kmer), graph->kmer_size, seq);
             log_printf("Found polymorphism to output at node %s\n", seq);
 
-            skip_this = output_polymorphism(path, &path_pos, graph, fout, fout2, &current);
+            skip_this = output_polymorphism(path, &path_pos, graph, fout, fout2, &current, gfa_count);
+            gfa_count->new_gfa_S = true;
         }
+
+
 
         if (skip_this == false) {
             fprintf(fout, "%c",  path->seq[path_pos]);
