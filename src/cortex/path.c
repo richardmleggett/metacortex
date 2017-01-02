@@ -754,11 +754,15 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
 
     // Find paths that end up at the same point as the chosen path
     void check_edge(Nucleotide nucleotide) {
-        if (nucleotide != chosen_edge) {
+      // ? path_new called shortly after this, not sure what this is for
+        /*if (nucleotide != chosen_edge) {
+            // initialise path
             paths[nucleotide] = 0;
-        }
+        }*/
 
         if (nucleotide != chosen_edge) {
+            // memory not allocated at this point yet?
+            paths[nucleotide] = 0;
             if (db_node_edge_exist_any_colour(current_node, nucleotide, orientation)) {
                 current_step.node = current_node;
                 current_step.label = nucleotide;
@@ -779,6 +783,7 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
                     path_destroy(paths[nucleotide]);
                     paths[nucleotide] = 0;
                     log_and_screen_printf("Destroyed non-matching path\n");
+                    count--; // added by MARTIN (2/1/17)
                 }
             }
         }
@@ -892,14 +897,9 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     }
 
 
-/*
-    // Now start new segment lines for gfa file
-    if(fout2!=NULL){
-      fprintf(fout2, "S with fprint %d", (int) gfa_S);
-      //output_seq_without_line_breaks("S ", fout);
-    }*/
 
-
+    // 'S' line at this branching point will overlap with immediately subsequent 'S' lines
+    gfa_count->current_S_line=gfa_count->S_count;
     for (j=0; j<4; j++) {
         if (paths[j] != 0) {
             strncpy(tempseq, paths[j]->seq, paths[j]->length - differ_pos + 1);
@@ -925,6 +925,7 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
 
     output_seq_with_line_breaks("]", fout, current);
 
+    // outout remaining sequence after the branching section
     strcpy(tempseq, paths[chosen_edge]->seq + (paths[chosen_edge]->length - differ_pos + 1));
     output_seq_with_line_breaks(tempseq, fout, current);
 
@@ -983,6 +984,7 @@ void * initalise_gfa_stats(gfa_stats * gfa_count){
   gfa_count->S_count=0;
   gfa_count->L_count=0;
   gfa_count->P_count=0;
+  gfa_count->current_S_line=0;
   gfa_count->new_gfa_S = false;
 
   return 0; // Right?

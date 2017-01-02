@@ -164,6 +164,7 @@ typedef struct {
     int S_count;
     int L_count;
     int P_count;
+    int current_S_line;
     boolean new_gfa_S;
 } gfa_stats;
 
