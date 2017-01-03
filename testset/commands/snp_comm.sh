@@ -7,7 +7,7 @@ b=100
 n=15
 
 #filename="reads/basic_genome.fa"
-filename="reads/single_snp_genome.fa"
+filename="reads/single_snp_genome_plus.fa"
 #filename="reads/single_insert_genome.fa"
 #filename="reads/single_del_genome.fa"
 

@@ -161,13 +161,14 @@ typedef struct { // Is max path length here
 
 
 typedef struct {
+    long long H_count;
     int S_count;
     int L_count;
     int P_count;
     int current_S_line;
     int overlap;
     boolean pre;
-    boolean new_gfa_S;
+    //boolean new_gfa_S;
 } gfa_stats;
 
 void path_counts_reset(PathCounts * pc);

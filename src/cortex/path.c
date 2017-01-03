@@ -730,15 +730,19 @@ void output_seq_without_line_breaks(char* seq, FILE* fout)
 }
 
 void output_S_line(FILE * f, gfa_stats * gfa_count, char* seq){
-  fprintf(f, "S %d ", gfa_count->S_count);
-  output_seq_without_line_breaks(seq, f);
+  fprintf(f, "S %qd_%d ", gfa_count->H_count, gfa_count->S_count);
+  if(seq!=NULL){
+    output_seq_without_line_breaks(seq, f);
+  }
 }
 
 void output_L_line(FILE * f, gfa_stats * gfa_count){
   if(gfa_count->pre){
     fprintf(f, "\n");
   }
-  fprintf(f, "L %d %d %dM\n", gfa_count->current_S_line, gfa_count->S_count, gfa_count->overlap);
+  fprintf(f, "L %qd_%d %qd_%d %dM\n",
+    gfa_count->H_count, gfa_count->current_S_line,
+    gfa_count->H_count, gfa_count->S_count, gfa_count->overlap);
 }
 
 boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fout, FILE* fout2, int* current, gfa_stats * gfa_count)
@@ -1008,12 +1012,13 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
 
 
 void * initalise_gfa_stats(gfa_stats * gfa_count){
+  gfa_count->H_count=0;
   gfa_count->S_count=0;
   gfa_count->L_count=0;
   gfa_count->P_count=0;
   gfa_count->current_S_line=0;
   gfa_count->overlap=0;
-  gfa_count->new_gfa_S = false;
+  //gfa_count->new_gfa_S = false;
   gfa_count->pre = false;
   return 0; // Right?
 }
@@ -1024,9 +1029,10 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable*
     int length = path->length;
     int max_length = path->max_length;
     int path_pos = 0;
-    gfa_stats * gfa_count = malloc(sizeof(gfa_stats));;
+    gfa_stats * gfa_count = malloc(sizeof(gfa_stats));
 
     initalise_gfa_stats(gfa_count);
+    gfa_count->H_count=path->id;
 
 
 
@@ -1129,7 +1135,8 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable*
     // Output to gfa file, start of first segment
     if(fout2!=NULL){
       gfa_count->S_count++;
-      fprintf(fout2, "S %d ", gfa_count->S_count);
+      //fprintf(fout2, "S %d ", gfa_count->S_count);
+      output_S_line(fout2, gfa_count, NULL);
     }
 
     // generate the initial kmer in the path
@@ -1153,16 +1160,18 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable*
     }
 
     path_pos = 0;
-    gfa_count->new_gfa_S = false;
+    //gfa_count->new_gfa_S = false;
     while (path_pos < strlen(path->seq)) {
         boolean skip_this = false;
 
         // output a new S for a section of sequence, (following a polymorphism)
-        if ((fout2!=NULL) && (gfa_count->new_gfa_S == true)){
+        /*if ((fout2!=NULL) && (gfa_count->new_gfa_S == true)){
+          fprintf(fout2, "here\n");
           gfa_count->S_count++;
           fprintf(fout2, "S %d ", gfa_count->S_count);
+          output_S_line(fout2, gfa_count, NULL);
           gfa_count->new_gfa_S = false;
-        }
+        }*/
 
         if (path->nodes[path_pos]->flags & POLYMORPHISM) {
             char seq[1024];
