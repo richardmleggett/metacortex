@@ -32,6 +32,6 @@ echo ${filename} > ${file_list}
 
 ${meta_p} -k ${kmer} -n ${n} -b ${b} -i ${file_list} -t fasta -o ${cortex_file} -f ${contig_file} -g 100 -l ${log_file}  -S -G graph_out.gv
 
-dot -Tdot graph_out.gv -o graph_out.dot
+#dot -Tdot graph_out.gv -o graph_out.dot
 
 

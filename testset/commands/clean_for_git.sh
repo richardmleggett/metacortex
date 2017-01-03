@@ -1,2 +1,1 @@
-rm *
-rm -r graphs/
+rm -r graphs/; rm *

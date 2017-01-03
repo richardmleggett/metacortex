@@ -165,6 +165,8 @@ typedef struct {
     int L_count;
     int P_count;
     int current_S_line;
+    int overlap;
+    boolean pre;
     boolean new_gfa_S;
 } gfa_stats;
 
@@ -386,5 +388,10 @@ void path_mark_as_visited(Path* path);
 void path_pairs_to_fasta(PathArray* pa, int distances[], FILE* fout);
 
 void * initalise_gfa_stats(gfa_stats * gfa_count);
+
+void output_S_line(FILE * f, gfa_stats * gfa_count, char* seq);
+
+void output_L_line(FILE * f, gfa_stats * gfa_count);
+
 
 #endif /* PATH_H_ */
