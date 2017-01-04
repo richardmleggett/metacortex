@@ -704,7 +704,6 @@ void path_to_fasta_debug(Path * path, FILE * fout)
         }
     }
     fprintf(fout, "\n");
-
     fflush(fout);
 }
 
@@ -729,20 +728,87 @@ void output_seq_without_line_breaks(char* seq, FILE* fout)
     }
 }
 
-void output_S_line(FILE * f, gfa_stats * gfa_count, char* seq){
-  fprintf(f, "S %qd_%d ", gfa_count->H_count, gfa_count->S_count);
+void * initalise_gfa_stats(gfa_stats * gfa, int max_length){
+  gfa->H_count=0;
+  gfa->S_count=0;
+  gfa->L_count=0;
+  gfa->P_count=0;
+  gfa->current_S_line=0;
+  gfa->overlap=0;
+  gfa->max_length=max_length;
+  gfa->gap_or_comma[0]=' ';
+  gfa->orient[0]='3';
+  gfa->P_line = calloc(gfa->max_length, sizeof(char));
+  gfa->P_line_overlap = calloc(gfa->max_length, sizeof(char));
+  return 0; // Right?
+}
+
+void output_S_line(FILE * f, gfa_stats * gfa, char* seq){
+  fprintf(f, "\nS %qd_%d ", gfa->H_count, gfa->S_count);
   if(seq!=NULL){
     output_seq_without_line_breaks(seq, f);
   }
 }
 
-void output_L_line(FILE * f, gfa_stats * gfa_count){
-  if(gfa_count->pre){
-    fprintf(f, "\n");
+void output_L_line(FILE * f, gfa_stats * gfa){
+  fprintf(f, "\nL %qd_%d %c %qd_%d %c %dM",
+    gfa->H_count, gfa->current_S_line, gfa->orient[0],
+    gfa->H_count, gfa->S_count, gfa->orient[0], gfa->overlap);
+}
+
+void post_polymorph_L_lines(FILE * f, gfa_stats * gfa){
+  while (gfa->S_count > gfa->current_S_line ){
+    output_L_line(f, gfa);
+    gfa->current_S_line++;
   }
-  fprintf(f, "L %qd_%d %qd_%d %dM\n",
-    gfa_count->H_count, gfa_count->current_S_line,
-    gfa_count->H_count, gfa_count->S_count, gfa_count->overlap);
+}
+
+void check_orient_gfa(gfa_stats * gfa, Orientation orientation){
+  if(orientation==forward){
+    gfa->orient[0]='+';
+  }
+  else if(orientation==reverse){
+    gfa->orient[0]='-';
+  }
+  else{
+    gfa->orient[0]='3';
+  }
+}
+
+void add_to_P_line(gfa_stats * gfa){
+  //check for sizes of P_line's (not greater than max size of string)
+  char text[10]; // HACK FOR NOW
+  char overlap[10]; // HACK FOR NOW
+
+  sprintf(text, "%c%qd_%d%c", gfa->gap_or_comma[0], gfa->H_count, gfa->S_count, gfa->orient[0]);
+  sprintf(overlap, "%c%dM", gfa->gap_or_comma[0], gfa->overlap);
+  if (strlen(gfa->P_line)>(gfa->max_length-strlen(text))
+              ||strlen(gfa->P_line_overlap)>(gfa->max_length-strlen(overlap))){
+    // output error? output P line and start a new one?
+    log_and_screen_printf("ERROR: gfa P line grew too large\n");
+  }
+  else{
+    if(strlen(gfa->P_line)>1){
+      // add to P_line_overlap if this is NOT the first entry
+      if(strlen(gfa->P_line_overlap)==0){ // HACK - runs through this for every P entry, but only relevant for first
+        // if first P_overlap entry
+        sprintf(overlap, " %dM", gfa->overlap);
+      }
+      strcat(gfa->P_line_overlap, overlap);
+    }
+
+    // always add to P_line
+    strcat(gfa->P_line, text);
+  }
+}
+
+void output_P_line(FILE * f, gfa_stats * gfa){
+  if(strlen(gfa->P_line)>0){
+    gfa->S_count++;
+    fprintf(f, "\nP %qd_%d", gfa->H_count, gfa->S_count);
+    output_seq_without_line_breaks(gfa->P_line, f);
+    output_seq_without_line_breaks(gfa->P_line_overlap, f);
+  }
 }
 
 boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fout, FILE* fout2, int* current, gfa_stats * gfa_count)
@@ -893,16 +959,20 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     else{
       output_seq_with_line_breaks(tempseq, fout, current);
       if(fout2!=NULL){
+        /*if a polymorphism has previously been reached, and the perfect path
+          after it output to gfa, then the L lines must be completed as well.
+        */
+        if((fout2!=NULL)&&(gfa_count->S_count>gfa_count->current_S_line)){
+          post_polymorph_L_lines(fout2, gfa_count);
+        }
+
         // 'S' line at this branching point will overlap with immediately subsequent 'S' lines
         gfa_count->current_S_line=gfa_count->S_count;
         gfa_count->S_count++;
-        fprintf(fout2, "\n");
         output_S_line(fout2, gfa_count, tempseq);
-        //fprintf(fout2, "\nS %d ", gfa_count->S_count);
-        //output_seq_without_line_breaks(tempseq, fout2);
-        //fprintf(fout2, "\n");
-        gfa_count->pre=true;
         output_L_line(fout2, gfa_count);
+        check_orient_gfa(gfa_count, paths[max_coverage_nucleotide]->orientations[0]);
+        add_to_P_line(gfa_count);
       }
     }
 
@@ -931,16 +1001,11 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
                 output_seq_with_line_breaks(tempseq, fout, current);
 
                 if((fout2!=NULL)&&(j!=max_coverage_nucleotide)){
-                  // really want to include whole of kmer here instead, and overlap
+                  // want to include whole of kmer here instead, and overlap?
                   gfa_count->S_count++;
-                  //fprintf(fout2, "S %d ", gfa_count->S_count);
                   output_S_line(fout2, gfa_count, tempseq);
-                  //output_seq_with_line_breaks(tempseq, fout2, current);
-                  //fprintf(fout2, "\n");
-                  // NOTE: this is not generic right now
                   output_L_line(fout2, gfa_count);
                 }
-
                 count++;
             }
         }
@@ -954,15 +1019,12 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
 
     if(fout2!=NULL){
       gfa_count->S_count++;
-      gfa_count->current_S_line++;;
-      gfa_count->pre=false;
-      while (gfa_count->S_count > gfa_count->current_S_line ){
-        output_L_line(fout2, gfa_count);
-        //fprintf(fout2, "S_count %d S_current %d\n",gfa_count->S_count, gfa_count->current_S_line);
-        gfa_count->current_S_line++;
-      }
+      gfa_count->current_S_line++;
 
-      fprintf(fout2, "S %d ",gfa_count->S_count);
+      //fprintf(fout2, "S %d ",gfa_count->S_count);
+      output_S_line(fout2, gfa_count, NULL);
+      check_orient_gfa(gfa_count, paths[chosen_edge]->orientations[0]);
+      add_to_P_line(gfa_count);
       output_seq_without_line_breaks(tempseq, fout2);
       //fprintf(fout2, "\n");
     }
@@ -1010,19 +1072,6 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     return true;
 }
 
-
-void * initalise_gfa_stats(gfa_stats * gfa_count){
-  gfa_count->H_count=0;
-  gfa_count->S_count=0;
-  gfa_count->L_count=0;
-  gfa_count->P_count=0;
-  gfa_count->current_S_line=0;
-  gfa_count->overlap=0;
-  //gfa_count->new_gfa_S = false;
-  gfa_count->pre = false;
-  return 0; // Right?
-}
-
 void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable* graph)
 {
     short kmer_size = path->kmer_size;
@@ -1031,7 +1080,7 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable*
     int path_pos = 0;
     gfa_stats * gfa_count = malloc(sizeof(gfa_stats));
 
-    initalise_gfa_stats(gfa_count);
+    initalise_gfa_stats(gfa_count, max_length);
     gfa_count->H_count=path->id;
 
 
@@ -1135,8 +1184,11 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable*
     // Output to gfa file, start of first segment
     if(fout2!=NULL){
       gfa_count->S_count++;
-      //fprintf(fout2, "S %d ", gfa_count->S_count);
+      gfa_count->current_S_line=gfa_count->S_count;
       output_S_line(fout2, gfa_count, NULL);
+      check_orient_gfa(gfa_count, path->orientations[0]);
+      add_to_P_line(gfa_count);
+      gfa_count->gap_or_comma[0]=',';
     }
 
     // generate the initial kmer in the path
@@ -1164,22 +1216,12 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable*
     while (path_pos < strlen(path->seq)) {
         boolean skip_this = false;
 
-        // output a new S for a section of sequence, (following a polymorphism)
-        /*if ((fout2!=NULL) && (gfa_count->new_gfa_S == true)){
-          fprintf(fout2, "here\n");
-          gfa_count->S_count++;
-          fprintf(fout2, "S %d ", gfa_count->S_count);
-          output_S_line(fout2, gfa_count, NULL);
-          gfa_count->new_gfa_S = false;
-        }*/
-
         if (path->nodes[path_pos]->flags & POLYMORPHISM) {
             char seq[1024];
 						binary_kmer_to_seq(&(path->nodes[path_pos]->kmer), graph->kmer_size, seq);
             log_printf("Found polymorphism to output at node %s\n", seq);
 
             skip_this = output_polymorphism(path, &path_pos, graph, fout, fout2, &current, gfa_count);
-            //gfa_count->new_gfa_S = true;
         }
 
 
@@ -1199,6 +1241,16 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable*
             path_pos++;
             current++;
         }
+    }
+
+    // catch any remaining L lines
+    if(fout2!=NULL){
+      post_polymorph_L_lines(fout2, gfa_count);
+      output_P_line(fout2, gfa_count);
+      //if(strlen(gfa_count->P_line)){
+      //  gfa_count->P_line="";
+      //  strcpy(tempseq, paths[chosen_edge]->seq + (paths[chosen_edge]->length - differ_pos + 1));
+      //}
     }
 
     fprintf(fout, "\n");

@@ -167,8 +167,11 @@ typedef struct {
     int P_count;
     int current_S_line;
     int overlap;
-    boolean pre;
-    //boolean new_gfa_S;
+    int max_length;
+    char gap_or_comma[1];
+    char orient[1];
+    char * P_line;
+    char * P_line_overlap;
 } gfa_stats;
 
 void path_counts_reset(PathCounts * pc);
@@ -388,11 +391,14 @@ void path_mark_as_visited(Path* path);
 
 void path_pairs_to_fasta(PathArray* pa, int distances[], FILE* fout);
 
-void * initalise_gfa_stats(gfa_stats * gfa_count);
+void * initalise_gfa_stats(gfa_stats * gfa, int max_length);
 
-void output_S_line(FILE * f, gfa_stats * gfa_count, char* seq);
+void output_S_line(FILE * f, gfa_stats * gfa, char* seq);
 
-void output_L_line(FILE * f, gfa_stats * gfa_count);
+void output_L_line(FILE * f, gfa_stats * gfa);
 
+void post_polymorph_L_lines(FILE * f, gfa_stats * gfa);
+
+void add_to_P_line(gfa_stats * gfa);
 
 #endif /* PATH_H_ */
