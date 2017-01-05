@@ -832,7 +832,7 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     current_step.orientation = orientation;
     paths[chosen_edge] = path_new(max_path_length, graph->kmer_size);
     db_graph_get_perfect_path_with_first_edge_all_colours(&current_step, &db_node_action_do_nothing, paths[chosen_edge], graph);
-    printf("Chosen edge: %d length %d seq %s\n", chosen_edge, paths[chosen_edge]->length, paths[chosen_edge]->seq);
+    log_printf("Chosen edge: %d length %d seq %s\n", chosen_edge, paths[chosen_edge]->length, paths[chosen_edge]->seq);
 
     // Find paths that end up at the same point as the chosen path
     void check_edge(Nucleotide nucleotide) {
@@ -854,7 +854,7 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
                 paths[nucleotide] = path_new(max_path_length, graph->kmer_size);
                 db_graph_get_perfect_path_with_first_edge_all_colours(&current_step, &db_node_action_do_nothing, paths[nucleotide], graph);
                 // count++;
-                printf("Got path %d length %d seq %s\n", nucleotide, paths[nucleotide]->length, paths[nucleotide]->seq);
+                log_printf("Got path %d length %d seq %s\n", nucleotide, paths[nucleotide]->length, paths[nucleotide]->seq);
 
                 if (paths[nucleotide]->nodes[paths[nucleotide]->length-1] == paths[chosen_edge]->nodes[paths[chosen_edge]->length - 1]) {
 									  char seq[1024];
@@ -864,7 +864,7 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
                 } else {
                     path_destroy(paths[nucleotide]);
                     paths[nucleotide] = 0;
-                    log_and_screen_printf("Destroyed non-matching path\n");
+                    log_printf("Destroyed non-matching path\n");
                 }
             }
         }
@@ -878,15 +878,15 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
         return false;
     }
 
-    log_and_screen_printf("Paths to compare:\n");
+    log_printf("Paths to compare:\n");
     for (j=0; j<4; j++) {
 			  if (paths[j] != 0) {
 					    if (j == chosen_edge) {
-								  log_and_screen_printf("%dE\t", j);
+								  log_printf("%dE\t", j);
 							} else {
-								log_and_screen_printf("%d\t", j);
+								log_printf("%d\t", j);
 							}
-							log_and_screen_printf("%s\n",paths[j]->seq);
+							log_printf("%s\n",paths[j]->seq);
 				}
 		}
 

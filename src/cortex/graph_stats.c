@@ -540,13 +540,13 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
                     // NOTE: unecessary converage element but repeating the whole path finding without coverage
                     //  is more work than necessary I think. See what processing time it changes?
 
-                    log_and_screen_printf("[WALKING PATH]]\n");
+                    log_printf("[WALKING PATH]\n");
                     coverage_walk_get_path(seed_node, forward, NULL, graph, path_fwd);
-                    log_and_screen_printf("[WALKING REV PATH]]\n");
+                    log_printf("[WALKING REV PATH]\n");
                     coverage_walk_get_path(seed_node, reverse, NULL, graph, path_rev);
                     path_reverse(path_fwd, simple_path);
                     path_append(simple_path, path_rev);
-                    log_and_screen_printf("\t[PATH WALKED AND APPENDED]]\n");
+                    log_printf("\t[PATH WALKED AND APPENDED]\n");
                     //log_and_screen_printf("Couldn't get memory for graph queue.\n");
 
                     simple_path->id = counter;
