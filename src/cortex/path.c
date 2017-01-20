@@ -777,8 +777,8 @@ void check_orient_gfa(gfa_stats * gfa, Orientation orientation){
 
 void add_to_P_line(gfa_stats * gfa){
   //check for sizes of P_line's (not greater than max size of string)
-  char text[10]; // HACK FOR NOW
-  char overlap[10]; // HACK FOR NOW
+  char text[100]; // HACK FOR NOW
+  char overlap[100]; // HACK FOR NOW
 
   sprintf(text, "%c%qd_%d%c", gfa->gap_or_comma[0], gfa->H_count, gfa->S_count, gfa->orient[0]);
   sprintf(overlap, "%c%dM", gfa->gap_or_comma[0], gfa->overlap);
@@ -923,7 +923,8 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     // check through paths - is this a snp, an indel?
     count = 0;
     int insert_size=0;
-    int bubble_max_coverage=0;
+    int best_path_cov=0;
+    int best_path_length=0;
     int max_coverage_nucleotide=0;
 
     for (j=0; j<4; j++) {
@@ -938,11 +939,14 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
                 int min_coverage=0;
                 int max_coverage=0;
                 path_get_statistics(&avg_coverage, &min_coverage, &max_coverage, paths[j]);
-                if(avg_coverage>bubble_max_coverage){
-                  max_coverage_nucleotide=j;
+                if(avg_coverage>=best_path_cov){
+                  if(strlen(tempseq)>best_path_length){
+                    max_coverage_nucleotide=j;
+                    best_path_length=strlen(tempseq);
+                  }
                 }
 
-                // is the the longest insert?
+                // find the longest length path in the bubble
                 if (strlen(tempseq) > insert_size) {
                   insert_size=strlen(tempseq);
                 }

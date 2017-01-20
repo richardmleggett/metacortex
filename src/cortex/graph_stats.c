@@ -70,6 +70,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
     for(i=0; i<NUM_BEST_NODES; i++){
         best_edges[i]=0;
     }
+    char* seq = calloc(256, 1);
 
     // Nucleotide iterator, used to walk all possible paths from a node
     void walk_if_exists(Nucleotide n) {
@@ -134,6 +135,9 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                     // need to count back from here to original branching point?
                     log_printf("\nBUBBLE FOUND, path length\t%i\n", new_path->length);
                     // length of path here? not perfect - if bubble structure is complex, it will only report on the most immediate perfect path size.
+                    // end_node
+                    binary_kmer_to_seq(&(end_node->kmer), graph->kmer_size, seq);
+                    log_printf("BUBBLE FOUND at kmer %s\n", seq);
                 }
 
                 // Now go through all nodes, look for best and mark all as visited
@@ -371,6 +375,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
         log_and_screen_printf("ERROR: Can't open contig (gfa) file.\n%s\n", gfa_filename);
         exit(-1);
     }
+    //fp_contigs_gfa=NULL;
 
     /* Open the sugraph degree file */
     sprintf(degrees_filename, "%s.degrees", consensus_contigs_filename);
