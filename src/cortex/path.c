@@ -926,9 +926,11 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
     int best_path_cov=0;
     int best_path_length=0;
     int max_coverage_nucleotide=0;
+    int indel_flag = 0;
 
     for (j=0; j<4; j++) {
         if (paths[j] != 0) {
+            log_printf("Paths:%i\n", j);
             strncpy(tempseq, paths[j]->seq, paths[j]->length - differ_pos + 1);
             tempseq[paths[j]->length - differ_pos + 1] = 0;
             if (strlen(tempseq) > 0) {
@@ -951,7 +953,19 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
                   insert_size=strlen(tempseq);
                 }
             }
+            else{
+              // indel - length is zero, but still meets same point. Can only be one of these, impossible for more.
+              indel_flag = 1;
+            }
         }
+    }
+
+    if (indel_flag){
+      // for an indel, add an L (link) directly between segments before and after bubble.
+      int S_count=gfa_count->S_count;
+      gfa_count->S_count=S_count+count+1;
+      output_L_line(fout2, gfa_count);
+      gfa_count->S_count=S_count;
     }
 
     // Output the highest coverage alternative state BEFORE the brackets
