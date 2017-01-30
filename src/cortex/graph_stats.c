@@ -274,13 +274,12 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
 // ----------------------------------------------------------------------
 // Work through graph, count cov, X, Y nodes
 // ----------------------------------------------------------------------
-void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int min_subgraph_kmers)
+void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int min_subgraph_kmers, int coverage_thresh)
 {
     FILE* fp_analysis;
     FILE* fp_report;
     FILE* fp_degrees;
     FILE* fp_contigs_fasta;
-    FILE* fp_contigs_fasta_high_conf;
     FILE* fp_contigs_fastg;
     FILE* fp_contigs_gfa;
     long int Contig_Branches[MAX_BRANCHES];
@@ -289,7 +288,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     int i;  int j; float percentage;
     int counter= 0;
 
-    double COVERAGE_THRESHOLD=2; // NOTE, THIS NEEDS TO BE USER DEFINED IN THE FUTURE
+    //double coverage_thresh=2; // NOTE, THIS NEEDS TO BE USER DEFINED IN THE FUTURE
 
     char cwd[1024];
 
@@ -324,7 +323,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     long int Coverage_Dist[COVERAGE_BINS*COVERAGE_BIN_SIZE]; // will this work?
     char fastg_filename[MAX_EXPLORE_PATH_LENGTH];
     char gfa_filename[MAX_EXPLORE_PATH_LENGTH];
-    char fasta_high_conf_filename[MAX_EXPLORE_PATH_LENGTH];
     char analysis_filename[MAX_EXPLORE_PATH_LENGTH];
     char degrees_filename[MAX_EXPLORE_PATH_LENGTH];
 
@@ -345,18 +343,10 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
         exit(-1);
     }
 
-    /* Open simple contigs file */
+    /* Open contigs file */
     fp_contigs_fasta = fopen(consensus_contigs_filename, "w");
     if (!fp_contigs_fasta) {
         log_and_screen_printf("ERROR: Can't open contig file.\n%s\n", consensus_contigs_filename);
-        exit(-1);
-    }
-
-    /* Open high confidence contigs file */
-    sprintf(fasta_high_conf_filename, "%s.high_conf", consensus_contigs_filename);
-    fp_contigs_fasta_high_conf = fopen(fasta_high_conf_filename, "w");
-    if (!fp_contigs_fasta_high_conf) {
-        log_and_screen_printf("ERROR: Can't open contig file.\n%s\n", fasta_high_conf_filename);
         exit(-1);
     }
 
@@ -537,12 +527,11 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
                     nodes_in_graph->num_subgraphs_2k++;
                 }
 
-                /* Simple graph (no branches) and enough nodes to bother with? If so, get consensus contig */
-                //if ((nodes_in_graph->branch_nodes==0) && (nodes_in_graph->total_size >= min_subgraph_kmers)) {
+                /* enough nodes to bother with? If so, get consensus contig */
                 if (nodes_in_graph->total_size >= min_subgraph_kmers) {
 
                     // should be a perfect path? might be two paths though, if we started in the middle
-                    // NOTE: unecessary converage element but repeating the whole path finding without coverage
+                    // NOTE: unecessary coverage element but repeating the whole path finding without coverage
                     //  is more work than necessary I think. See what processing time it changes?
 
                     log_printf("[WALKING PATH]\n");
@@ -565,17 +554,17 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
                         int max_coverage=0;
                         path_get_statistics(&average_coverage, &min_coverage, &max_coverage, simple_path);
                         // NOTE: decision - minimum cov or average cov dictates confidence threshold met?
-                        if (min_coverage>COVERAGE_THRESHOLD){
-                          path_to_fasta(simple_path, fp_contigs_fasta_high_conf);
+                        if (min_coverage>=coverage_thresh){
+                          // Output for alternative formats
+                          if(fp_contigs_gfa!=NULL){
+                            fprintf(fp_contigs_gfa, "H %qd", simple_path->id);
+                          }
+                          path_to_fasta(simple_path, fp_contigs_fasta);
+                          path_to_fasta_metacortex(simple_path, fp_contigs_fastg, fp_contigs_gfa, graph);
                         }
                         else{
-                          path_to_fasta(simple_path, fp_contigs_fasta);
+                          log_printf("Didn't write path of min coverage %d\n", min_coverage);
                         }
-                        // Output to file2
-                        if(fp_contigs_gfa!=NULL){
-                          fprintf(fp_contigs_gfa, "H %qd", simple_path->id);
-                        }
-                        path_to_fasta_metacortex(simple_path, fp_contigs_fastg, fp_contigs_gfa, graph);
                         counter++;
                     } else {
                         log_printf("Didn't write path of size %d\n", simple_path->length);

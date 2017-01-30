@@ -52,6 +52,7 @@ void usage(void)
     "   [-b|--mem_width INT] = Size of hash table buckets (default 100).\n" \
     "   [-n|--mem_height INT] = Number of buckets in hash table in bits (default 10, this is a power of 2, ie 2^mem_height).\n" \
     "   [-c|--tip_clip INT] = Clips the tips in the graph, the argument defines the max length for the tips.\n" \
+    "   [-C|--high_confidence INT] = Only ouptuts contigs which have no nodes with coverage below THESHOLD.\n" \
     "   [-z|--remove_low_coverage_kmers INT] = Filter for kmers with coverage in the threshold or smaller.\n" \
     "   [-q|--quality_score_threshold INT] = Filter for quality scores in the input file, any k-mer wiht a base wiht quality in the threshold or smaller is not considered (default 0).\n" \
     "   [-o|--dump_binary FILENAME] = Dump binary for graph in file (after applying all specified actions on graph).\n" \
@@ -97,6 +98,7 @@ int default_opts(CmdLine * c)
     c->multiple_subgraph_contigs = false;
 
     //output
+    c->high_confidence = false;
     c->dump_binary = false;
     c->output_fasta = false;
     c->detect_bubbles = false;
@@ -137,6 +139,7 @@ int default_opts(CmdLine * c)
     //c->output_ctx_filename required
     //c->output_fasta_filename required
     //c->output_graphviz_filename required
+    c->coverage_thresh = 1;
     c->singleton_length = 100;
     c->algorithm = METACORTEX_CONSENSUS;
 	c->max_length=200000;
@@ -165,6 +168,7 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
         {"remove_bubbles", no_argument, NULL, 'a'},
         {"mem_width", required_argument, NULL, 'b'},
         {"tip_clip", required_argument, NULL, 'c'},
+        {"high_confidence", required_argument, NULL, 'C'},
         {"output_contigs", required_argument, NULL, 'd'},
         {"output_coverages", no_argument, NULL, 'e'},
         {"output_supernodes", required_argument, NULL, 'f'},
@@ -188,8 +192,8 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
         {"remove_low_coverage_kmers", required_argument, NULL, 'z'},
         {"algorithm",required_argument,NULL,'A'},
         {"graphviz", required_argument, NULL, 'G'},
-   		{"input_reference", required_argument, NULL, 'H'},
-		{"output_kmer_coverage", required_argument, NULL, 'J'},
+     		{"input_reference", required_argument, NULL, 'H'},
+  		  {"output_kmer_coverage", required_argument, NULL, 'J'},
         {"remove_spurious_links",required_argument,NULL,'L'},
         {"multiple_subgraph_contigs",no_argument,NULL,'M'},
         {"hash_output_file", required_argument, NULL, 'O'},
@@ -448,6 +452,18 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
             case 'A':
                 errx(1,"[-A  | --algorithm ] option is not used for metacortex");
                 exit(-1);
+                break;
+
+
+            case 'C':
+                if (optarg == NULL) {
+                    errx(1, "[-C | --high_confidence] option called without value, using default threshold (2)");
+                    cmd_line.coverage_thresh=2;
+                }
+                else{
+                  cmd_line.coverage_thresh = atoi(optarg);
+                }
+                cmd_line.high_confidence=true;
                 break;
 
             case 'G':

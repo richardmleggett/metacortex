@@ -1114,6 +1114,8 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable*
         exit(-1);
     }
 
+    // fout2 may be NULL, no sense in checking
+
     if (DEBUG) {
         printf("[path_to_fasta] About to print a path\n");
     }

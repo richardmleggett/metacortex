@@ -74,6 +74,7 @@ typedef struct
 
     //output
     boolean dump_binary;
+    boolean high_confidence;
     boolean output_fasta;
     boolean dump_hash;
     boolean detect_bubbles;
@@ -120,8 +121,9 @@ typedef struct
     char output_hash_filename[LENGTH_FILENAME];
     char log_filename[LENGTH_FILENAME];
     char output_kmer_coverage[LENGTH_FILENAME];
-	char output_reference_coverage_file[LENGTH_FILENAME];
-	int max_length;
+		char output_reference_coverage_file[LENGTH_FILENAME];
+		int coverage_thresh;
+		int max_length;
     int singleton_length;
     int min_subgraph_size;
     int min_contig_length;

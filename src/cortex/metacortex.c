@@ -442,9 +442,13 @@ int main(int argc, char **argv)
                 metacortex_find_subgraphs(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.min_contig_length, cmd_line.multiple_subgraph_contigs);
                 break;
             case GRAPH_STATS:
+                // if --high_confidence option set by user, alter output name accordingly
+                if(cmd_line.high_confidence){
+                  sprintf(cmd_line.output_fasta_filename, "%s.high_conf", cmd_line.output_fasta_filename);
+                }
 
                 log_and_screen_printf("\nSearching graph for stats...\n");
-                find_subgraph_stats(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size);
+                find_subgraph_stats(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.coverage_thresh);
 
 
                 /* Put all of this into a seperate command line call (BUBBLEFIND)*/

@@ -121,39 +121,43 @@ Nucleotide coverage_walk_get_best_label(dBNode* node, Orientation orientation, d
 /*----------------------------------------------------------------------*
  * Function:  coverage_walk_get_best_label_bubble                       *
  * Purpose:   find first_step->label and first_step->alt_label					*
- *         		walk bubble if encountered																*
+ *         		walk bubble if encountered. Will return a single					*
+ *         		label if one clear alternative, rather than      					*
+ *         		multiple possible options     					                  *
  * Params:                                                              *
  * Returns:                                                             *
  *----------------------------------------------------------------------*/
 Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Orientation orientation, dBGraph* db_graph)
 {
     int highest_coverage = 0;
+    int highest_coverage_length = 0;
     int all_coverages[4] = {0, 0, 0, 0};	// initialises all elements to zero
+    int all_lengths[4] = {0, 0, 0, 0};	// initialises all elements to zero
     int bubble_edge = -1;
     dBNode * nodes[4];	// legal? pointing to other nodes that already exist
     Path* paths[4];
     int i;
-    
+
     // Clear path array
     for (i=0; i<4; i++) {
         paths[i] = 0;
     }
-    
+
     step->label=Undefined;
-    
+
     // check a node for edges
     // if more than one, walk each path
     // are final (branching) nodes the same? then this is a bubble.
     // is sum(coverage) for both paths equal to or highest coverage?
     // keep highest coverage as label, and next highest as alt_label
     // NOTE: only two paths allowed here. Extend later
-    
+
     // check to see if a simple bubble occurs from this branch point - one that
     //   does rejoin, and has no further branching in between
     void bubble_check()
     {
         int i, j;
-        
+
         for (i=0; i<4; i++){
             for (j=i+1; j<4; j++){
                 if ((all_coverages[i] > 0) &&
@@ -177,18 +181,17 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Or
                 } // i&j exists
             } // j
         } // i
-        
         // DOES THIS WORK WITH BUBBLES THAT DON'T HAVE HIGHEST COVERAGE?
         if (bubble_edge>-1) {
             char seq[1024];
-            
+
             step->label = bubble_edge;
             db_node_action_set_flag(step->node, POLYMORPHISM);
             db_node_action_set_flag(paths[bubble_edge]->nodes[paths[bubble_edge]->length - 1], POLYMORPHISM);
-            
+
             binary_kmer_to_seq(&(step->node->kmer), db_graph->kmer_size, seq);
             log_printf("Polymorphism start node %s\n", seq);
-            
+
             binary_kmer_to_seq(&(paths[bubble_edge]->nodes[paths[bubble_edge]->length - 1]->kmer), db_graph->kmer_size, seq);
             log_printf("Polymorphism end node %s\n", seq);
         }
@@ -198,30 +201,38 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Or
     void check_edge(Nucleotide nucleotide) {
         if (db_node_edge_exist_any_colour(node, nucleotide, orientation)) {
             pathStep current_step, reverse_step, next_step;
-            //int coverage;
+            double avg_coverage;
+            int min_coverage;
+            int max_coverage;
             int MAX_BRANCH_LENGTH=(db_graph->kmer_size)*2;
 
             current_step.node = node;
             current_step.label = nucleotide;
             current_step.orientation = orientation;
             db_graph_get_next_step(&current_step, &next_step, &reverse_step, db_graph);
-            all_coverages[nucleotide] = element_get_coverage_all_colours(next_step.node);
 
             paths[nucleotide] = path_new(MAX_BRANCH_LENGTH, db_graph->kmer_size);
             db_graph_get_perfect_path_with_first_edge_all_colours(&current_step, &db_node_action_do_nothing, paths[nucleotide], db_graph);
+            path_get_statistics(&avg_coverage, &min_coverage, &max_coverage, paths[nucleotide]);
+            all_coverages[nucleotide] = avg_coverage;
+            all_lengths[nucleotide] = paths[nucleotide]->length;
 
             nodes[nucleotide] = paths[nucleotide]->nodes[paths[nucleotide]->length-1];
             // Add end node to list of nodes to visit
         }
     }
 
-    // check for single best edge first
+    // check for single best edge first on coverage, with length of path breaking ties
     void check_coverages(Nucleotide nucleotide) {
-        if ((all_coverages[nucleotide] >= highest_coverage) &&
-            (all_coverages[nucleotide] >= 1)) {
+      if (all_coverages[nucleotide] > 1){
+        if ((all_coverages[nucleotide] > highest_coverage) ||
+            ((all_coverages[nucleotide] == highest_coverage) &&
+                (all_lengths[nucleotide] > highest_coverage_length))){
             highest_coverage=all_coverages[nucleotide];
+            highest_coverage_length=all_lengths[nucleotide];
             step->label=nucleotide;
         }
+      }
     }
 
     nucleotide_iterator(&check_edge);
@@ -339,7 +350,7 @@ static boolean coverage_walk_continue_traversing(pathStep * current_step,
             cont = false;
         }
     }
-    
+
     return cont;
 }
 
