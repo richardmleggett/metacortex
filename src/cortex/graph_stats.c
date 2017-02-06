@@ -335,13 +335,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
         Coverage_Dist[i]=0;
     }
 
-    /* Open the analysis file */
-    sprintf(analysis_filename, "%s.analysis", consensus_contigs_filename);
-    fp_analysis = fopen(analysis_filename, "w");
-    if (!fp_analysis) {
-        log_and_screen_printf("ERROR: Can't open analysis file.\n");
-        exit(-1);
-    }
 
     /* Open contigs file */
     fp_contigs_fasta = fopen(consensus_contigs_filename, "w");
@@ -350,8 +343,19 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
         exit(-1);
     }
 
+    remove_file_extension(consensus_contigs_filename);
+
+    /* Open the analysis file */
+    sprintf(analysis_filename, "%s.analysis", consensus_contigs_filename);
+    fp_analysis = fopen(analysis_filename, "w");
+    if (!fp_analysis) {
+        log_and_screen_printf("ERROR: Can't open analysis file.\n");
+        exit(-1);
+    }
+
+
     /* Open fastg contigs file */
-    sprintf(fastg_filename, "%sstg", consensus_contigs_filename);
+    sprintf(fastg_filename, "%s.fastg", consensus_contigs_filename);
     fp_contigs_fastg = fopen(fastg_filename, "w");
     if (!fp_contigs_fastg) {
         log_and_screen_printf("ERROR: Can't open contig (fastg) file.\n%s\n", fastg_filename);
@@ -365,7 +369,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
         log_and_screen_printf("ERROR: Can't open contig (gfa) file.\n%s\n", gfa_filename);
         exit(-1);
     }
-    //fp_contigs_gfa=NULL;
 
     /* Open the sugraph degree file */
     sprintf(degrees_filename, "%s.degrees", consensus_contigs_filename);
@@ -374,11 +377,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
         log_and_screen_printf("ERROR: Can't open degrees file.\n");
         exit(-1);
     }
-
-    //log_and_screen_printf("contig name\t%s\n", consensus_contigs_filename);
-    //log_and_screen_printf("dir\t%s\nbase\t%s\ncwd\t%s\n",dirname(consensus_contigs_filename), basename(consensus_contigs_filename),cwd);
-    //log_and_screen_printf("contig name\t%s\n", consensus_contigs_filename);
-
 
     // check for graphs dir existance
     if (basename(consensus_contigs_filename)==consensus_contigs_filename){

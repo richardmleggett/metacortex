@@ -253,54 +253,6 @@ long long load_fastq_from_filename_into_graph(char *filename, short colour,
 }
 
 
-
-
-
-#if 0
-
-long long load_fastq_from_filename_into_graph(char *filename, short colour,
-                                              long long *bad_reads,
-                                              char quality_cut_off,
-                                              int max_read_length, int fastq_ascii_offset, dBGraph * db_graph)
-
-{
-
-    FILE * fp = NULL;
-
-    int file_reader(FILE * fp, Sequence * seq, int max_read_length,
-                    boolean new_entry, boolean * full_entry) {
-		*full_entry = true;
-
-		if (new_entry != true) {
-			puts("new_entry has to be true for fastq\n");
-			exit(1);
-		}
-
-		return read_sequence_from_fastq(fp, seq, max_read_length);
-	}
-
-
-    if (strcmp("-", filename) == 0) {
-        fp = stdin;
-    }else{
-        fp = fopen(filename, "r");
-
-    }
-	if (fp == NULL) {
-		fprintf(stderr, "cannot open file:%s\n", filename);
-		exit(1);	//TODO - prefer to print warning and skip file and return an error code?
-	}
-
-
-	long long ret = load_seq_into_graph(fp, &file_reader, bad_reads, fastq_ascii_offset, quality_cut_off, max_read_length, colour, db_graph);
-
-    if (fp != stdin) {
-        fclose(fp);
-    }
-	return ret;
-}
-
-#endif
 long long load_fastq_cov_from_filename_into_graph(char *filename, short colour, long long *bad_reads, char quality_cut_off, int max_read_length, int fastq_ascii_offset, dBGraph * db_graph)
 {
 
@@ -360,7 +312,7 @@ long long load_fasta_from_filename_into_graph(char *filename, short colour,
     fra.inner_args = &fria;
     fra.insert = true;
     fra.max_read_length = 1000;
-    fra.maximum_ocupancy = 95;
+    fra.maximum_ocupancy = 100; //NOTE fastq is 100%?
     fra.db_graph = db_graph;
     //fp, seq, max_read_length, full_entry, &full_entry
 
@@ -368,7 +320,6 @@ long long load_fasta_from_filename_into_graph(char *filename, short colour,
     printf("Loaded %'lld kmers (bad reads %'lld)\n", loaded_kmers, fra.bad_reads);
     hash_table_print_stats(db_graph);
     return loaded_kmers;
-
 }
 
 //this routine supports big fasta entries (chromosome length for example)
