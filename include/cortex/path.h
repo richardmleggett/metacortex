@@ -61,7 +61,7 @@
 #define PATH_FLAG_IS_DOUBLE_Y           8
 #define PATH_FLAG_IS_CYCLE              16
 #define PATH_FLAG_LONGER_THAN_BUFFER    32
-#define PATH_TOO_COMPEX                 64
+#define PATH_TOO_COMPLEX                 64
 
 //Block of flags for the path (may be useful)
 #define PRINT_FIRST          	(1 <<  0) //x0000 0001

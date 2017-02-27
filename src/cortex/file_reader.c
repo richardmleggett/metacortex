@@ -242,7 +242,7 @@ long long load_fastq_from_filename_into_graph(char *filename, short colour,
     fra.inner_args = &fria;
     fra.insert = true;
     fra.max_read_length = 1000;
-    fra.maximum_ocupancy = 100;
+    fra.maximum_ocupancy = 95;
     fra.db_graph = db_graph;
     //fp, seq, max_read_length, full_entry, &full_entry
 
@@ -312,7 +312,7 @@ long long load_fasta_from_filename_into_graph(char *filename, short colour,
     fra.inner_args = &fria;
     fra.insert = true;
     fra.max_read_length = 1000;
-    fra.maximum_ocupancy = 100; //NOTE fastq is 100%?
+    fra.maximum_ocupancy = 95;
     fra.db_graph = db_graph;
     //fp, seq, max_read_length, full_entry, &full_entry
 

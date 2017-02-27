@@ -272,7 +272,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
 
 
 // ----------------------------------------------------------------------
-// Work through graph, count cov, X, Y nodes
+// Primary routine of metacortex - Work through graph, count cov, X, Y nodes, produce contigs
 // ----------------------------------------------------------------------
 void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int min_subgraph_kmers, int coverage_thresh)
 {
@@ -532,10 +532,67 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
                     // NOTE: unecessary coverage element but repeating the whole path finding without coverage
                     //  is more work than necessary I think. See what processing time it changes?
 
-                    log_printf("[WALKING PATH]\n");
-                    coverage_walk_get_path(seed_node, forward, NULL, graph, path_fwd);
-                    log_printf("[WALKING REV PATH]\n");
-                    coverage_walk_get_path(seed_node, reverse, NULL, graph, path_rev);
+                    // function passed to graph walking
+                    void confident_walk_continue_traversing(pathStep * current_step,
+                                                                     pathStep * next_step,
+                                                                     pathStep * reverse_step,
+                                                                     Path * temp_path,
+                                                                     dBGraph * db_graph)
+                    {
+                        pathStep first;
+                        // int coverage_thresh; is this inherited from overarching function?
+
+                        boolean cont;
+                        cont = current_step->label != Undefined;
+
+                        /* We don't do these checks for the first node - in case it's a Y node */
+                        if (temp_path->length > 1) {
+                            /* Check for a cycle - as this is a perfect path, we only need to check the first node. If we come
+                             back in at one of the other nodes, then it will result in two edges in one orientation */
+                            path_get_step_at_index(0, &first, temp_path);
+                            if (path_step_equals_without_label(&first, current_step)) {
+                                path_add_stop_reason(LAST, PATH_FLAG_IS_CYCLE, temp_path);
+                                cont = false;
+                            }
+
+                            /* Check for visited flag */
+                            if (db_node_check_for_any_flag(next_step->node, next_step->orientation == forward? VISITED_FORWARD:VISITED_REVERSE)) {
+                                cont = false;
+                            }
+
+                            /* Now check for one or more edges moving forward */
+                            if (db_node_edges_count_all_colours(current_step->node, current_step->orientation) == 0) {
+                                path_add_stop_reason(LAST, PATH_FLAG_STOP_BLUNT_END, temp_path);
+                                cont = false;
+                            }
+
+                            /* Check path has space */
+                            if (!path_has_space(temp_path)) {
+                                path_add_stop_reason(LAST, PATH_FLAG_LONGER_THAN_BUFFER, temp_path);
+                                cont = false;
+                            }
+
+                            /* Check next step_has sufficient coverage */
+                            if (element_get_coverage_all_colours(next_step->node) < coverage_thresh) {
+                                cont = false;
+                            }
+                        }
+
+                        return ; //cont;
+                    }
+
+                    if (coverage_thresh==1){
+                      log_printf("[WALKING PATH]\n");
+                      coverage_walk_get_path(seed_node, forward, NULL, graph, path_fwd);
+                      log_printf("[WALKING REV PATH]\n");
+                      coverage_walk_get_path(seed_node, reverse, NULL, graph, path_rev);
+                    }
+                    else{
+                      log_printf("[WALKING PATH]\n");
+                      coverage_walk_get_path(seed_node, forward, &confident_walk_continue_traversing, graph, path_fwd);
+                      log_printf("[WALKING REV PATH]\n");
+                      coverage_walk_get_path(seed_node, reverse, &confident_walk_continue_traversing, graph, path_rev);
+                    }
                     path_reverse(path_fwd, simple_path);
                     path_append(simple_path, path_rev);
                     log_printf("\t[PATH WALKED AND APPENDED]\n");
@@ -546,23 +603,12 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
                         log_printf("Write path of size %d\n", simple_path->length);
                         log_printf("graph size\t%i\n",nodes_in_graph->total_size);
 
-                        // could save the path walking again here if needed, hold these figures in path structure
-                        double average_coverage=0;
-                        int min_coverage=0;
-                        int max_coverage=0;
-                        path_get_statistics(&average_coverage, &min_coverage, &max_coverage, simple_path);
                         // NOTE: decision - minimum cov or average cov dictates confidence threshold met?
-                        if (min_coverage>=coverage_thresh){
-                          // Output for alternative formats
                           if(fp_contigs_gfa!=NULL){
                             fprintf(fp_contigs_gfa, "H %qd", simple_path->id);
                           }
                           path_to_fasta(simple_path, fp_contigs_fasta);
                           path_to_fasta_metacortex(simple_path, fp_contigs_fastg, fp_contigs_gfa, graph);
-                        }
-                        else{
-                          log_printf("Didn't write path of min coverage %d\n", min_coverage);
-                        }
                         counter++;
                     } else {
                         log_printf("Didn't write path of size %d\n", simple_path->length);

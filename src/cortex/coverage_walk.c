@@ -287,11 +287,7 @@ static pathStep *coverage_walk_get_next_step(pathStep * current_step, pathStep *
             next_step->label = coverage_walk_get_best_label(next_step->node, next_step->orientation, db_graph);
         } else if (db_node_edges_count_all_colours(next_step->node, next_step->orientation) > 1) {
             coverage_walk_get_best_label_bubble(next_step, next_step->node, next_step->orientation, db_graph);
-        } //else {
-            //char seq[1024];
-            //binary_kmer_to_seq(&(next_step->node->kmer), db_graph->kmer_size, seq);
-            //printf("  No edge at %s orientation %s\n", seq, next_step->orientation == forward ? "Fwd":"Rev");
-        //}
+        }
     }
 
     return next_step;
@@ -373,6 +369,7 @@ WalkingFunctions * coverage_walk_get_funtions(WalkingFunctions *walking_function
     return walking_functions;
 }
 
+
 /*----------------------------------------------------------------------*
  * Function:                                                            *
  * Purpose:                                                             *
@@ -399,13 +396,15 @@ int coverage_walk_get_path_with_callback(dBNode * node, Orientation orientation,
     //void (*action) (pathStep * step);
     //action = wf.step_action;
 
-    void local_step_action(pathStep * ps) {
+    /*void local_step_action(pathStep * ps) {
         //action(ps);
         node_action(ps->node);
         return;
-    }
+    }*/
     if (node_action != NULL) {
-        wf.step_action = &local_step_action;
+        //wf.step_action = &local_step_action;
+        // replace traversal function with new one
+        wf.continue_traversing = &node_action;
     }
 
     // Setup path action to include passed in path action
@@ -432,6 +431,8 @@ int coverage_walk_get_path_with_callback(dBNode * node, Orientation orientation,
     return ret;
 }
 
+
+
 /*----------------------------------------------------------------------*
  * Function:                                                            *
  * Purpose:                                                             *
@@ -449,3 +450,10 @@ int coverage_walk_get_path(dBNode * node, Orientation orientation, void (*node_a
 
     return path_get_edges_count(path);
 }
+
+
+
+// if coverage < threshold during get_next_step
+//     next_step->orientation == forward? VISITED_FORWARD:VISITED_REVERSE
+
+// action  current_step->label != Undefined;

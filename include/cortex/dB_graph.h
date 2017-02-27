@@ -110,6 +110,13 @@ int db_graph_get_perfect_path_with_first_edge_all_colours(pathStep * first_step,
 														  Path * path,
 														  dBGraph * db_graph);
 
+
+int db_graph_get_perfect_path_with_first_edge_all_colours_confident(pathStep * first_step,
+														  void(*node_action)(dBNode * node),
+														  Path * path,
+														  dBGraph * db_graph,
+															int coverage_thresh);
+
 int db_graph_get_perfect_path_with_first_edge_long(dBNode * node,
 		Orientation orientation, int limit, Nucleotide fst_nucleotide,
 		void(*node_action)(dBNode * node), dBNode * * path_nodes,
