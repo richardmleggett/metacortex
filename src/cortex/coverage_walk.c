@@ -44,6 +44,7 @@
 #include <path.h>
 #include <perfect_path.h>
 #include <logger.h>
+#include <metacortex.h>
 #include "coverage_walk.h"
 
 //int debugme = 0;
@@ -287,7 +288,11 @@ static pathStep *coverage_walk_get_next_step(pathStep * current_step, pathStep *
             next_step->label = coverage_walk_get_best_label(next_step->node, next_step->orientation, db_graph);
         } else if (db_node_edges_count_all_colours(next_step->node, next_step->orientation) > 1) {
             coverage_walk_get_best_label_bubble(next_step, next_step->node, next_step->orientation, db_graph);
-        }
+        } //else {
+            //char seq[1024];
+            //binary_kmer_to_seq(&(next_step->node->kmer), db_graph->kmer_size, seq);
+            //printf("  No edge at %s orientation %s\n", seq, next_step->orientation == forward ? "Fwd":"Rev");
+        //}
     }
 
     return next_step;
@@ -369,7 +374,6 @@ WalkingFunctions * coverage_walk_get_funtions(WalkingFunctions *walking_function
     return walking_functions;
 }
 
-
 /*----------------------------------------------------------------------*
  * Function:                                                            *
  * Purpose:                                                             *
@@ -396,15 +400,13 @@ int coverage_walk_get_path_with_callback(dBNode * node, Orientation orientation,
     //void (*action) (pathStep * step);
     //action = wf.step_action;
 
-    /*void local_step_action(pathStep * ps) {
+    void local_step_action(pathStep * ps) {
         //action(ps);
         node_action(ps->node);
         return;
-    }*/
+    }
     if (node_action != NULL) {
-        //wf.step_action = &local_step_action;
-        // replace traversal function with new one
-        wf.continue_traversing = &node_action;
+        wf.step_action = &local_step_action;
     }
 
     // Setup path action to include passed in path action
@@ -431,8 +433,6 @@ int coverage_walk_get_path_with_callback(dBNode * node, Orientation orientation,
     return ret;
 }
 
-
-
 /*----------------------------------------------------------------------*
  * Function:                                                            *
  * Purpose:                                                             *
@@ -453,7 +453,268 @@ int coverage_walk_get_path(dBNode * node, Orientation orientation, void (*node_a
 
 
 
-// if coverage < threshold during get_next_step
-//     next_step->orientation == forward? VISITED_FORWARD:VISITED_REVERSE
 
-// action  current_step->label != Undefined;
+///////////////////////////////////////////////////////////////////////////////////////
+
+void execute_path_step_callbacks_MinCov(pathStep * p, PathStepActionCallbackArray * callbacks){
+    int i;
+    for (i = 0; i < callbacks->used; i++) {
+        void  (* f)() = callbacks->callback[i];
+        if (callbacks->args[i] == NULL) {
+            f(p);
+        }else{
+            f(p, callbacks->args[i]);
+        }
+    }
+}
+
+
+void execute_path_callbacks_MinCov(Path * p, PathCallbackArray * callbacks){
+    int i;
+    for (i = 0; i < callbacks->used; i++) {
+        void  (* f)() = callbacks->callback[i];
+        if (callbacks->args[i] == NULL) {
+            f(p);
+        }else{
+            f(p, callbacks->args[i]);
+        }
+    }
+}
+
+void execute_node_callbacks_MinCov(dBNode * n, NodeActionCallbackArray * callbacks){
+    int i;
+    for (i = 0; i < callbacks->used; i++) {
+        void  (* f)() = callbacks->callback[i];
+        if (callbacks->args[i] == NULL) {
+            f(n);
+        }else{
+            f(n, callbacks->args[i]);
+        }
+    }
+}
+
+/*----------------------------------------------------------------------*
+ * Function:                                                            *
+ * Purpose:                                                             *
+ * Params:                                                              *
+ * Returns:                                                             *
+ *----------------------------------------------------------------------*/
+boolean min_coverage_walk_continue_traversing(pathStep * current_step,
+                                                 pathStep * next_step,
+                                                 pathStep * reverse_step,
+                                                 Path * temp_path,
+                                                 dBGraph * db_graph,
+                                                 int coverage_thresh)
+{
+    pathStep first;
+
+    boolean cont;
+    cont = current_step->label != Undefined;
+
+    /* We don't do these checks for the first node - in case it's a Y node */
+    if (temp_path->length > 1) {
+        /* Check for a cycle - as this is a perfect path, we only need to check the first node. If we come
+         back in at one of the other nodes, then it will result in two edges in one orientation */
+        path_get_step_at_index(0, &first, temp_path);
+        if (path_step_equals_without_label(&first, current_step)) {
+            path_add_stop_reason(LAST, PATH_FLAG_IS_CYCLE, temp_path);
+            cont = false;
+        }
+
+        /* Check for visited flag */
+        if (db_node_check_for_any_flag(next_step->node, next_step->orientation == forward? VISITED_FORWARD:VISITED_REVERSE)) {
+            cont = false;
+        }
+
+        /* Now check for one or more edges moving forward */
+        if (db_node_edges_count_all_colours(current_step->node, current_step->orientation) == 0) {
+            path_add_stop_reason(LAST, PATH_FLAG_STOP_BLUNT_END, temp_path);
+            cont = false;
+        }
+
+        /* Check path has space */
+        if (!path_has_space(temp_path)) {
+            path_add_stop_reason(LAST, PATH_FLAG_LONGER_THAN_BUFFER, temp_path);
+            cont = false;
+        }
+
+        /* Check next step has high enough coverage */
+        if (coverage_thresh > element_get_coverage_all_colours(next_step->node)) {
+            path_add_stop_reason(LAST, PATH_FLAG_STOP_BLUNT_END, temp_path); // not ideal reason
+            cont = false;
+        }
+    }
+
+    return cont;
+}
+
+
+
+int db_graph_MinCov_walk(pathStep * first_step, Path * path, WalkingFunctions * functions, dBGraph * db_graph, int coverage_threshold)
+{
+	//dBNode * node = first_step->node;
+	//sanity check
+	if (first_step == NULL) {
+		printf("[db_graph_generic_walk] can't pass a null node\n");
+        assert(0);
+		exit(1);
+	}
+
+	if (path == NULL) {
+		printf("[db_graph_generic_walk] can't pass a null path\n");
+        assert(0);
+		exit(1);
+	}
+
+	if (functions == NULL) {
+		printf("[db_graph_generic_walk] can't pass  null functions\n");
+        assert(0);
+		exit(1);
+	}
+
+	if (db_graph == NULL) {
+		printf("[db_graph_generic_walk] can't pass  null db_graph\n");
+        assert(0);
+		exit(1);
+	}
+
+	pathStep current_step, next_step, rev_step;
+
+	path_step_assign(&next_step, first_step);
+    next_step.path = path; //This way, on all the assignments we keep the pointer to the path that was sent to the function originally.
+	functions->get_starting_step(&next_step, db_graph);
+
+	//boolean  try = true;
+	int count = 0;
+    boolean walked;
+    boolean added;
+
+	do {
+		walked = false;
+        do {
+            added = path_add_node(&next_step, path);
+            path_step_assign(&current_step, &next_step);
+            //try = false;
+            functions->pre_step_action(&current_step);
+
+            added = false;
+            if (current_step.label != Undefined) {
+                functions->get_next_step(&current_step, &next_step, &rev_step, db_graph);
+            }
+
+            if (added == false) {
+                // Do something?
+            }
+
+            functions->step_action(&current_step);
+            execute_path_step_callbacks_MinCov(&current_step,&functions->step_actions);
+            execute_node_callbacks_MinCov(current_step.node, &functions->node_callbacks);
+        }
+        while (min_coverage_walk_continue_traversing(&current_step, &next_step, &rev_step, path,db_graph, coverage_threshold));
+
+		if (path->length > 0) {
+			walked = true;
+		}
+
+		if (walked) {
+			count++;
+			functions->output_callback(path);
+            execute_path_callbacks_MinCov(path, &functions->path_callbacks);
+
+		}
+		do {
+			pathStep ps;
+
+			path_get_last_step(&ps, path);
+			if(ps.node != NULL){
+                functions->post_step_action(&ps);
+                path_remove_last(path);
+            }
+		}while (functions->continue_backwards(path, db_graph));
+        if(path_get_length(path) > 0){//This is to enable the backtracking.
+            path_get_last_step(&current_step, path);//The continue_backwards should fix the last step
+            functions->get_next_step(&current_step,&next_step, &rev_step,db_graph);
+
+        }
+	}while (path_get_length(path) > 0);
+	return count;
+}
+
+
+
+/*----------------------------------------------------------------------*
+ * Function:                                                            *
+ * Purpose:                                                             *
+ * Params:                                                              *
+ * Returns:                                                             *
+ *----------------------------------------------------------------------*/
+int min_coverage_walk_get_path_with_callback(dBNode * node, Orientation orientation,
+                                         void (*node_action) (dBNode * node),
+                                         void (*path_action) (Path * path),
+                                         dBGraph * db_graph, int coverage_thresh)
+{
+    // Get walking functions
+    WalkingFunctions wf;
+    coverage_walk_get_funtions(&wf);
+
+    // Setup first step
+    pathStep first;
+    first.node = node;
+    first.orientation = orientation;
+    first.label = Undefined;
+    wf.get_starting_step = &coverage_walk_get_first_label;
+
+    // Setup step action to include passed in node action
+    //void (*action) (pathStep * step);
+    //action = wf.step_action;
+
+    void local_step_action(pathStep * ps) {
+        //action(ps);
+        node_action(ps->node);
+        return;
+    }
+    if (node_action != NULL) {
+        wf.step_action = &local_step_action;
+    }
+
+    // Setup path action to include passed in path action
+    void (*action_path) (Path * p);
+
+    action_path = wf.output_callback;
+
+    void local_path_action(Path * p) {
+        action_path(p);
+        path_action(p);
+        return;
+    }
+    wf.output_callback = local_path_action;
+
+    // Get a buffer for this path
+    Path *path = path_get_buffer_path();
+
+    // Do the walk
+    int ret = db_graph_MinCov_walk(&first, path, &wf, db_graph, coverage_thresh);
+
+    // Free buffer
+    path_free_buffer_path(path);
+
+    return ret;
+}
+
+/*----------------------------------------------------------------------*
+ * Function:                                                            *
+ * Purpose:                                                             *
+ * Params:                                                              *
+ * Returns:                                                             *
+ *----------------------------------------------------------------------*/
+int min_coverage_walk_get_path(dBNode * node, Orientation orientation, void (*node_action) (dBNode * node), dBGraph * db_graph, Path * path, int coverage_thresh)
+{
+    void copy_path(Path * p) {
+        path_copy(path, p);
+    }
+
+    log_printf("\t[NEW-NODE in coverage walk]\n");
+    min_coverage_walk_get_path_with_callback(node, orientation,	node_action, &copy_path, db_graph, coverage_thresh);
+
+    return path_get_edges_count(path);
+}

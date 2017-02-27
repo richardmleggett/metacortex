@@ -90,6 +90,25 @@ typedef struct {
     dBGraph * db_graph;
 } WalkingFunctions;
 
+
+/*typedef struct {
+	pathStep *  (*get_starting_step)(pathStep * step, dBGraph * db_graph );//Used to find the first  step for a given random node.
+	boolean (*continue_backwards)(Path * path, dBGraph * db_graph);
+	void (* post_step_action)(pathStep * step);
+	void (* pre_step_action)(pathStep * step);
+	pathStep * (*get_next_step)(pathStep * current_step, pathStep * next_step, pathStep * reverse_step, dBGraph * db_graph);
+	void (* step_action)(pathStep * step);
+	boolean (*continue_traversing)(pathStep * current_step, pathStep * next_step, pathStep * reverse_step, Path * path,  dBGraph * db_graph, int coverage_thresh);
+	void (* output_callback)(Path * path);
+	PathArray * buffers;
+
+    PathStepActionCallbackArray step_actions;
+    PathCallbackArray   path_callbacks;
+    NodeActionCallbackArray node_callbacks;
+    dBGraph * db_graph;
+		int coverage_threshold;
+} WalkingFunctions_MinCov;*/
+
 boolean db_graph_remove_path_callback(WalkingFunctions * wf, void * funct);
 void db_graph_add_path_callback(WalkingFunctions * wf, void (*path_callback)(Path * path));
 void db_graph_add_step_action(WalkingFunctions * wf, void (*step_action)(pathStep * ps));
@@ -109,13 +128,6 @@ int db_graph_get_perfect_path_with_first_edge_all_colours(pathStep * first_step,
 														  void(*node_action)(dBNode * node),
 														  Path * path,
 														  dBGraph * db_graph);
-
-
-int db_graph_get_perfect_path_with_first_edge_all_colours_confident(pathStep * first_step,
-														  void(*node_action)(dBNode * node),
-														  Path * path,
-														  dBGraph * db_graph,
-															int coverage_thresh);
 
 int db_graph_get_perfect_path_with_first_edge_long(dBNode * node,
 		Orientation orientation, int limit, Nucleotide fst_nucleotide,
