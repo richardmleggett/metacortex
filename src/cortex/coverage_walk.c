@@ -215,6 +215,9 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Or
             paths[nucleotide] = path_new(MAX_BRANCH_LENGTH, db_graph->kmer_size);
             db_graph_get_perfect_path_with_first_edge_all_colours(&current_step, &db_node_action_do_nothing, paths[nucleotide], db_graph);
             path_get_statistics(&avg_coverage, &min_coverage, &max_coverage, paths[nucleotide]);
+            if(min_coverage<coverage_thresh){
+              // destroy path
+            }
             all_coverages[nucleotide] = avg_coverage;
             all_lengths[nucleotide] = paths[nucleotide]->length;
 
@@ -288,11 +291,7 @@ static pathStep *coverage_walk_get_next_step(pathStep * current_step, pathStep *
             next_step->label = coverage_walk_get_best_label(next_step->node, next_step->orientation, db_graph);
         } else if (db_node_edges_count_all_colours(next_step->node, next_step->orientation) > 1) {
             coverage_walk_get_best_label_bubble(next_step, next_step->node, next_step->orientation, db_graph);
-        } //else {
-            //char seq[1024];
-            //binary_kmer_to_seq(&(next_step->node->kmer), db_graph->kmer_size, seq);
-            //printf("  No edge at %s orientation %s\n", seq, next_step->orientation == forward ? "Fwd":"Rev");
-        //}
+        }
     }
 
     return next_step;
@@ -499,6 +498,33 @@ void execute_node_callbacks_MinCov(dBNode * n, NodeActionCallbackArray * callbac
  * Params:                                                              *
  * Returns:                                                             *
  *----------------------------------------------------------------------*/
+pathStep* min_coverage_walk_get_first_label(pathStep * first_step, dBGraph * db_graph, int coverage_thresh)
+{
+    //char seq[1024];
+    //debugme = 1;
+    first_step->label = Undefined;
+
+    if (db_node_edges_count_all_colours(first_step->node, first_step->orientation)==1){ // for simple, non-branching nodes
+        first_step->label = coverage_walk_get_best_label(first_step->node, first_step->orientation, db_graph);
+        if(coverage_thresh>){
+          first_step->label = Undefined;
+        }
+    } else {
+        min_coverage_walk_get_best_label_bubble(first_step, first_step->node, first_step->orientation, db_graph, coverage_thresh);
+    }
+
+    //debugme = 0;
+    //binary_kmer_to_seq(&(first_step->node->kmer), db_graph->kmer_size, seq);
+    //log_printf("  First kmer %s first label %c\n", seq, binary_nucleotide_to_char(first_step->label));
+    return first_step;
+}
+
+/*----------------------------------------------------------------------*
+ * Function:                                                            *
+ * Purpose:                                                             *
+ * Params:                                                              *
+ * Returns:                                                             *
+ *----------------------------------------------------------------------*/
 boolean min_coverage_walk_continue_traversing(pathStep * current_step,
                                                  pathStep * next_step,
                                                  pathStep * reverse_step,
@@ -662,7 +688,7 @@ int min_coverage_walk_get_path_with_callback(dBNode * node, Orientation orientat
     first.node = node;
     first.orientation = orientation;
     first.label = Undefined;
-    wf.get_starting_step = &coverage_walk_get_first_label;
+    wf.get_starting_step = &min_coverage_walk_get_first_label;
 
     // Setup step action to include passed in node action
     //void (*action) (pathStep * step);
