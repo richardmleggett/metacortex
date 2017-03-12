@@ -49,7 +49,7 @@ typedef struct {
     int highest_cov;
 } GraphInfo;
 
-void find_subgraph_stats(dBGraph* graph, char* consensus_contigs_filename, int min_subgraph_kmers, int coverage_thresh);
+void find_subgraph_stats(dBGraph* graph, char* consensus_contigs_filename, int min_subgraph_kmers);
 
 void print_degree_stats(GraphInfo * nodes_in_graph, FILE* fp_degrees);
 

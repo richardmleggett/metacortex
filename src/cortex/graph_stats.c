@@ -274,7 +274,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
 // ----------------------------------------------------------------------
 // Work through graph, count cov, X, Y nodes
 // ----------------------------------------------------------------------
-void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int min_subgraph_kmers, int coverage_thresh)
+void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int min_subgraph_kmers)
 {
     FILE* fp_analysis;
     FILE* fp_report;
@@ -287,8 +287,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     long int total_nodes = 0;
     int i;  int j; float percentage;
     int counter= 0;
-
-    //double coverage_thresh=2; // NOTE, THIS NEEDS TO BE USER DEFINED IN THE FUTURE
 
     char cwd[1024];
 

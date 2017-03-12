@@ -47,26 +47,26 @@ void usage(void)
     printf("\nusage: metacortex [-h] [--input file_of_files] [--mem_height n] [--dump_binary bin_output] [--input_format fastq|fasta|binary] [--output_contigs contigs.fa] \n");
     printf("\n" \
     "   [-h|--help] = This help screen.\n" \
+    "   [-a|--remove_bubbles] = Removes the bubbles in the graph.\n"\
+    "   [-b|--mem_width INT] = Size of hash table buckets (default 100).\n" \
+    "   [-c|--tip_clip INT] = Clips the tips in the graph, the argument defines the max length for the tips.\n" \
+    "   [-C|--high_confidence INT] = Only outputs contigs which have no nodes with coverage below THESHOLD.\n" \
+    "   [-e|--output_coverages] = Print coverages for contigs/supernodes in a different file with _cov suffix.\n" \
+    "   [-d|--ouput_contigs FILENAME] = Fasta file with all the contigs (after applying all specified actions on graph).\n" \
+    "   [-f|--ouput_supernodes FILENAME] = Fasta file with all the supernodes (after applying all specified actions on graph).\n" \
+    "   [-g|--min_contig_length] = minimum contig length produced.\n" \
     "   [-i|--input FILENAME] = File of filenames to be processed (start and end read is optional, format <filename>  <start read index>  <end read index> ).\n" \
     "   [-k|--kmer_size INT] = Kmer size (default 21), it has to be an odd number.\n" \
-    "   [-b|--mem_width INT] = Size of hash table buckets (default 100).\n" \
     "   [-n|--mem_height INT] = Number of buckets in hash table in bits (default 10, this is a power of 2, ie 2^mem_height).\n" \
-    "   [-c|--tip_clip INT] = Clips the tips in the graph, the argument defines the max length for the tips.\n" \
-    "   [-C|--high_confidence INT] = Only ouptuts contigs which have no nodes with coverage below THESHOLD.\n" \
-    "   [-z|--remove_low_coverage_kmers INT] = Filter for kmers with coverage in the threshold or smaller.\n" \
-    "   [-q|--quality_score_threshold INT] = Filter for quality scores in the input file, any k-mer wiht a base wiht quality in the threshold or smaller is not considered (default 0).\n" \
     "   [-o|--dump_binary FILENAME] = Dump binary for graph in file (after applying all specified actions on graph).\n" \
-    "   [-f|--ouput_supernodes FILENAME] = Fasta file with all the supernodes (after applying all specified actions on graph).\n" \
-    "   [-d|--ouput_contigs FILENAME] = Fasta file with all the contigs (after applying all specified actions on graph).\n" \
-    "   [-t|--input_format FORMAT] = File format for input (binary | fasta | fastq | hash ).\n" \
-    "   [-e|--output_coverages] = Print coverages for contigs/supernodes in a different file with _cov suffix.\n" \
-    "   [-g|--min_contig_length] = minimum contig length produced.\n" \
-    "   [-u|--remove_seq_errors] = remove sequence of kmers induced by errors. Equivalent to --remove_low_coverage_kmers 1\n"\
-    "   [-a|--remove_bubbles] = Removes the bubbles in the graph.\n"\
-    "   [-Z|--max_read_len] = Maximum read length over all input files.\n"\
-    "   [-p|--quality_score_offset] = Fastq quality offset. Default 33. Use 63 for illumina.\n"\
-    "   [-q|--quality_score_threshold ] = The minimiun phred value for a base to be considered in an assembly.\n"\
     "   [-O|--hash_output_file ] = Dumps the whole graph into a file. Read with the input_format hash. The file stores the information required to restore the hash table, hence mem_height and mem_width don't have any effect."
+    "   [-p|--quality_score_offset] = Fastq quality offset. Default 33. Use 63 for illumina.\n"\
+    "   [-q|--quality_score_threshold INT] = Filter for quality scores in the input file, any k-mer wiht a base with quality in the threshold or smaller is not considered (default 0).\n"\
+    "   [-q|--quality_score_threshold ] = The minimiun phred value for a base to be considered in an assembly.\n"\
+    "   [-t|--input_format FORMAT] = File format for input (binary | fasta | fastq | hash ).\n" \
+    "   [-u|--remove_seq_errors] = remove sequence of kmers induced by errors. Equivalent to --remove_low_coverage_kmers 1\n"\
+    "   [-z|--remove_low_coverage_kmers INT] = Filter for kmers with coverage in the threshold or smaller.\n" \
+    "   [-Z|--max_read_len] = Maximum read length over all input files.\n"\
     "\n");
     printf("\n");
 }
@@ -108,6 +108,7 @@ int default_opts(CmdLine * c)
     c->print_uncertain_as_n = true;
     c->output_log = false;
     c->min_contig_length = 0;
+    c->path_coverage_threshold = 1;
 
     //-----------
     //parameters
@@ -139,7 +140,6 @@ int default_opts(CmdLine * c)
     //c->output_ctx_filename required
     //c->output_fasta_filename required
     //c->output_graphviz_filename required
-    c->coverage_thresh = 1;
     c->singleton_length = 100;
     c->algorithm = METACORTEX_CONSENSUS;
 	c->max_length=200000;
@@ -458,10 +458,10 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
             case 'C':
                 if (optarg == NULL) {
                     errx(1, "[-C | --high_confidence] option called without value, using default threshold (2)");
-                    cmd_line.coverage_thresh=2;
+                    cmd_line.path_coverage_threshold=2;
                 }
                 else{
-                  cmd_line.coverage_thresh = atoi(optarg);
+                  cmd_line.path_coverage_threshold = atoi(optarg);
                 }
                 cmd_line.high_confidence=true;
                 break;

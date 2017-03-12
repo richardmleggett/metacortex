@@ -122,7 +122,6 @@ typedef struct
     char log_filename[LENGTH_FILENAME];
     char output_kmer_coverage[LENGTH_FILENAME];
 		char output_reference_coverage_file[LENGTH_FILENAME];
-		int coverage_thresh;
 		int max_length;
     int singleton_length;
     int min_subgraph_size;

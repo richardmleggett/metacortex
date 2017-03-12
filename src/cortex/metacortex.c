@@ -327,8 +327,6 @@ int main(int argc, char **argv)
 		log_and_screen_printf("\nRemove low coverage nodes (<=%'d) \n", cmd_line.node_coverage_threshold);
 		fflush(stdout);
 		cleaning_remove_low_coverage(cmd_line.node_coverage_threshold, db_graph);
-        //		db_graph_remove_low_coverage_nodes
-        //		    (cmd_line.node_coverage_threshold, db_graph);
         hash_table_print_stats(db_graph);
 
 	}
@@ -447,8 +445,11 @@ int main(int argc, char **argv)
                   sprintf(cmd_line.output_fasta_filename, "%s.high_conf", cmd_line.output_fasta_filename);
                 }
 
+                // pass path_coverage_threshold value to dBgraph for use later
+                db_graph->path_coverage_threshold = cmd_line.path_coverage_threshold;
+
                 log_and_screen_printf("\nSearching graph for stats...\n");
-                find_subgraph_stats(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.coverage_thresh);
+                find_subgraph_stats(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size);
 
 
                 /* Put all of this into a seperate command line call (BUBBLEFIND)*/

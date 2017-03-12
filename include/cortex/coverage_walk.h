@@ -29,8 +29,3 @@
  */
 
 int coverage_walk_get_path(dBNode * node, Orientation orientation, void (*node_action) (dBNode * node), dBGraph * db_graph, Path * path);
-
-int min_coverage_walk_get_path(dBNode * node, Orientation orientation, void (*node_action) (dBNode * node), dBGraph * db_graph, Path * path, int coverage_thresh);
-
-
-int db_graph_MinCov_walk(pathStep * first_step, Path * path, WalkingFunctions * functions, dBGraph * db_graph, int coverage_thresh);
