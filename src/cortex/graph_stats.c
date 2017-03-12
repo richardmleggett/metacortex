@@ -533,16 +533,10 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
                     //  is more work than necessary I think. See what processing time it changes?
 
                     log_printf("[WALKING PATH]\n");
-                    if (coverage_thresh>1){
-                      min_coverage_walk_get_path(seed_node, forward, NULL, graph, path_fwd, coverage_thresh);
-                      log_printf("[WALKING REV PATH]\n");
-                      min_coverage_walk_get_path(seed_node, reverse, NULL, graph, path_rev, coverage_thresh);
-                    }
-                    else{
-                      coverage_walk_get_path(seed_node, forward, NULL, graph, path_fwd);
-                      log_printf("[WALKING REV PATH]\n");
-                      coverage_walk_get_path(seed_node, reverse, NULL, graph, path_rev);
-                    }
+                    coverage_walk_get_path(seed_node, forward, NULL, graph, path_fwd);
+                    log_printf("[WALKING REV PATH]\n");
+                    coverage_walk_get_path(seed_node, reverse, NULL, graph, path_rev);
+
                     path_reverse(path_fwd, simple_path);
                     path_append(simple_path, path_rev);
                     log_printf("\t[PATH WALKED AND APPENDED]\n");
@@ -559,17 +553,12 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
                         int max_coverage=0;
                         path_get_statistics(&average_coverage, &min_coverage, &max_coverage, simple_path);
                         // NOTE: decision - minimum cov or average cov dictates confidence threshold met?
-                        if (min_coverage>=coverage_thresh){
-                          // Output for alternative formats
-                          if(fp_contigs_gfa!=NULL){
-                            fprintf(fp_contigs_gfa, "H %qd", simple_path->id);
-                          }
-                          path_to_fasta(simple_path, fp_contigs_fasta);
-                          path_to_fasta_metacortex(simple_path, fp_contigs_fastg, fp_contigs_gfa, graph);
+                        // Output for alternative formats
+                        if(fp_contigs_gfa!=NULL){
+                          fprintf(fp_contigs_gfa, "H %qd", simple_path->id);
                         }
-                        else{
-                          log_printf("Didn't write path of min coverage %d\n", min_coverage);
-                        }
+                        path_to_fasta(simple_path, fp_contigs_fasta);
+                        path_to_fasta_metacortex(simple_path, fp_contigs_fastg, fp_contigs_gfa, graph);
                         counter++;
                     } else {
                         log_printf("Didn't write path of size %d\n", simple_path->length);
