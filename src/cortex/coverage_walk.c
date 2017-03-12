@@ -104,7 +104,7 @@ Nucleotide coverage_walk_get_best_label(dBNode* node, Orientation orientation, d
             coverage = element_get_coverage_all_colours(next_step.node);
 
             //if (debugme) log_printf("  Coverage %i\n", coverage);
-            if (coverage > highest_coverage) {
+            if ((coverage > db_graph->path_coverage_threshold) &&  (coverage > highest_coverage)) {
                 label = nucleotide;
                 highest_coverage = coverage;
             }
@@ -215,14 +215,16 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Or
             paths[nucleotide] = path_new(MAX_BRANCH_LENGTH, db_graph->kmer_size);
             db_graph_get_perfect_path_with_first_edge_all_colours(&current_step, &db_node_action_do_nothing, paths[nucleotide], db_graph);
             path_get_statistics(&avg_coverage, &min_coverage, &max_coverage, paths[nucleotide]);
-            /*if(min_coverage<coverage_thresh){     // NOTE return here when hash includes coverage_thresh 
-              // destroy path
+            if(min_coverage<db_graph->path_coverage_threshold){
+              all_coverages[nucleotide] = 0;
             }
-            all_coverages[nucleotide] = avg_coverage;
-            all_lengths[nucleotide] = paths[nucleotide]->length;*/
+            else{
+              all_coverages[nucleotide] = avg_coverage;
+              all_lengths[nucleotide] = paths[nucleotide]->length;
 
-            nodes[nucleotide] = paths[nucleotide]->nodes[paths[nucleotide]->length-1];
-            // Add end node to list of nodes to visit
+              nodes[nucleotide] = paths[nucleotide]->nodes[paths[nucleotide]->length-1];
+              // Add end node to list of nodes to visit
+            }
         }
     }
 
@@ -348,6 +350,12 @@ static boolean coverage_walk_continue_traversing(pathStep * current_step,
             //log_printf("  Stopped for longer than buffer at %s\n", seq);
             path_add_stop_reason(LAST, PATH_FLAG_LONGER_THAN_BUFFER, temp_path);
             cont = false;
+        }
+
+        if (element_get_coverage_all_colours(next_step->node) < db_graph->path_coverage_threshold){
+          // check coverage for next step meets min threshold
+          printf("  Path stopped; next node coverage is too low\n");
+          cont = false;
         }
     }
 

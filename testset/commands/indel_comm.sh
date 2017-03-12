@@ -30,7 +30,7 @@ mkdir graphs; chmod 755 graphs
 
 echo ${filename} > ${file_list}
 
-${meta_p} -k ${kmer} -n ${n} -b ${b} -i ${file_list} -t fasta -o ${cortex_file} -f ${contig_file} -g 100 -l ${log_file}  -S -G graph_out.gv
+${meta_p} -k ${kmer} -n ${n} -b ${b} -i ${file_list} -t fasta -o ${cortex_file} -f ${contig_file} -g 100 -l ${log_file}  -S -G graph_out.gv # -C 2
 
 #dot -Tdot graph_out.gv -o graph_out.dot
 
