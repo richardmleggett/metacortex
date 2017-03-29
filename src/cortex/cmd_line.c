@@ -458,7 +458,7 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
             case 'C':
                 if (optarg == NULL) {
                     errx(1, "[-C | --high_confidence] option called without value, using default threshold (2)");
-                    cmd_line.path_coverage_threshold=2;
+                    cmd_line.path_coverage_threshold=1;
                 }
                 else{
                   cmd_line.path_coverage_threshold = atoi(optarg);
