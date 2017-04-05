@@ -474,30 +474,38 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
             log_and_screen_printf("Error: Coverage is <1 in the graph?\n");
             exit(-1);
         }
-        this_coverage = (this_coverage-1);
 
-        if(this_coverage>COVERAGE_BINS*COVERAGE_BIN_SIZE-1){
-            this_coverage = COVERAGE_BINS*COVERAGE_BIN_SIZE-1;
-        }
 
-        Coverage_Dist[this_coverage]++;
-        total_nodes++;
+      // PARTITIONING - REMOVE EXTREMELY CONNECTED NODES
+        if (edges_forward+edges_reverse<5){
+          this_coverage = (this_coverage-1);
 
-        // Look for Y shape branch forward orientation
-        // The nodes at the top of the Y should contain different colours
-        if (edges_forward > 1
-            && edges_reverse == 1) {
-            db_node_action_set_flag(node, BRANCH_NODE_FORWARD);
+          if(this_coverage>COVERAGE_BINS*COVERAGE_BIN_SIZE-1){
+              this_coverage = COVERAGE_BINS*COVERAGE_BIN_SIZE-1;
+          }
+
+          Coverage_Dist[this_coverage]++;
+          total_nodes++;
+
+          // Look for Y shape branch forward orientation
+          // The nodes at the top of the Y should contain different colours
+          if (edges_forward > 1
+              && edges_reverse == 1) {
+              db_node_action_set_flag(node, BRANCH_NODE_FORWARD);
+          }
+          // Look for Y shape branch reverse orientation
+          if (edges_reverse > 1
+              && edges_forward == 1) {
+              db_node_action_set_flag(node, BRANCH_NODE_REVERSE);
+          }
+          // Look for X-shaped branch
+          if (edges_reverse > 1
+              && edges_forward > 1) {
+              db_node_action_set_flag(node, X_NODE);
+          }
         }
-        // Look for Y shape branch reverse orientation
-        if (edges_reverse > 1
-            && edges_forward == 1) {
-            db_node_action_set_flag(node, BRANCH_NODE_REVERSE);
-        }
-        // Look for X-shaped branch
-        if (edges_reverse > 1
-            && edges_forward > 1) {
-            db_node_action_set_flag(node, X_NODE);
+        else{
+            cleaning_prune_db_node(node, graph);
         }
     } // identify_branch_nodes()
 
@@ -631,7 +639,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     // second travesal - build subgraphs out.
     //log_printf("\t2ND TRAVERSAL?\n");
     log_and_screen_printf("Full traversal started...");
-    hash_table_traverse(&explore_node, graph);  
+    hash_table_traverse(&explore_node, graph);
     log_and_screen_printf("DONE\n");
     fclose(fp_analysis);
     fclose(fp_degrees);
