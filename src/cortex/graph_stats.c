@@ -307,7 +307,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
 
 
 // ----------------------------------------------------------------------
-// Work through graph, count cov, X, Y nodes
+// Work through graph, count coverage, X, Y nodes
 // ----------------------------------------------------------------------
 void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int min_subgraph_kmers)
 {
@@ -396,7 +396,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     }
 
     /* Open gfa contigs file */
-    sprintf(gfa_filename, "%s.gfa", basename(consensus_contigs_filename));
+    sprintf(gfa_filename, "%s.gfa", consensus_contigs_filename);
     fp_contigs_gfa = fopen(gfa_filename, "w");
     if (!fp_contigs_gfa) {
         log_and_screen_printf("ERROR: Can't open contig (gfa) file.\n%s\n", gfa_filename);
@@ -431,6 +431,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
         sprintf(analysis_filename, "%s/graphs/%s.tex", dirname(consensus_contigs_filename), basename(consensus_contigs_filename));
         sprintf(graph_wd, "%s/graphs/", dirname(consensus_contigs_filename));
     }
+
+
 
     mkdir(graph_wd, 777);
 
