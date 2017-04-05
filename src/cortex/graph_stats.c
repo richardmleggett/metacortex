@@ -510,7 +510,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     /* Initialise temporaray path array buffers */
     path_array_initialise_buffers(graph->kmer_size);
 
-    // Hash table iterator to walk nodes, looking for branches
+    // Hash table iterator to walk graphs, produce paths
     void explore_node(dBNode * node) {
         if(db_node_check_for_any_flag(node, PRUNED | VISITED) == false){
 
@@ -559,7 +559,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
                 }
 
                 /* enough nodes to bother with? If so, get consensus contig */
-                if (nodes_in_graph->total_size >= min_subgraph_kmers) {
+                if (0){ //}(nodes_in_graph->total_size >= min_subgraph_kmers) {
 
                     // should be a perfect path? might be two paths though, if we started in the middle
                     // NOTE: unecessary coverage element but repeating the whole path finding without coverage
