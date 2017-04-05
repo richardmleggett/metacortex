@@ -630,9 +630,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
     // second travesal - build subgraphs out.
     //log_printf("\t2ND TRAVERSAL?\n");
-    log_and_screen_printf("Full traversal skipped...");
-    /*log_and_screen_printf("Full traversal started...");
-      hash_table_traverse(&explore_node, graph);  */
+    log_and_screen_printf("Full traversal started...");
+    hash_table_traverse(&explore_node, graph);  
     log_and_screen_printf("DONE\n");
     fclose(fp_analysis);
     fclose(fp_degrees);
