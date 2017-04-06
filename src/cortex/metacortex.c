@@ -61,8 +61,8 @@ typedef struct {
 } ReadFileDescriptor;
 
 #define FILE_LIST_SIZE 1024
-#define TOTAL_MAX_LENGTH 10000
-#define BUBBLE_MAX_DEPTH 10
+#define TOTAL_MAX_LENGTH 10000  // bubble_find.c
+#define BUBBLE_MAX_DEPTH 10     // bubble_find.c
 
 void write_graphviz_file(char *filename, dBGraph * db_graph);
 void timestamp();

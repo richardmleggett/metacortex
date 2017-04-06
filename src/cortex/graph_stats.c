@@ -48,6 +48,7 @@
 #define NUM_BEST_NODES 5
 #define MIN_CONTIG_SIZE 10
 #define MIN_SUBGRAPH_SIZE 2000
+#define MAX_NODE_EDGES 9
 
 
 /*----------------------------------------------------------------------*
@@ -114,11 +115,19 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
 
                 // check for path coverage here
                 int starting_coverage = element_get_coverage_all_colours(node);
+
                 double path_coverage=0;
-                int min_coverage=0;
-                int max_coverage=0;
+                int min_coverage=0; int max_coverage=0; // required for path_get_statistics()
+                float delta_coverage=0.5;     // NOTE def earlier, just here for now
+                delta_coverage = delta_coverage * (float) starting_coverage;
+                min_coverage=starting_coverage - (int) delta_coverage;
+                if (min_coverage <1){
+                  min_coverage=1;
+                }
+                max_coverage=starting_coverage + (int) delta_coverage + 1;
+                log_and_screen_printf("checking path coverages; start (%i), max (%i), min (%i), path (%d)\n", starting_coverage, min_coverage, max_coverage, path_coverage);
                 path_get_statistics(&path_coverage, &min_coverage, &max_coverage, new_path);
-                if (((float)starting_coverage > path_coverage*0.5) && ((float)starting_coverage < path_coverage*1.5))  {
+                if ((starting_coverage >= min_coverage) && (starting_coverage <= max_coverage))  {
 
                   // Add end node to list of nodes to visit
                   end_node = new_path->nodes[new_path->length-1];
@@ -260,6 +269,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                 }
                 else{
                   cleaning_prune_db_node(new_path->nodes[new_path->length-1], graph);
+                  // NOTE best_node - needs to be checked here. Don't want to return NULL
                 }
 
                 // Clean up
@@ -478,8 +488,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
         }
 
 
-      // PARTITIONING - REMOVE EXTREMELY CONNECTED NODES
-        if (edges_forward+edges_reverse<5){
+      // PARTITIONING - REMOVE EXTREMELY BRANCHED NODES
+        if (edges_forward+edges_reverse<MAX_NODE_EDGES){
           this_coverage = (this_coverage-1);
 
           if(this_coverage>COVERAGE_BINS*COVERAGE_BIN_SIZE-1){
