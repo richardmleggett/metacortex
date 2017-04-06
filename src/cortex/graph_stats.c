@@ -48,7 +48,7 @@
 #define NUM_BEST_NODES 5
 #define MIN_CONTIG_SIZE 10
 #define MIN_SUBGRAPH_SIZE 2000
-#define MAX_NODE_EDGES 9
+#define MAX_NODE_EDGES 6
 
 
 /*----------------------------------------------------------------------*
@@ -493,7 +493,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
 
       // PARTITIONING - REMOVE EXTREMELY BRANCHED NODES
-        if (edges_forward+edges_reverse<MAX_NODE_EDGES){
+        if (edges_forward+edges_reverse<=MAX_NODE_EDGES){
           this_coverage = (this_coverage-1);
 
           if(this_coverage>COVERAGE_BINS*COVERAGE_BIN_SIZE-1){
