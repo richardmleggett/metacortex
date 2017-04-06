@@ -575,8 +575,9 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
 
             case 'R':
                 if (optarg == NULL)
-                    errx(1,"[-R ] delta_coverage option requires float argument");
+                    errx(1,"[-R ] delta_coverage option requires int argument (as a percentage)");
                 cmd_line.delta_coverage = atoi(optarg);
+                cmd_line.delta_coverage=cmd_line.delta_coverage/100;
                 break;
 
             case 'S':

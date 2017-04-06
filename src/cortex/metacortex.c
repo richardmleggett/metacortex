@@ -147,6 +147,8 @@ boolean add_read_file(char* filename, int colour, int pair, int* n_files, ReadFi
 void output_basic_info(CmdLine cmd_line)
 {
     log_and_screen_printf("Max k: %i\n", (NUMBER_OF_BITFIELDS_IN_BINARY_KMER*32)-1);
+    log_and_screen_printf("max_node_edges: %i\n", (cmd_line.max_node_edges));
+    log_and_screen_printf("delta_coverage: %f\n", (cmd_line.delta_coverage));
     if (cmd_line.input_file_format == FASTQ) {
         log_and_screen_printf("Quality score offset: %i", cmd_line.quality_score_offset);
         if (cmd_line.quality_score_offset == 33) {
@@ -449,7 +451,7 @@ int main(int argc, char **argv)
                 db_graph->path_coverage_threshold = cmd_line.path_coverage_threshold;
 
                 log_and_screen_printf("\nSearching graph for stats...\n");
-                find_subgraph_stats(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size);
+                find_subgraph_stats(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.max_node_edges, cmd_line.delta_coverage);
 
 
                 /* Put all of this into a seperate command line call (BUBBLEFIND)*/
