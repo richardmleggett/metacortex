@@ -118,17 +118,21 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
 
                 double path_coverage=0;
                 int min_coverage=0; int max_coverage=0; // required for path_get_statistics()
-                float delta_coverage=0.5;     // NOTE def earlier, just here for now
+               	path_get_statistics(&path_coverage, &min_coverage, &max_coverage, new_path);
+
+		 float delta_coverage=0.5;     // NOTE def earlier, just here for now
                 delta_coverage = delta_coverage * (float) starting_coverage;
                 min_coverage=starting_coverage - (int) delta_coverage;
                 if (min_coverage <1){
                   min_coverage=1;
                 }
-                max_coverage=starting_coverage + (int) delta_coverage + 1;
-                log_and_screen_printf("checking path coverages; start (%i), max (%i), min (%i), path (%i)\n", starting_coverage, min_coverage, max_coverage, (int) path_coverage);
-                path_get_statistics(&path_coverage, &min_coverage, &max_coverage, new_path);
-                if ((starting_coverage >= min_coverage) && (starting_coverage <= max_coverage))  {
-
+		if (delta_coverage<1){
+                  delta_coverage=1;
+                }
+                max_coverage=starting_coverage + (int) delta_coverage;
+//                log_and_screen_printf("checking path coverages; start (%i), min (%i), max (%i), path (%f), delta (%f)\n", starting_coverage, min_coverage, max_coverage, path_coverage, delta_coverage);
+                if ((path_coverage >= min_coverage) && (path_coverage <= max_coverage))  {
+//log_and_screen_printf("\tCOV PASSES\n");
                   // Add end node to list of nodes to visit
                   end_node = new_path->nodes[new_path->length-1];
                   end_orientation = new_path->orientations[new_path->length - 1];
