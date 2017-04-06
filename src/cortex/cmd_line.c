@@ -128,6 +128,8 @@ int default_opts(CmdLine * c)
 
     //cleaning
     //c->node_coverage_threshold required
+    c->max_node_edges = 9; //TODO
+    c->delta_coverage = 100; //TODO
     c->tip_length = 100; //TODO
     c->tip_clip_iterations = 100;
     //c->remove_low_coverage_supernodes_threshold required;
@@ -142,7 +144,7 @@ int default_opts(CmdLine * c)
     //c->output_graphviz_filename required
     c->singleton_length = 100;
     c->algorithm = METACORTEX_CONSENSUS;
-	c->max_length=200000;
+	  c->max_length=200000;
     c->min_subgraph_size=0;
 
 	return 1;
@@ -183,6 +185,7 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
         {"dump_binary", required_argument, NULL, 'o'},
         {"quality_score_offset", required_argument, NULL, 'p'},
         {"quality_score_threshold", required_argument, NULL, 'q'},
+        {"max_node_edges", required_argument, NULL, 'r'},  // using still available letters
         {"remove_low_coverage_supernodes", required_argument, NULL,'s'},
         {"input_format", required_argument, NULL, 't'},
         {"remove_seq_errors", no_argument, NULL, 'u'},
@@ -198,13 +201,14 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
         {"multiple_subgraph_contigs",no_argument,NULL,'M'},
         {"hash_output_file", required_argument, NULL, 'O'},
         {"tip_clip_iterations", required_argument, NULL, 'P'},
+        {"delta_coverage", required_argument, NULL, 'R'},  // using still available letters
         {"graph_stats", no_argument, NULL, 'S'},
         {"threads", required_argument, NULL, 'T'},
         {0, 0, 0, 0}
     };
 
     while ((opt = getopt_long(argc, argv,
-                              "ab:c:d:ef:g:hi:jk:l:m:n:o:p:q:s:t:uvw:x:z:A:B:C:D:E:FG:H:I:J:K:L:MN:O:P:STZ:",
+                              "ab:c:d:ef:g:hi:jk:l:m:n:o:p:q:r:s:t:uvw:x:z:A:B:C:D:E:FG:H:I:J:K:L:MN:O:P:R:STZ:",
                               long_options, &longopt_index)) > 0)
     {
         //Parse the default options
@@ -387,6 +391,12 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                 }
                 break;
 
+            case 'r':
+                if (optarg == NULL)
+                    errx(1,"[-r ] max_node_edges option requires int argument");
+                cmd_line.max_node_edges = atoi(optarg);
+                break;
+
             case 's': //remove_low_coverage_supernodes
                 cmd_line.remove_low_coverage_supernodes=true;
                 if (optarg==NULL)
@@ -564,10 +574,9 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                 break;
 
             case 'R':
-                errx(1, "454 quality files not implemented yet. Use the regular fasta format. \n");
-                cmd_line.input_file_format_known = true;
-                cmd_line.input_file_format = ROCHE;
-                printf ("Doing 454\n");
+                if (optarg == NULL)
+                    errx(1,"[-R ] delta_coverage option requires float argument");
+                cmd_line.delta_coverage = atoi(optarg);
                 break;
 
             case 'S':

@@ -91,7 +91,6 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                 exit(-1);
             }
 
-
             // If not already visited the first node, walk it...
             if (!db_node_check_flag_visited(next_node)) {
                 pathStep first_step;
@@ -109,9 +108,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                     exit(-1);
                 }
 
-
                 db_graph_get_perfect_path_with_first_edge_all_colours(&first_step, &db_node_action_do_nothing, new_path, graph);
-
 
                 // check for path coverage here
                 int starting_coverage = element_get_coverage_all_colours(node);
@@ -120,19 +117,17 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                 int min_coverage=0; int max_coverage=0; // required for path_get_statistics()
                	path_get_statistics(&path_coverage, &min_coverage, &max_coverage, new_path);
 
-		 float delta_coverage=0.5;     // NOTE def earlier, just here for now
+		            float delta_coverage=0.5;     // NOTE def earlier, just here for now
                 delta_coverage = delta_coverage * (float) starting_coverage;
                 min_coverage=starting_coverage - (int) delta_coverage;
                 if (min_coverage <1){
                   min_coverage=1;
                 }
-		if (delta_coverage<1){
+		            if (delta_coverage<1){
                   delta_coverage=1;
                 }
                 max_coverage=starting_coverage + (int) delta_coverage;
-//                log_and_screen_printf("checking path coverages; start (%i), min (%i), max (%i), path (%f), delta (%f)\n", starting_coverage, min_coverage, max_coverage, path_coverage, delta_coverage);
                 if ((path_coverage >= min_coverage) && (path_coverage <= max_coverage))  {
-//log_and_screen_printf("\tCOV PASSES\n");
                   // Add end node to list of nodes to visit
                   end_node = new_path->nodes[new_path->length-1];
                   end_orientation = new_path->orientations[new_path->length - 1];
