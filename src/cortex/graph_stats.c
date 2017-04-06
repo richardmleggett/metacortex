@@ -125,7 +125,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                   min_coverage=1;
                 }
                 max_coverage=starting_coverage + (int) delta_coverage + 1;
-                log_and_screen_printf("checking path coverages; start (%i), max (%i), min (%i), path (%d)\n", starting_coverage, min_coverage, max_coverage, path_coverage);
+                log_and_screen_printf("checking path coverages; start (%i), max (%i), min (%i), path (%i)\n", starting_coverage, min_coverage, max_coverage, (int) path_coverage);
                 path_get_statistics(&path_coverage, &min_coverage, &max_coverage, new_path);
                 if ((starting_coverage >= min_coverage) && (starting_coverage <= max_coverage))  {
 
