@@ -48,7 +48,6 @@
 #define NUM_BEST_NODES 5
 #define MIN_CONTIG_SIZE 10
 #define MIN_SUBGRAPH_SIZE 2000
-#define MAX_NODE_EDGES 6
 
 
 /*----------------------------------------------------------------------*
@@ -59,7 +58,7 @@
  * Returns:                                                             *
  *----------------------------------------------------------------------*/
 
-int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* graph, Queue* graph_queue, GraphInfo* nodes_in_graph)
+int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* graph, Queue* graph_queue, GraphInfo* nodes_in_graph, float delta_coverage)
 {
     Queue* nodes_to_walk;
     dBNode* node;
@@ -117,7 +116,6 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                 int min_coverage=0; int max_coverage=0; // required for path_get_statistics()
                	path_get_statistics(&path_coverage, &min_coverage, &max_coverage, new_path);
 
-		            float delta_coverage=0.5;     // NOTE def earlier, just here for now
                 delta_coverage = delta_coverage * (float) starting_coverage;
                 min_coverage=starting_coverage - (int) delta_coverage;
                 if (min_coverage <1){
@@ -127,7 +125,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                   delta_coverage=1;
                 }
                 max_coverage=starting_coverage + (int) delta_coverage;
-                if ((path_coverage >= min_coverage) && (path_coverage <= max_coverage))  {
+                if (((path_coverage >= min_coverage) && (path_coverage <= max_coverage)) || best_node == NULL)  {
                   // Add end node to list of nodes to visit
                   end_node = new_path->nodes[new_path->length-1];
                   end_orientation = new_path->orientations[new_path->length - 1];
@@ -240,28 +238,6 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
 
                           db_node_action_set_flag_visited(new_path->nodes[i]);
 
-
-/*
-                      // Check coverage of next node compared to previous five in path
-                        // if too low, for now, prune lower next node rather than adding it to queue
-                        // OBVIOUSLY THIS IS A PROBLEM FOR SNP STUFF. CAN FIX THAT LATER.
-                      this_coverage = element_get_coverage_all_colours(new_path->nodes[i]);
-                      if (i>4){
-                        float moving_average=0;
-                        // average last five nodes in the path
-                        if (((float)this_coverage > moving_average*0.5)) &&
-                            ((float)this_coverage < moving_average*1.5)))  {
-                          queue_push(graph_queue, new_path->nodes[i]);
-                        }
-                        else{
-                          // delete node rather than add it to queue
-                        }
-                      }
-                      else{
-                        queue_push(graph_queue, new_path->nodes[i]);
-                      }
-*/
-
                       nodes_in_graph->total_size++;
                     }
                   } // path->length loop
@@ -318,7 +294,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
 // ----------------------------------------------------------------------
 // Work through graph, count coverage, X, Y nodes
 // ----------------------------------------------------------------------
-void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int min_subgraph_kmers)
+void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int min_subgraph_kmers, int max_node_edges, float delta_coverage)
 {
     FILE* fp_analysis;
     FILE* fp_report;
@@ -488,7 +464,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
 
       // PARTITIONING - REMOVE EXTREMELY BRANCHED NODES
-        if (edges_forward+edges_reverse<=MAX_NODE_EDGES){
+        if (edges_forward+edges_reverse<=max_node_edges){
           this_coverage = (this_coverage-1);
 
           if(this_coverage>COVERAGE_BINS*COVERAGE_BIN_SIZE-1){
@@ -550,7 +526,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
             graph_queue->number_of_items = 0;
 
             // now with a subgraph, walk the graph counting degrees by graph
-            grow_graph_from_node_stats(node, &seed_node, graph, graph_queue, nodes_in_graph);
+            grow_graph_from_node_stats(node, &seed_node, graph, graph_queue, nodes_in_graph, delta_coverage);
 
             if (seed_node == NULL) {
                 printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph->total_size);

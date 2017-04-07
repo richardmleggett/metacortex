@@ -5,6 +5,8 @@ export R_ENV_PATH='../'
 
 b=100
 n=15
+max_edges=6
+delta=0.5
 
 #filename="reads/basic_genome.fa"
 #filename="reads/single_snp_genome.fa"
@@ -30,8 +32,6 @@ mkdir graphs; chmod 755 graphs
 
 echo ${filename} > ${file_list}
 
-${meta_p} -k ${kmer} -n ${n} -b ${b} -i ${file_list} -t fasta -o ${cortex_file} -f ${contig_file} -g 100 -l ${log_file}  -S -G graph_out.gv # -C 2
+${meta_p} -k ${kmer} -n ${n} -b ${b} -i ${file_list} -t fasta -o ${cortex_file} -f ${contig_file} -g 100 -l ${log_file} -r ${max_edges} -R ${delta} -S -G graph_out.gv # -C 2
 
 #dot -Tdot graph_out.gv -o graph_out.dot
-
-
