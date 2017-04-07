@@ -886,7 +886,9 @@ void alloc_sequence(Sequence * seq, int max_read_length, int max_name_length, ch
 	seq->max_name_length = max_name_length;
     seq->check_quality_values = false;
     seq->header = NULL;
-    sequence_set_quality_parameters(seq, offset);
+	if(offset){
+    		sequence_set_quality_parameters(seq, offset);
+	}
     
 } 
 
