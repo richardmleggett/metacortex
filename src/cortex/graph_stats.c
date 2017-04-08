@@ -243,7 +243,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                   } // path->length loop
                 }
                 else{
-                  cleaning_prune_db_node(new_path->nodes[new_path->length-1], graph);
+                  cleaning_prune_db_node(new_path->nodes[new_path->0], graph);
                   // NOTE best_node - needs to be checked here. Don't want to return NULL
                 }
 
