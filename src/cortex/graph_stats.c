@@ -58,7 +58,7 @@
  * Returns:                                                             *
  *----------------------------------------------------------------------*/
 
-int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* graph, Queue* graph_queue, GraphInfo* nodes_in_graph, float delta_coverage)
+int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* graph, Queue* graph_queue, GraphInfo* nodes_in_graph, float delta)
 {
     Queue* nodes_to_walk;
     dBNode* node;
@@ -71,6 +71,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
         best_edges[i]=0;
     }
     char* seq = calloc(256, 1);
+    float delta_coverage;
 
     // Nucleotide iterator, used to walk all possible paths from a node
     void walk_if_exists(Nucleotide n) {
@@ -116,15 +117,17 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                 int min_coverage=0; int max_coverage=0; // required for path_get_statistics()
                	path_get_statistics(&path_coverage, &min_coverage, &max_coverage, new_path);
 
-                delta_coverage = delta_coverage * (float) starting_coverage;
-                min_coverage=starting_coverage - (int) delta_coverage;
+                float
+                delta_coverage = delta * (float) starting_coverage;
+                min_coverage = starting_coverage - (int) delta_coverage;
                 if (min_coverage <1){
                   min_coverage=1;
                 }
 		            if (delta_coverage<1){
                   delta_coverage=1;
                 }
-                max_coverage=starting_coverage + (int) delta_coverage;
+                log_and_screen_printf("\tDelta cov:\t %d (WALK)\n", (int) delta_coverage);
+                max_coverage = starting_coverage + (int) delta_coverage;
                 if (((path_coverage >= min_coverage) && (path_coverage <= max_coverage)) || best_node == NULL)  {
                   // Add end node to list of nodes to visit
                   end_node = new_path->nodes[new_path->length-1];
@@ -243,7 +246,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                   } // path->length loop
                 }
                 else{
-                  cleaning_prune_db_node(new_path->nodes[new_path->0], graph);
+                  cleaning_prune_db_node(new_path->nodes[0], graph);
                   // NOTE best_node - needs to be checked here. Don't want to return NULL
                 }
 
