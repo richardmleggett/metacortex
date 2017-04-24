@@ -964,7 +964,9 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fou
       // for an indel, add an L (link) directly between segments before and after bubble.
       int S_count=gfa_count->S_count;
       gfa_count->S_count=S_count+count+1;
-      output_L_line(fout2, gfa_count);
+      if(fout2!=NULL){
+        output_L_line(fout2, gfa_count);
+      }
       gfa_count->S_count=S_count;
     }
 
