@@ -49,7 +49,6 @@
 #define MIN_CONTIG_SIZE 10
 #define MIN_SUBGRAPH_SIZE 2000
 
-
 /*----------------------------------------------------------------------*
  * Function: grow_graph_from_node_stats                                 *
  * Purpose: takes start node, walks a complete graph from there         *
@@ -467,6 +466,12 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
             exit(-1);
         }
 
+      //hash_table_traverse if edges_forward+edges reverse>2
+      //  if(db_node_edge_exist_any_colour)(node, n, orientation)
+      //  perfect path each edge
+      //  count length
+      //  average length > kmer?
+
 
       // PARTITIONING - REMOVE EXTREMELY BRANCHED NODES
         if (edges_forward+edges_reverse<=max_node_edges){
@@ -513,7 +518,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     // Hash table iterator to walk graphs, produce paths
     void explore_node(dBNode * node) {
         if(db_node_check_for_any_flag(node, PRUNED | VISITED) == false){
-
 
             dBNode* seed_node;
             nodes_in_graph->total_size = 0;
@@ -672,15 +676,12 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     }
 
     writeLaTeXHeader(fp_report, consensus_contigs_filename);
-
     writeLaTeXreport(fp_report, (int) MAX_BRANCHES, (int) COVERAGE_BIN_SIZE, \
       (int) COVERAGE_BINS, (int) GRAPH_LOG10_LIMIT, (int) NUM_BEST_NODES, &Contig_Branches[0], \
       &Coverage_Dist[0], graph, nodes_in_graph);
-
     fclose(fp_report);
 
     //sprintf(command, "pdflatex -interaction=nonstopmode %s", analysis_filename);
-
 
     // memory issue - analysis_filename is being stomped on at some point
     log_and_screen_printf("\nanalysis filename\t%s\n", analysis_filename);
@@ -691,7 +692,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
       // The system method failed
       log_and_screen_printf("Failed call to system?\n");
     }
-
 
     // exec("Rscript <path_to_src>/degree_plots.R degrees_filename")
 
