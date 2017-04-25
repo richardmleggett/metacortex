@@ -30,6 +30,8 @@
 
 #include <binary_kmer.h>
 
+#ifndef GRAPHINFO_H
+#define GRAPHINFO_H
 typedef struct {
     int total_size;
     int largest_subgraph;
@@ -48,9 +50,9 @@ typedef struct {
     BinaryKmer highest_cov_in_subgraph;
     int highest_cov;
 } GraphInfo;
+#endif /* GRAPHINFO_H */
+
 
 void find_subgraph_stats(dBGraph* graph, char* consensus_contigs_filename, int min_subgraph_kmers, int max_node_edges, float delta_coverage);
 
 void print_degree_stats(GraphInfo * nodes_in_graph, FILE* fp_degrees);
-
-int sum_array(long int * array, int first, int last);

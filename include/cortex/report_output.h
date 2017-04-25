@@ -27,7 +27,19 @@
  * **********************************************************************
  * This file is to declare the analysis functions. Stuff that is not necesarily part of the main assembly, but that can be useful to analyze the graph.
  */
- 
- #include <binary_kmer.h>
+
+
+ #include "dB_graph.h"
+ #include "graph_stats.h"
 
 void writeLaTeXHeader(FILE* fp_latex, char* consensus_contigs_filename);
+
+/*void writeLaTeXreport(FILE* fp_latex, int MAX_BRANCHES, int COVERAGE_BIN_SIZE,
+ int GRAPH_LOG10_LIMIT, int NUM_BEST_NODES, long int Contig_Branches,
+ long int Coverage_Dist, dBGraph * graph, GraphInfo * nodes_in_graph); */
+
+void writeLaTeXreport(FILE* fp_latex, int MAX_BRANCHES, int COVERAGE_BIN_SIZE, \
+ int COVERAGE_BINS, int GRAPH_LOG10_LIMIT, int NUM_BEST_NODES, long int * Contig_Branches, \
+ long int * Coverage_Dist, dBGraph * graph, GraphInfo * nodes_in_graph);
+
+int sum_array(long int * array, int first, int last);
