@@ -5,8 +5,8 @@ export R_ENV_PATH='../'
 
 b=100
 n=15
-max_edges=6
-delta=0.5
+max_edges=8
+delta=1000
 
 #filename="reads/basic_genome.fa"
 #filename="reads/single_snp_genome.fa"

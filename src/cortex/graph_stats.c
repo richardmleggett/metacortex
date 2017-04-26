@@ -116,7 +116,6 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                 int min_coverage=0; int max_coverage=0; // required for path_get_statistics()
                	path_get_statistics(&path_coverage, &min_coverage, &max_coverage, new_path);
 
-                float
                 delta_coverage = delta * (float) starting_coverage;
 		            if (delta_coverage<1){
                   delta_coverage=1;
@@ -127,7 +126,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                   min_coverage=1;
                 }
 
-                log_and_screen_printf("\tDelta cov:\t %d (WALK)\n", (int) delta_coverage);
+                //log_and_screen_printf("\tDelta cov:\t%d (WALK)\tstarting cov:\t%d\n", (int) delta_coverage, starting_coverage);
                 max_coverage = starting_coverage + (int) delta_coverage;
                 if (((path_coverage >= min_coverage) && (path_coverage <= max_coverage)) || best_node == NULL)  {
                   // Add end node to list of nodes to visit
@@ -311,6 +310,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     long int total_nodes = 0;
     int i;  int j;
     int counter= 0;
+    int min_distance = graph->kmer_size;  // NOTE: needs to be a cmd_line option
 
     char cwd[1024];
 
@@ -455,55 +455,98 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
     db_graph_reset_flags(graph);
 
+    // called by identify_branch_nodes(), walks paths from a branch
+    void find_path_length_with_first_edge_all_colours(Nucleotide n, dBNode * node, int * path_length, Orientation orientation) {
+      if (db_node_edge_exist_any_colour(node, n, orientation)) {
+        pathStep first_step;
+        Path * new_path;
+        first_step.node = node;
+        first_step.orientation = orientation;
+        first_step.label = n;
+        new_path = path_new(MAX_EXPLORE_NODES, graph->kmer_size);
+
+        db_graph_get_perfect_path_with_first_edge_all_colours(&first_step, &db_node_action_do_nothing, new_path, graph);
+        * path_length += new_path->length;
+      }
+    }
+
     // Hash table iterator to label nodes
     void identify_branch_nodes(dBNode * node) {
-        //if (!db_node_check_flag_visited(node)) {
-        int this_coverage = element_get_coverage_all_colours(node);
-        int edges_forward= db_node_edges_count_all_colours(node, forward);
-        int edges_reverse = db_node_edges_count_all_colours(node, reverse);
-        if (this_coverage<=0) {
-            log_and_screen_printf("Error: Coverage is <1 in the graph?\n");
-            exit(-1);
-        }
+      //if (!db_node_check_flag_visited(node)) {
+      int this_coverage = element_get_coverage_all_colours(node) - 1;
+      int edges_forward= db_node_edges_count_all_colours(node, forward);
+      int edges_reverse = db_node_edges_count_all_colours(node, reverse);
+      int all_edges = edges_forward + edges_reverse;
+      int local_distance = 0;
+      int orientation;
+      if (this_coverage<0) {
+          log_and_screen_printf("Error: Coverage is <1 in the graph?\n");
+          exit(-1);
+      }
 
-      //hash_table_traverse if edges_forward+edges reverse>2
-      //  if(db_node_edge_exist_any_colour)(node, n, orientation)
-      //  perfect path each edge
-      //  count length
-      //  average length > kmer?
+      // GRAPH DENSITY ESTIMATES
+      // hash_table_traverse if edges_forward+edges reverse>2
+      //   if(db_node_edge_exist_any_colour)(node, n, orientation)
+      //   perfect path each edge
+      //   count length
+      //   average length > kmer?
+
+
+      if ((all_edges>2) && (all_edges<=max_node_edges)){
+        log_and_screen_printf("\nWalking branch node...\n");
+        // Look at all paths out from here
+        orientation = forward;
+        int i;
+      	for (i = 0; i < 4; i++) {
+      		find_path_length_with_first_edge_all_colours(i, node, &local_distance, orientation);
+      	}
+
+        orientation = reverse;
+        // nucleotide_iterator(&walk_if_exists);
+      	for (i = 0; i < 4; i++) {
+      		find_path_length_with_first_edge_all_colours(i, node, &local_distance, orientation);
+      	}
+
+        local_distance = local_distance / all_edges;
+      }
+      else{
+        // could check
+        local_distance = min_distance;
+      }
 
 
       // PARTITIONING - REMOVE EXTREMELY BRANCHED NODES
-        if (edges_forward+edges_reverse<=max_node_edges){
-          this_coverage = (this_coverage-1);
-
-          if(this_coverage>COVERAGE_BINS*COVERAGE_BIN_SIZE-1){
-              this_coverage = COVERAGE_BINS*COVERAGE_BIN_SIZE-1;
-          }
-
-          Coverage_Dist[this_coverage]++;
-          total_nodes++;
-
-          // Look for Y shape branch forward orientation
-          // The nodes at the top of the Y should contain different colours
-          if (edges_forward > 1
-              && edges_reverse == 1) {
-              db_node_action_set_flag(node, BRANCH_NODE_FORWARD);
-          }
-          // Look for Y shape branch reverse orientation
-          if (edges_reverse > 1
-              && edges_forward == 1) {
-              db_node_action_set_flag(node, BRANCH_NODE_REVERSE);
-          }
-          // Look for X-shaped branch
-          if (edges_reverse > 1
-              && edges_forward > 1) {
-              db_node_action_set_flag(node, X_NODE);
-          }
+      if ((all_edges<=max_node_edges) && (local_distance>=min_distance))
+      {
+        if(this_coverage>COVERAGE_BINS*COVERAGE_BIN_SIZE-1)
+        {
+          this_coverage = COVERAGE_BINS*COVERAGE_BIN_SIZE-1;
         }
-        else{
-            cleaning_prune_db_node(node, graph);
+
+        Coverage_Dist[this_coverage]++;
+        total_nodes++;
+
+        // Look for Y shape branch forward orientation
+        // The nodes at the top of the Y should contain different colours
+        if (edges_forward > 1
+            && edges_reverse == 1) {
+            db_node_action_set_flag(node, BRANCH_NODE_FORWARD);
         }
+        // Look for Y shape branch reverse orientation
+        if (edges_reverse > 1
+            && edges_forward == 1) {
+            db_node_action_set_flag(node, BRANCH_NODE_REVERSE);
+        }
+        // Look for X-shaped branch
+        if (edges_reverse > 1
+            && edges_forward > 1) {
+            db_node_action_set_flag(node, X_NODE);
+        }
+      }
+      else{
+          log_and_screen_printf("\nPruning node:\tedges\t%i\tdistance\t%i\n", all_edges, local_distance);
+          cleaning_prune_db_node(node, graph);
+      }
     } // identify_branch_nodes()
 
 
