@@ -49,6 +49,96 @@
 #define MIN_CONTIG_SIZE 10
 #define MIN_SUBGRAPH_SIZE 2000
 
+
+///////////////////// literally pasting in Richard's linked-list code for the moment. Unsure of memory issues.
+typedef struct _TopItem {
+    dBNode * ptr;
+    int value;
+    struct _TopItem* next;
+    struct _TopItem* prev;
+} TopItem;
+
+TopItem *start = 0;
+int max_size = 1000;
+int current_size = 0;
+void add_item(dBNode* ptr, int value)
+{
+    //printf("Adding %s with %d\n", ptr, value);
+    TopItem *ti = malloc(sizeof(TopItem));
+    if (ti == 0) {
+        printf("Error: can't get memory for TopItem!\n");
+        exit(1);
+    }
+
+    ti->ptr = ptr;
+    ti->value = value;
+    ti->next = 0;
+    ti->prev = 0;
+
+    if (start == 0) {
+        start = ti;
+        current_size++;
+    } else {
+        // If value is > than start of list, we need to find where to insert it
+        if ((value > start->value) || (current_size < max_size)) {
+            // Find insertion point
+            TopItem* current = start;
+            while ((current->next != 0) && (value > current->value)) {
+                current = current->next;
+            }
+
+            // If value still > current item, then we met the end of the list.
+            if (value > current->value) {
+                //printf("Inserting after %s\n", current->ptr);
+                ti->next = 0;
+                ti->prev = current;
+                current->next = ti;
+                current_size++;
+            } else {
+                //printf("Inserting before %s\n", current->ptr);
+
+                if (current->prev != 0) {
+                    current->prev->next = ti;
+                }
+                ti->next = current;
+                ti->prev = current->prev;
+
+                current->prev = ti;
+                current_size++;
+
+                if (current == start) {
+                    start = ti;
+                }
+            }
+
+            // Is list too big now?
+            if (current_size > max_size) {
+                //printf("Removing %s\n", start->ptr);
+                free(start);
+                start = start->next;
+                current_size--;
+            }
+
+        }
+    }
+}
+
+void clear_list(dBGraph* graph)
+{
+    TopItem* current = start;
+    TopItem* past = 0;
+
+    while(current != 0) {
+      cleaning_prune_db_node(current->ptr, graph);
+      past = current;
+      current = current->next;
+      free(past);
+    }
+}
+
+////////////////////// end of linked list functions
+
+
 /*----------------------------------------------------------------------*
  * Function: grow_graph_from_node_stats                                 *
  * Purpose: takes start node, walks a complete graph from there         *
@@ -310,7 +400,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     long int total_nodes = 0;
     int i;  int j;
     int counter= 0;
-    int min_distance = graph->kmer_size;  // NOTE: needs to be a cmd_line option
+    int min_distance = 10 * (graph->kmer_size);  // NOTE: needs to be a cmd_line option
 
     char cwd[1024];
 
@@ -484,6 +574,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
           exit(-1);
       }
 
+      add_item(node, this_coverage);
+
       // GRAPH DENSITY ESTIMATES
       // hash_table_traverse if edges_forward+edges reverse>2
       //   if(db_node_edge_exist_any_colour)(node, n, orientation)
@@ -580,7 +672,10 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
             // now with a subgraph, walk the graph counting degrees by graph
             grow_graph_from_node_stats(node, &seed_node, graph, graph_queue, nodes_in_graph, delta_coverage);
 
-            if (seed_node == NULL) {
+            if (nodes_in_graph->total_size ==1) {
+              // ignore; pruned node
+            }
+            else if (seed_node == NULL) {
                 printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph->total_size);
             } else if (nodes_in_graph->total_size) {
                 // print out the size of the current subgraph
@@ -671,6 +766,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     log_and_screen_printf("Stats traversal started...");
     hash_table_traverse(&identify_branch_nodes, graph);
     log_and_screen_printf("DONE\n");
+    clear_list(graph);
 
     // first line for stats output file
     fprintf(fp_analysis, "\n#Subgraph sizes\n");
