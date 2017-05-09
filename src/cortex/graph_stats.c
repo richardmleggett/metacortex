@@ -669,6 +669,9 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
             log_printf("Growing graph from node\n");
             graph_queue->number_of_items = 0;
 
+            timestamp();
+            log_and_screen_printf("\n");
+
             // now with a subgraph, walk the graph counting degrees by graph
             grow_graph_from_node_stats(node, &seed_node, graph, graph_queue, nodes_in_graph, delta_coverage);
 
