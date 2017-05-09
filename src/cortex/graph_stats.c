@@ -49,6 +49,11 @@
 #define MIN_CONTIG_SIZE 10
 #define MIN_SUBGRAPH_SIZE 2000
 
+void timestamp_gs() {
+	time_t ltime = time(NULL);
+	log_printf("\n-----\n%s",asctime(localtime(&ltime)));
+	fflush(stdout);
+}
 
 ///////////////////// literally pasting in Richard's linked-list code for the moment. Unsure of memory issues.
 typedef struct _TopItem {
@@ -400,7 +405,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     long int total_nodes = 0;
     int i;  int j;
     int counter= 0;
-    int min_distance = 10 * (graph->kmer_size);  // NOTE: needs to be a cmd_line option
+    int min_distance = 0; //10 * (graph->kmer_size);  // NOTE: needs to be a cmd_line option
 
     char cwd[1024];
 
@@ -669,7 +674,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
             log_printf("Growing graph from node\n");
             graph_queue->number_of_items = 0;
 
-            timestamp();
+            timestamp_gs();
             log_and_screen_printf("\n");
 
             // now with a subgraph, walk the graph counting degrees by graph
@@ -704,7 +709,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
                 }
 
                 /* enough nodes to bother with? If so, get consensus contig */
-                if (0){ //}(nodes_in_graph->total_size >= min_subgraph_kmers) {
+                if (nodes_in_graph->total_size >= min_subgraph_kmers) {
 
                     // should be a perfect path? might be two paths though, if we started in the middle
                     // NOTE: unecessary coverage element but repeating the whole path finding without coverage
