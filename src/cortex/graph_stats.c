@@ -40,6 +40,7 @@
 #include "cleaning.h"
 #include "metagraphs.h"
 #include "report_output.h"
+#include <time.h>
 
 #define COVERAGE_BINS 10
 #define COVERAGE_BIN_SIZE 1
@@ -64,7 +65,7 @@ typedef struct _TopItem {
 } TopItem;
 
 TopItem *start = 0;
-int max_size = 1000;
+int max_size = 1000; // should be user defined - top N coverage nodes
 int current_size = 0;
 void add_item(dBNode* ptr, int value)
 {
@@ -138,6 +139,7 @@ void clear_list(dBGraph* graph)
       past = current;
       current = current->next;
       free(past);
+      graph->unique_kmers--;
     }
 }
 
@@ -774,7 +776,9 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     log_and_screen_printf("Stats traversal started...");
     hash_table_traverse(&identify_branch_nodes, graph);
     log_and_screen_printf("DONE\n");
+    log_and_screen_printf("Unique kmers before clearing:\t %lld\n", graph->unique_kmers);
     clear_list(graph);
+    log_and_screen_printf("Unique kmers after clearing:\t %lld\n", graph->unique_kmers);
 
     // first line for stats output file
     fprintf(fp_analysis, "\n#Subgraph sizes\n");
