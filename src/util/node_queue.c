@@ -1,10 +1,10 @@
 /*
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
  * **********************************************************************
@@ -26,7 +26,7 @@
  *
  * **********************************************************************
  */
- 
+
 /*----------------------------------------------------------------------*
  * File:    nodequeue.c                                                 *
  * Purpose: A queue for nodes!                                          *
@@ -71,27 +71,28 @@ void* queue_push(Queue* q, void* item)
         printf("Reached max items %d of size %d\n", q->number_of_items, q->max_size);
 		return NULL;
 	}
-	
+
     q->items[q->number_of_items++] = item;
-    
+
 	return item;
 }
 
 void* queue_pop(Queue* q)
 {
     void* item = 0;
-	int i;
+	//int i;
 	
 	if (q->number_of_items > 0) {
-		item = q->items[0];
+		//item = q->items[0];
         
-		for (i=1; i<q->number_of_items; i++) {
-			q->items[i-1] = q->items[i];
-		}
+		//for (i=1; i<q->number_of_items; i++) {
+		//	q->items[i-1] = q->items[i];
+		//}
 		
+		item = q->items[q->number_of_items-1];
 		q->number_of_items--;
 	}
-    
+
 	return item;
 }
 
@@ -101,15 +102,15 @@ void queue_free(Queue *q)
 		int i;
 		for (i=0; i<q->number_of_items; i++) {
 			QueueItem* qi = queue_pop(q);
-            
+
 			if (qi) {
 			    free(qi);
-			} 
+			}
 		}
 		if (q->items) {
 			free(q->items);
 		}
-		
+
 		free(q);
 	}
 }
@@ -120,20 +121,20 @@ void queue_free(Queue *q)
 QueueItem* queue_push_node(Queue* q, dBNode* n, int d)
 {
 	QueueItem* item = malloc(sizeof(QueueItem));
-	
+
 	if (!item) {
 		return 0;
 	}
-	
+
 	item->node = n;
 	item->depth = d;
-    
+
 	//BinaryKmer tmp;
-	//char seq[kmer_size];	
+	//char seq[kmer_size];
 	//binary_kmer_assignment_operator(tmp, n->kmer);
-	//binary_kmer_to_seq(&tmp, kmer_size, seq);	
+	//binary_kmer_to_seq(&tmp, kmer_size, seq);
 	//printf("Pushing %s depth %d\n", seq, d);
-	
+
 	return queue_push(q, item);
 }
 
@@ -141,19 +142,19 @@ dBNode* queue_pop_node(Queue* q, int* d)
 {
 	QueueItem* item = queue_pop(q);
 	dBNode* node = 0;
-	
+
 	if (item) {
 		*d = item->depth;
-		node = item->node;		
-        
+		node = item->node;
+
 		//BinaryKmer tmp;
-		//char seq[kmer_size];	
+		//char seq[kmer_size];
 		//binary_kmer_assignment_operator(tmp, node->kmer);
 		//binary_kmer_to_seq(&tmp, kmer_size, seq);
 		//printf("Popped %s depth %d\n", seq, *d);
-        
+
 		free(item);
 	}
-	
+
 	return node;
 }
