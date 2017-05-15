@@ -565,13 +565,15 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
       if (db_node_edge_exist_any_colour(node, n, orientation)) {
         pathStep first_step;
         Path * new_path;
+        new_path = path_new(MAX_EXPLORE_NODES, graph->kmer_size);
         first_step.node = node;
         first_step.orientation = orientation;
         first_step.label = n;
-        new_path = path_new(MAX_EXPLORE_NODES, graph->kmer_size);
 
         db_graph_get_perfect_path_with_first_edge_all_colours(&first_step, &db_node_action_do_nothing, new_path, graph);
+				new_path->length=1;
         * path_length += new_path->length;
+				path_destroy(new_path);
       }
     }
 
@@ -582,7 +584,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
       int edges_forward= db_node_edges_count_all_colours(node, forward);
       int edges_reverse = db_node_edges_count_all_colours(node, reverse);
       int all_edges = edges_forward + edges_reverse;
-      int local_distance = 0;
+      int local_distance = 1;
       int orientation;
       if (this_coverage<0) {
           log_and_screen_printf("Error: Coverage is <1 in the graph?\n");
@@ -620,7 +622,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
         // could check
         local_distance = min_distance;
       }
-
 
       // PARTITIONING - REMOVE EXTREMELY BRANCHED NODES
       if ((all_edges<=max_node_edges) && (local_distance>=min_distance))
