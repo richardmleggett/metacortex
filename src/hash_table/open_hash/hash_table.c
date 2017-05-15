@@ -94,7 +94,7 @@ HashTable * hash_table_new(int number_bits, int bucket_size, int max_rehash_trie
 	hash_table->kmer_size      = kmer_size;
 	hash_table->number_of_threads = 1;
 
-	log_and_screen_printf("\nSize of db_graph: %i\n", (sizeof(HashTable) + (max_rehash_tries* sizeof(long long)) +  (hash_table->number_buckets * hash_table->bucket_size * sizeof(Element)) + (hash_table->number_buckets * sizeof(int))));
+	log_and_screen_printf("\nSize of db_graph: %li\n", (sizeof(HashTable) + (max_rehash_tries* sizeof(long long)) +  (hash_table->number_buckets * hash_table->bucket_size * sizeof(Element)) + (hash_table->number_buckets * sizeof(int))));
 
 	return hash_table;
 }
