@@ -13,3 +13,7 @@ run -k 31 -n 15 -b 100 -i /home/aylingm/testgenome/testdata/gdb_files.txt -t fas
 
 run -k 31 -n 15 -b 100 -i testdata/gdb_files.txt -t fastq -o testdata/temp.ctx -f testdata/temp.fa -g 100 -l testdata/temp.txt  -S
 
+
+ulimit -c unlimited
+-k 95 -n 21 -b 100 -i /tgac/scratch/aylingm/simulated/metacortex/family_500k_05-15-2017-08:29:45/family_files.txt -t fasta -o /tgac/scratch/aylingm/simulated/metacortex/family_500k_05-15-2017-08:29:45/family.ctx -f /tgac/scratch/aylingm/simulated/metacortex/family_500k_05-15-2017-08:29:45/family.fa -g 100 -l /tgac/scratch/aylingm/simulated/metacortex/family_500k_05-15-2017-08:29:45/family.log -r 8 -R 1000 -S
+generate-core-file

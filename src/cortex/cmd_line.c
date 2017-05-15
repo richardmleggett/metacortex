@@ -159,6 +159,7 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
     }
     printf("\n");
     printf("Unit size: %i\n", unit_size);
+    printf("Node size: %lu\n", sizeof(dBNode));
 
     CmdLine cmd_line;
     default_opts(&cmd_line);

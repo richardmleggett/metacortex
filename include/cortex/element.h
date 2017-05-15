@@ -1,8 +1,8 @@
 /*
- * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo 
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
  * **********************************************************************
@@ -60,12 +60,6 @@ typedef struct {
 	Flags flags;
 } Element;
 
-
-typedef struct {
-	BinaryKmer kmer;
-	Edges edges; // less significant nibble forward
-} Element2;
-
 typedef Element dBNode;
 
 typedef BinaryKmer* Key;
@@ -100,23 +94,23 @@ boolean db_node_add_edge(dBNode *, dBNode *, Orientation, Orientation, short kme
 
 void db_node_add_alt_labelled_edge(dBNode* e, Orientation o, Nucleotide base);
 
-//returns true if the node side defined by the orientation is a conflict 
+//returns true if the node side defined by the orientation is a conflict
 //or doesn't have any outgoing edge
 boolean db_node_is_supernode_end(dBNode *, Orientation);
 
-//returns yes if the label defined by the nucleotide coresponds to an 
-//outgoing edge in the side defined by the orientation.   
+//returns yes if the label defined by the nucleotide coresponds to an
+//outgoing edge in the side defined by the orientation.
 boolean db_node_edge_exist(dBNode *, Nucleotide, Orientation);
 boolean db_node_edge_exist_any_colour(dBNode *, Nucleotide, Orientation);
 
-//returns the label of the first outgoing edge -- leaving from the side 
-//defined by orientation. 
+//returns the label of the first outgoing edge -- leaving from the side
+//defined by orientation.
 boolean db_node_has_precisely_one_edge(dBNode *, Orientation, Nucleotide *);
 
 boolean db_node_has_precisely_one_edge_all_colours(dBNode *, Orientation, Nucleotide *);
 
 //returns the label of the "two edges"
-//defined by orientation. 
+//defined by orientation.
 boolean db_node_has_precisely_two_edges(dBNode *, Orientation, Nucleotide *, Nucleotide *);
 
 boolean db_node_has_unvisited_edge(dBNode * node, Orientation orientation, Nucleotide * nucleotide);
@@ -141,7 +135,7 @@ void db_node_reset_edge_all_colours(dBNode *, Orientation, Nucleotide);
 //check that the edges are 0's
 //boolean db_node_edges_reset(dBNode *);
 
-//set every edge in 'edges' 
+//set every edge in 'edges'
 void db_node_set_edges(dBNode * node, short colour, Edges edges);
 
 boolean db_node_edge_has_single_coverage(dBNode * element, Nucleotide base, Orientation orientation);
@@ -161,7 +155,7 @@ void db_node_print_binary_by_colour(FILE * fp, dBNode * node, short colour, int 
 
 boolean db_node_read_binary(FILE * fp, short kmer_size, dBNode * node);
 
-//actions and conditions 
+//actions and conditions
 
 void db_node_action_do_nothing(dBNode * node);
 
