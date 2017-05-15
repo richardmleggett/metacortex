@@ -120,12 +120,15 @@ void add_item(dBNode* ptr, int value)
             // Is list too big now?
             if (current_size > max_size) {
                 //printf("Removing %s\n", start->ptr);
-                free(start);
-                start = start->next;
+								TopItem* temp = start;
+								start = temp->next;
+                free(temp);
                 current_size--;
             }
 
-        }
+        } else {
+					free(ti);
+				}
     }
 }
 
@@ -139,7 +142,7 @@ void clear_list(dBGraph* graph)
     while(current != 0) {
 	binary_kmer_to_seq(&(current->ptr->kmer), graph->kmer_size, seq);
 	log_printf("%s\n", seq);
-      
+
 	cleaning_prune_db_node(current->ptr, graph);
       past = current;
       current = current->next;
