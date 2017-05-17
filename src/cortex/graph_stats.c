@@ -140,10 +140,10 @@ void clear_list(dBGraph* graph)
 
 		log_printf("HIGH COVERAGE KMERS\n");
     while(current != 0) {
-	binary_kmer_to_seq(&(current->ptr->kmer), graph->kmer_size, seq);
-	log_printf("%s\n", seq);
+			binary_kmer_to_seq(&(current->ptr->kmer), graph->kmer_size, seq);
+			log_printf("%s\n", seq);
 
-	cleaning_prune_db_node(current->ptr, graph);
+			cleaning_prune_db_node(current->ptr, graph);
       past = current;
       current = current->next;
       free(past);

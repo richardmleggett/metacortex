@@ -740,7 +740,17 @@ void * initalise_gfa_stats(gfa_stats * gfa, int max_length){
   gfa->orient[0]='3';
   gfa->P_line = calloc(gfa->max_length, sizeof(char));
   gfa->P_line_overlap = calloc(gfa->max_length, sizeof(char));
-  return 0; // Right?
+
+  return 0;
+}
+
+void * destroy_gfa_stats(gfa_stats * gfa){
+  if (gfa){
+    free(gfa->P_line);
+    free(gfa->P_line_overlap);
+    free(gfa);
+  }
+  return 0;
 }
 
 void output_S_line(FILE * f, gfa_stats * gfa, char* seq){
@@ -1282,6 +1292,8 @@ void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable*
       fprintf(fout2, "\n");
       fflush(fout2);
     }
+
+    destroy_gfa_stats(gfa_count);
 }
 
 void path_to_fasta(Path * path, FILE * fout)

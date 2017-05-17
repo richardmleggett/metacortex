@@ -393,6 +393,8 @@ void path_pairs_to_fasta(PathArray* pa, int distances[], FILE* fout);
 
 void * initalise_gfa_stats(gfa_stats * gfa, int max_length);
 
+void * destroy_gfa_stats(gfa_stats * gfa);
+
 void output_S_line(FILE * f, gfa_stats * gfa, char* seq);
 
 void output_L_line(FILE * f, gfa_stats * gfa);
