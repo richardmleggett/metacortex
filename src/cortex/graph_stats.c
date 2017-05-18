@@ -752,7 +752,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
                           fprintf(fp_contigs_gfa, "H %qd", simple_path->id);
                         }
                         path_to_fasta(simple_path, fp_contigs_fasta);
-                        path_to_fasta_metacortex(simple_path, fp_contigs_fastg, fp_contigs_gfa, graph);
+                        //path_to_fasta_metacortex(simple_path, fp_contigs_fastg, fp_contigs_gfa, graph);
                         counter++;
                     } else {
                         log_printf("Didn't write path of size %d\n", simple_path->length);
