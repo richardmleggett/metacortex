@@ -271,6 +271,7 @@ pathStep* coverage_walk_get_first_label(pathStep * first_step, dBGraph * db_grap
         first_step->label = coverage_walk_get_best_label(first_step->node, first_step->orientation, db_graph);
     } else {
         coverage_walk_get_best_label_bubble(first_step, first_step->node, first_step->orientation, db_graph);
+        log_printf("coverage_walk_get_best_label_bubble (in first label) done\n");
     }
 
     //debugme = 0;
@@ -296,6 +297,7 @@ static pathStep *coverage_walk_get_next_step(pathStep * current_step, pathStep *
             next_step->label = coverage_walk_get_best_label(next_step->node, next_step->orientation, db_graph);
         } else if (db_node_edges_count_all_colours(next_step->node, next_step->orientation) > 1) {
             coverage_walk_get_best_label_bubble(next_step, next_step->node, next_step->orientation, db_graph);
+            log_printf("coverage_walk_get_best_label_bubble (in next step) done\n");
         }
     }
 
@@ -436,6 +438,7 @@ int coverage_walk_get_path_with_callback(dBNode * node, Orientation orientation,
 
     // Do the walk
     int ret = db_graph_generic_walk(&first, path, &wf, db_graph);
+    log_printf("db_graph_generic_walk done\n");
 
     // Free buffer
     path_free_buffer_path(path);
