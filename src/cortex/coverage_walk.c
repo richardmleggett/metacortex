@@ -242,8 +242,11 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Or
     }
 
     nucleotide_iterator(&check_edge);
+    log_printf("check_edge completed\n");
     nucleotide_iterator(&check_coverages); // check coverages as individual edges first
+    log_printf("check_coverages completed\n");
     bubble_check();
+    log_printf("bubble_check completed\n");
 
     for (i=0; i<4; i++) {
         if (paths[i] != 0) path_destroy(paths[i]);
