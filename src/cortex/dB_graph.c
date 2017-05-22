@@ -1092,6 +1092,7 @@ int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions *
             execute_node_callbacks(current_step.node, &functions->node_callbacks);
         }
         while (functions->continue_traversing(&current_step, &next_step, &rev_step, path,db_graph));
+				log_printf("[finisHed continue_traversing [DEBUG]\n");
 
 		if (path->length > 0) {
 			walked = true;
