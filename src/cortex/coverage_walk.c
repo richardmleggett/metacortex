@@ -442,6 +442,7 @@ int coverage_walk_get_path_with_callback(dBNode * node, Orientation orientation,
 
     // Free buffer
     path_free_buffer_path(path);
+    log_printf("path_free_buffer_path done\n");
 
     return ret;
 }
@@ -460,6 +461,7 @@ int coverage_walk_get_path(dBNode * node, Orientation orientation, void (*node_a
 
     log_printf("\t[NEW-NODE in coverage walk]\n");
     coverage_walk_get_path_with_callback(node, orientation,	node_action, &copy_path, db_graph);
+    log_printf("\t[NEW-NODE in coverage walk finished]\n");
 
     return path_get_edges_count(path);
 }

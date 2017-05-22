@@ -730,8 +730,10 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
                     coverage_walk_get_path(seed_node, forward, NULL, graph, path_fwd);
                     log_printf("[WALKING REV PATH]\n");
                     coverage_walk_get_path(seed_node, reverse, NULL, graph, path_rev);
+                    log_printf("\t[PATH WALKED]\n");
 
                     path_reverse(path_fwd, simple_path);
+                    log_printf("\t[PATH REVERSED]\n");
                     path_append(simple_path, path_rev);
                     log_printf("\t[PATH WALKED AND APPENDED]\n");
                     //log_and_screen_printf("Couldn't get memory for graph queue.\n");
