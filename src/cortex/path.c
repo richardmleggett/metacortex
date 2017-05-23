@@ -2267,7 +2267,7 @@ void path_reverse(Path * source, Path * destination)
     log_printf("path_reverse started...[DEBUG]\n");
 
     for (i = source->length - 1; i >= 0; i--) {
-        log_printf("path_reverse step = %i...\n[DEBUG]", i);
+        log_printf("path_reverse step = %i...[DEBUG]\n", i);
         path_get_step_reverse(&new_step, source, i);
         log_printf("\tpath_get_step_reverse done[DEBUG]\n");
         new_step.flags = new_step.flags & PATH_STEP_MASK_VISITED; //Because we are reversing, we cant keep track of all the paths which were already visited in this walk

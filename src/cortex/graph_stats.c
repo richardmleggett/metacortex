@@ -448,10 +448,10 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
     // array to bin coverage 0-5, 5-10, 10-15..95-100
     long int Coverage_Dist[COVERAGE_BINS*COVERAGE_BIN_SIZE]; // will this work?
-    char fastg_filename[MAX_EXPLORE_PATH_LENGTH];
-    char gfa_filename[MAX_EXPLORE_PATH_LENGTH];
-    char analysis_filename[MAX_EXPLORE_PATH_LENGTH];
-    char degrees_filename[MAX_EXPLORE_PATH_LENGTH];
+    char fastg_filename[256];
+    char gfa_filename[256];
+    char analysis_filename[256];
+    char degrees_filename[256];
 
     Queue* graph_queue;
     for(i=0;i<MAX_BRANCHES;i++){

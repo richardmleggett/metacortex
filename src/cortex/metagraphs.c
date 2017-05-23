@@ -181,7 +181,7 @@ void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename,
     Path *path_rev = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
     Path *final_path = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
     char seq[256];
-    char analysis_filename[MAX_EXPLORE_PATH_LENGTH];
+    char analysis_filename[256];
     long int total_nodes = 0;
     int n_seeds = 0;
     int counter= 0;
