@@ -2264,16 +2264,16 @@ void path_reverse(Path * source, Path * destination)
 {
     pathStep new_step;
     int i;
-    log_printf("path_reverse started...[DEBUG]\n");
+    //log_printf("path_reverse started...[DEBUG]\n");
 
     for (i = source->length - 1; i >= 0; i--) {
-        log_printf("path_reverse step = %i...[DEBUG]\n", i);
+      //  log_printf("path_reverse step = %i...[DEBUG]\n", i);
         path_get_step_reverse(&new_step, source, i);
-        log_printf("\tpath_get_step_reverse done[DEBUG]\n");
+      //  log_printf("\tpath_get_step_reverse done[DEBUG]\n");
         new_step.flags = new_step.flags & PATH_STEP_MASK_VISITED; //Because we are reversing, we cant keep track of all the paths which were already visited in this walk
-        log_printf("\tPATH_STEP_MASK_VISITED done[DEBUG]\n");
+    //    log_printf("\tPATH_STEP_MASK_VISITED done[DEBUG]\n");
         path_add_node(&new_step, destination);
-        log_printf("\tpath_add_node done[DEBUG]\n");
+    //    log_printf("\tpath_add_node done[DEBUG]\n");
         // Update step flags - could be more elegant
         //destination->step_flags[destination->length-1] = source->step_flags[i];
     }
