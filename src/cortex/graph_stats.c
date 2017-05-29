@@ -65,7 +65,7 @@ typedef struct _TopItem {
 } TopItem;
 
 TopItem *start = 0;
-int max_size = 1000; // should be user defined - top N coverage nodes
+int max_size = 1; // should be user defined - top N coverage nodes
 int current_size = 0;
 void add_item(dBNode* ptr, int value)
 {
@@ -81,7 +81,7 @@ void add_item(dBNode* ptr, int value)
     ti->next = 0;
     ti->prev = 0;
 
-    if (start == 0) {
+    if ((start == 0) && (max_size>0)) {
         start = ti;
         current_size++;
     } else {
@@ -754,7 +754,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
                           fprintf(fp_contigs_gfa, "H %qd", simple_path->id);
                         }
                         path_to_fasta(simple_path, fp_contigs_fasta);
-                        //path_to_fasta_metacortex(simple_path, fp_contigs_fastg, fp_contigs_gfa, graph);
+                        path_to_fasta_metacortex(simple_path, fp_contigs_fastg, fp_contigs_gfa, graph);
                         counter++;
                     } else {
                         log_printf("Didn't write path of size %d\n", simple_path->length);
