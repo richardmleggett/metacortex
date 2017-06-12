@@ -416,6 +416,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     int i;  int j;
     int counter= 0;
     int min_distance = 0; //10 * (graph->kmer_size);  // NOTE: needs to be a cmd_line option
+    int walk_paths = 0; // FLAG - needs to be set in cmd_line; 1=walk subgraphs, 0=don't
 
     char cwd[1024];
 
@@ -696,7 +697,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
             }
             else if (seed_node == NULL) {
                 printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph->total_size);
-            } else if (nodes_in_graph->total_size) {
+            } else if (walk_paths && (nodes_in_graph->total_size)) {
                 // print out the size of the current subgraph
                 log_printf("graph size\t%i\n",nodes_in_graph->total_size);
                 fprintf(fp_analysis, "%i\t%i\t",nodes_in_graph->branch_nodes,nodes_in_graph->total_size);
