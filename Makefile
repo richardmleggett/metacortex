@@ -129,6 +129,9 @@ LIBRARY_OBJ =  obj/cortex/file_format.o obj/cortex/analysis.o obj/cortex/flags.o
 metacortex : remove_objects $(METACORTEX_OBJ)
 	mkdir -p $(BIN); $(CC) $(OPT) $(OPT_COLS) -o $(BIN)/metacortex_k$(BIN_SUFFIX) $(METACORTEX_OBJ) -lm
 
+no_walk : remove_objects $(METACORTEX_OBJ)
+	mkdir -p $(BIN); $(CC) $(OPT) $(OPT_COLS) -o $(BIN)/no_walk_k$(BIN_SUFFIX) $(METACORTEX_OBJ) -lm
+
 kmerinfo: remove_objects $(KMERINFO_OBJ)
 	mkdir -p $(BIN); $(CC) $(OPT) -o $(BIN)/kmerinfo $(KMERINFO_OBJ) -lm
 
