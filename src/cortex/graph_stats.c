@@ -697,7 +697,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
             }
             else if (seed_node == NULL) {
                 printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph->total_size);
-            } else if (walk_paths && (nodes_in_graph->total_size)) {
+            } else if (nodes_in_graph->total_size) {
                 // print out the size of the current subgraph
                 log_printf("graph size\t%i\n",nodes_in_graph->total_size);
                 fprintf(fp_analysis, "%i\t%i\t",nodes_in_graph->branch_nodes,nodes_in_graph->total_size);
@@ -721,7 +721,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
                 }
 
                 /* enough nodes to bother with? If so, get consensus contig */
-                if (nodes_in_graph->total_size >= min_subgraph_kmers) {
+                if (walk_paths && (nodes_in_graph->total_size >= min_subgraph_kmers)) {
 
                     // should be a perfect path? might be two paths though, if we started in the middle
                     // NOTE: unecessary coverage element but repeating the whole path finding without coverage
@@ -785,6 +785,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
 
     // check each node in the graph, FLAG X&Y nodes (mark all nodes as visited)
+		timestamp_gs();
     log_and_screen_printf("Stats traversal started...");
     hash_table_traverse(&identify_branch_nodes, graph);
     log_and_screen_printf("DONE\n");
@@ -797,6 +798,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
     // second travesal - build subgraphs out.
     //log_printf("\t2ND TRAVERSAL?\n");
+		timestamp_gs();
     log_and_screen_printf("Full traversal started...");
     hash_table_traverse(&explore_node, graph);
     log_and_screen_printf("DONE\n");
