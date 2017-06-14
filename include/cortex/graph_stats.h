@@ -53,6 +53,6 @@ typedef struct {
 #endif /* GRAPHINFO_H */
 
 
-void find_subgraph_stats(dBGraph* graph, char* consensus_contigs_filename, int min_subgraph_kmers, int max_node_edges, float delta_coverage);
+void find_subgraph_stats(dBGraph* graph, char* consensus_contigs_filename, int min_subgraph_kmers, int max_node_edges, float delta_coverage, int linked_list_max_size);
 
 void print_degree_stats(GraphInfo * nodes_in_graph, FILE* fp_degrees);

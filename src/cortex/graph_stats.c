@@ -65,9 +65,9 @@ typedef struct _TopItem {
 } TopItem;
 
 TopItem *start = 0;
-int max_size = 1; // should be user defined - top N coverage nodes
+// int linked_list_max_size = 1; // should be user defined - top N coverage nodes
 int current_size = 0;
-void add_item(dBNode* ptr, int value)
+void add_item(dBNode* ptr, int value, int linked_list_max_size)
 {
     //printf("Adding %s with %d\n", ptr, value);
     TopItem *ti = malloc(sizeof(TopItem));
@@ -81,12 +81,12 @@ void add_item(dBNode* ptr, int value)
     ti->next = 0;
     ti->prev = 0;
 
-    if ((start == 0) && (max_size>0)) {
+    if ((start == 0) && (linked_list_max_size>0)) {
         start = ti;
         current_size++;
     } else {
         // If value is > than start of list, we need to find where to insert it
-        if ((value > start->value) || (current_size < max_size)) {
+        if ((value > start->value) || (current_size < linked_list_max_size)) {
             // Find insertion point
             TopItem* current = start;
             while ((current->next != 0) && (value > current->value)) {
@@ -118,7 +118,7 @@ void add_item(dBNode* ptr, int value)
             }
 
             // Is list too big now?
-            if (current_size > max_size) {
+            if (current_size > linked_list_max_size) {
                 //printf("Removing %s\n", start->ptr);
 								TopItem* temp = start;
 								start = temp->next;
@@ -402,7 +402,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
 // ----------------------------------------------------------------------
 // Work through graph, count coverage, X, Y nodes
 // ----------------------------------------------------------------------
-void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int min_subgraph_kmers, int max_node_edges, float delta_coverage)
+void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int min_subgraph_kmers, int max_node_edges, float delta_coverage, int linked_list_max_size)
 {
     FILE* fp_analysis;
     FILE* fp_report;
@@ -592,7 +592,9 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
           exit(-1);
       }
 
-      add_item(node, this_coverage);
+			if (linked_list_max_size){
+	      add_item(node, this_coverage, linked_list_max_size);
+			}
 
       // GRAPH DENSITY ESTIMATES
       // hash_table_traverse if edges_forward+edges reverse>2
@@ -790,7 +792,9 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     hash_table_traverse(&identify_branch_nodes, graph);
     log_and_screen_printf("DONE\n");
     log_and_screen_printf("Unique kmers before clearing:\t %lld\n", graph->unique_kmers);
-    clear_list(graph);
+		if (linked_list_max_size){
+	    clear_list(graph);
+		}
     log_and_screen_printf("Unique kmers after clearing:\t %lld\n", graph->unique_kmers);
 
     // first line for stats output file
