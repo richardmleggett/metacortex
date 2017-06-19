@@ -130,6 +130,7 @@ int default_opts(CmdLine * c)
     //c->node_coverage_threshold required
     c->max_node_edges = 9; //TODO
     c->delta_coverage = 100; //TODO
+    c->linked_list_max_size = 0; //TODO
     c->tip_length = 100; //TODO
     c->tip_clip_iterations = 100;
     //c->remove_low_coverage_supernodes_threshold required;
@@ -193,6 +194,7 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
         {"verbose", no_argument, NULL, 'v'},
         {"detect_bubbles", required_argument, NULL, 'w'},
         {"singleton_length", required_argument, NULL, 'x'},
+        {"linked_list_max_size", required_argument, NULL, 'y'},  // using still available letters
         {"remove_low_coverage_kmers", required_argument, NULL, 'z'},
         {"algorithm",required_argument,NULL,'A'},
         {"graphviz", required_argument, NULL, 'G'},
@@ -209,7 +211,7 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
     };
 
     while ((opt = getopt_long(argc, argv,
-                              "ab:c:d:ef:g:hi:jk:l:m:n:o:p:q:r:s:t:uvw:x:z:A:B:C:D:E:FG:H:I:J:K:L:MN:O:P:R:STZ:",
+                              "ab:c:d:ef:g:hi:jk:l:m:n:o:p:q:r:s:t:uvw:x:y:z:A:B:C:D:E:FG:H:I:J:K:L:MN:O:P:R:STZ:",
                               long_options, &longopt_index)) > 0)
     {
         //Parse the default options
@@ -447,6 +449,13 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                 if(optarg == 0){
                     errx(1,  "[-x | --singleton_length] requires an integer greater than 0");
                 }
+                break;
+
+            case 'y':
+                if (optarg == NULL){
+                    errx(1,"[-y ] linked_list_max_size option requires int argument");
+                }
+                cmd_line.linked_list_max_size = atoi(optarg);
                 break;
 
             case 'z':	//node coverage threshold
