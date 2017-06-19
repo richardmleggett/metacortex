@@ -792,6 +792,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     hash_table_traverse(&identify_branch_nodes, graph);
     log_and_screen_printf("DONE\n");
     log_and_screen_printf("Unique kmers before clearing:\t %lld\n", graph->unique_kmers);
+		log_and_screen_printf("linked_list_max_size:\t %i\n", linked_list_max_size);
 		if (linked_list_max_size){
 	    clear_list(graph);
 		}
@@ -848,10 +849,10 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     writeLaTeXreport(fp_report, (int) MAX_BRANCHES, (int) COVERAGE_BIN_SIZE, \
       (int) COVERAGE_BINS, (int) GRAPH_LOG10_LIMIT, (int) NUM_BEST_NODES, &Contig_Branches[0], \
       &Coverage_Dist[0], graph, nodes_in_graph);
-	  writeLaTeXreport_to_log_and_screen((int) MAX_BRANCHES, (int) COVERAGE_BIN_SIZE, \
-	      (int) COVERAGE_BINS, (int) GRAPH_LOG10_LIMIT, (int) NUM_BEST_NODES, &Contig_Branches[0], \
-	      &Coverage_Dist[0], graph, nodes_in_graph);
     fclose(fp_report);
+		writeLaTeXreport_to_log_and_screen((int) MAX_BRANCHES, (int) COVERAGE_BIN_SIZE, \
+			(int) COVERAGE_BINS, (int) GRAPH_LOG10_LIMIT, (int) NUM_BEST_NODES, &Contig_Branches[0], \
+			&Coverage_Dist[0], graph, nodes_in_graph);
 
     //sprintf(command, "pdflatex -interaction=nonstopmode %s", analysis_filename);
 
