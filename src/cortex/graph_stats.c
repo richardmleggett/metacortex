@@ -44,7 +44,7 @@
 
 #define COVERAGE_BINS 10
 #define COVERAGE_BIN_SIZE 1
-#define MAX_BRANCHES 5
+#define MAX_BRANCHES 10
 #define GRAPH_LOG10_LIMIT 10 // little hacky to do this here, because it needs to match size of subgraph_dist in graph_stats.h
 #define NUM_BEST_NODES 5
 #define MIN_CONTIG_SIZE 10
