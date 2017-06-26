@@ -603,10 +603,12 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
       //   count length
       //   average length > kmer?
 
+			Contig_Branches[all_edges-1]++;
 
       if ((all_edges>2) && (all_edges<=max_node_edges)){
         //log_and_screen_printf("\nWalking branch node...\n");
         // Look at all paths out from here
+
         orientation = forward;
         int i;
       	for (i = 0; i < 4; i++) {
@@ -781,7 +783,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
             if (nodes_in_graph->branch_nodes>(MAX_BRANCHES-1)){
                 nodes_in_graph->branch_nodes=MAX_BRANCHES-1;
             }
-            Contig_Branches[nodes_in_graph->branch_nodes]++;
         }
     } // explore_node
 

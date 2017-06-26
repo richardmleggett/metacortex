@@ -261,6 +261,13 @@ void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename,
                         log_printf("Didn't write path of size %d\n", final_path->length);
                     }
 
+
+/*
+
+HERE - INSTEAD OF VISITING A BRANCH NODE, INSTEAD REMOVE EDGES FROM BEFORE
+AND AFTER IT ON CURRENT PATH
+
+*/
                     if (multiple_subgraph_contigs) {
                         /* Now clear visited flags for subgraph */
                         while (graph_queue->number_of_items > 0) {
