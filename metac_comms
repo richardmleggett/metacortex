@@ -1,5 +1,6 @@
 make MAXK=31 metacortex
 make MAXK=95 metacortex
+make MAXK=95 no_walk
 
 metac_path=/usr/users/ga002/aylingm/grimoire/metacortex/bin/metacortex_k95
 
