@@ -799,7 +799,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 
 										*/
 
-										while (graph_queue->number_of_items > 0) {
+										/*while (graph_queue->number_of_items > 0) {
 												queue_node = (dBNode*)queue_pop(graph_queue);
 												db_node_action_unset_flag(queue_node, VISITED);
 										}
@@ -808,7 +808,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 											// remove edges from branhing nodes along path.
 												cleaning_prune_db_node(final_path->nodes[pi], graph);
 												db_node_action_set_flag(final_path->nodes[pi], VISITED);
-										}
+										}*/
 
                     /* Reset paths */
                     path_reset(simple_path);
