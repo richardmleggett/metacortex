@@ -805,15 +805,13 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 										}
 										// Now disconnect path from other nodes and mark path as visited, so it's not visited again //
 										for (pi=0; pi<final_path->length; pi++) {
-											// remove edges from branhing nodes along path.
+											// remove edges from branching nodes along path.
 												cleaning_prune_db_node(final_path->nodes[pi], graph);
 												db_node_action_set_flag(final_path->nodes[pi], VISITED);
 										}*/
 
                     /* Reset paths */
                     path_reset(simple_path);
-                    //} else if (nodes_in_graph->branch_nodes>0) {
-                    //    log_printf("  Too complicated a graph (%i branch nodes). Not outputting contig.\n", nodes_in_graph->branch_nodes);
 
                 } else  {
                     log_printf("  Number of nodes (%i) too small. Not outputting contig.\n", nodes_in_graph->total_size);
