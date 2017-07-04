@@ -402,7 +402,9 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
 // ----------------------------------------------------------------------
 // Work through graph, count coverage, X, Y nodes
 // ----------------------------------------------------------------------
-void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int min_subgraph_kmers, int max_node_edges, float delta_coverage, int linked_list_max_size)
+void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
+	 int min_subgraph_kmers, int max_node_edges, float delta_coverage,
+	  int linked_list_max_size, int walk_paths)
 {
     FILE* fp_analysis;
     FILE* fp_report;
@@ -416,7 +418,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
     int i;  int j;
     int counter= 0;
     int min_distance = 0; //10 * (graph->kmer_size);  // NOTE: needs to be a cmd_line option
-    int walk_paths = 0; // FLAG - needs to be set in cmd_line; 1=walk subgraphs, 0=don't
+    //int walk_paths = 0; // FLAG - needs to be set in cmd_line; 1=walk subgraphs, 0=don't
 
     char cwd[1024];
 
@@ -540,7 +542,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
      exit(-1);
      }*/
 
-    sprintf(analysis_filename, "%s%s.tex", graph_wd, basename(consensus_contigs_filename));
+    //sprintf(analysis_filename, "%s%s.tex", graph_wd, basename(consensus_contigs_filename));
 
     log_and_screen_printf("graphs\t%s\n", analysis_filename);
 
@@ -779,10 +781,10 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename, int 
 										// Now disconnect path from other nodes and mark path as visited, so it's not visited again //
 										for (i=0; i<simple_path->length; i++) {
 
-											// remove edges from branching nodes along path.
 											if (simple_path->step_flags[i] & X_NODE)
 											{
-												// check seq before and after?
+												// leave branching nodes in path, cleaning_prune_db_node
+												//   will remove reciprocal edges to adjacent nodes in path
 											}
 											else // for non-branching nodes (including Y-branches)
 											{
