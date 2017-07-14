@@ -753,22 +753,9 @@ void * destroy_gfa_stats(gfa_stats * gfa){
   return 0;
 }
 
-void output_S_line(FILE * f, gfa_stats * gfa, char* seq){
-  fprintf(f, "\nS %qd_%d ", gfa->H_count, gfa->S_count);
-  if(seq!=NULL){
-    output_seq_without_line_breaks(seq, f);
-  }
-}
-
-void output_L_line(FILE * f, gfa_stats * gfa){
-  fprintf(f, "\nL %qd_%d %c %qd_%d %c %dM",
-    gfa->H_count, gfa->current_S_line, gfa->orient[0],
-    gfa->H_count, gfa->S_count, gfa->orient[0], gfa->overlap);
-}
-
-void post_polymorph_L_lines(FILE * f, gfa_stats * gfa){
+void post_polymorph_L_lines(FILE * file_gfa, gfa_stats * gfa){
   while (gfa->S_count > gfa->current_S_line ){
-    output_L_line(f, gfa);
+    output_L_line(file_gfa, gfa);
     gfa->current_S_line++;
   }
 }
@@ -785,6 +772,17 @@ void check_orient_gfa(gfa_stats * gfa, Orientation orientation){
   }
 }
 
+void output_S_line(FILE * file_gfa, gfa_stats * gfa, char* seq){
+  fprintf(file_gfa, "\nS %qd_%d ", gfa->H_count, gfa->S_count);
+  if(seq!=NULL){
+    output_seq_without_line_breaks(seq, file_gfa);
+  }
+}
+
+void output_L_line(FILE * file_gfa, gfa_stats * gfa){
+  fprintf(file_gfa, "\nL %qd_%d %c %qd_%d %c %dM", gfa->H_count, gfa->current_S_line, gfa->orient[0], gfa->H_count, gfa->S_count, gfa->orient[0], gfa->overlap);
+}
+
 void add_to_P_line(gfa_stats * gfa){
   //check for sizes of P_line's (not greater than max size of string)
   char text[100]; // HACK FOR NOW
@@ -792,8 +790,7 @@ void add_to_P_line(gfa_stats * gfa){
 
   sprintf(text, "%c%qd_%d%c", gfa->gap_or_comma[0], gfa->H_count, gfa->S_count, gfa->orient[0]);
   sprintf(overlap, "%c%dM", gfa->gap_or_comma[0], gfa->overlap);
-  if (strlen(gfa->P_line)>(gfa->max_length-strlen(text))
-              ||strlen(gfa->P_line_overlap)>(gfa->max_length-strlen(overlap))){
+  if (strlen(gfa->P_line)>(gfa->max_length-strlen(text)) || strlen(gfa->P_line_overlap)>(gfa->max_length-strlen(overlap))){
     // output error? output P line and start a new one?
     log_and_screen_printf("ERROR: gfa P line grew too large\n");
   }
@@ -812,12 +809,12 @@ void add_to_P_line(gfa_stats * gfa){
   }
 }
 
-void output_P_line(FILE * f, gfa_stats * gfa){
+void output_P_line(FILE * file_gfa, gfa_stats * gfa){
   if(strlen(gfa->P_line)>0){
     gfa->S_count++;
-    fprintf(f, "\nP %qd_%d", gfa->H_count, gfa->S_count);
-    output_seq_without_line_breaks(gfa->P_line, f);
-    output_seq_without_line_breaks(gfa->P_line_overlap, f);
+    fprintf(file_gfa, "\nP %qd_%d", gfa->H_count, gfa->S_count);
+    output_seq_without_line_breaks(gfa->P_line, file_gfa);
+    output_seq_without_line_breaks(gfa->P_line_overlap, file_gfa);
   }
 }
 
