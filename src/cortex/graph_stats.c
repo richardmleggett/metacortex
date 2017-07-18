@@ -718,7 +718,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
                     nodes_in_graph->largest_subgraph=nodes_in_graph->total_size;
                 }
                 nodes_in_graph->branch_nodes_total=nodes_in_graph->branch_nodes_total+nodes_in_graph->branch_nodes;
-                nodes_in_graph->num_subgraphs++;
+                //nodes_in_graph->num_subgraphs++;		if more than one contig per graph, this is actually num contigs
                 i=log10(nodes_in_graph->total_size);
                 if(i>=GRAPH_LOG10_LIMIT){
                     i=GRAPH_LOG10_LIMIT-1;
@@ -763,7 +763,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
                           fprintf(fp_contigs_gfa, "H %qd", simple_path->id);
                         }
                         path_to_fasta(simple_path, fp_contigs_fasta);
-                        path_to_fasta_metacortex(simple_path, fp_contigs_fastg, fp_contigs_gfa, graph);
+                        //path_to_fasta_metacortex(simple_path, fp_contigs_fastg, fp_contigs_gfa, graph);
                         counter++;
                     } else {
                         log_printf("Didn't write path of size %d\n", simple_path->length);
@@ -783,6 +783,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
 
 											if (simple_path->step_flags[i] & X_NODE)
 											{
+			                  log_printf("[x-NODE IN PATH RETAINED]\n");
 												// leave branching nodes in path, cleaning_prune_db_node
 												//   will remove reciprocal edges to adjacent nodes in path
 											}

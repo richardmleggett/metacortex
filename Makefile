@@ -13,41 +13,37 @@ endif
 BIN = bin
 LIB = lib
 
-ifeq ($(MAXK),31)
-   BITFIELDS = 1
+ifndef MAXK
+ MAXK = 31
 endif
 
-ifeq ($(MAXK),63)
-   BITFIELDS = 2
-endif
-
-ifeq ($(MAXK),95)
-   BITFIELDS = 3
-endif
-
-ifeq ($(MAXK),127)
-   BITFIELDS = 4
-endif
-
-ifeq ($(MAXK),160)
-   BITFIELDS = 5
-endif
-
-ifeq ($(MAXK),192)
-   BITFIELDS = 6
-endif
-
-ifeq ($(MAXK),223)
-   BITFIELDS = 7
-endif
-
-ifeq ($(MAXK),255)
-   BITFIELDS = 8
-endif
-
-ifndef BITFIELDS
-   BITFIELDS = 1
-   MAXK = 31
+ifeq ($(shell expr $(MAXK) \< 32),1)
+BITFIELDS = 1
+MAXK=31
+else ifeq ($(shell expr $(MAXK) \< 64),1)
+BITFIELDS = 2
+MAXK=63
+else ifeq ($(shell expr $(MAXK) \< 96),1)
+BITFIELDS = 3
+MAXK=95
+else ifeq ($(shell expr $(MAXK) \< 128),1)
+BITFIELDS = 4
+MAXK=127
+else ifeq ($(shell expr $(MAXK) \< 161),1)
+BITFIELDS = 5
+MAXK=159
+else ifeq ($(shell expr $(MAXK) \< 193),1)
+BITFIELDS = 6
+MAXK=191
+else ifeq ($(shell expr $(MAXK) \< 224),1)
+BITFIELDS = 7
+MAXK=223
+else ifeq ($(shell expr $(MAXK) \< 256),1)
+BITFIELDS = 8
+MAXK=255
+else
+BITFIELDS = 1
+MAXK=31
 endif
 
 BIN_SUFFIX = $(MAXK)
