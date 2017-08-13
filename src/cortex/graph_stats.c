@@ -563,7 +563,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
 
     db_graph_reset_flags(graph);
 
-    // called by identify_branch_nodes(), walks paths from a branch
+    // called by stats_traversal(), walks paths from a branch
     void find_path_length_with_first_edge_all_colours(Nucleotide n, dBNode * node, int * path_length, Orientation orientation) {
       if (db_node_edge_exist_any_colour(node, n, orientation)) {
         pathStep first_step;
@@ -580,8 +580,10 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
       }
     }
 
+
+
     // Hash table iterator to label nodes
-    void identify_branch_nodes(dBNode * node) {
+    void stats_traversal(dBNode * node) {
       //if (!db_node_check_flag_visited(node)) {
       int this_coverage = element_get_coverage_all_colours(node) - 1;
       int edges_forward= db_node_edges_count_all_colours(node, forward);
@@ -664,7 +666,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
           log_and_screen_printf("\nPruning node:\tedges\t%i\tdistance\t%i\n", all_edges, local_distance);
           cleaning_prune_db_node(node, graph);
       }
-    } // identify_branch_nodes()
+    } // stats_traversal()
 
 
     graph_queue = queue_new(METACORTEX_QUEUE_SIZE);
@@ -675,8 +677,68 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
     /* Initialise temporaray path array buffers */
     path_array_initialise_buffers(graph->kmer_size);
 
+
+    // Hash table iterator to label nodes
+    void explore_graph_size(dBNode * node) {
+			if(db_node_check_for_any_flag(node, PRUNED | VISITED) == false){
+
+				dBNode* seed_node;
+				nodes_in_graph->total_size = 0;
+				nodes_in_graph->branch_nodes = 0;
+				nodes_in_graph->end_nodes = 0;
+				nodes_in_graph->highest_cov = 0;
+				for(i=0;i<5;i++){
+					for(j=0;j<5;j++){
+						nodes_in_graph->node_degree[i][j]=0;
+					}
+				}
+				// Grow graph from this node, returning the 'best' (highest coverage) node to store as seed point
+				log_printf("\nGrowing graph from node");
+				graph_queue->number_of_items = 0;
+
+				timestamp_gs();
+				log_printf("\n");
+
+				// now with a subgraph, walk the graph counting degrees by graph
+				grow_graph_from_node_stats(node, &seed_node, graph, graph_queue, nodes_in_graph, delta_coverage);
+
+				if (nodes_in_graph->total_size ==1) {
+					// ignore; pruned node
+				}
+				else if (seed_node == NULL) {
+					printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph->total_size);
+				}
+				else if (nodes_in_graph->total_size) {
+					// print out the size of the current subgraph
+					log_printf("graph size\t%i\n",nodes_in_graph->total_size);
+					fprintf(fp_analysis, "%i\t%i\t",nodes_in_graph->branch_nodes,nodes_in_graph->total_size);
+					binary_kmer_to_seq(&nodes_in_graph->highest_cov_in_subgraph, graph->kmer_size, seq);
+					fprintf(fp_analysis, "%s\n", seq);
+
+					// update graph wide stats
+					print_degree_stats(nodes_in_graph, fp_degrees);
+					if (nodes_in_graph->total_size>nodes_in_graph->largest_subgraph) {
+							nodes_in_graph->largest_subgraph=nodes_in_graph->total_size;
+					}
+					nodes_in_graph->branch_nodes_total=nodes_in_graph->branch_nodes_total+nodes_in_graph->branch_nodes;
+					//nodes_in_graph->num_subgraphs++;		if more than one contig per graph, this is actually num contigs
+					i=log10(nodes_in_graph->total_size);
+					if(i>=GRAPH_LOG10_LIMIT){
+							i=GRAPH_LOG10_LIMIT-1;
+					}
+					nodes_in_graph->subgraph_dist[i]++;
+					if(nodes_in_graph->total_size>MIN_SUBGRAPH_SIZE){
+							nodes_in_graph->num_subgraphs_2k++;
+					}
+				}
+				if (nodes_in_graph->branch_nodes>(MAX_BRANCHES-1)){
+						nodes_in_graph->branch_nodes=MAX_BRANCHES-1;
+				}
+			}
+		} // end of &explore_graph_size
+
     // Hash table iterator to walk graphs, produce paths
-    void explore_node(dBNode * node) {
+    void traversal_for_contigs(dBNode * node) {
         if(db_node_check_for_any_flag(node, PRUNED | VISITED) == false){
 
             dBNode* seed_node;
@@ -707,10 +769,10 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
                 printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph->total_size);
             } else if (nodes_in_graph->total_size) {
                 // print out the size of the current subgraph
-                log_printf("graph size\t%i\n",nodes_in_graph->total_size);
+
+								/*log_printf("graph size\t%i\n",nodes_in_graph->total_size);
                 fprintf(fp_analysis, "%i\t%i\t",nodes_in_graph->branch_nodes,nodes_in_graph->total_size);
                 binary_kmer_to_seq(&nodes_in_graph->highest_cov_in_subgraph, graph->kmer_size, seq);
-                fprintf(fp_analysis, "%s\n", seq);
 
                 // update graph wide stats
                 print_degree_stats(nodes_in_graph, fp_degrees);
@@ -727,6 +789,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
                 if(nodes_in_graph->total_size>MIN_SUBGRAPH_SIZE){
                     nodes_in_graph->num_subgraphs_2k++;
                 }
+
+                fprintf(fp_analysis, "%s\n", seq);*/
 
                 /* enough nodes to bother with? If so, get consensus contig */
                 if (walk_paths && (nodes_in_graph->total_size >= min_subgraph_kmers)) {
@@ -800,7 +864,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
 
                 } else  {
                     log_printf("  Number of nodes (%i) too small. Not outputting contig.\n", nodes_in_graph->total_size);
-                }
+                } // end size graph size check
 
 
             } else {
@@ -811,14 +875,21 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
                 nodes_in_graph->branch_nodes=MAX_BRANCHES-1;
             }
         }
-    } // explore_node
+    } // traversal_for_contigs
 
 
     // check each node in the graph, FLAG X&Y nodes (mark all nodes as visited)
 		timestamp_gs();
     log_and_screen_printf("Stats traversal started...");
-    hash_table_traverse(&identify_branch_nodes, graph);
+    hash_table_traverse(&stats_traversal, graph);
     log_and_screen_printf("DONE\n");
+
+
+		timestamp_gs();
+		log_and_screen_printf("Graph size traversal started...");
+    hash_table_traverse(&explore_graph_size, graph);
+    log_and_screen_printf("DONE\n");
+
     log_and_screen_printf("Unique kmers before clearing:\t %lld\n", graph->unique_kmers);
 		log_and_screen_printf("linked_list_max_size:\t %i\n", linked_list_max_size);
 		if (linked_list_max_size){
@@ -832,8 +903,9 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
     // second travesal - build subgraphs out.
     //log_printf("\t2ND TRAVERSAL?\n");
 		timestamp_gs();
+    db_graph_reset_flags(graph);
     log_and_screen_printf("Full traversal started...");
-    hash_table_traverse(&explore_node, graph);
+    hash_table_traverse(&traversal_for_contigs, graph);
     log_and_screen_printf("DONE\n");
     fclose(fp_analysis);
     fclose(fp_degrees);
