@@ -285,67 +285,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                               *best_node = new_path->nodes[i];
                           }
 
-                          if (this_coverage>nodes_in_graph->highest_cov){
-                              nodes_in_graph->highest_cov=this_coverage;
-                              binary_kmer_assignment_operator(nodes_in_graph->current_kmer,new_path->nodes[i]->kmer);
-                              binary_kmer_assignment_operator(nodes_in_graph->highest_cov_in_subgraph,nodes_in_graph->current_kmer);
-                          }
-
-                          // if this is better than the lowest 'good' node (top five coverage)
-                          if ((best_node == 0) ||
-                              (this_coverage > nodes_in_graph->best_coverage[NUM_BEST_NODES-1]) ||
-                              ((this_coverage == nodes_in_graph->best_coverage[NUM_BEST_NODES-1]) && ((this_FOR_edges + this_REV_edges) > best_edges[NUM_BEST_NODES-1])))
-                          {
-                              // sort algorithm - because I sort as I build array, no need to make more than one pass
-                              int temp_cov=0;
-                              binary_kmer_initialise_to_zero(&(nodes_in_graph->temp_kmer));
-                              // yes, this is the same as above.
-                              binary_kmer_assignment_operator(nodes_in_graph->current_kmer,new_path->nodes[i]->kmer);
-                              // seed_node->kmer
-
-                              int j=0;
-                              while(this_coverage){
-                                  if(j>=NUM_BEST_NODES){
-                                      this_coverage=0;
-                                  }
-                                  else if (this_coverage>nodes_in_graph->best_coverage[j]||
-                                           ((this_coverage == nodes_in_graph->best_coverage[j]) && ((this_FOR_edges + this_REV_edges) > best_edges[j]))){
-                                      temp_cov = nodes_in_graph->best_coverage[j];
-                                      nodes_in_graph->best_coverage[j] = this_coverage;
-                                      this_coverage=temp_cov;
-
-                                      // recycle temp_cov for one line
-                                      temp_cov=best_edges[j];
-                                      best_edges[j] = (this_FOR_edges + this_REV_edges);
-                                      // set the current edge count for the rest of the loop
-                                      this_FOR_edges=temp_cov;
-                                      this_REV_edges=0;
-                                      temp_cov=0;
-
-                                      binary_kmer_assignment_operator(nodes_in_graph->temp_kmer,nodes_in_graph->kmer[j]);
-                                      binary_kmer_assignment_operator(nodes_in_graph->kmer[j],nodes_in_graph->current_kmer);
-                                      binary_kmer_assignment_operator(nodes_in_graph->current_kmer,nodes_in_graph->temp_kmer);
-                                      j++;
-                                  }
-                                  else{
-                                      j++;
-                                  }
-                              }
-                          }
-
-                          if (db_node_check_for_any_flag(new_path->nodes[i], BRANCH_NODE_FORWARD)){
-                              nodes_in_graph->branch_nodes++;
-                          }
-                          else if (db_node_check_for_any_flag(new_path->nodes[i], BRANCH_NODE_REVERSE)){
-                              nodes_in_graph->branch_nodes++;
-                          }
-                          else if (db_node_check_for_any_flag(new_path->nodes[i], X_NODE)){
-                              nodes_in_graph->branch_nodes++;
-                          }
-
                           db_node_action_set_flag_visited(new_path->nodes[i]);
-
-                      nodes_in_graph->total_size++;
                     }
                   } // path->length loop
                 }
@@ -417,7 +357,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
     int i;  int j;
     int counter= 0;
     int min_distance = 0; //10 * (graph->kmer_size);  // NOTE: needs to be a cmd_line option
-    //int walk_paths = 0; // FLAG - needs to be set in cmd_line; 1=walk subgraphs, 0=don't
 
     char cwd[1024];
 
@@ -499,17 +438,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
     // check for graphs dir existance
     if (basename(consensus_contigs_filename)==consensus_contigs_filename){
         log_and_screen_printf("(Relative path for contig output given, prefixing CWD)\n");
-        /*if (cwd=='.'){
-         graph_wd="graphs/";
-         }
-         else{
-         // NOTE: this breaks, rather than returning the full path sometimes.
-         */
         // returns '.' which breaks other paths later on
         sprintf(graph_wd, "%s/graphs/", cwd);
-        //}
-        //graph_wd="graphs/";
-        //sprintf(analysis_filename, "%s%s.tex", graph_wd, basename(consensus_contigs_filename));
     }
     else{
         // dirname modifies 'consensus_contigs_filename' on some platforms, shifted in here to avoid that
@@ -517,20 +447,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
         sprintf(graph_wd, "%s/graphs/", dirname(consensus_contigs_filename));
     }
 
-
-
     mkdir(graph_wd, 777);
-
-    /*if(mkdir(graph_wd, 777)){
-     // runs even if 'graphs' exists
-     //log_and_screen_printf("mkdir works\n");
-     }
-     else{
-     log_and_screen_printf("mkdir failed?\n");
-     exit(-1);
-     }*/
-
-    //sprintf(analysis_filename, "%s%s.tex", graph_wd, basename(consensus_contigs_filename));
 
     log_and_screen_printf("graphs\t%s\n", analysis_filename);
 
