@@ -521,7 +521,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
         sprintf(graph_wd, "%s/graphs/", cwd);
         //}
         //graph_wd="graphs/";
-        sprintf(analysis_filename, "%s%s.tex", graph_wd, basename(consensus_contigs_filename));
+        //sprintf(analysis_filename, "%s%s.tex", graph_wd, basename(consensus_contigs_filename));
     }
     else{
         // dirname modifies 'consensus_contigs_filename' on some platforms, shifted in here to avoid that
@@ -886,6 +886,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
 
 
 		timestamp_gs();
+    // first line for stats output file
+    fprintf(fp_analysis, "\n#Subgraph sizes\n");
 		log_and_screen_printf("Graph size traversal started...");
     hash_table_traverse(&explore_graph_size, graph);
     log_and_screen_printf("DONE\n");
@@ -897,8 +899,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
 		}
     log_and_screen_printf("Unique kmers after clearing:\t %lld\n", graph->unique_kmers);
 
-    // first line for stats output file
-    fprintf(fp_analysis, "\n#Subgraph sizes\n");
 
     // second travesal - build subgraphs out.
     //log_printf("\t2ND TRAVERSAL?\n");
