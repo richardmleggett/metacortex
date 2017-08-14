@@ -305,7 +305,6 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
 
                               int j=0;
                               while(this_coverage){
-                                  //log_printf("\n\t\t\tj %d\t%d\t%d\n", j, this_coverage, nodes_in_graph->best_coverage[j]);  // DEBUG BUBBLE BUG
                                   if(j>=NUM_BEST_NODES){
                                       this_coverage=0;
                                   }
@@ -436,18 +435,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
     Path *path_rev = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
 
     GraphInfo* nodes_in_graph = calloc(1,sizeof(GraphInfo));
-    // need a small function for initialising this?
-    nodes_in_graph->largest_subgraph = 0;
-    nodes_in_graph->num_subgraphs = 0;
-    nodes_in_graph->num_subgraphs_2k = 0;
-    nodes_in_graph->simple_bubbles = 0;
-    for(i=0;i<GRAPH_LOG10_LIMIT;i++){
-        nodes_in_graph->subgraph_dist[i]=0;
-    }
-    for (i=0; i<NUM_BEST_NODES; i++) {
-        nodes_in_graph->best_coverage[i]=0;
-    }
-    nodes_in_graph->branch_nodes_total=0;
+		new_GraphInfo(nodes_in_graph);
 
     // array to bin coverage 0-5, 5-10, 10-15..95-100
     long int Coverage_Dist[COVERAGE_BINS*COVERAGE_BIN_SIZE]; // will this work?
@@ -580,8 +568,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
       }
     }
 
-
-
     // Hash table iterator to label nodes
     void stats_traversal(dBNode * node) {
       //if (!db_node_check_flag_visited(node)) {
@@ -668,7 +654,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
       }
     } // stats_traversal()
 
-
     graph_queue = queue_new(METACORTEX_QUEUE_SIZE);
     if (!graph_queue) {
         log_and_screen_printf("Couldn't get memory for graph queue.\n");
@@ -677,21 +662,11 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
     /* Initialise temporaray path array buffers */
     path_array_initialise_buffers(graph->kmer_size);
 
-
-    // Hash table iterator to label nodes
+    // Hash table iterator to initially walk all
     void explore_graph_size(dBNode * node) {
 			if(db_node_check_for_any_flag(node, PRUNED | VISITED) == false){
 
-				dBNode* seed_node;
-				nodes_in_graph->total_size = 0;
-				nodes_in_graph->branch_nodes = 0;
-				nodes_in_graph->end_nodes = 0;
-				nodes_in_graph->highest_cov = 0;
-				for(i=0;i<5;i++){
-					for(j=0;j<5;j++){
-						nodes_in_graph->node_degree[i][j]=0;
-					}
-				}
+				initialise_GraphInfo(nodes_in_graph);
 				// Grow graph from this node, returning the 'best' (highest coverage) node to store as seed point
 				log_printf("\nGrowing graph from node");
 				graph_queue->number_of_items = 0;
@@ -700,13 +675,10 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
 				log_printf("\n");
 
 				// now with a subgraph, walk the graph counting degrees by graph
-				grow_graph_from_node_stats(node, &seed_node, graph, graph_queue, nodes_in_graph, delta_coverage);
+				explore_subgraphs(node, graph, nodes_in_graph);
 
 				if (nodes_in_graph->total_size ==1) {
 					// ignore; pruned node
-				}
-				else if (seed_node == NULL) {
-					printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph->total_size);
 				}
 				else if (nodes_in_graph->total_size) {
 					// print out the size of the current subgraph
@@ -721,7 +693,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
 							nodes_in_graph->largest_subgraph=nodes_in_graph->total_size;
 					}
 					nodes_in_graph->branch_nodes_total=nodes_in_graph->branch_nodes_total+nodes_in_graph->branch_nodes;
-					//nodes_in_graph->num_subgraphs++;		if more than one contig per graph, this is actually num contigs
+					nodes_in_graph->num_subgraphs++;
 					i=log10(nodes_in_graph->total_size);
 					if(i>=GRAPH_LOG10_LIMIT){
 							i=GRAPH_LOG10_LIMIT-1;
@@ -742,15 +714,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
         if(db_node_check_for_any_flag(node, PRUNED | VISITED) == false){
 
             dBNode* seed_node;
-            nodes_in_graph->total_size = 0;
-            nodes_in_graph->branch_nodes = 0;
-            nodes_in_graph->end_nodes = 0;
-            nodes_in_graph->highest_cov = 0;
-            for(i=0;i<5;i++){
-                for(j=0;j<5;j++){
-                    nodes_in_graph->node_degree[i][j]=0;
-                }
-            }
+						initialise_GraphInfo(nodes_in_graph);
 
             // Grow graph from this node, returning the 'best' (highest coverage) node to store as seed point
             log_printf("\nGrowing graph from node");
@@ -768,30 +732,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
             else if (seed_node == NULL) {
                 printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph->total_size);
             } else if (nodes_in_graph->total_size) {
-                // print out the size of the current subgraph
-
-								/*log_printf("graph size\t%i\n",nodes_in_graph->total_size);
-                fprintf(fp_analysis, "%i\t%i\t",nodes_in_graph->branch_nodes,nodes_in_graph->total_size);
-                binary_kmer_to_seq(&nodes_in_graph->highest_cov_in_subgraph, graph->kmer_size, seq);
-
-                // update graph wide stats
-                print_degree_stats(nodes_in_graph, fp_degrees);
-                if(nodes_in_graph->total_size>nodes_in_graph->largest_subgraph){
-                    nodes_in_graph->largest_subgraph=nodes_in_graph->total_size;
-                }
-                nodes_in_graph->branch_nodes_total=nodes_in_graph->branch_nodes_total+nodes_in_graph->branch_nodes;
-                //nodes_in_graph->num_subgraphs++;		if more than one contig per graph, this is actually num contigs
-                i=log10(nodes_in_graph->total_size);
-                if(i>=GRAPH_LOG10_LIMIT){
-                    i=GRAPH_LOG10_LIMIT-1;
-                }
-                nodes_in_graph->subgraph_dist[i]++;
-                if(nodes_in_graph->total_size>MIN_SUBGRAPH_SIZE){
-                    nodes_in_graph->num_subgraphs_2k++;
-                }
-
-                fprintf(fp_analysis, "%s\n", seq);*/
-
                 /* enough nodes to bother with? If so, get consensus contig */
                 if (walk_paths && (nodes_in_graph->total_size >= min_subgraph_kmers)) {
 
@@ -877,28 +817,26 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
         }
     } // traversal_for_contigs
 
-
     // check each node in the graph, FLAG X&Y nodes (mark all nodes as visited)
 		timestamp_gs();
     log_and_screen_printf("Stats traversal started...");
     hash_table_traverse(&stats_traversal, graph);
     log_and_screen_printf("DONE\n");
 
-
+		// first line for stats output file
 		timestamp_gs();
-    // first line for stats output file
     fprintf(fp_analysis, "\n#Subgraph sizes\n");
 		log_and_screen_printf("Graph size traversal started...");
     hash_table_traverse(&explore_graph_size, graph);
     log_and_screen_printf("DONE\n");
 
+		// clear linked list
     log_and_screen_printf("Unique kmers before clearing:\t %lld\n", graph->unique_kmers);
 		log_and_screen_printf("linked_list_max_size:\t %i\n", linked_list_max_size);
 		if (linked_list_max_size){
 	    clear_list(graph);
 		}
     log_and_screen_printf("Unique kmers after clearing:\t %lld\n", graph->unique_kmers);
-
 
     // second travesal - build subgraphs out.
     //log_printf("\t2ND TRAVERSAL?\n");
@@ -971,14 +909,224 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
     db_graph_reset_flags(graph);
 }
 
-void print_degree_stats(GraphInfo * nodes_in_graph, FILE* fp_degrees){
+void print_degree_stats(GraphInfo * info, FILE* fp_degrees){
     int i;  int j;
-    int total_nodes=nodes_in_graph->total_size;
+    int total_nodes=info->total_size;
 
     for(i=0;i<5;i++){
         for(j=0;j<5;j++){
-            fprintf(fp_degrees,"%f\t",  ((float) nodes_in_graph->node_degree[i][j]) / (float) total_nodes);
+            fprintf(fp_degrees,"%f\t",  ((float) info->node_degree[i][j]) / (float) total_nodes);
         }
     }
     fprintf(fp_degrees,"%d\n", total_nodes);
+}
+
+void initialise_GraphInfo(GraphInfo * info){
+	int i, j;
+	info->total_size = 0;
+	info->branch_nodes = 0;
+	info->end_nodes = 0;
+	info->highest_cov = 0;
+	for(i=0;i<5;i++){
+		for(j=0;j<5;j++){
+			info->node_degree[i][j]=0;
+		}
+	}
+}
+
+void new_GraphInfo(GraphInfo * info){
+	int i;
+	info->largest_subgraph = 0;
+	info->num_subgraphs = 0;
+	info->num_subgraphs_2k = 0;
+	info->simple_bubbles = 0;
+	for(i=0;i<GRAPH_LOG10_LIMIT;i++){
+			info->subgraph_dist[i]=0;
+	}
+	for (i=0; i<NUM_BEST_NODES; i++) {
+			info->best_coverage[i]=0;
+	}
+	info->branch_nodes_total=0;
+}
+
+int explore_subgraphs(dBNode* start_node, dBGraph* graph, GraphInfo* nodes_in_graph){
+	Queue* nodes_to_walk;
+	dBNode* node;
+	int orientation;
+	int depth;
+	int best_edges[NUM_BEST_NODES];
+	int i;
+	for(i=0; i<NUM_BEST_NODES; i++){
+	    best_edges[i]=0;
+	}
+
+	// Nucleotide iterator, used to walk all possible paths from a node
+	void walk_if_exists(Nucleotide n) {
+	    // If there is an edge in any colour for this nucleotide...
+	    if (db_node_edge_exist_any_colour(node, n, orientation)) {
+
+	        // Get first node along this edge and check we've not already visited it...
+	        Orientation next_orientation;
+	        Nucleotide reverse_nucleotide;
+	        dBNode * next_node;
+	        next_node = db_graph_get_next_node(node, orientation, &next_orientation, n, &reverse_nucleotide, graph);
+	        if (!next_node) {
+	            log_and_screen_printf("Error: Something went wrong with db_graph_get_next_node\n");
+	            exit(-1);
+	        }
+
+	        // If not already visited the first node, walk it...
+	        if (!db_node_check_flag_visited(next_node)) {
+	            pathStep first_step;
+	            Path * new_path;
+	            dBNode* end_node;
+	            i = 0;
+
+	            // Get path
+	            first_step.node = node;
+	            first_step.orientation = orientation;
+	            first_step.label = n;
+	            new_path = path_new(MAX_EXPLORE_NODES, graph->kmer_size);
+	            if (!new_path) {
+	                log_and_screen_printf("ERROR: Not enough memory to allocate new path.\n");
+	                exit(-1);
+	            }
+
+	            db_graph_get_perfect_path_with_first_edge_all_colours(&first_step, &db_node_action_do_nothing, new_path, graph);
+
+	            double path_coverage=0;
+	            int min_coverage=0; int max_coverage=0; // required for path_get_statistics()
+	           	path_get_statistics(&path_coverage, &min_coverage, &max_coverage, new_path);
+
+	            if (1)  {
+	              // Add end node to list of nodes to visit
+	              end_node = new_path->nodes[new_path->length-1];
+	              if (!db_node_check_flag_visited(end_node)) {
+	                  if (!db_node_is_blunt_end_all_colours(end_node, new_path->orientations[new_path->length-1])) {
+	                      if (queue_push_node(nodes_to_walk, end_node, depth+1) == NULL) {
+	                          log_and_screen_printf("Queue too large. Ending. (WALK)\n");
+	                          exit(1);
+	                      }
+	                  }
+	              }
+
+	              // Now go through all nodes, look for best and mark all as visited
+	              for (i=0; i<new_path->length; i++) {
+	                  if (!db_node_check_flag_visited(new_path->nodes[i])) {
+	                      int this_coverage = element_get_coverage_all_colours(new_path->nodes[i]);
+	                      int this_FOR_edges = db_node_edges_count_all_colours(new_path->nodes[i], forward);
+	                      int this_REV_edges = db_node_edges_count_all_colours(new_path->nodes[i], reverse);
+
+	                      // add node degrees to 2D array of all degrees in subgraph
+	                      nodes_in_graph->node_degree[this_FOR_edges][this_REV_edges]++;
+
+	                      if (this_coverage>nodes_in_graph->highest_cov){
+	                          nodes_in_graph->highest_cov=this_coverage;
+	                          binary_kmer_assignment_operator(nodes_in_graph->current_kmer,new_path->nodes[i]->kmer);
+	                          binary_kmer_assignment_operator(nodes_in_graph->highest_cov_in_subgraph,nodes_in_graph->current_kmer);
+	                      }
+
+	                      // if this is better than the lowest 'good' node (top five coverage)
+	                      if ((this_coverage > nodes_in_graph->best_coverage[NUM_BEST_NODES-1]) ||
+	                          ((this_coverage == nodes_in_graph->best_coverage[NUM_BEST_NODES-1]) && ((this_FOR_edges + this_REV_edges) > best_edges[NUM_BEST_NODES-1])))
+	                      {
+	                          // sort algorithm - because I sort as I build array, no need to make more than one pass
+	                          int temp_cov=0;
+	                          binary_kmer_initialise_to_zero(&(nodes_in_graph->temp_kmer));
+	                          // yes, this is the same as above.
+	                          binary_kmer_assignment_operator(nodes_in_graph->current_kmer,new_path->nodes[i]->kmer);
+	                          // seed_node->kmer
+
+	                          int j=0;
+	                          while(this_coverage){
+	                              if(j>=NUM_BEST_NODES){
+	                                  this_coverage=0;
+	                              }
+	                              else if (this_coverage>nodes_in_graph->best_coverage[j]||
+	                                       ((this_coverage == nodes_in_graph->best_coverage[j]) && ((this_FOR_edges + this_REV_edges) > best_edges[j]))){
+	                                  temp_cov = nodes_in_graph->best_coverage[j];
+	                                  nodes_in_graph->best_coverage[j] = this_coverage;
+	                                  this_coverage=temp_cov;
+
+	                                  // recycle temp_cov for one line
+	                                  temp_cov=best_edges[j];
+	                                  best_edges[j] = (this_FOR_edges + this_REV_edges);
+	                                  // set the current edge count for the rest of the loop
+	                                  this_FOR_edges=temp_cov;
+	                                  this_REV_edges=0;
+	                                  temp_cov=0;
+
+	                                  binary_kmer_assignment_operator(nodes_in_graph->temp_kmer,nodes_in_graph->kmer[j]);
+	                                  binary_kmer_assignment_operator(nodes_in_graph->kmer[j],nodes_in_graph->current_kmer);
+	                                  binary_kmer_assignment_operator(nodes_in_graph->current_kmer,nodes_in_graph->temp_kmer);
+	                                  j++;
+	                              }
+	                              else{
+	                                  j++;
+	                              }
+	                          }
+	                      }
+
+	                      if (db_node_check_for_any_flag(new_path->nodes[i], BRANCH_NODE_FORWARD)){
+	                          nodes_in_graph->branch_nodes++;
+	                      }
+	                      else if (db_node_check_for_any_flag(new_path->nodes[i], BRANCH_NODE_REVERSE)){
+	                          nodes_in_graph->branch_nodes++;
+	                      }
+	                      else if (db_node_check_for_any_flag(new_path->nodes[i], X_NODE)){
+	                          nodes_in_graph->branch_nodes++;
+	                      }
+
+	                      db_node_action_set_flag_visited(new_path->nodes[i]);
+
+	                  nodes_in_graph->total_size++;
+	                }
+	              } // path->length loop
+	            }
+	            else{
+	              cleaning_prune_db_node(new_path->nodes[0], graph);
+	              // NOTE best_node - needs to be checked here. Don't want to return NULL
+	            }
+
+	            // Clean up
+	            path_destroy(new_path);
+	        }
+	    }
+	} // walk_if_exists
+
+	// Start a queue of nodes to walk
+	//log_and_screen_printf("Allocating %d Mb to store queue information (max %d nodes, when full each node could be %d)...\n", ((METACORTEX_QUEUE_SIZE * sizeof(QueueItem*)) / 1024) / 1024, METACORTEX_QUEUE_SIZE, sizeof(QueueItem));
+	nodes_to_walk = queue_new(METACORTEX_QUEUE_SIZE);
+	if (!nodes_to_walk) {
+	    log_and_screen_printf("Couldn't get memory for node queue.\n");
+	    exit(-1);
+	}
+
+	// Add start node to list of nodes to visit
+	if (queue_push_node(nodes_to_walk, start_node, 0) == NULL) {
+	    log_and_screen_printf("Queue too large. Ending.\n");
+	    exit(-1);
+	}
+
+
+	if (!db_node_check_flag_visited(start_node)) {
+	    db_node_action_set_flag_visited(start_node);
+	    nodes_in_graph->total_size++;
+	}
+
+	// Now keep visiting nodes and walking paths
+	while (nodes_to_walk->number_of_items > 0) {
+	    // Take top node from list
+	    node = queue_pop_node(nodes_to_walk, &depth);
+
+	    // Look at all paths out from here
+	    orientation = forward;
+	    nucleotide_iterator(&walk_if_exists);
+	    orientation = reverse;
+	    nucleotide_iterator(&walk_if_exists);
+	}
+
+	queue_free(nodes_to_walk);
+
+	return 0;
 }
