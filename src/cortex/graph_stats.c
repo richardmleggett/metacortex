@@ -231,7 +231,6 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                   min_coverage=1;
                 }
 
-                //log_and_screen_printf("\tDelta cov:\t%d (WALK)\tstarting cov:\t%d\n", (int) delta_coverage, starting_coverage);
                 max_coverage = starting_coverage + (int) delta_coverage;
                 if (((path_coverage >= min_coverage) && (path_coverage <= max_coverage)) || best_node == NULL)  {
                   // Add end node to list of nodes to visit
@@ -277,8 +276,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                           nodes_in_graph->node_degree[this_FOR_edges][this_REV_edges]++;
 
                           // if this is the new best node update the other bests
-                          if ((best_node[0] == 0) ||
-                              (this_coverage > nodes_in_graph->best_coverage[0]) ||
+                          if ((this_coverage > nodes_in_graph->best_coverage[0]) ||
                               ((this_coverage == nodes_in_graph->best_coverage[0]) && ((this_FOR_edges + this_REV_edges) < best_edges[0])))
                           {
                               best_edges[0] = (this_FOR_edges + this_REV_edges);
@@ -843,11 +841,14 @@ void initialise_GraphInfo(GraphInfo * info){
 	info->total_size = 0;
 	info->branch_nodes = 0;
 	info->end_nodes = 0;
-	info->highest_cov = 0;
 	for(i=0;i<5;i++){
 		for(j=0;j<5;j++){
 			info->node_degree[i][j]=0;
 		}
+	}
+	info->highest_cov = 0;
+	for (i=0; i<NUM_BEST_NODES; i++) {
+			info->best_coverage[i]=0;
 	}
 }
 
@@ -857,13 +858,10 @@ void new_GraphInfo(GraphInfo * info){
 	info->num_subgraphs = 0;
 	info->num_subgraphs_2k = 0;
 	info->simple_bubbles = 0;
+	info->branch_nodes_total=0;
 	for(i=0;i<GRAPH_LOG10_LIMIT;i++){
 			info->subgraph_dist[i]=0;
 	}
-	for (i=0; i<NUM_BEST_NODES; i++) {
-			info->best_coverage[i]=0;
-	}
-	info->branch_nodes_total=0;
 }
 
 int explore_subgraphs(dBNode* start_node, dBGraph* graph, GraphInfo* nodes_in_graph){
