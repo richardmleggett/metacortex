@@ -1078,14 +1078,14 @@ int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions *
             //try = false;
             functions->pre_step_action(&current_step);
 
-            added = false;
+            added = false; // redundant? 
             if (current_step.label != Undefined) {
                 functions->get_next_step(&current_step, &next_step, &rev_step, db_graph);
             }
 
-            if (added == false) {
+            /*if (added == false) {
                 // Do something?
-            }
+            }*/
 
             functions->step_action(&current_step);
             execute_path_step_callbacks(&current_step,&functions->step_actions);

@@ -218,7 +218,7 @@ void mark_double_y(dBGraph * db_graph)
 {
     
 	WalkingFunctions wf;
-	perfect_path_get_funtions(&wf);
+	perfect_path_get_functions(&wf);
 	wf.continue_traversing = &continue_searching;
 	wf.get_starting_step = &get_first_step_identity;
 	wf.pre_step_action = &pre_step_action;
@@ -261,7 +261,7 @@ Path *y_walk_get_path(dBNode * node, Orientation orientation,
 	first.orientation =  orientation;
 	
 	WalkingFunctions wf;
-	perfect_path_get_funtions(&wf);
+	perfect_path_get_functions(&wf);
 	
 	void (* old_step_action)(pathStep * st) = wf.step_action;
 	void step_action (pathStep * step){
@@ -380,7 +380,7 @@ void y_walk_print_paths(char *filename, int max_length, int singleton_length,
 	mark_double_y(db_graph);
 	path_reset(path);
     
-	perfect_path_get_funtions(&wf);
+	perfect_path_get_functions(&wf);
 	wf.continue_traversing = &continue_traversing;
     //TODO: write a function that actually looks for where to start... 
 	wf.get_starting_step = &get_first_step_identity;

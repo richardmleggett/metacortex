@@ -1,0 +1,12 @@
+>node_0 length:96 average_coverage:1.00 min_coverage:1 max_coverage:1 fst_coverage:1 fst_r:G fst_f: lst_coverage:1 lst_r: lst_f:G
+GCGATTTTTTTGCCGTATTTTGTTTGTATGAATTTAGCCATGAGTTAAACTCATGATGATACCTTCGATTTCTCTTATAT
+TATCCCCTAAAGAAG
+>node_1 length:96 average_coverage:1.00 min_coverage:1 max_coverage:1 fst_coverage:1 fst_r: fst_f:A lst_coverage:1 lst_r:A lst_f:
+TTAAACTTATGATGATACCTTCGATTTCTCTTATATTATCCCCTAAAGAAGTAGCGATATAGTTTATAATATCATTAGAA
+AGATTGATATCGTTA
+>node_2 length:96 average_coverage:1.00 min_coverage:1 max_coverage:1 fst_coverage:1 fst_r:A fst_f: lst_coverage:1 lst_r: lst_f:A
+TTAGGGGATAATATAAGAGAAATCGAAGGTATCATCATGATGTTTAACTCATGGCTAAATTCATACAAACAAAATACGGC
+AAAAAAATCGCGCAT
+>node_3 length:96 average_coverage:1.00 min_coverage:1 max_coverage:1 fst_coverage:1 fst_r:A fst_f: lst_coverage:1 lst_r: lst_f:A
+GCTTGTATATTTATGATGGCTTTATTTCCGCTTTGCACTTCATAAAAATGCGCGATTTTTTTGCCGTATTTTGTTTGTAT
+GAATTTAGCCATGAG

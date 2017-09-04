@@ -114,7 +114,7 @@ typedef struct
     int bubble_max_length;
     int remove_spurious_links_min_coverage;
     int remove_spurious_links_max_difference;
-    int path_coverage_threshold;
+    int path_coverage_minimum;
     int tip_clip_iterations;
 
     //output

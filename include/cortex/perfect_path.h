@@ -54,7 +54,7 @@ int perfect_path_get_path(dBNode * node, Orientation orientation,
 int pefcet_path_get_path_with_callback(dBNode * node, Orientation orientation,
 		void(*node_action)(dBNode * node), void(*path_action)(Path * path), dBGraph * db_graph);
 
-WalkingFunctions *perfect_path_get_funtions(WalkingFunctions *
+WalkingFunctions *perfect_path_get_functions(WalkingFunctions *
 											walking_functions);
 
 

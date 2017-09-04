@@ -146,7 +146,7 @@ static boolean clean_path(Path * p, dBGraph * db_graph){
 }
 
 WalkingFunctions * branches_get_funtions(WalkingFunctions * walking_functions){
-    perfect_path_get_funtions(walking_functions);
+    perfect_path_get_functions(walking_functions);
     walking_functions->continue_backwards = &clean_path;
     walking_functions->get_next_step = &get_next_step;
     walking_functions->continue_traversing = &continue_traversing;

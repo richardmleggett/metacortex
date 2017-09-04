@@ -108,7 +108,7 @@ int default_opts(CmdLine * c)
     c->print_uncertain_as_n = true;
     c->output_log = false;
     c->min_contig_length = 0;
-    c->path_coverage_threshold = 1;
+    c->path_coverage_minimum = 1;
 
     //-----------
     //parameters
@@ -479,10 +479,10 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
             case 'C':
                 if (optarg == NULL) {
                     errx(1, "[-C | --high_confidence] option called without value, using default threshold (2)");
-                    cmd_line.path_coverage_threshold=1;
+                    cmd_line.path_coverage_minimum=1;
                 }
                 else{
-                  cmd_line.path_coverage_threshold = atoi(optarg);
+                  cmd_line.path_coverage_minimum = atoi(optarg);
                 }
                 cmd_line.high_confidence=true;
                 break;

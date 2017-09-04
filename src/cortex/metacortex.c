@@ -447,8 +447,8 @@ int main(int argc, char **argv)
                   sprintf(cmd_line.output_fasta_filename, "%s.high_conf", cmd_line.output_fasta_filename);
                 }
 
-                // pass path_coverage_threshold value to dBgraph for use later
-                db_graph->path_coverage_threshold = cmd_line.path_coverage_threshold;
+                // pass path_coverage_minimum value to dBgraph for use later
+                db_graph->path_coverage_minimum = cmd_line.path_coverage_minimum;
 
                 log_and_screen_printf("\nSearching graph for stats...\n");
                 find_subgraph_stats(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.max_node_edges, cmd_line.delta_coverage, cmd_line.linked_list_max_size, cmd_line.multiple_subgraph_contigs);

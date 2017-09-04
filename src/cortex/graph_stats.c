@@ -643,6 +643,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
 
             if (nodes_in_graph->total_size ==1) {
               // ignore; pruned node
+							cleaning_prune_db_node(node, graph);
+							db_node_action_set_flag(node, VISITED);
             }
             else if (seed_node == NULL) {
                 printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph->total_size);
@@ -682,7 +684,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
                           fprintf(fp_contigs_gfa, "H %qd", simple_path->id);
                         }
                         path_to_fasta(simple_path, fp_contigs_fasta);
-                        //path_to_fasta_metacortex(simple_path, fp_contigs_fastg, fp_contigs_gfa, graph);
+                        path_to_fasta_metacortex(simple_path, fp_contigs_fastg, fp_contigs_gfa, graph);
                         counter++;
                     } else {
                         log_printf("Didn't write path of size %d\n", simple_path->length);

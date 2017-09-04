@@ -104,7 +104,7 @@ Nucleotide coverage_walk_get_best_label(dBNode* node, Orientation orientation, d
             coverage = element_get_coverage_all_colours(next_step.node);
 
             //if (debugme) log_printf("  Coverage %i\n", coverage);
-            if ((coverage > db_graph->path_coverage_threshold) &&  (coverage > highest_coverage)) {
+            if ((coverage > db_graph->path_coverage_minimum) &&  (coverage > highest_coverage)) {
                 label = nucleotide;
                 highest_coverage = coverage;
             }
@@ -215,7 +215,7 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Or
             paths[nucleotide] = path_new(MAX_BRANCH_LENGTH, db_graph->kmer_size);
             db_graph_get_perfect_path_with_first_edge_all_colours(&current_step, &db_node_action_do_nothing, paths[nucleotide], db_graph);
             path_get_statistics(&avg_coverage, &min_coverage, &max_coverage, paths[nucleotide]);
-            if(min_coverage<db_graph->path_coverage_threshold){
+            if(min_coverage<db_graph->path_coverage_minimum){
               all_coverages[nucleotide] = 0;
             }
             else{
@@ -297,7 +297,6 @@ static pathStep *coverage_walk_get_next_step(pathStep * current_step, pathStep *
             next_step->label = coverage_walk_get_best_label(next_step->node, next_step->orientation, db_graph);
         } else if (db_node_edges_count_all_colours(next_step->node, next_step->orientation) > 1) {
             coverage_walk_get_best_label_bubble(next_step, next_step->node, next_step->orientation, db_graph);
-            //log_printf("coverage_walk_get_best_label_bubble (in next step) done\n");
         }
     }
 
@@ -357,7 +356,7 @@ static boolean coverage_walk_continue_traversing(pathStep * current_step,
             cont = false;
         }
 
-        if (element_get_coverage_all_colours(next_step->node) < db_graph->path_coverage_threshold){
+        if (element_get_coverage_all_colours(next_step->node) < db_graph->path_coverage_minimum){
           // check coverage for next step meets min threshold
           printf("  Path stopped; next node coverage is too low\n");
           cont = false;
@@ -375,7 +374,7 @@ static boolean coverage_walk_continue_traversing(pathStep * current_step,
  *----------------------------------------------------------------------*/
 WalkingFunctions * coverage_walk_get_funtions(WalkingFunctions *walking_functions)
 {
-    perfect_path_get_funtions(walking_functions);
+    perfect_path_get_functions(walking_functions);
 
     // Which to over-rule?
     walking_functions->continue_traversing = &coverage_walk_continue_traversing;

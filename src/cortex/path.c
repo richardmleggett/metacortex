@@ -1259,9 +1259,6 @@ void path_to_fasta_metacortex(Path * path, FILE * file_fastg, FILE * file_gfa, H
             skip_this = output_polymorphism(path, &path_pos, graph, file_fastg, file_gfa, &current, gfa_count);
         }
 
-
-
-
         if (skip_this == false) {
             fprintf(file_fastg, "%c",  path->seq[path_pos]);
 
@@ -1282,10 +1279,6 @@ void path_to_fasta_metacortex(Path * path, FILE * file_fastg, FILE * file_gfa, H
     if(file_gfa!=NULL){
       post_polymorph_L_lines(file_gfa, gfa_count);
       output_P_line(file_gfa, gfa_count);
-      //if(strlen(gfa_count->P_line)){
-      //  gfa_count->P_line="";
-      //  strcpy(tempseq, paths[chosen_edge]->seq + (paths[chosen_edge]->length - differ_pos + 1));
-      //}
     }
 
     fprintf(file_fastg, "\n");

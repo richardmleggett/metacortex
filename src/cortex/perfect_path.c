@@ -289,7 +289,7 @@ static void post_step_action(pathStep * ps){
 }
 
 
-WalkingFunctions * perfect_path_get_funtions(WalkingFunctions *
+WalkingFunctions * perfect_path_get_functions(WalkingFunctions *
 											 walking_functions)
 {
 	//walking_functions->find_first_node = &always_true;
@@ -319,7 +319,7 @@ int perfect_path_get_path_with_callback(dBNode * node, Orientation orientation, 
 {
 	
 	WalkingFunctions wf;
-	perfect_path_get_funtions(&wf);
+	perfect_path_get_functions(&wf);
 	
 	pathStep first;
 	first.node = node;
@@ -352,7 +352,7 @@ int perfect_path_get_path_with_callback_with_args(dBNode * node, Orientation ori
 {
 	
 	WalkingFunctions wf;
-	perfect_path_get_funtions(&wf);
+	perfect_path_get_functions(&wf);
 	
 	pathStep first;
 	first.node = node;
@@ -387,7 +387,7 @@ int perfect_path_get_path_from_step_with_callback_with_args(pathStep  first,
 {
 	
 	WalkingFunctions wf;
-	perfect_path_get_funtions(&wf);
+	perfect_path_get_functions(&wf);
 	
 	
 	

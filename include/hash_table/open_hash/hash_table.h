@@ -63,7 +63,7 @@ typedef struct {
     short kmer_size;
     short max_double_y_complexity;
     short max_coverage_for_branches;
-    int path_coverage_threshold;
+    int path_coverage_minimum;
 
     //stuff from here is to get statistics.
     boolean calculated;
