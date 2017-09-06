@@ -1073,19 +1073,21 @@ int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions *
 	do {
 		walked = false;
         do {
+						log_printf("[path_add_node [DEBUG]\n");
             added = path_add_node(&next_step, path);
             path_step_assign(&current_step, &next_step);
             //try = false;
             functions->pre_step_action(&current_step);
 
-            added = false; // redundant? 
+            added = false; // redundant?
             if (current_step.label != Undefined) {
+								log_printf("[current_step.label != Undefined] [DEBUG]\n");
                 functions->get_next_step(&current_step, &next_step, &rev_step, db_graph);
             }
 
-            /*if (added == false) {
+            if (added == false) {
                 // Do something?
-            }*/
+            }
 
             functions->step_action(&current_step);
             execute_path_step_callbacks(&current_step,&functions->step_actions);

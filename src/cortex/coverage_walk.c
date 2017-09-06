@@ -319,22 +319,27 @@ static boolean coverage_walk_continue_traversing(pathStep * current_step,
 
     boolean cont;
     cont = current_step->label != Undefined;
+    if(!cont){
+        log_and_screen_printf("label == Undefined [DEBUG]\n");
+    }
 
     /* We don't do these checks for the first node - in case it's a Y node */
     if (temp_path->length > 1) {
+        log_and_screen_printf("Path->length >1 [DEBUG]\n");
         /* Check for a cycle - as this is a perfect path, we only need to check the first node. If we come
          back in at one of the other nodes, then it will result in two edges in one orientation */
         path_get_step_at_index(0, &first, temp_path);
         if (path_step_equals_without_label(&first, current_step)) {
-            //char seq[1024];
-            //binary_kmer_to_seq(&(current_step->node->kmer), db_graph->kmer_size, seq);
-            //log_printf("  Stopped for cycle at %s\n", seq);
-            path_add_stop_reason(LAST, PATH_FLAG_IS_CYCLE, temp_path);
+            /*char seq[1024];
+            binary_kmer_to_seq(&(current_step->node->kmer), db_graph->kmer_size, seq);
+            log_and_screen_printf("  Stopped for cycle at %s\n", seq);
+            path_add_stop_reason(LAST, PATH_FLAG_IS_CYCLE, temp_path);*/
             cont = false;
         }
 
         /* Check for visited flag */
         if (db_node_check_for_any_flag(next_step->node, next_step->orientation == forward? VISITED_FORWARD:VISITED_REVERSE)) {
+            //log_and_screen_printf("  Path stopped; node is visited\n");
             cont = false;
         }
 
@@ -345,6 +350,7 @@ static boolean coverage_walk_continue_traversing(pathStep * current_step,
             //printf("  Stopped for blunt end at %s\n", seq);
             path_add_stop_reason(LAST, PATH_FLAG_STOP_BLUNT_END, temp_path);
             cont = false;
+                //log_and_screen_printf("  Path stopped; PATH_FLAG_STOP_BLUNT_END is visited\n");
         }
 
         /* Check path has space */
@@ -354,15 +360,15 @@ static boolean coverage_walk_continue_traversing(pathStep * current_step,
             //log_printf("  Stopped for longer than buffer at %s\n", seq);
             path_add_stop_reason(LAST, PATH_FLAG_LONGER_THAN_BUFFER, temp_path);
             cont = false;
+                //log_and_screen_printf("  Path stopped; PATH_FLAG_LONGER_THAN_BUFFER is visited\n");
         }
 
-        if (element_get_coverage_all_colours(next_step->node) < db_graph->path_coverage_minimum){
+        if (element_get_coverage_all_colours(next_step->node) <= db_graph->path_coverage_minimum){
           // check coverage for next step meets min threshold
-          printf("  Path stopped; next node coverage is too low\n");
+          log_and_screen_printf("  Path stopped; next node coverage is too low [DEBUG]\n");
           cont = false;
         }
     }
-
     return cont;
 }
 

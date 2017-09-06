@@ -284,6 +284,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
                           }
 
                           db_node_action_set_flag_visited(new_path->nodes[i]);
+									        nodes_in_graph->total_size++;
                     }
                   } // path->length loop
                 }
@@ -645,6 +646,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
               // ignore; pruned node
 							cleaning_prune_db_node(node, graph);
 							db_node_action_set_flag(node, VISITED);
+							log_printf("\t[Singleton pruned.]\n");
             }
             else if (seed_node == NULL) {
                 printf("ERROR: Seed node is NULL, nodes in graph is %d\n", nodes_in_graph->total_size);
@@ -666,6 +668,11 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
                     log_printf("\t[PATH REVERSED]\n");
                     path_append(simple_path, path_rev);
                     log_printf("\t[PATH WALKED AND APPENDED]\n");
+
+                    log_printf("path_fwd %d [DEBUG]\n", path_fwd->length);
+                    log_printf("path_rev %d [DEBUG]\n", path_rev->length);
+                    log_printf("simple_path %d [DEBUG]\n", simple_path->length);
+										//simple_path->length = path_get_nodes_count(simple_path);
                     //log_and_screen_printf("Couldn't get memory for graph queue.\n");
 
                     simple_path->id = counter;
@@ -740,10 +747,11 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
     hash_table_traverse(&stats_traversal, graph);
     log_and_screen_printf("DONE\n");
 
-		// first line for stats output file
 		timestamp_gs();
+		// first line for stats output file
     fprintf(fp_analysis, "\n#Subgraph sizes\n");
 		log_and_screen_printf("Graph size traversal started...");
+    // first travesal - build subgraphs out, produce stats
     hash_table_traverse(&explore_graph_size, graph);
     log_and_screen_printf("DONE\n");
 
@@ -755,10 +763,9 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
 		}
     log_and_screen_printf("Unique kmers after clearing:\t %lld\n", graph->unique_kmers);
 
-    // second travesal - build subgraphs out.
-    //log_printf("\t2ND TRAVERSAL?\n");
 		timestamp_gs();
     db_graph_reset_flags(graph);
+    // second travesal - build subgraphs out, produce contigs
     log_and_screen_printf("Full traversal started...");
     hash_table_traverse(&traversal_for_contigs, graph);
     log_and_screen_printf("DONE\n");
