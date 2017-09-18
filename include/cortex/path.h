@@ -35,6 +35,7 @@
  * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
+ *
  ************************************************************************
  *
  * This file is part of CORTEX.
