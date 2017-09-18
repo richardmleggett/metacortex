@@ -443,8 +443,10 @@ int main(int argc, char **argv)
                 break;
             case GRAPH_STATS:
                 // if --high_confidence option set by user, alter output name accordingly
-                if(cmd_line.high_confidence){
-                  sprintf(cmd_line.output_fasta_filename, "%s.high_conf", cmd_line.output_fasta_filename);
+                if(cmd_line.high_confidence) {
+                    char temp[LENGTH_FILENAME];
+                    strcpy(temp, cmd_line.output_fasta_filename);
+                    sprintf(cmd_line.output_fasta_filename, "%s.high_conf", temp);
                 }
 
                 // pass path_coverage_minimum value to dBgraph for use later

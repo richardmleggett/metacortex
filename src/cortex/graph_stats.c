@@ -22,6 +22,7 @@
 #include <sys/stat.h>
 #include <libgen.h>
 #include <unistd.h>
+#include <time.h>
 #include "global.h"
 #include "binary_kmer.h"
 #include "flags.h"
@@ -38,9 +39,9 @@
 #include "perfect_path.h"
 #include "graph_stats.h"
 #include "cleaning.h"
+#include "metacortex.h"
 #include "metagraphs.h"
 #include "report_output.h"
-#include <time.h>
 
 #define COVERAGE_BINS 10
 #define COVERAGE_BIN_SIZE 1

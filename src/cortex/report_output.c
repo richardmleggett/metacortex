@@ -6,6 +6,7 @@
 #include "report_output.h"
 #include "dB_graph.h"
 #include "graph_stats.h"
+#include "logger.h"
 
 
 void writeLaTeXHeader(FILE* fp_latex, char* consensus_contigs_filename) {

@@ -38,8 +38,12 @@ void writeLaTeXHeader(FILE* fp_latex, char* consensus_contigs_filename);
  int GRAPH_LOG10_LIMIT, int NUM_BEST_NODES, long int Contig_Branches,
  long int Coverage_Dist, dBGraph * graph, GraphInfo * nodes_in_graph); */
 
-void writeLaTeXreport(FILE* fp_latex, int MAX_BRANCHES, int COVERAGE_BIN_SIZE, \
- int COVERAGE_BINS, int GRAPH_LOG10_LIMIT, int NUM_BEST_NODES, long int * Contig_Branches, \
- long int * Coverage_Dist, dBGraph * graph, GraphInfo * nodes_in_graph);
+void writeLaTeXreport(FILE* fp_latex, int MAX_BRANCHES, int COVERAGE_BIN_SIZE,
+                      int COVERAGE_BINS, int GRAPH_LOG10_LIMIT, int NUM_BEST_NODES, long int * Contig_Branches,
+                      long int * Coverage_Dist, dBGraph * graph, GraphInfo * nodes_in_graph);
+
+void writeLaTeXreport_to_log_and_screen(int MAX_BRANCHES, int COVERAGE_BIN_SIZE,
+                                        int COVERAGE_BINS, int GRAPH_LOG10_LIMIT, int NUM_BEST_NODES, long int * Contig_Branches,
+                                        long int * Coverage_Dist, dBGraph * graph, GraphInfo * nodes_in_graph);
 
 int sum_array(long int * array, int first, int last);

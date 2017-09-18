@@ -5,9 +5,8 @@ ifndef CC
 endif
 
 ifdef MAC
-    # Change the following to point to your GCC binary
-    CC=/usr/local/Cellar/gcc/4.9.2_1/bin/gcc-4.9
-    #MACFLAG = -fnested-functions
+    $(warning On MacOS, make sure you set CC to point to your GCC binary - LLVM won't compile MetaCortex)
+    $(warning     e.g. export CC=/usr/local/Cellar/gcc/7.1.0/bin/gcc-7)
 endif
 
 BIN = bin
@@ -85,10 +84,11 @@ ifdef 32_BITS
 endif
 
 # Compiler options
-OPT		= $(ARCH) -Wall -O3 $(MACFLAG) -DNUMBER_OF_BITFIELDS_IN_BINARY_KMER=$(BITFIELDS) -pthread -g
+OPT		= $(ARCH) -Wall -O3 -DNUMBER_OF_BITFIELDS_IN_BINARY_KMER=$(BITFIELDS) -pthread -g
+#-Wno-duplicate-decl-specifier
 
 ifdef DEBUG
-OPT	= $(ARCH) -Wall -O0 $(MACFLAG) -DNUMBER_OF_BITFIELDS_IN_BINARY_KMER=$(BITFIELDS) -g -pthread
+OPT	= $(ARCH) -Wall -O0 -DNUMBER_OF_BITFIELDS_IN_BINARY_KMER=$(BITFIELDS) -g -pthread
 endif
 
 ifdef DEBUG_PRINT_LABELS
