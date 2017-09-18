@@ -1,11 +1,38 @@
-/*
+/************************************************************************
+ *
+ * This file is part of MetaCortex
+ *
+ * Authors:
+ *     Richard M. Leggett (richard.leggett@earlham.ac.uk) and
+ *     Martin Ayling (martin.ayling@earlham.ac.uk)
+ *
+ * MetaCortex is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetaCortex is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetaCortex.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ************************************************************************
+ *
+ * This file is modified from source that was part of CORTEX. The
+ * original license notice for that is given below.
+ *
+ ************************************************************************
+ *
  * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
  *
  * CORTEX project contacts:
  * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * **********************************************************************
+ ************************************************************************
  *
  * This file is part of CORTEX.
  *
@@ -22,16 +49,19 @@
  * You should have received a copy of the GNU General Public License
  * along with CORTEX.  If not, see <http://www.gnu.org/licenses/>.
  *
- * **********************************************************************
- */
+ ************************************************************************/
 
-/*
- element.h defines the interface for the de Bruijn graph node. The implementation is complemented by
- a hash table that stores every node indexed by kmers (BinaryKmers).
-
- The element routines, ie the one required by hash_table/priority queue, are prefixed with element_
- The de Bruijn based routines are prefixed with db_node
- */
+/************************************************************************
+ * element.h
+ *
+ * Defines the interface for the de Bruijn graph node. The implementation
+ * is complemented by a hash table that stores every node indexed by
+ * kmers (BinaryKmers).
+ *
+ * The element routines, ie the one required by hash_table/priority queue,
+ * are prefixed with element_
+ * The de Bruijn based routines are prefixed with db_node
+ ************************************************************************/
 
 #include <global.h>
 #include <nucleotide.h>
@@ -48,8 +78,6 @@
 
 //type definitions
 typedef char Edges;
-
-
 
 // We provide a smaller version of element for use in count_kmers
 typedef struct {
@@ -83,8 +111,11 @@ BinaryKmer* element_get_kmer(Element *);
 
 //int element_get_coverage(Element *);
 int element_get_coverage_all_colours(Element *);
+
 int element_get_coverage_by_colour(Element *, short);
+
 int element_update_coverage(Element *, short, int);
+
 boolean db_node_check_for_flag_ALL_OFF(dBNode * node);
 
 Orientation db_node_get_orientation(BinaryKmer*, dBNode *, short kmer_size);
@@ -216,7 +247,8 @@ Edges db_node_get_edges_for_orientation_by_colour(dBNode * node, Orientation ori
 Edges db_node_get_edges_for_orientation_all_colours(dBNode * node, Orientation orientation);
 
 Edges db_node_get_edges_for_orientation(dBNode * node, Orientation orientation);
-/**
+
+/*
  * Method to set the orientation in which the node will be printed. It is
  * important to notice that if the node already has an orientation, the method
  * doesn't have any effect and the returned value is the stored orientation.
@@ -224,6 +256,7 @@ Edges db_node_get_edges_for_orientation(dBNode * node, Orientation orientation);
 #ifndef SHORT_FLAGS
 Flags db_node_set_print_orientation(Orientation current_orientation, dBNode * current_node);
 #endif
+
 boolean element_check_for_flag_ALL_OFF(Element * node);
 
 boolean db_node_check_flag_not_pruned(dBNode * node);

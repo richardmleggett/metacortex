@@ -1,11 +1,38 @@
-/*
+/************************************************************************
+ *
+ * This file is part of MetaCortex
+ *
+ * Authors:
+ *     Richard M. Leggett (richard.leggett@earlham.ac.uk) and
+ *     Martin Ayling (martin.ayling@earlham.ac.uk)
+ *
+ * MetaCortex is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetaCortex is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetaCortex.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ************************************************************************
+ *
+ * This file is modified from source that was part of CORTEX. The
+ * original license notice for that is given below.
+ *
+ ************************************************************************
+ *
  * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
  *
  * CORTEX project contacts:
  * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * **********************************************************************
+ ************************************************************************
  *
  * This file is part of CORTEX.
  *
@@ -22,13 +49,13 @@
  * You should have received a copy of the GNU General Public License
  * along with CORTEX.  If not, see <http://www.gnu.org/licenses/>.
  *
- * **********************************************************************
- */
+ ************************************************************************/
 
-/*
-  cmd_line.h - manipulation of command line
-
-*/
+/************************************************************************
+ * cmd_line.h
+ *
+ * Manipulation of command line.
+ ************************************************************************/
 
 #ifndef CMD_LINE_H_
 #define CMD_LINE_H_
@@ -82,7 +109,7 @@ typedef struct
     boolean graphviz;
     boolean print_uncertain_as_n;
     boolean output_log;
-		boolean output_kmer_coverage_know;
+    boolean output_kmer_coverage_know;
     boolean multiple_subgraph_contigs;
 
     //-----------
