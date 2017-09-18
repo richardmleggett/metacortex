@@ -1,4 +1,31 @@
-/*
+/************************************************************************
+ *
+ * This file is part of MetaCortex
+ *
+ * Authors:
+ *     Richard M. Leggett (richard.leggett@earlham.ac.uk) and
+ *     Martin Ayling (martin.ayling@earlham.ac.uk)
+ *
+ * MetaCortex is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetaCortex is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetaCortex.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ************************************************************************
+ *
+ * This file is modified from source that was part of CORTEX. The
+ * original license notice for that is given below.
+ *
+ ************************************************************************
+ *
  * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
  *
  * CORTEX project contacts:
@@ -8,7 +35,8 @@
  * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
- * **********************************************************************
+ *
+ ************************************************************************
  *
  * This file is part of CORTEX.
  *
@@ -25,17 +53,15 @@
  * You should have received a copy of the GNU General Public License
  * along with CORTEX.  If not, see <http://www.gnu.org/licenses/>.
  *
- * **********************************************************************
- */
+ ************************************************************************/
 
-
- /*
- hash_table.h
-
- open hash table implementation - ie every bucket has a predifined size
- overloads results in rehashing
- all the routines as prefixed with hash_table
- */
+/************************************************************************
+ * hash_table.h
+ *
+ * open hash table implementation - ie every bucket has a predifined size
+ * overloads results in rehashing
+ * all the routines as prefixed with hash_table
+ ************************************************************************/
 
 #ifndef HASH_H_
 #define HASH_H_
@@ -49,22 +75,22 @@
 #define MAGIC_TEXT "BINARY_HASH"
 #define HASH_VERSION 1
 typedef struct {
-	long long number_buckets;
-	long long unique_kmers;
+    long long number_buckets;
+    long long unique_kmers;
     long long pruned_kmers;
     long long loaded_kmers;
     long long colour_kmers[NUMBER_OF_COLOURS];
     int bucket_size;
-	Element * table;
+    Element * table;
     long long * collisions;
-	int * next_element; //keeps index of the next free element in bucket
-	int max_rehash_tries;
-	int number_of_threads;
+    int * next_element; //keeps index of the next free element in bucket
+    int max_rehash_tries;
+    int number_of_threads;
     short kmer_size;
     short max_double_y_complexity;
     short max_coverage_for_branches;
     int path_coverage_minimum;
-
+    
     //stuff from here is to get statistics.
     boolean calculated;
     double average_coverage[NUMBER_OF_COLOURS];
@@ -74,8 +100,7 @@ typedef struct {
     long long number_of_reads[NUMBER_OF_COLOURS];
 } HashTable;
 
-HashTable * hash_table_new(int number_bits, int bucket_size,
-		int max_rehash_tries, short kmer_size);
+HashTable * hash_table_new(int number_bits, int bucket_size, int max_rehash_tries, short kmer_size);
 
 void hash_table_free(HashTable * * hash_table);
 
@@ -91,8 +116,8 @@ void hash_table_traverse(void(*f)(Element *), HashTable *);
 void hash_table_traverse_with_args( void (*f)(Element *, void * args), void ** args, HashTable * hash_table);
 
 //if the element is not in table create an element with key and adds it
-Element * hash_table_find_or_insert(Key key, boolean * found,
-		HashTable * hash_table);
+Element * hash_table_find_or_insert(Key key, boolean * found, HashTable * hash_table);
+
 Element * hash_table_insert(Key key, HashTable * hash_table);
 
 void hash_table_print_stats(HashTable * db_hash);
@@ -113,7 +138,6 @@ long long hash_table_array_index_of_element(Element *, HashTable *);
 //of the hash table.
 void hash_table_set_number_of_threads(int threads, HashTable * hash_table);
 
-
 #ifdef THREADS
 //Iterator that splits the hash table on the number of threads given to the
 //table. Default is 1.
@@ -126,9 +150,10 @@ void hash_table_threaded_traverse( void (*f)(Element *), HashTable * hash_table)
 
 HashTable *  hash_table_read_dumped_memory(char * filename );
 
-
 void hash_table_set_number_of_reads(long long read_count, short colour, HashTable * hash);
+
 void hash_table_add_number_of_reads(long long read_count, short colour,  HashTable * hash);
+
 long long hash_table_get_number_of_reads( short colour, HashTable * hash);
 
 #endif /* HASH_H_ */
