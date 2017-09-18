@@ -81,11 +81,11 @@ typedef char Edges;
 
 // We provide a smaller version of element for use in count_kmers
 typedef struct {
-	BinaryKmer kmer;
-	uint32_t coverage[NUMBER_OF_COLOURS];
-	// less significant nibble forward
-	Edges edges[NUMBER_OF_COLOURS];
-	Flags flags;
+    BinaryKmer kmer;
+    uint32_t coverage[NUMBER_OF_COLOURS];
+    // less significant nibble forward
+    Edges edges[NUMBER_OF_COLOURS];
+    Flags flags;
 } Element;
 
 typedef Element dBNode;

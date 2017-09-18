@@ -25,12 +25,12 @@
  * original license notice for that is given below.
  *
  ************************************************************************
- * 
+ *
  * CORTEX project contacts:
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
  *

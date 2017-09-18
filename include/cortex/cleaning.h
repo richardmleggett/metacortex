@@ -63,9 +63,9 @@
 #define CLEANING_H_
 
 typedef struct {
-	 int tip_length;
-     int tips_removed;
-     int tips_nodes_removed;
+    int tip_length;
+    int tips_removed;
+    int tips_nodes_removed;
     int marked_tips;
     dBGraph * db_graph;
 } clip_tip_vars;

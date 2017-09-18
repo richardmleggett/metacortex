@@ -27,9 +27,9 @@
  ************************************************************************
  *
  * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
  ************************************************************************
@@ -74,13 +74,13 @@ typedef struct{
 } DBGraphFileReaderInnerArgs;
 
 typedef struct {
-    char * filename; 
+    char * filename;
     short colour;
     long long bad_reads;
     char quality_cut_off;
     int max_read_length;
     int fastq_ascii_offset;
-    DBGraphFileReaderInnerArgs * inner_args;//This holds thread-specific information. 
+    DBGraphFileReaderInnerArgs * inner_args;//This holds thread-specific information.
     float maximum_ocupancy;
     boolean stop_on_full;
     boolean insert;
@@ -99,13 +99,13 @@ long long load_kmers_binary_from_filename_update_coverage(char *filename, dBGrap
 //void close_kmer_file_reader_wrapper(DBGraphFileReaderInnerArgs ** fria );
 /**
  * these routines return the length of the read sequence, for the binary file is all the kmers conctenated
- * The first part is available when compiling for read pairs. 
- * The second block of definitions is mostly the same, just taking in account the read pairs. 
+ * The first part is available when compiling for read pairs.
+ * The second block of definitions is mostly the same, just taking in account the read pairs.
  * This if block system may be used when adding extra functionality. The point about this is to don't repeat
- * code and give some kind of "polymorphism" depending on the program which is being compiled. 
+ * code and give some kind of "polymorphism" depending on the program which is being compiled.
  */
 
-//for short fasta entries - reads or similar 
+//for short fasta entries - reads or similar
 long long load_fasta_from_filename_into_graph(char* filename, short colour, long long * bad_reads, int max_chunk_length, dBGraph* db_graph);
 
 //for fastq
@@ -134,9 +134,9 @@ int get_sliding_windows_from_sequence_breaking_windows_when_sequence_not_in_grap
                                                                                   KmerSlidingWindowSet * windows, int max_windows, int max_kmers, dBGraph* db_graph);
 
 // for dumping clean fasta files from fastq - ie only holding reads that lie entirely in a (presumably cleaned) graph
-void read_fastq_and_print_reads_that_lie_in_graph(FILE* fp, FILE* fout, int (* file_reader)(FILE * fp, Sequence * seq, int max_read_length, boolean new_entry, boolean * full_entry), 
-						  long long * bad_reads, int max_read_length, dBGraph * db_graph,
-						  boolean is_for_testing, char** for_test_array_of_clean_reads, int* for_test_index);
+void read_fastq_and_print_reads_that_lie_in_graph(FILE* fp, FILE* fout, int (* file_reader)(FILE * fp, Sequence * seq, int max_read_length, boolean new_entry, boolean * full_entry),
+                                                  long long * bad_reads, int max_read_length, dBGraph * db_graph,
+                                                  boolean is_for_testing, char** for_test_array_of_clean_reads, int* for_test_index);
 
 //This are used to validate that the graph is correct.
 void print_binary_signature(FILE * fp, uint32_t kmer_size, uint32_t num_cols, uint32_t mean_read_len, uint64_t total_seq);
@@ -147,8 +147,8 @@ void binary_kmers_sliding_window_reset_iterator(KmerSlidingWindowSet * ksws);
 
 //To make some analysis, iterator over the kmers of a sequence.
 long long seq_kmer_iterator(FILE * fp, void * args, void  (*kmer_action) (BinaryKmer * k, void * arg) ,int (*file_reader) (FILE * fp, Sequence * seq,
-					int max_read_length, boolean new_entry, boolean * full_entry),
-		    		long long *bad_reads, int fastq_ascii_offset, char quality_cut_off,
-					int max_read_length, short kmer_size);
+                                                                                                                           int max_read_length, boolean new_entry, boolean * full_entry),
+                            long long *bad_reads, int fastq_ascii_offset, char quality_cut_off,
+                            int max_read_length, short kmer_size);
 
 #endif /* FILE_READER_H_ */

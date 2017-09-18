@@ -26,13 +26,13 @@
  *
  ************************************************************************
  *
- * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo 
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
  *
@@ -59,14 +59,14 @@
  * bubble_find.h
  ************************************************************************/
 
-void db_graph_identify_branches(int max_length, dBGraph * db_graph); 
+void db_graph_identify_branches(int max_length, dBGraph * db_graph);
 
 void db_graph_walk_branches(char * filename, int total_max_length, int bubble_max_length, int bubble_max_depth, dBGraph * db_graph);
 
 boolean db_graph_compare_paths(PathArray * patharray, pathStep * end, int kmer_size);
 
 int db_graph_found_matched_paths(PathArray * patharray, int max_length, Orientation orientation,
-					dBNode * start_node, pathStep * end_step, char * filename, dBGraph * db_graph);
+                                 dBNode * start_node, pathStep * end_step, char * filename, dBGraph * db_graph);
 
 Path * db_graph_get_surrounding_path(dBNode * node,	Orientation orientation, boolean reverse_path, int max_length, dBGraph * db_graph);
 

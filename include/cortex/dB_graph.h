@@ -70,18 +70,18 @@ typedef HashTable dBGraph;
 #endif
 
 typedef struct {
-	dBNode * node;
-	Path * path_so_far;
-	Orientation orientation;
-	int depth;
+    dBNode * node;
+    Path * path_so_far;
+    Orientation orientation;
+    int depth;
 } NodesToWalkItem;
 
 typedef struct {
-	int max_size;
-	int number_of_items;
-	int head;
-	int tail;
-	NodesToWalkItem** items;
+    int max_size;
+    int number_of_items;
+    int head;
+    int tail;
+    NodesToWalkItem** items;
 } NodesToWalkQueue;
 
 typedef struct{
@@ -104,16 +104,16 @@ typedef struct{
 
 
 typedef struct {
-	pathStep *  (*get_starting_step)(pathStep * step, dBGraph * db_graph );//Used to find the first  step for a given random node.
-	boolean (*continue_backwards)(Path * path, dBGraph * db_graph);
-	void (* post_step_action)(pathStep * step);
-	void (* pre_step_action)(pathStep * step);
-	pathStep * (*get_next_step)(pathStep * current_step, pathStep * next_step, pathStep * reverse_step, dBGraph * db_graph);
-	void (* step_action)(pathStep * step);
-	boolean (*continue_traversing)(pathStep * current_step, pathStep * next_step, pathStep * reverse_step, Path * path,  dBGraph * db_graph);
-	void (* output_callback)(Path * path);
-	PathArray * buffers;
-
+    pathStep *  (*get_starting_step)(pathStep * step, dBGraph * db_graph );//Used to find the first  step for a given random node.
+    boolean (*continue_backwards)(Path * path, dBGraph * db_graph);
+    void (* post_step_action)(pathStep * step);
+    void (* pre_step_action)(pathStep * step);
+    pathStep * (*get_next_step)(pathStep * current_step, pathStep * next_step, pathStep * reverse_step, dBGraph * db_graph);
+    void (* step_action)(pathStep * step);
+    boolean (*continue_traversing)(pathStep * current_step, pathStep * next_step, pathStep * reverse_step, Path * path,  dBGraph * db_graph);
+    void (* output_callback)(Path * path);
+    PathArray * buffers;
+    
     PathStepActionCallbackArray step_actions;
     PathCallbackArray   path_callbacks;
     NodeActionCallbackArray node_callbacks;
@@ -141,11 +141,11 @@ pathStep * db_graph_get_next_step(pathStep * current_step, pathStep * next_step,
 int db_graph_get_perfect_path_with_first_edge_all_colours(pathStep * first_step, void(*node_action)(dBNode * node), Path * path, dBGraph * db_graph);
 
 int db_graph_get_perfect_path_with_first_edge_long(dBNode * node,
-		Orientation orientation, int limit, Nucleotide fst_nucleotide,
-		void(*node_action)(dBNode * node), dBNode * * path_nodes,
-		Orientation * path_orientations, Nucleotide * path_labels, char * seq,
-		double * avg_coverage, int * min_coverage, int * max_coverage,
-		boolean * is_cycle, dBGraph * db_graph);
+                                                   Orientation orientation, int limit, Nucleotide fst_nucleotide,
+                                                   void(*node_action)(dBNode * node), dBNode * * path_nodes,
+                                                   Orientation * path_orientations, Nucleotide * path_labels, char * seq,
+                                                   double * avg_coverage, int * min_coverage, int * max_coverage,
+                                                   boolean * is_cycle, dBGraph * db_graph);
 
 void db_graph_print_status(dBGraph * db_graph);
 
@@ -170,14 +170,14 @@ double db_graph_get_average_coverage(dBGraph * db_graph);
 Orientation db_graph_get_reverse_edge_between(dBNode * src, dBNode * tgt, dBGraph * db_graph);
 
 /*boolean db_graph_detect_bubble(dBNode * node, Orientation orientation,
-		int limit, void(*node_action)(dBNode * node), int * length1,
-		dBNode ** path_nodes1, Orientation * path_orientations1,
-		Nucleotide * path_labels1, char * seq1, double * avg_coverage1,
-		int * min_coverage1, int * max_coverage1, int * length2,
-		dBNode ** path_nodes2, Orientation * path_orientations2,
-		Nucleotide * path_labels2, char * seq2, double * avg_coverage2,
-		int * min_coverage2, int * max_coverage2, dBGraph * db_graph);
-*/
+ int limit, void(*node_action)(dBNode * node), int * length1,
+ dBNode ** path_nodes1, Orientation * path_orientations1,
+ Nucleotide * path_labels1, char * seq1, double * avg_coverage1,
+ int * min_coverage1, int * max_coverage1, int * length2,
+ dBNode ** path_nodes2, Orientation * path_orientations2,
+ Nucleotide * path_labels2, char * seq2, double * avg_coverage2,
+ int * min_coverage2, int * max_coverage2, dBGraph * db_graph);
+ */
 
 boolean db_graph_detect_bubble(dBNode * node, Orientation orientation, PathArray * pa, dBGraph * db_graph);
 
@@ -196,43 +196,43 @@ int db_graph_db_node_clip_tip_with_orientation(dBNode * node, Orientation orient
 int db_graph_db_node_clip_tip(dBNode * node, int limit, void(*node_action)(dBNode * node), dBGraph * db_graph);
 
 boolean db_graph_is_condition_true_for_all_nodes_in_supernode(dBNode * node,
-		int limit, boolean(*condition_for_all_nodes)(dBNode * node),
-		void(*node_action)(dBNode * node), dBNode * * path_nodes,
-		Orientation * path_orientations, Nucleotide * path_labels,
-		int* path_length, char * string, double * avg_coverage, int * min,
-		int * max, boolean * is_cycle, dBGraph * db_graph);
+                                                              int limit, boolean(*condition_for_all_nodes)(dBNode * node),
+                                                              void(*node_action)(dBNode * node), dBNode * * path_nodes,
+                                                              Orientation * path_orientations, Nucleotide * path_labels,
+                                                              int* path_length, char * string, double * avg_coverage, int * min,
+                                                              int * max, boolean * is_cycle, dBGraph * db_graph);
 
 boolean db_graph_is_condition_true_for_at_least_one_node_in_supernode(
-		dBNode * node, int limit, boolean(*condition_for_all_nodes)(
-				dBNode * node), void(*node_action)(dBNode * node),
-		dBNode * * path_nodes, Orientation * path_orientations,
-		Nucleotide * path_labels, int* path_length, char * string,
-		double * avg_coverage, int * min, int * max, boolean * is_cycle,
-		dBGraph * db_graph);
+                                                                      dBNode * node, int limit, boolean(*condition_for_all_nodes)(
+                                                                                                                                  dBNode * node), void(*node_action)(dBNode * node),
+                                                                      dBNode * * path_nodes, Orientation * path_orientations,
+                                                                      Nucleotide * path_labels, int* path_length, char * string,
+                                                                      double * avg_coverage, int * min, int * max, boolean * is_cycle,
+                                                                      dBGraph * db_graph);
 
 boolean db_graph_is_condition_true_for_start_and_end_but_not_all_nodes_in_supernode(
-		dBNode * node, int limit, boolean(*condition_for_all_nodes)(
-				dBNode * node), void(*node_action)(dBNode * node),
-		int min_start, int min_end, int min_diff, dBNode * * path_nodes,
-		Orientation * path_orientations, Nucleotide * path_labels,
-		int * path_length, char * string, double * avg_coverage, int * min,
-		int * max, boolean * is_cycle, dBGraph * db_graph);
+                                                                                    dBNode * node, int limit, boolean(*condition_for_all_nodes)(
+                                                                                                                                                dBNode * node), void(*node_action)(dBNode * node),
+                                                                                    int min_start, int min_end, int min_diff, dBNode * * path_nodes,
+                                                                                    Orientation * path_orientations, Nucleotide * path_labels,
+                                                                                    int * path_length, char * string, double * avg_coverage, int * min,
+                                                                                    int * max, boolean * is_cycle, dBGraph * db_graph);
 
 void db_graph_print_supernodes_where_condition_is_true_for_all_nodes_in_supernode(
-		dBGraph * db_graph, boolean(*condition)(dBNode * node),
-		int min_covg_required, FILE* fout, boolean is_for_testing,
-		char** for_test_array_of_supernodes, int* for_test_index);
+                                                                                  dBGraph * db_graph, boolean(*condition)(dBNode * node),
+                                                                                  int min_covg_required, FILE* fout, boolean is_for_testing,
+                                                                                  char** for_test_array_of_supernodes, int* for_test_index);
 
 void db_graph_print_supernodes_where_condition_is_true_for_at_least_one_node_in_supernode(
-				dBGraph * db_graph, boolean(*condition)(dBNode * node),
-				int min_covg_required, FILE* fout, boolean is_for_testing,
-				char** for_test_array_of_supernodes, int* for_test_index);
+                                                                                          dBGraph * db_graph, boolean(*condition)(dBNode * node),
+                                                                                          int min_covg_required, FILE* fout, boolean is_for_testing,
+                                                                                          char** for_test_array_of_supernodes, int* for_test_index);
 
 void db_graph_print_supernodes_where_condition_is_true_at_start_and_end_but_not_all_nodes_in_supernode(
-				dBGraph * db_graph, boolean(*condition)(dBNode * node),
-				int min_covg_required, int min_start, int min_end,
-				int min_diff, FILE* fout, boolean is_for_testing,
-				char** for_test_array_of_supernodes, int* for_test_index);
+                                                                                                       dBGraph * db_graph, boolean(*condition)(dBNode * node),
+                                                                                                       int min_covg_required, int min_start, int min_end,
+                                                                                                       int min_diff, FILE* fout, boolean is_for_testing,
+                                                                                                       char** for_test_array_of_supernodes, int* for_test_index);
 
 void db_graph_print_supernodes(char * filename, int max_length, boolean with_coverages, dBGraph * db_graph);
 

@@ -65,13 +65,13 @@
 #include <file_format.h>
 
 typedef enum{
-	PERFECT_PATH = 0,
-	BRANCHES = 1,
-	Y_WALK = 2,
-	BUBBLES = 3,
-	READ_PAIR = 5,
-  METACORTEX_CONSENSUS = 6,
-  GRAPH_STATS = 7
+    PERFECT_PATH = 0,
+    BRANCHES = 1,
+    Y_WALK = 2,
+    BUBBLES = 3,
+    READ_PAIR = 5,
+    METACORTEX_CONSENSUS = 6,
+    GRAPH_STATS = 7
 }TraverseAlgorithm;
 
 typedef struct
@@ -81,7 +81,7 @@ typedef struct
     int kmer_size;
     int bucket_size;
     int number_of_buckets_bits;
-
+    
     //----------------
     //actions on/off
     //----------------
@@ -89,8 +89,8 @@ typedef struct
     boolean input_file; //if it is present
     boolean input_file_format_known;
     boolean health_check_binary;
-	boolean input_reference_known;
-
+    boolean input_reference_known;
+    
     //cleaning
     boolean tip_clip;
     boolean remove_bubbles;
@@ -98,7 +98,7 @@ typedef struct
     boolean low_coverage_node_clip;
     boolean remove_low_coverage_supernodes;
     boolean remove_spurious_links;
-
+    
     //output
     boolean dump_binary;
     boolean high_confidence;
@@ -111,30 +111,30 @@ typedef struct
     boolean output_log;
     boolean output_kmer_coverage_know;
     boolean multiple_subgraph_contigs;
-
+    
     //-----------
     //parameters
     //-----------
     //core parameters
     int threads;
     short max_double_y_complexity;
-
+    
     //input
     FileFormat input_file_format;
     int quality_score_threshold;
     char input_filename[LENGTH_FILENAME];
     char qual_filename[LENGTH_FILENAME];
-		char input_reference[LENGTH_FILENAME];
-
+    char input_reference[LENGTH_FILENAME];
+    
     int quality_score_offset;
     int max_read_len;
     int binary_version;
-
+    
     //cleaning
     int node_coverage_threshold;
     int max_node_edges;
     float delta_coverage;
-		int linked_list_max_size;
+    int linked_list_max_size;
     int tip_length;
     int remove_low_coverage_supernodes_threshold;
     int bubble_max_depth;
@@ -143,7 +143,7 @@ typedef struct
     int remove_spurious_links_max_difference;
     int path_coverage_minimum;
     int tip_clip_iterations;
-
+    
     //output
     char output_ctx_filename[LENGTH_FILENAME];
     char output_fasta_filename[LENGTH_FILENAME];
@@ -151,8 +151,8 @@ typedef struct
     char output_hash_filename[LENGTH_FILENAME];
     char log_filename[LENGTH_FILENAME];
     char output_kmer_coverage[LENGTH_FILENAME];
-		char output_reference_coverage_file[LENGTH_FILENAME];
-		int max_length;
+    char output_reference_coverage_file[LENGTH_FILENAME];
+    int max_length;
     int singleton_length;
     int min_subgraph_size;
     int min_contig_length;

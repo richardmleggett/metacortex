@@ -31,8 +31,8 @@
 #define MAX_EXPLORE_NODES 200
 
 typedef struct {
-     dBNode* seed_node;
-     int graph_size;
+    dBNode* seed_node;
+    int graph_size;
 } SubGraphInfo;
 
 /*typedef struct {
@@ -41,8 +41,8 @@ typedef struct {
 	int head;
 	int tail;
 	void** items;
-} Queue;
-*/
+ } Queue;
+ */
 
 //int grow_graph_from_node(dBNode* start_node, dBNode** best_node, dBGraph* graph, Queue* graph_queue);
 

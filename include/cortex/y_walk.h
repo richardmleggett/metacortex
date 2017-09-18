@@ -27,12 +27,12 @@
  ************************************************************************
  *
  * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
  *
@@ -54,7 +54,7 @@
  * along with CORTEX.  If not, see <http://www.gnu.org/licenses/>.
  *
  ************************************************************************/
- 
+
 /************************************************************************
  * y_walk.h
  ************************************************************************/
@@ -68,6 +68,6 @@ void y_walk_print_paths(char *filename, int max_length,int singleton_length, boo
 
 Path *y_walk_get_path(dBNode * node, Orientation orientation, void (*node_action) (dBNode * node), dBGraph * db_graph, boolean both_directions,Path * path);
 
-void y_walk_dont_mark();//Not to be used in production, but to control the unit testing. 
+void y_walk_dont_mark();//Not to be used in production, but to control the unit testing.
 
 #endif
