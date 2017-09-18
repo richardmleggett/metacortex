@@ -1,14 +1,42 @@
-/*
- * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo 
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+/************************************************************************
+ *
+ * This file is part of MetaCortex
+ *
+ * Authors:
+ *     Richard M. Leggett (richard.leggett@earlham.ac.uk) and
+ *     Martin Ayling (martin.ayling@earlham.ac.uk)
+ *
+ * MetaCortex is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetaCortex is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetaCortex.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ************************************************************************
+ *
+ * This file is modified from source that was part of CORTEX. The
+ * original license notice for that is given below.
+ *
+ ************************************************************************
+ *
+ * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
- * **********************************************************************
+ *
+ ************************************************************************
  *
  * This file is part of CORTEX.
  *
@@ -25,9 +53,12 @@
  * You should have received a copy of the GNU General Public License
  * along with CORTEX.  If not, see <http://www.gnu.org/licenses/>.
  *
- * **********************************************************************
- */
- 
+ ************************************************************************/
+
+/************************************************************************
+ * seq.h
+ ************************************************************************/
+
 #ifndef STDSEQ_H_
 #define STDSEQ_H_
 
@@ -35,14 +66,12 @@
 #include <global.h>
 //#include <binary_kmer.h>
 
-
-
 typedef struct
 {
     char * name;
     int  start,end, length;
-    char * seq;  // sequence 
-    char * qual; // qualities 
+    char * seq;  // sequence
+    char * qual; // qualities
     //TODO validate that the sequence never gets out of bounds...
     int max_length;
     int max_name_length;
@@ -53,31 +82,31 @@ typedef struct
     int highest_expected_value;
     int highest_raw_read_value;
     void * header;
-   
+    
 } Sequence;
 
 typedef struct{
-    void (* header_parser)(Sequence * seq); 
-    char * (* get_index)(Sequence * seq); 
+    void (* header_parser)(Sequence * seq);
+    char * (* get_index)(Sequence * seq);
 }header_function;
 
 
 typedef struct{
-	Sequence ** sequences;
-	int capacity; 
-	int total;
+    Sequence ** sequences;
+    int capacity;
+    int total;
 } SequenceArray;
 
 typedef char dinucleotide;
 
 typedef struct{
-  long long dinculeotides[25][MAX_READ_LENGTH];	
-  long long nucleotides[5][MAX_READ_LENGTH];
-  long long qual_dinculeotides[25][MAX_READ_LENGTH];	
-  long long qual_nucleotides[5][MAX_READ_LENGTH];
-  long long total_bases;
-  int  max_length;
-  int reads;
+    long long dinculeotides[25][MAX_READ_LENGTH];
+    long long nucleotides[5][MAX_READ_LENGTH];
+    long long qual_dinculeotides[25][MAX_READ_LENGTH];
+    long long qual_nucleotides[5][MAX_READ_LENGTH];
+    long long total_bases;
+    int  max_length;
+    int reads;
 }SequenceStats;
 
 void sequence_set_quality_parameters(Sequence *seq, int quality_offset);
@@ -172,7 +201,7 @@ int sequence_compare_with_ambiguity(Sequence * seq1, Sequence * seq2);
 
 void sequence_merge_removing_ambiguity(Sequence * seq1, Sequence * seq2);
 
-//Functions to deal with the array of sequences.... 
+//Functions to deal with the array of sequences....
 SequenceArray * sequence_array_new(int capacity);
 
 void sequence_array_destroy(SequenceArray ** sa);
@@ -183,7 +212,6 @@ void sequence_array_add(int max_read_length, int max_name_length, SequenceArray 
 
 void sequence_array_clean(SequenceArray *sa);
 
-
 //Sequences for the alignment algorithms
 int sequence_prev_anchor_base(int pos, Sequence * seq);
 
@@ -192,6 +220,5 @@ int sequence_next_anchor_base(int pos, Sequence * seq);
 int sequence_next_hompoplymer(int pos, int max_righ, Sequence *seq);
 
 int sequence_prev_hompoplymer(int pos, int max_left, Sequence *seq);
-
 
 #endif /* STDSEQ_H_ */
