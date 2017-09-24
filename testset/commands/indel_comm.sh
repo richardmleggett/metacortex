@@ -1,10 +1,11 @@
-kmer=95
+kmer=31
 meta_p=../bin/metacortex_k${kmer}
 
 export R_ENV_PATH='../'
 
 b=100
 n=15
+g=100
 max_edges=8
 delta=1000
 kmers_cut=0

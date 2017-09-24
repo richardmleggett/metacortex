@@ -97,7 +97,7 @@ Nucleotide coverage_walk_get_best_label(dBNode* node, Orientation orientation, d
             coverage = element_get_coverage_all_colours(next_step.node);
 
             //if (debugme) log_printf("  Coverage %i\n", coverage);
-            if ((coverage > db_graph->path_coverage_minimum) &&  (coverage > highest_coverage)) {
+            if ((coverage >= db_graph->path_coverage_minimum) &&  (coverage > highest_coverage)) {
                 label = nucleotide;
                 highest_coverage = coverage;
             }
@@ -262,6 +262,10 @@ pathStep* coverage_walk_get_first_label(pathStep * first_step, dBGraph * db_grap
 
     if (db_node_edges_count_all_colours(first_step->node, first_step->orientation)==1){ // for simple, non-branching nodes
         first_step->label = coverage_walk_get_best_label(first_step->node, first_step->orientation, db_graph);
+        log_printf("coverage_walk_get_best_label (in first label) done\n");
+        	if (first_step->label == Undefined) {
+        			log_printf("[first_step.label == Undefined] [DEBUG]\n");
+        	}
     } else {
         coverage_walk_get_best_label_bubble(first_step, first_step->node, first_step->orientation, db_graph);
         //log_printf("coverage_walk_get_best_label_bubble (in first label) done\n");
@@ -356,7 +360,7 @@ static boolean coverage_walk_continue_traversing(pathStep * current_step,
                 //log_and_screen_printf("  Path stopped; PATH_FLAG_LONGER_THAN_BUFFER is visited\n");
         }
 
-        if (element_get_coverage_all_colours(next_step->node) <= db_graph->path_coverage_minimum){
+        if (element_get_coverage_all_colours(next_step->node) < db_graph->path_coverage_minimum){
           // check coverage for next step meets min threshold
           log_and_screen_printf("  Path stopped; next node coverage is too low [DEBUG]\n");
           cont = false;

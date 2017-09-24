@@ -1088,10 +1088,20 @@ int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions *
 
 	pathStep current_step, next_step, rev_step;
 
+
+
 	path_step_assign(&next_step, first_step);
     next_step.path = path; //This way, on all the assignments we keep the pointer to the path that was sent to the function originally.
+
+
+		if (next_step.label == Undefined) {
+				log_printf("[next_step.label (1) == Undefined] [DEBUG]\n");
+		}
 	functions->get_starting_step(&next_step, db_graph);
 
+	if (next_step.label == Undefined) {
+			log_printf("[next_step.label (2) == Undefined] [DEBUG]\n");
+	}
 	//boolean  try = true;
 	int count = 0;
     boolean walked;
@@ -1108,9 +1118,11 @@ int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions *
 
             added = false; // redundant?
             if (current_step.label != Undefined) {
-								log_printf("[current_step.label != Undefined] [DEBUG]\n");
                 functions->get_next_step(&current_step, &next_step, &rev_step, db_graph);
             }
+						else {
+								log_printf("[current_step.label == Undefined] [DEBUG]\n");
+						}
 
             if (added == false) {
                 // Do something?
