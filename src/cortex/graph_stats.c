@@ -665,23 +665,11 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
                     // should be a perfect path? might be two paths though, if we started in the middle
                     // NOTE: unecessary coverage element but repeating the whole path finding without coverage
                     //  is more work than necessary I think. See what processing time it changes?
-
-                    log_printf("[WALKING PATH]\n");
                     coverage_walk_get_path(seed_node, forward, NULL, graph, path_fwd);
-                    log_printf("[WALKING REV PATH]\n");
                     coverage_walk_get_path(seed_node, reverse, NULL, graph, path_rev);
-                    log_printf("\t[PATH WALKED]\n");
 
                     path_reverse(path_fwd, simple_path);
-                    log_printf("\t[PATH REVERSED]\n");
                     path_append(simple_path, path_rev);
-                    log_printf("\t[PATH WALKED AND APPENDED]\n");
-
-                    log_printf("path_fwd %d [DEBUG]\n", path_fwd->length);
-                    log_printf("path_rev %d [DEBUG]\n", path_rev->length);
-                    log_printf("simple_path %d [DEBUG]\n", simple_path->length);
-										//simple_path->length = path_get_nodes_count(simple_path);
-                    //log_and_screen_printf("Couldn't get memory for graph queue.\n");
 
                     simple_path->id = counter;
                     if (simple_path->length >= (MIN_CONTIG_SIZE - graph->kmer_size)) {

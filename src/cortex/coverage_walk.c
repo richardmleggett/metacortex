@@ -85,7 +85,6 @@ Nucleotide coverage_walk_get_best_label(dBNode* node, Orientation orientation, d
     int highest_coverage = 0;
 
     void check_edge(Nucleotide nucleotide) {
-        //if (debugme) log_printf("  Trying nucleotide %c\n", binary_nucleotide_to_char(nucleotide));
         if (db_node_edge_exist_any_colour(node, nucleotide, orientation)) {
             pathStep step, reverse_step, next_step;
             int coverage;
@@ -96,7 +95,6 @@ Nucleotide coverage_walk_get_best_label(dBNode* node, Orientation orientation, d
             db_graph_get_next_step(&step, &next_step, &reverse_step, db_graph);
             coverage = element_get_coverage_all_colours(next_step.node);
 
-            //if (debugme) log_printf("  Coverage %i\n", coverage);
             if ((coverage >= db_graph->path_coverage_minimum) &&  (coverage > highest_coverage)) {
                 label = nucleotide;
                 highest_coverage = coverage;
@@ -235,11 +233,8 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Or
     }
 
     nucleotide_iterator(&check_edge);
-    //log_printf("check_edge completed\n");
     nucleotide_iterator(&check_coverages); // check coverages as individual edges first
-    //log_printf("check_coverages completed\n");
     bubble_check();
-    //log_printf("bubble_check completed\n");
 
     for (i=0; i<4; i++) {
         if (paths[i] != 0) path_destroy(paths[i]);
@@ -256,24 +251,13 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Or
  *----------------------------------------------------------------------*/
 pathStep* coverage_walk_get_first_label(pathStep * first_step, dBGraph * db_graph)
 {
-    //char seq[1024];
-    //debugme = 1;
     first_step->label = Undefined;
 
     if (db_node_edges_count_all_colours(first_step->node, first_step->orientation)==1){ // for simple, non-branching nodes
         first_step->label = coverage_walk_get_best_label(first_step->node, first_step->orientation, db_graph);
-        log_printf("coverage_walk_get_best_label (in first label) done\n");
-        	if (first_step->label == Undefined) {
-        			log_printf("[first_step.label == Undefined] [DEBUG]\n");
-        	}
     } else {
         coverage_walk_get_best_label_bubble(first_step, first_step->node, first_step->orientation, db_graph);
-        //log_printf("coverage_walk_get_best_label_bubble (in first label) done\n");
     }
-
-    //debugme = 0;
-    //binary_kmer_to_seq(&(first_step->node->kmer), db_graph->kmer_size, seq);
-    //log_printf("  First kmer %s first label %c\n", seq, binary_nucleotide_to_char(first_step->label));
     return first_step;
 }
 
@@ -316,53 +300,35 @@ static boolean coverage_walk_continue_traversing(pathStep * current_step,
 
     boolean cont;
     cont = current_step->label != Undefined;
-    if(!cont){
-        log_and_screen_printf("label == Undefined [DEBUG]\n");
-    }
 
     /* We don't do these checks for the first node - in case it's a Y node */
     if (temp_path->length > 1) {
-        log_and_screen_printf("Path->length >1 [DEBUG]\n");
         /* Check for a cycle - as this is a perfect path, we only need to check the first node. If we come
          back in at one of the other nodes, then it will result in two edges in one orientation */
         path_get_step_at_index(0, &first, temp_path);
         if (path_step_equals_without_label(&first, current_step)) {
-            /*char seq[1024];
-            binary_kmer_to_seq(&(current_step->node->kmer), db_graph->kmer_size, seq);
-            log_and_screen_printf("  Stopped for cycle at %s\n", seq);
-            path_add_stop_reason(LAST, PATH_FLAG_IS_CYCLE, temp_path);*/
             cont = false;
         }
 
         /* Check for visited flag */
         if (db_node_check_for_any_flag(next_step->node, next_step->orientation == forward? VISITED_FORWARD:VISITED_REVERSE)) {
-            //log_and_screen_printf("  Path stopped; node is visited\n");
             cont = false;
         }
 
         /* Now check for one or more edges moving forward */
         if (db_node_edges_count_all_colours(current_step->node, current_step->orientation) == 0) {
-            //char seq[1024];
-            //binary_kmer_to_seq(&(current_step->node->kmer), db_graph->kmer_size, seq);
-            //printf("  Stopped for blunt end at %s\n", seq);
             path_add_stop_reason(LAST, PATH_FLAG_STOP_BLUNT_END, temp_path);
             cont = false;
-                //log_and_screen_printf("  Path stopped; PATH_FLAG_STOP_BLUNT_END is visited\n");
         }
 
         /* Check path has space */
         if (!path_has_space(temp_path)) {
-            //char seq[1024];
-            //binary_kmer_to_seq(&(current_step->node->kmer), db_graph->kmer_size, seq);
-            //log_printf("  Stopped for longer than buffer at %s\n", seq);
             path_add_stop_reason(LAST, PATH_FLAG_LONGER_THAN_BUFFER, temp_path);
             cont = false;
-                //log_and_screen_printf("  Path stopped; PATH_FLAG_LONGER_THAN_BUFFER is visited\n");
         }
 
+        /*  check coverage for next step meets min threshold */
         if (element_get_coverage_all_colours(next_step->node) < db_graph->path_coverage_minimum){
-          // check coverage for next step meets min threshold
-          log_and_screen_printf("  Path stopped; next node coverage is too low [DEBUG]\n");
           cont = false;
         }
     }
@@ -440,11 +406,9 @@ int coverage_walk_get_path_with_callback(dBNode * node, Orientation orientation,
 
     // Do the walk
     int ret = db_graph_generic_walk(&first, path, &wf, db_graph);
-    log_printf("db_graph_generic_walk done\n");
 
     // Free buffer
     path_free_buffer_path(path);
-    log_printf("path_free_buffer_path done\n");
 
     return ret;
 }
@@ -461,9 +425,7 @@ int coverage_walk_get_path(dBNode * node, Orientation orientation, void (*node_a
         path_copy(path, p);
     }
 
-    log_printf("\t[NEW-NODE in coverage walk]\n");
     coverage_walk_get_path_with_callback(node, orientation,	node_action, &copy_path, db_graph);
-    log_printf("\t[NEW-NODE in coverage walk finished]\n");
 
     return path_get_edges_count(path);
 }

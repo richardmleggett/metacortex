@@ -1087,21 +1087,10 @@ int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions *
 	}
 
 	pathStep current_step, next_step, rev_step;
-
-
-
 	path_step_assign(&next_step, first_step);
     next_step.path = path; //This way, on all the assignments we keep the pointer to the path that was sent to the function originally.
 
-
-		if (next_step.label == Undefined) {
-				log_printf("[next_step.label (1) == Undefined] [DEBUG]\n");
-		}
 	functions->get_starting_step(&next_step, db_graph);
-
-	if (next_step.label == Undefined) {
-			log_printf("[next_step.label (2) == Undefined] [DEBUG]\n");
-	}
 	//boolean  try = true;
 	int count = 0;
     boolean walked;
@@ -1110,7 +1099,6 @@ int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions *
 	do {
 		walked = false;
         do {
-						log_printf("[path_add_node [DEBUG]\n");
             added = path_add_node(&next_step, path);
             path_step_assign(&current_step, &next_step);
             //try = false;
@@ -1120,9 +1108,6 @@ int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions *
             if (current_step.label != Undefined) {
                 functions->get_next_step(&current_step, &next_step, &rev_step, db_graph);
             }
-						else {
-								log_printf("[current_step.label == Undefined] [DEBUG]\n");
-						}
 
             if (added == false) {
                 // Do something?
@@ -1133,7 +1118,6 @@ int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions *
             execute_node_callbacks(current_step.node, &functions->node_callbacks);
         }
         while (functions->continue_traversing(&current_step, &next_step, &rev_step, path,db_graph));
-				log_printf("[finished continue_traversing [DEBUG]\n");
 
 		if (path->length > 0) {
 			walked = true;
