@@ -55,8 +55,6 @@
 #define MAX_BRANCHES 10
 #define GRAPH_LOG10_LIMIT 10 // little hacky to do this here, because it needs to match size of subgraph_dist in graph_stats.h
 #define NUM_BEST_NODES 5
-#define MIN_CONTIG_SIZE 10
-#define MIN_SUBGRAPH_SIZE 2000
 
 void timestamp_gs() {
 	time_t ltime = time(NULL);
@@ -349,7 +347,7 @@ int grow_graph_from_node_stats(dBNode* start_node, dBNode** best_node, dBGraph* 
 // Work through graph, count coverage, X, Y nodes
 // ----------------------------------------------------------------------
 void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
-	 int min_subgraph_kmers, int max_node_edges, float delta_coverage,
+	 int min_subgraph_kmers, int min_contig_size, int max_node_edges, float delta_coverage,
 	  int linked_list_max_size, int walk_paths)
 {
     FILE* fp_analysis;
@@ -623,7 +621,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
 							i=GRAPH_LOG10_LIMIT-1;
 					}
 					nodes_in_graph->subgraph_dist[i]++;
-					if(nodes_in_graph->total_size>MIN_SUBGRAPH_SIZE){
+					if(nodes_in_graph->total_size>min_subgraph_kmers){
 							nodes_in_graph->num_subgraphs_2k++;
 					}
 				}
@@ -672,7 +670,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
                     path_append(simple_path, path_rev);
 
                     simple_path->id = counter;
-                    if (simple_path->length >= (MIN_CONTIG_SIZE - graph->kmer_size)) {
+                    if ((simple_path->length - graph->kmer_size) >= min_contig_size) {
                         log_printf("Write path of size %d\n", simple_path->length);
                         log_printf("graph size\t%i\n",nodes_in_graph->total_size);
 

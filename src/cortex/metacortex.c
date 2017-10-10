@@ -480,7 +480,7 @@ int main(int argc, char **argv)
                 db_graph->path_coverage_minimum = cmd_line.path_coverage_minimum;
 
                 log_and_screen_printf("\nSearching graph for stats...\n");
-                find_subgraph_stats(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.max_node_edges, cmd_line.delta_coverage, cmd_line.linked_list_max_size, cmd_line.multiple_subgraph_contigs);
+                find_subgraph_stats(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.min_contig_length, cmd_line.max_node_edges, cmd_line.delta_coverage, cmd_line.linked_list_max_size, cmd_line.multiple_subgraph_contigs);
 
 
                 /* Put all of this into a seperate command line call (BUBBLEFIND)*/
