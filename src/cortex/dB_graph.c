@@ -768,7 +768,7 @@ void db_graph_calculate_stats(dBGraph * db_graph){
     }
     tmp_args[0]->db_graph = db_graph;
 
-	log_and_screen_printf("Calculating graph stats...\n");
+		log_and_screen_printf("Calculating graph stats...\n");
 
     db_graph->common_kmers_in_all_colours = 0;
 
@@ -1095,6 +1095,7 @@ int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions *
 	int count = 0;
     boolean walked;
     boolean added;
+
 
 	do {
 		walked = false;

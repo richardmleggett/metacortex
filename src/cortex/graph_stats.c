@@ -670,7 +670,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
                     path_append(simple_path, path_rev);
 
                     simple_path->id = counter;
-                    if ((simple_path->length - graph->kmer_size) >= min_contig_size) {
+                    if (simple_path->length >= min_contig_size) {
                         log_printf("Write path of size %d\n", simple_path->length);
                         log_printf("graph size\t%i\n",nodes_in_graph->total_size);
 
@@ -719,6 +719,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
 
                     /* Reset paths */
                     path_reset(simple_path);
+                    path_reset(path_fwd);
+                    path_reset(path_rev);
 
                 } else  {
                     log_printf("  Number of nodes (%i) too small. Not outputting contig.\n", nodes_in_graph->total_size);
