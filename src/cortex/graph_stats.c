@@ -452,7 +452,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
         sprintf(graph_wd, "%s/graphs/", dirname(consensus_contigs_filename));
     }
 
-    mkdir(graph_wd, 777);
+    //mkdir(graph_wd, 777);
 
     log_and_screen_printf("graphs\t%s\n", analysis_filename);
 
