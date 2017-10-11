@@ -454,6 +454,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
 
     //mkdir(graph_wd, 777);
 
+		log_and_screen_printf("graphs dir\t%s\n", graph_wd);
     log_and_screen_printf("graphs\t%s\n", analysis_filename);
 
     /* Open the DIGEST file */
