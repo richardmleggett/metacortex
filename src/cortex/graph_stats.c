@@ -452,7 +452,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
         sprintf(analysis_filename, "%s%s.tex", graph_wd, basename(consensus_contigs_filename));
     }
 
-    //mkdir(graph_wd, 777);
+    mkdir(graph_wd, 777);
 
 		log_and_screen_printf("graphs dir\t%s\n", graph_wd);
     log_and_screen_printf("graphs\t%s\n", analysis_filename);
@@ -813,8 +813,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
 			(int) COVERAGE_BINS, (int) GRAPH_LOG10_LIMIT, (int) NUM_BEST_NODES, &Contig_Branches[0], \
 			&Coverage_Dist[0], graph, nodes_in_graph);
 
-    //sprintf(command, "pdflatex -interaction=nonstopmode %s", analysis_filename);
-
     // memory issue - analysis_filename is being stomped on at some point
     log_and_screen_printf("\nanalysis filename\t%s\n", analysis_filename);
     sprintf(command, "pdflatex -interaction=nonstopmode %s", analysis_filename);
@@ -824,8 +822,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
       // The system method failed
       log_and_screen_printf("Failed call to system?\n");
     }
-
-    // exec("Rscript <path_to_src>/degree_plots.R degrees_filename")
 
     db_graph_reset_flags(graph);
 }
