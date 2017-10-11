@@ -448,8 +448,8 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
     }
     else{
         // dirname modifies 'consensus_contigs_filename' on some platforms, shifted in here to avoid that
-        sprintf(analysis_filename, "%s/graphs/%s.tex", dirname(consensus_contigs_filename), basename(consensus_contigs_filename));
         sprintf(graph_wd, "%s/graphs/", dirname(consensus_contigs_filename));
+        sprintf(analysis_filename, "%s%s.tex", graph_wd, basename(consensus_contigs_filename));
     }
 
     //mkdir(graph_wd, 777);
