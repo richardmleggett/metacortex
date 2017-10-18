@@ -374,10 +374,6 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
 
     char*  graph_wd = calloc(256, 1);
 
-		log_and_screen_printf("min_contig_size\t%i\n", min_contig_size);
-		log_and_screen_printf("kmer_size\t%i\n", graph->kmer_size);
-		log_and_screen_printf("diff\t%i\n", (min_contig_size - graph->kmer_size));
-
     Path *simple_path = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
     Path *path_fwd = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
     Path *path_rev = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
@@ -675,7 +671,7 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
                     path_append(simple_path, path_rev);
 
                     simple_path->id = counter;
-                    if (simple_path->length >= (min_contig_size - graph->kmer_size)) {
+                    if (simple_path->length > (min_contig_size - graph->kmer_size)) {
                         log_printf("Write path of size %d\n", simple_path->length);
                         log_printf("graph size\t%i\n",nodes_in_graph->total_size);
 
