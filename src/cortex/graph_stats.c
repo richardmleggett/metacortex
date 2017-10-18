@@ -374,6 +374,10 @@ void find_subgraph_stats(dBGraph * graph, char* consensus_contigs_filename,
 
     char*  graph_wd = calloc(256, 1);
 
+		log_and_screen_printf("min_contig_size\t%i\n", min_contig_size);
+		log_and_screen_printf("kmer_size\t%i\n", graph->kmer_size);
+		log_and_screen_printf("diff\t%i\n", (min_contig_size - graph->kmer_size));
+
     Path *simple_path = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
     Path *path_fwd = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
     Path *path_rev = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
