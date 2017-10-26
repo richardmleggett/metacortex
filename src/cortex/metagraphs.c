@@ -263,7 +263,7 @@ void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename,
                     if (final_path->length >= (min_contig_length - graph->kmer_size)) {
                         log_printf("Write path of size %d\n", final_path->length);
                         log_printf("graph size\t%i\n",nodes_in_graph);
-                        path_to_fasta_metacortex(final_path, fp_contigs, NULL, graph);
+                        path_to_fastg_gfa(final_path, fp_contigs, NULL, graph);
                     } else {
                         log_printf("Didn't write path of size %d\n", final_path->length);
                     }

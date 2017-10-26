@@ -126,14 +126,14 @@ typedef struct {
     Orientation * orientations;
     Nucleotide * labels;
     Flags * step_flags;
-    
+
     int max_length;
     //short depth;
-    
+
     int * in_nodes;
     char * seq;
     char * header;
-    
+
     int length;
     int max_virtual_length; //A soft limit to be used when you want a limit smaller than the buffer size.
     int new_nodes;
@@ -143,10 +143,10 @@ typedef struct {
     int out_nodes_count;
     short kmer_size;
     boolean used;
-    
+
     Flags stop_reasons_first;
     Flags stop_reasons_last;
-    
+
 } Path;
 
 typedef struct {
@@ -179,7 +179,7 @@ typedef struct{
     uint64_t is_double_y;//used to count how many paths are double y
     uint64_t is_cycle;
     uint64_t longer_than_buffer;
-    
+
     uint64_t minimum_double_y; //count how many double Y were marked
     uint64_t total_double_y_lenght; //counts the total lenght of the double Ys. We divide later by the minimum_double_y to get the average. However
 }PathCounts;
@@ -221,7 +221,7 @@ void path_increase_id(Path * path);
 
 void path_to_fasta(Path * path, FILE * fout);
 
-void path_to_fasta_metacortex(Path * path, FILE * fout, FILE * fout2, HashTable* graph);
+void path_to_fastg_gfa(Path * path, FILE * fout, FILE * fout2, HashTable* graph);
 
 void path_to_fasta_debug(Path * path, FILE * fout);
 
@@ -363,6 +363,8 @@ boolean paths_equal(Path * path_a, Path * path_b);
 
 //STEP functions
 
+void path_step_new(pathStep * step);
+
 void path_step_assign(pathStep*to, pathStep*from);
 
 boolean path_step_equals(pathStep * step, pathStep * other);
@@ -379,6 +381,7 @@ void path_step_print(pathStep * step, int kmer_size, FILE * f);
 
 //PathArray functions
 PathArray * path_array_new(short number_of_paths);
+
 
 void path_array_destroy(PathArray * pa);
 
