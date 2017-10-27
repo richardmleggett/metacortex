@@ -1087,6 +1087,7 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fil
 
     // outout remaining sequence after the branching section
     strcpy(tempseq, paths[chosen_edge]->seq + (paths[chosen_edge]->length - differ_pos + 1));
+
     output_seq_with_line_breaks(tempseq, file_fastg, current);
 
     if(file_gfa!=NULL){
@@ -1102,7 +1103,7 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fil
     }
 
     // Update path pos
-    *path_pos = *path_pos + paths[chosen_edge]->length;
+    *path_pos = *path_pos + paths[chosen_edge]->length - 1;
 
     // Destroy paths
     for (j=0; j<4; j++) {
@@ -1255,16 +1256,6 @@ void path_to_fastg_gfa(Path * path, FILE * file_fastg, FILE * file_gfa, HashTabl
             (lst_orientation == forward ? lst_f : lst_r));
 
 
-    // Output to gfa file, start of first segment
-    if(file_gfa!=NULL){
-      gfa_count->S_count++;
-      gfa_count->current_S_line=gfa_count->S_count;
-      output_S_line(file_gfa, gfa_count, NULL);
-      check_orient_gfa(gfa_count, path->orientations[0]);
-      add_to_P_line(gfa_count);
-      gfa_count->gap_or_comma[0]=',';
-    }
-
     // generate the initial kmer in the path
     binary_kmer_to_seq(&fst_kmer, flags_check_for_flag(PRINT_FIRST,	&(path->flags)) ? kmer_size : kmer_size - 1, fst_seq);
 
@@ -1277,13 +1268,23 @@ void path_to_fastg_gfa(Path * path, FILE * file_fastg, FILE * file_gfa, HashTabl
         }
     }
 
-
+    // Output to gfa file, start of first segment
     if(file_gfa!=NULL){
+      gfa_count->S_count++;
+      gfa_count->current_S_line=gfa_count->S_count;
+      output_S_line(file_gfa, gfa_count, fst_seq);
+      check_orient_gfa(gfa_count, path->orientations[0]);
+      add_to_P_line(gfa_count);
+      gfa_count->gap_or_comma[0]=',';
+    }
+
+
+    /*if(file_fastg!=NULL){
       for(i = 0, current = 1 ; i < path->kmer_size; i++, current++) {
           fprintf(file_fastg, "%c", fst_seq[i]);
           // never have a line break
       }
-    }
+    }*/
 
     path_pos = 0;
     //gfa_count->new_gfa_S = false;
@@ -1294,6 +1295,13 @@ void path_to_fastg_gfa(Path * path, FILE * file_fastg, FILE * file_gfa, HashTabl
             char seq[1024];
 						binary_kmer_to_seq(&(path->nodes[path_pos]->kmer), graph->kmer_size, seq);
             log_printf("Found polymorphism to output at node %s\n", seq);
+
+            /*if(file_fastg!=NULL){
+              for(i = 0, current = 1 ; i < path->kmer_size; i++, current++) {
+                  fprintf(file_fastg, "%c", fst_seq[i]);
+                  // never have a line break
+              }
+            }*/
 
             skip_this = output_polymorphism(path, &path_pos, graph, file_fastg, file_gfa, &current, gfa_count);
         }
@@ -1312,6 +1320,7 @@ void path_to_fastg_gfa(Path * path, FILE * file_fastg, FILE * file_gfa, HashTabl
             path_pos++;
             current++;
         }
+
     }
 
     // catch any remaining L lines
