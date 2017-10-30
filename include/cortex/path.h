@@ -367,6 +367,8 @@ void path_step_new(pathStep * step);
 
 void path_step_assign(pathStep*to, pathStep*from);
 
+void path_step_initialise(pathStep * step);
+
 boolean path_step_equals(pathStep * step, pathStep * other);
 
 boolean path_step_equals_without_label(pathStep * step, pathStep * other);
