@@ -217,6 +217,7 @@ void db_graph_walk_from_node(dBNode * node, Path * current_path, int orientation
 			first_step.node = node;
 			first_step.orientation = orientation;
 			first_step.label = n;
+            first_step.flags = 0;
 
 			new_path = path_new(max_length, db_graph->kmer_size);
 			merged_path = path_new(max_length, db_graph->kmer_size);
@@ -1157,6 +1158,7 @@ Path* db_graph_get_surrounding_path(dBNode * node, Orientation orientation, bool
 		first_step.node = node;
 		first_step.orientation = orientation;
 		first_step.label = n;
+        first_step.flags = 0;
 		db_graph_get_perfect_path_with_first_edge_all_colours(&first_step, &db_node_action_do_nothing, path, db_graph);
 
 		if (DEBUG)

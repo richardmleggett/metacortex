@@ -1259,6 +1259,7 @@ int db_graph_get_neighbouring_nodes_all_colours(dBNode* start, Orientation orien
             current_step.node = start;
             current_step.label = nucleotide;
             current_step.orientation = orientation;
+            current_step.flags = 0;
             db_graph_get_next_step(&current_step, &next_step, &rev_step, db_graph);
 
             if (next_step.node != NULL) {

@@ -386,6 +386,7 @@ int perfect_path_get_path_with_callback_with_args(dBNode * node, Orientation ori
 	//first.orientation = orientation == undefined? reverse: orientation;
 	first.orientation = orientation;
 	first.label = Undefined;
+    first.flags = 0;
 	
 	if (orientation != undefined) {
 		db_node_has_precisely_one_edge_all_colours(node, orientation, &first.label);

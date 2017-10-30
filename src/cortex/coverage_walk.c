@@ -92,6 +92,7 @@ Nucleotide coverage_walk_get_best_label(dBNode* node, Orientation orientation, d
             step.node = node;
             step.label = nucleotide;
             step.orientation = orientation;
+            step.flags = 0;
             db_graph_get_next_step(&step, &next_step, &reverse_step, db_graph);
             coverage = element_get_coverage_all_colours(next_step.node);
 
@@ -201,6 +202,7 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Or
             current_step.node = node;
             current_step.label = nucleotide;
             current_step.orientation = orientation;
+            current_step.flags = 0;
             db_graph_get_next_step(&current_step, &next_step, &reverse_step, db_graph);
 
             paths[nucleotide] = path_new(MAX_BRANCH_LENGTH, db_graph->kmer_size);
@@ -374,6 +376,7 @@ int coverage_walk_get_path_with_callback(dBNode * node, Orientation orientation,
     first.node = node;
     first.orientation = orientation;
     first.label = Undefined;
+    first.flags = 0;
     wf.get_starting_step = &coverage_walk_get_first_label;
 
     // Setup step action to include passed in node action

@@ -90,6 +90,7 @@ int grow_graph_from_node(dBNode* start_node, dBNode** best_node, dBGraph* graph,
                 first_step.node = node;
                 first_step.orientation = orientation;
                 first_step.label = n;
+                first_step.flags = 0;
                 new_path = path_new(MAX_EXPLORE_NODES, graph->kmer_size);
                 if (!new_path) {
                     log_and_screen_printf("ERROR: Not enough memory to allocate new path.\n");

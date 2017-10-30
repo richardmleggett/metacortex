@@ -882,6 +882,7 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fil
     current_step.node = current_node;
     current_step.label = chosen_edge;
     current_step.orientation = orientation;
+    current_step.flags = 0;
     paths[chosen_edge] = path_new(max_path_length, graph->kmer_size);
     db_graph_get_perfect_path_with_first_edge_all_colours(&current_step, &db_node_action_do_nothing, paths[chosen_edge], graph);
     log_printf("Chosen edge: %d length %d seq %s\n", chosen_edge, paths[chosen_edge]->length, paths[chosen_edge]->seq);
@@ -901,6 +902,7 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fil
                 current_step.node = current_node;
                 current_step.label = nucleotide;
                 current_step.orientation = orientation;
+                current_step.flags = 0;
                 db_graph_get_next_step(&current_step, &next_step, &reverse_step, graph);
 
                 paths[nucleotide] = path_new(max_path_length, graph->kmer_size);
@@ -1792,6 +1794,7 @@ void path_iterator_reverse(void (*step_action) (pathStep * step), Path * path)
         ps.node = path->nodes[i];
         ps.label = path->labels[i];
         ps.orientation = path->orientations[i];
+        ps.flags = 0;
         step_action(&ps);
     }
 }
@@ -1805,6 +1808,7 @@ void path_iterator_with_index(void (*step_action) (int index, pathStep * step), 
         ps.node = path->nodes[i];
         ps.label = path->labels[i];
         ps.orientation = path->orientations[i];
+        ps.flags = 0;
         step_action(i,&ps);
     }
 }
@@ -1974,10 +1978,8 @@ void path_get_statistics(double *avg_coverage, int *min_coverage, int *max_cover
 
         int coverage = element_get_coverage_all_colours(path->nodes[i]);
         sum_coverage += coverage;
-        *max_coverage =
-        (*max_coverage < coverage) ? coverage : *max_coverage;
-        *min_coverage =
-        (*min_coverage > coverage) ? coverage : *min_coverage;
+        *max_coverage = (*max_coverage < coverage) ? coverage : *max_coverage;
+        *min_coverage = (*min_coverage > coverage) ? coverage : *min_coverage;
 
     }
     int length = path_get_nodes_count(path);

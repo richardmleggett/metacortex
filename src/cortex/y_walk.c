@@ -197,12 +197,14 @@ static boolean continue_traversing(pathStep * current_step,
 
 
 
-static void mark_from_end(dBNode * node, void * args) {
+static void mark_from_end(dBNode * node, void * args)
+{
     WalkingFunctions  * wf  = ( WalkingFunctions  * ) args;
     pathStep first;
     first.node = node;
     first.orientation = undefined;
     first.path = NULL;
+    first.flags = 0;
     Path *buffer = NULL;
     if (!db_node_check_for_any_flag (node, Y_START ) ) {	//We already marked this as an end-point
         int fwd_count = db_node_edges_count(node, forward);
@@ -228,8 +230,8 @@ static void mark_from_end(dBNode * node, void * args) {
     }
 }
 
-
-static void mark_double_y_callback(Path * p, void * args) {
+static void mark_double_y_callback(Path * p, void * args)
+{
     
     pathStep ps;
     
@@ -241,6 +243,7 @@ static void mark_double_y_callback(Path * p, void * args) {
         (*double_y_count)++;
     }
 }
+
 void mark_double_y(dBGraph * db_graph)
 {
     
@@ -286,6 +289,7 @@ Path *y_walk_get_path(dBNode * node, Orientation orientation,
 	boolean only_one_edge;
 	first.node = node;
 	first.orientation =  orientation;
+    first.flags = 0;
 	
 	WalkingFunctions wf;
 	perfect_path_get_functions(&wf);

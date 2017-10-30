@@ -198,6 +198,7 @@ int graph_tools_walk_around(GraphToolsOptions* options, GraphToolsState* state, 
                 first_step.node = node;
                 first_step.orientation = orientation;
                 first_step.label = n;
+                first_step.flags = 0;
                 new_path = path_new(options->max_nodes_to_output, graph->kmer_size);
                 if (!new_path) {
                     printf("ERROR: Not enough memory to allocate new path.\n");
@@ -466,6 +467,7 @@ void graph_tools_write_graph_file(char * filename, GraphFileFormat* gff, GraphTo
                             first_step.node = node;
                             first_step.orientation = o;
                             first_step.label = n;
+                            first_step.flags = 0;
                             
                             db_graph_get_perfect_path_with_first_edge_all_colours(&first_step, &db_node_action_do_nothing, new_path, db_graph);						
                             
