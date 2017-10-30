@@ -283,7 +283,7 @@ boolean unlabelled_path_step_equals(pathStep * step, pathStep * other)
 boolean path_contains_step(pathStep * step, Path * path)
 {
     pathStep tmp;
-    path_step_new(&tmp);
+    path_step_initialise(&tmp);
     int i;
     int len = path_get_length(path);
     for (i = 0; i < len; i++) {
@@ -298,7 +298,7 @@ boolean path_contains_step(pathStep * step, Path * path)
 boolean path_contains_step_without_label(pathStep * step, Path * path)
 {
     pathStep tmp;
-    path_step_new(&tmp);
+    path_step_initialise(&tmp);
     int i;
     int len = path_get_length(path);
     for (i = 0; i < len; i++) {
@@ -317,8 +317,8 @@ boolean path_is_first_equals_to_last(Path * path)
         return false;
 
     pathStep first, last;
-    path_step_new(&first);
-    path_step_new(&last);
+    path_step_initialise(&first);
+    path_step_initialise(&last);
     path_get_last_step(&last, path);
     path_get_step_at_index(0, &first, path);
     return path_step_equals_without_label(&first, &last);
@@ -327,7 +327,7 @@ boolean path_is_first_equals_to_last(Path * path)
 boolean path_contains_step_from_index(int index, pathStep * step, Path * path)
 {
     pathStep tmp;
-    path_step_new(&tmp);
+    path_step_initialise(&tmp);
     int i;
     int len = path_get_length(path);
     for (i = index; i < len; i++) {
@@ -342,7 +342,7 @@ boolean path_contains_step_from_index(int index, pathStep * step, Path * path)
 boolean path_contains_step_from_index_without_label(int index, pathStep * step, Path * path)
 {
     pathStep tmp;
-    path_step_new(&tmp);
+    path_step_initialise(&tmp);
     int i;
     int len = path_get_length(path);
     for (i = index; i < len; i++) {
@@ -399,7 +399,7 @@ void path_add_in_step(pathStep * step, Path * path)
 boolean path_has_in_step(pathStep * step, Path * path){
     boolean found = false;
     pathStep tmp_step;
-    path_step_new(&tmp_step);
+    path_step_initialise(&tmp_step);
     int i;
     for(i = 0; i < path->in_nodes_count && !found; i++ ){
         path_get_step_at_index(path->in_nodes[i], &tmp_step, path);
@@ -465,7 +465,7 @@ boolean path_add_node(pathStep * step, Path * path)
     Orientation orientation = step->orientation;
     Nucleotide nucleotide = step->label;
     pathStep first;
-    path_step_new(&first);
+    path_step_initialise(&first);
     if(path->length > 0){
         path_get_step_at_index(0, &first, path);
         if(path_step_equals_without_label(&first, step)){ //TODO this is not enough for a cycle as the cycle doesn't need to close on first node (it is also disregarding the orientation)
@@ -576,7 +576,7 @@ PathArray * path_split_in_perfect_paths(Path * p){
     Path * current_path = path_get_buffer_path();
     path_array_add_path(current_path, pa);
     pathStep tmp;
-    path_step_new(&tmp);
+    path_step_initialise(&tmp);
     i = 0;
     path_get_step_at_index(i, &tmp, p);
     count_rev = db_node_edges_count_all_colours(tmp.node, reverse);
@@ -868,9 +868,9 @@ boolean output_polymorphism(Path* path, int* path_pos, dBGraph* graph, FILE* fil
     int chosen_edge = path->labels[*path_pos];
     int max_path_length=(path->kmer_size)*2;
     pathStep current_step, reverse_step, next_step;
-    path_step_new(&current_step);
-    path_step_new(&reverse_step);
-    path_step_new(&next_step);
+    path_step_initialise(&current_step);
+    path_step_initialise(&reverse_step);
+    path_step_initialise(&next_step);
     int j;
     int p = 1;
     int differ_pos = -1;
@@ -1668,7 +1668,7 @@ void path_iterator_from_index(int index, void (*step_action) (pathStep * step), 
 {
     int i = 0;
     pathStep ps;
-    path_step_new(&ps);
+    path_step_initialise(&ps);
 
     if (index >= path->length) {
         printf("[path_iterator_from_index] Error: index (%d) greater than path length (%d)\n", index, path->length);
@@ -1688,7 +1688,7 @@ void path_inner_iterator(void (*step_action) (pathStep * step), Path * path)
 
     int i;
     pathStep ps;
-    path_step_new(&ps);
+    path_step_initialise(&ps);
 
     for (i = 1; i < path->length - 1; i++) {
         ps.node = path->nodes[i];
@@ -1702,7 +1702,7 @@ void path_iterator(void (*step_action) (pathStep * step), Path * path)
 {
     int i = 0;
     pathStep ps;
-    path_step_new(&ps);
+    path_step_initialise(&ps);
     for (i = 0; i < path->length; i++) {
         ps.node = path->nodes[i];
         ps.label = path->labels[i];
@@ -1715,7 +1715,7 @@ void path_iterator_with_args(void (*step_action) (pathStep * , void *),void * ar
 {
     int i = 0;
     pathStep ps;
-    path_step_new(&ps);
+    path_step_initialise(&ps);
     for (i = 0; i < path->length; i++) {
         ps.node = path->nodes[i];
         ps.label = path->labels[i];
@@ -1730,8 +1730,8 @@ boolean path_is_singleton(int length, Path * path){
     int min_cov, max_cov;
     pathStep first;
     pathStep last;
-    path_step_new(&first);
-    path_step_new(&last);
+    path_step_initialise(&first);
+    path_step_initialise(&last);
     path_get_step_at_index(0, &first, path);
     path_get_last_step(&last, path);
 
@@ -1787,7 +1787,7 @@ void path_iterator_reverse(void (*step_action) (pathStep * step), Path * path)
 {
     int i = 0;
     pathStep ps;
-    path_step_new(&ps);
+    path_step_initialise(&ps);
     for (i = path->length - 1; i >= 0; i--) {
         ps.node = path->nodes[i];
         ps.label = path->labels[i];
@@ -1800,7 +1800,7 @@ void path_iterator_with_index(void (*step_action) (int index, pathStep * step), 
 {
     int i = 0;
     pathStep ps;
-    path_step_new(&ps);
+    path_step_initialise(&ps);
     for (i = 0; i < path->length; i++) {
         ps.node = path->nodes[i];
         ps.label = path->labels[i];
@@ -1919,9 +1919,9 @@ void path_graphviz_line(FILE * f, Path * p){
         return;
 
     pathStep  first ;
-    path_step_new(&first);
+    path_step_initialise(&first);
     pathStep last;
-    path_step_new(&last);
+    path_step_initialise(&last);
 
     path_get_step_at_index(0, &first, p);
     path_get_last_step(&last, p);
@@ -1949,7 +1949,7 @@ void path_graphviz_line(FILE * f, Path * p){
 void path_print_contig_with_details(FILE * fout, Path * p){
 
     pathStep  ps;
-    path_step_new(&ps);
+    path_step_initialise(&ps);
     int i;
     fprintf(fout, ">node_%qd \n", p->id);
     for(i=0; i<path_get_length(p); i++){
@@ -2024,7 +2024,7 @@ boolean path_is_empty(Path * path)
 boolean path_is_blunt(Orientation o, Path * p){
     if (path_get_length(p) > 0) {
         pathStep ps;
-        path_step_new(&ps);
+        path_step_initialise(&ps);
 
         if(o == forward){
             path_get_last_step(&ps, p);
@@ -2197,7 +2197,7 @@ void path_step_assign(pathStep * to, pathStep * from)
     to->flags = from->flags;
 }
 
-void path_step_new(pathStep * step){
+void path_step_initialise(pathStep * step){
     step->node = NULL;
     step->orientation = 0;  // NOTE check this. Valid initialisation?
     step->label = 0;
@@ -2327,7 +2327,7 @@ int path_percentage_new_nodes(Path * path){
 void path_reverse(Path * source, Path * destination)
 {
     pathStep new_step;
-    path_step_new(&new_step);
+    path_step_initialise(&new_step);
     int i;
 
     for (i = source->length - 1; i >= 0; i--) {
@@ -2355,9 +2355,9 @@ boolean path_append(Path * destination, Path * source){
     pathStep new_step;
     pathStep first_step;
     pathStep last_step;
-    path_step_new(&new_step);
-    path_step_new(&first_step);
-    path_step_new(&last_step);
+    path_step_initialise(&new_step);
+    path_step_initialise(&first_step);
+    path_step_initialise(&last_step);
     boolean success = true;
 
     if (source->length == 0) {
