@@ -224,9 +224,12 @@ Nucleotide coverage_walk_get_best_label_bubble(pathStep * step, dBNode* node, Or
     // check for single best edge first on coverage, with length of path breaking ties
     void check_coverages(Nucleotide nucleotide) {
       if (all_coverages[nucleotide] > 1){
-        if ((all_coverages[nucleotide] > highest_coverage) ||
+        /*if ((all_coverages[nucleotide] > highest_coverage) ||
             ((all_coverages[nucleotide] == highest_coverage) &&
-                (all_lengths[nucleotide] > highest_coverage_length))){
+                (all_lengths[nucleotide] > highest_coverage_length))){ */
+        if ((all_lengths[nucleotide] > highest_coverage_length) ||
+            ((all_lengths[nucleotide] == highest_coverage_length) &&
+                (all_coverages[nucleotide] > highest_coverage))){
             highest_coverage=all_coverages[nucleotide];
             highest_coverage_length=all_lengths[nucleotide];
             step->label=nucleotide;

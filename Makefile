@@ -18,34 +18,34 @@ endif
 
 ifeq ($(shell expr $(MAXK) \< 32),1)
 BITFIELDS = 1
-MAXK=31
+BIN_SUFFIX=31
 else ifeq ($(shell expr $(MAXK) \< 64),1)
 BITFIELDS = 2
-MAXK=63
+BIN_SUFFIX=63
 else ifeq ($(shell expr $(MAXK) \< 96),1)
 BITFIELDS = 3
-MAXK=95
+BIN_SUFFIX=95
 else ifeq ($(shell expr $(MAXK) \< 128),1)
 BITFIELDS = 4
-MAXK=127
+BIN_SUFFIX=127
 else ifeq ($(shell expr $(MAXK) \< 161),1)
 BITFIELDS = 5
-MAXK=159
+BIN_SUFFIX=159
 else ifeq ($(shell expr $(MAXK) \< 193),1)
 BITFIELDS = 6
-MAXK=191
+BIN_SUFFIX=191
 else ifeq ($(shell expr $(MAXK) \< 224),1)
 BITFIELDS = 7
-MAXK=223
+BIN_SUFFIX=223
 else ifeq ($(shell expr $(MAXK) \< 256),1)
 BITFIELDS = 8
-MAXK=255
+BIN_SUFFIX=255
 else
 BITFIELDS = 1
-MAXK=31
+BIN_SUFFIX=31
 endif
 
-BIN_SUFFIX = $(MAXK)
+#BIN_SUFFIX = $(MAXK)
 
 # Main program includes
 IDIR_BASIC =include/basic
@@ -135,13 +135,13 @@ filterreads:remove_objects $(FILTERREADS_OBJ)
 	mkdir -p $(BIN); $(CC) $(OPT) -o $(BIN)/filterreads_$(BIN_SUFFIX) $(FILTERREADS_OBJ) -lm
 
 run_basic_tests : remove_objects $(BASIC_TESTS_OBJ)
-	mkdir -p $(BIN); $(CC) $(OPT) $(CFLAGS_CUNIT) $(CFLAGS_BASIC_TESTS)      -lcunit -o $(BIN)/run_basic_tests_$(MAXK)$(READ_PAIR_SUFFIX) $(BASIC_TESTS_OBJ)
+	mkdir -p $(BIN); $(CC) $(OPT) $(CFLAGS_CUNIT) $(CFLAGS_BASIC_TESTS)      -lcunit -o $(BIN)/run_basic_tests_$(BIN_SUFFIX)$(READ_PAIR_SUFFIX) $(BASIC_TESTS_OBJ)
 
 run_hash_table_tests : remove_objects $(HASH_TABLE_TESTS_OBJ)
-	mkdir -p $(BIN); $(CC) $(OPT) $(CFLAGS_CUNIT) $(CFLAGS_HASH_TABLE_TESTS) -lcunit -o $(BIN)/run_hash_table_tests_$(MAXK) $(HASH_TABLE_TESTS_OBJ)
+	mkdir -p $(BIN); $(CC) $(OPT) $(CFLAGS_CUNIT) $(CFLAGS_HASH_TABLE_TESTS) -lcunit -o $(BIN)/run_hash_table_tests_$(BIN_SUFFIX) $(HASH_TABLE_TESTS_OBJ)
 
 run_graph_tests : remove_objects $(GRAPH_TESTS_OBJ)
-	mkdir -p $(BIN); $(CC) $(LINKOPT) $(CFLAGS_CUNIT)  -o $(BIN)/run_graph_tests_$(MAXK) $(GRAPH_TESTS_OBJ) -lcunit
+	mkdir -p $(BIN); $(CC) $(LINKOPT) $(CFLAGS_CUNIT)  -o $(BIN)/run_graph_tests_$(BIN_SUFFIX) $(GRAPH_TESTS_OBJ) -lcunit
 
 tests: remove_objects run_basic_tests run_hash_table_tests run_graph_tests
 
