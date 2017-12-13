@@ -1,11 +1,42 @@
-/*
+/************************************************************************
+ *
+ * This file is part of MetaCortex
+ *
+ * Authors:
+ *     Richard M. Leggett (richard.leggett@earlham.ac.uk) and
+ *     Martin Ayling (martin.ayling@earlham.ac.uk)
+ *
+ * MetaCortex is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetaCortex is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetaCortex.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ************************************************************************
+ *
+ * This file is modified from source that was part of CORTEX. The
+ * original license notice for that is given below.
+ *
+ ************************************************************************
+ *
  * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
  *
  * CORTEX project contacts:
  * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * **********************************************************************
+ * Development team:
+ *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
+ *       R. Leggett (richard@leggettnet.org.uk)
+ *
+ ************************************************************************
  *
  * This file is part of CORTEX.
  *
@@ -22,8 +53,8 @@
  * You should have received a copy of the GNU General Public License
  * along with CORTEX.  If not, see <http://www.gnu.org/licenses/>.
  *
- * **********************************************************************
- */
+ ************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -47,25 +78,26 @@ void usage(void)
     printf("\nusage: metacortex [-h] [--input file_of_files] [--mem_height n] [--dump_binary bin_output] [--input_format fastq|fasta|binary] [--output_contigs contigs.fa] \n");
     printf("\n" \
     "   [-h|--help] = This help screen.\n" \
+    "   [-a|--remove_bubbles] = Removes the bubbles in the graph.\n"\
+    "   [-b|--mem_width INT] = Size of hash table buckets (default 100).\n" \
+    "   [-c|--tip_clip INT] = Clips the tips in the graph, the argument defines the max length for the tips.\n" \
+    "   [-C|--high_confidence INT] = Only outputs contigs which have no nodes with coverage below THESHOLD.\n" \
+    "   [-e|--output_coverages] = Print coverages for contigs/supernodes in a different file with _cov suffix.\n" \
+    "   [-d|--ouput_contigs FILENAME] = Fasta file with all the contigs (after applying all specified actions on graph).\n" \
+    "   [-f|--ouput_supernodes FILENAME] = Fasta file with all the supernodes (after applying all specified actions on graph).\n" \
+    "   [-g|--min_contig_length] = minimum contig length produced.\n" \
     "   [-i|--input FILENAME] = File of filenames to be processed (start and end read is optional, format <filename>  <start read index>  <end read index> ).\n" \
     "   [-k|--kmer_size INT] = Kmer size (default 21), it has to be an odd number.\n" \
-    "   [-b|--mem_width INT] = Size of hash table buckets (default 100).\n" \
     "   [-n|--mem_height INT] = Number of buckets in hash table in bits (default 10, this is a power of 2, ie 2^mem_height).\n" \
-    "   [-c|--tip_clip INT] = Clips the tips in the graph, the argument defines the max length for the tips.\n" \
-    "   [-z|--remove_low_coverage_kmers INT] = Filter for kmers with coverage in the threshold or smaller.\n" \
-    "   [-q|--quality_score_threshold INT] = Filter for quality scores in the input file, any k-mer wiht a base wiht quality in the threshold or smaller is not considered (default 0).\n" \
     "   [-o|--dump_binary FILENAME] = Dump binary for graph in file (after applying all specified actions on graph).\n" \
-    "   [-f|--ouput_supernodes FILENAME] = Fasta file with all the supernodes (after applying all specified actions on graph).\n" \
-    "   [-d|--ouput_contigs FILENAME] = Fasta file with all the contigs (after applying all specified actions on graph).\n" \
-    "   [-t|--input_format FORMAT] = File format for input (binary | fasta | fastq | hash ).\n" \
-    "   [-e|--output_coverages] = Print coverages for contigs/supernodes in a different file with _cov suffix.\n" \
-    "   [-g|--min_contig_length] = minimum contig length produced.\n" \
-    "   [-u|--remove_seq_errors] = remove sequence of kmers induced by errors. Equivalent to --remove_low_coverage_kmers 1\n"\
-    "   [-a|--remove_bubbles] = Removes the bubbles in the graph.\n"\
-    "   [-Z|--max_read_len] = Maximum read length over all input files.\n"\
-    "   [-p|--quality_score_offset] = Fastq quality offset. Default 33. Use 63 for illumina.\n"\
-    "   [-q|--quality_score_threshold ] = The minimiun phred value for a base to be considered in an assembly.\n"\
     "   [-O|--hash_output_file ] = Dumps the whole graph into a file. Read with the input_format hash. The file stores the information required to restore the hash table, hence mem_height and mem_width don't have any effect."
+    "   [-p|--quality_score_offset] = Fastq quality offset. Default 33. Use 63 for illumina.\n"\
+    "   [-q|--quality_score_threshold INT] = Filter for quality scores in the input file, any k-mer wiht a base with quality in the threshold or smaller is not considered (default 0).\n"\
+    "   [-q|--quality_score_threshold ] = The minimiun phred value for a base to be considered in an assembly.\n"\
+    "   [-t|--input_format FORMAT] = File format for input (binary | fasta | fastq | hash ).\n" \
+    "   [-u|--remove_seq_errors] = remove sequence of kmers induced by errors. Equivalent to --remove_low_coverage_kmers 1\n"\
+    "   [-z|--remove_low_coverage_kmers INT] = Filter for kmers with coverage in the threshold or smaller.\n" \
+    "   [-Z|--max_read_len] = Maximum read length over all input files.\n"\
     "\n");
     printf("\n");
 }
@@ -97,6 +129,7 @@ int default_opts(CmdLine * c)
     c->multiple_subgraph_contigs = false;
 
     //output
+    c->high_confidence = false;
     c->dump_binary = false;
     c->output_fasta = false;
     c->detect_bubbles = false;
@@ -106,6 +139,7 @@ int default_opts(CmdLine * c)
     c->print_uncertain_as_n = true;
     c->output_log = false;
     c->min_contig_length = 0;
+    c->path_coverage_minimum = 1;
 
     //-----------
     //parameters
@@ -125,6 +159,9 @@ int default_opts(CmdLine * c)
 
     //cleaning
     //c->node_coverage_threshold required
+    c->max_node_edges = 9; //TODO
+    c->delta_coverage = 100; //TODO
+    c->linked_list_max_size = 0; //TODO
     c->tip_length = 100; //TODO
     c->tip_clip_iterations = 100;
     //c->remove_low_coverage_supernodes_threshold required;
@@ -139,7 +176,7 @@ int default_opts(CmdLine * c)
     //c->output_graphviz_filename required
     c->singleton_length = 100;
     c->algorithm = METACORTEX_CONSENSUS;
-	c->max_length=200000;
+	  c->max_length=200000;
     c->min_subgraph_size=0;
 
 	return 1;
@@ -154,6 +191,7 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
     }
     printf("\n");
     printf("Unit size: %i\n", unit_size);
+    printf("Node size: %lu\n", sizeof(dBNode));
 
     CmdLine cmd_line;
     default_opts(&cmd_line);
@@ -165,6 +203,7 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
         {"remove_bubbles", no_argument, NULL, 'a'},
         {"mem_width", required_argument, NULL, 'b'},
         {"tip_clip", required_argument, NULL, 'c'},
+        {"high_confidence", required_argument, NULL, 'C'},
         {"output_contigs", required_argument, NULL, 'd'},
         {"output_coverages", no_argument, NULL, 'e'},
         {"output_supernodes", required_argument, NULL, 'f'},
@@ -179,28 +218,31 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
         {"dump_binary", required_argument, NULL, 'o'},
         {"quality_score_offset", required_argument, NULL, 'p'},
         {"quality_score_threshold", required_argument, NULL, 'q'},
+        {"max_node_edges", required_argument, NULL, 'r'},  // using still available letters
         {"remove_low_coverage_supernodes", required_argument, NULL,'s'},
         {"input_format", required_argument, NULL, 't'},
         {"remove_seq_errors", no_argument, NULL, 'u'},
         {"verbose", no_argument, NULL, 'v'},
         {"detect_bubbles", required_argument, NULL, 'w'},
         {"singleton_length", required_argument, NULL, 'x'},
+        {"linked_list_max_size", required_argument, NULL, 'y'},  // using still available letters
         {"remove_low_coverage_kmers", required_argument, NULL, 'z'},
         {"algorithm",required_argument,NULL,'A'},
         {"graphviz", required_argument, NULL, 'G'},
-   		{"input_reference", required_argument, NULL, 'H'},
-		{"output_kmer_coverage", required_argument, NULL, 'J'},
+     		{"input_reference", required_argument, NULL, 'H'},
+  		  {"output_kmer_coverage", required_argument, NULL, 'J'},
         {"remove_spurious_links",required_argument,NULL,'L'},
         {"multiple_subgraph_contigs",no_argument,NULL,'M'},
         {"hash_output_file", required_argument, NULL, 'O'},
         {"tip_clip_iterations", required_argument, NULL, 'P'},
+        {"delta_coverage", required_argument, NULL, 'R'},  // using still available letters
         {"graph_stats", no_argument, NULL, 'S'},
         {"threads", required_argument, NULL, 'T'},
         {0, 0, 0, 0}
     };
 
     while ((opt = getopt_long(argc, argv,
-                              "ab:c:d:ef:g:hi:jk:l:m:n:o:p:q:s:t:uvw:x:z:A:B:C:D:E:FG:H:I:J:K:L:MN:O:P:STZ:",
+                              "ab:c:d:ef:g:hi:jk:l:m:n:o:p:q:r:s:t:uvw:x:y:z:A:B:C:D:E:FG:H:I:J:K:L:MN:O:P:R:STZ:",
                               long_options, &longopt_index)) > 0)
     {
         //Parse the default options
@@ -383,6 +425,13 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                 }
                 break;
 
+            case 'r':
+                if (optarg == NULL){
+                    errx(1,"[-r ] max_node_edges option requires int argument");
+                }
+                cmd_line.max_node_edges = atoi(optarg);
+                break;
+
             case 's': //remove_low_coverage_supernodes
                 cmd_line.remove_low_coverage_supernodes=true;
                 if (optarg==NULL)
@@ -433,6 +482,13 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                 }
                 break;
 
+            case 'y':
+                if (optarg == NULL){
+                    errx(1,"[-y ] linked_list_max_size option requires int argument");
+                }
+                cmd_line.linked_list_max_size = atoi(optarg);
+                break;
+
             case 'z':	//node coverage threshold
                 if (optarg == NULL){
                     errx(1, "[-z | --node_coverage_threshold] option requires int argument [node coverate cut off]");
@@ -448,6 +504,18 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
             case 'A':
                 errx(1,"[-A  | --algorithm ] option is not used for metacortex");
                 exit(-1);
+                break;
+
+
+            case 'C':
+                if (optarg == NULL) {
+                    errx(1, "[-C | --high_confidence] option called without value, using default threshold (2)");
+                    cmd_line.path_coverage_minimum=1;
+                }
+                else{
+                  cmd_line.path_coverage_minimum = atoi(optarg);
+                }
+                cmd_line.high_confidence=true;
                 break;
 
             case 'G':
@@ -548,10 +616,11 @@ CmdLine parse_cmdline(int argc, char *argv[], int unit_size)
                 break;
 
             case 'R':
-                errx(1, "454 quality files not implemented yet. Use the regular fasta format. \n");
-                cmd_line.input_file_format_known = true;
-                cmd_line.input_file_format = ROCHE;
-                printf ("Doing 454\n");
+                if (optarg == NULL){
+                    errx(1,"[-R ] delta_coverage option requires int argument (as a percentage)");
+                }
+                cmd_line.delta_coverage = atoi(optarg);
+                cmd_line.delta_coverage=cmd_line.delta_coverage/100;
                 break;
 
             case 'S':

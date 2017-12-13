@@ -1,11 +1,38 @@
-/*
- * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo 
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+/************************************************************************
+ *
+ * This file is part of MetaCortex
+ *
+ * Authors:
+ *     Richard M. Leggett (richard.leggett@earlham.ac.uk) and
+ *     Martin Ayling (martin.ayling@earlham.ac.uk)
+ *
+ * MetaCortex is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetaCortex is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetaCortex.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ************************************************************************
+ *
+ * This file is modified from source that was part of CORTEX. The
+ * original license notice for that is given below.
+ *
+ ************************************************************************
+ *
+ * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * **********************************************************************
+ ************************************************************************
  *
  * This file is part of CORTEX.
  *
@@ -22,16 +49,19 @@
  * You should have received a copy of the GNU General Public License
  * along with CORTEX.  If not, see <http://www.gnu.org/licenses/>.
  *
- * **********************************************************************
- */
+ ************************************************************************/
 
-/*
- element.h defines the interface for the de Bruijn graph node. The implementation is complemented by
- a hash table that stores every node indexed by kmers (BinaryKmers).
-
- The element routines, ie the one required by hash_table/priority queue, are prefixed with element_
- The de Bruijn based routines are prefixed with db_node
- */
+/************************************************************************
+ * element.h
+ *
+ * Defines the interface for the de Bruijn graph node. The implementation
+ * is complemented by a hash table that stores every node indexed by
+ * kmers (BinaryKmers).
+ *
+ * The element routines, ie the one required by hash_table/priority queue,
+ * are prefixed with element_
+ * The de Bruijn based routines are prefixed with db_node
+ ************************************************************************/
 
 #include <global.h>
 #include <nucleotide.h>
@@ -49,22 +79,14 @@
 //type definitions
 typedef char Edges;
 
-
-
 // We provide a smaller version of element for use in count_kmers
 typedef struct {
-	BinaryKmer kmer;
-	uint32_t coverage[NUMBER_OF_COLOURS];
-	// less significant nibble forward
-	Edges edges[NUMBER_OF_COLOURS];
-	Flags flags;
+    BinaryKmer kmer;
+    uint32_t coverage[NUMBER_OF_COLOURS];
+    // less significant nibble forward
+    Edges edges[NUMBER_OF_COLOURS];
+    Flags flags;
 } Element;
-
-
-typedef struct {
-	BinaryKmer kmer;
-	Edges edges; // less significant nibble forward
-} Element2;
 
 typedef Element dBNode;
 
@@ -89,38 +111,40 @@ BinaryKmer* element_get_kmer(Element *);
 
 //int element_get_coverage(Element *);
 int element_get_coverage_all_colours(Element *);
+
 int element_get_coverage_by_colour(Element *, short);
+
 int element_update_coverage(Element *, short, int);
+
 boolean db_node_check_for_flag_ALL_OFF(dBNode * node);
 
 Orientation db_node_get_orientation(BinaryKmer*, dBNode *, short kmer_size);
 
 //add an edge between nodes -- NB: it adds both edges: forward and reverse
-boolean db_node_add_edge(dBNode *, dBNode *, Orientation, Orientation,
-		short kmer_size, short);
+boolean db_node_add_edge(dBNode *, dBNode *, Orientation, Orientation, short kmer_size, short);
 
-//returns true if the node side defined by the orientation is a conflict 
+void db_node_add_alt_labelled_edge(dBNode* e, Orientation o, Nucleotide base);
+
+//returns true if the node side defined by the orientation is a conflict
 //or doesn't have any outgoing edge
 boolean db_node_is_supernode_end(dBNode *, Orientation);
 
-//returns yes if the label defined by the nucleotide coresponds to an 
-//outgoing edge in the side defined by the orientation.   
+//returns yes if the label defined by the nucleotide coresponds to an
+//outgoing edge in the side defined by the orientation.
 boolean db_node_edge_exist(dBNode *, Nucleotide, Orientation);
 boolean db_node_edge_exist_any_colour(dBNode *, Nucleotide, Orientation);
 
-//returns the label of the first outgoing edge -- leaving from the side 
-//defined by orientation. 
+//returns the label of the first outgoing edge -- leaving from the side
+//defined by orientation.
 boolean db_node_has_precisely_one_edge(dBNode *, Orientation, Nucleotide *);
 
 boolean db_node_has_precisely_one_edge_all_colours(dBNode *, Orientation, Nucleotide *);
 
 //returns the label of the "two edges"
-//defined by orientation. 
-boolean db_node_has_precisely_two_edges(dBNode *, Orientation,
-		Nucleotide *, Nucleotide *);
+//defined by orientation.
+boolean db_node_has_precisely_two_edges(dBNode *, Orientation, Nucleotide *, Nucleotide *);
 
-boolean db_node_has_unvisited_edge(dBNode * node, Orientation orientation,
-		Nucleotide * nucleotide);
+boolean db_node_has_unvisited_edge(dBNode * node, Orientation orientation, Nucleotide * nucleotide);
 
 Edges db_node_get_edges(dBNode * node);
 
@@ -142,11 +166,10 @@ void db_node_reset_edge_all_colours(dBNode *, Orientation, Nucleotide);
 //check that the edges are 0's
 //boolean db_node_edges_reset(dBNode *);
 
-//set every edge in 'edges' 
+//set every edge in 'edges'
 void db_node_set_edges(dBNode * node, short colour, Edges edges);
 
-boolean db_node_edge_has_single_coverage(dBNode * element, Nucleotide base,
-		Orientation orientation);
+boolean db_node_edge_has_single_coverage(dBNode * element, Nucleotide base, Orientation orientation);
 
 int db_node_count_number_of_colours_out(dBNode *node, Orientation orientation);
 
@@ -163,7 +186,7 @@ void db_node_print_binary_by_colour(FILE * fp, dBNode * node, short colour, int 
 
 boolean db_node_read_binary(FILE * fp, short kmer_size, dBNode * node);
 
-//actions and conditions 
+//actions and conditions
 
 void db_node_action_do_nothing(dBNode * node);
 
@@ -185,8 +208,7 @@ void clear_visited_count(void);
 
 Flags db_node_get_flags(dBNode * node, Flags f);
 #ifndef SHORT_FLAGS
-void db_node_action_set_visited(dBNode * node, Orientation o, Nucleotide n,
-		Nucleotide n_r);
+void db_node_action_set_visited(dBNode * node, Orientation o, Nucleotide n, Nucleotide n_r);
 
 void db_node_action_unset_visited(dBNode * node, Orientation o);
 
@@ -218,23 +240,23 @@ int db_node_edges_count_all_colours(dBNode * node, Orientation orientation);
 
 boolean db_node_condition_always_true(dBNode* node);
 
-boolean db_node_is_visited_on_all_the_paths(dBNode * node,
-		Orientation orientation);
+boolean db_node_is_visited_on_all_the_paths(dBNode * node, Orientation orientation);
 
 Edges db_node_get_edges_for_orientation_by_colour(dBNode * node, Orientation orientation, short colour);
 
 Edges db_node_get_edges_for_orientation_all_colours(dBNode * node, Orientation orientation);
 
 Edges db_node_get_edges_for_orientation(dBNode * node, Orientation orientation);
-/**
+
+/*
  * Method to set the orientation in which the node will be printed. It is
  * important to notice that if the node already has an orientation, the method
  * doesn't have any effect and the returned value is the stored orientation.
  */
 #ifndef SHORT_FLAGS
-Flags db_node_set_print_orientation(Orientation current_orientation,
-		dBNode * current_node);
+Flags db_node_set_print_orientation(Orientation current_orientation, dBNode * current_node);
 #endif
+
 boolean element_check_for_flag_ALL_OFF(Element * node);
 
 boolean db_node_check_flag_not_pruned(dBNode * node);

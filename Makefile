@@ -5,52 +5,47 @@ ifndef CC
 endif
 
 ifdef MAC
-    # Change the following to point to your GCC binary
-    CC=/usr/local/Cellar/gcc/4.9.2_1/bin/gcc-4.9
-    #MACFLAG = -fnested-functions
+    $(warning On MacOS, make sure you set CC to point to your GCC binary - LLVM won't compile MetaCortex)
+    $(warning     e.g. export CC=/usr/local/Cellar/gcc/7.1.0/bin/gcc-7)
 endif
 
 BIN = bin
 LIB = lib
 
-ifeq ($(MAXK),31)
-   BITFIELDS = 1
+ifndef MAXK
+ MAXK = 31
 endif
 
-ifeq ($(MAXK),63)
-   BITFIELDS = 2
+ifeq ($(shell expr $(MAXK) \< 32),1)
+BITFIELDS = 1
+BIN_SUFFIX=31
+else ifeq ($(shell expr $(MAXK) \< 64),1)
+BITFIELDS = 2
+BIN_SUFFIX=63
+else ifeq ($(shell expr $(MAXK) \< 96),1)
+BITFIELDS = 3
+BIN_SUFFIX=95
+else ifeq ($(shell expr $(MAXK) \< 128),1)
+BITFIELDS = 4
+BIN_SUFFIX=127
+else ifeq ($(shell expr $(MAXK) \< 161),1)
+BITFIELDS = 5
+BIN_SUFFIX=159
+else ifeq ($(shell expr $(MAXK) \< 193),1)
+BITFIELDS = 6
+BIN_SUFFIX=191
+else ifeq ($(shell expr $(MAXK) \< 224),1)
+BITFIELDS = 7
+BIN_SUFFIX=223
+else ifeq ($(shell expr $(MAXK) \< 256),1)
+BITFIELDS = 8
+BIN_SUFFIX=255
+else
+BITFIELDS = 1
+BIN_SUFFIX=31
 endif
 
-ifeq ($(MAXK),95)
-   BITFIELDS = 3
-endif
-
-ifeq ($(MAXK),127)
-   BITFIELDS = 4
-endif
-
-ifeq ($(MAXK),160)
-   BITFIELDS = 5
-endif
-
-ifeq ($(MAXK),192)
-   BITFIELDS = 6
-endif
-
-ifeq ($(MAXK),223)
-   BITFIELDS = 7
-endif
-
-ifeq ($(MAXK),255)
-   BITFIELDS = 8
-endif
-
-ifndef BITFIELDS
-   BITFIELDS = 1
-   MAXK = 31
-endif
-
-BIN_SUFFIX = $(MAXK)
+#BIN_SUFFIX = $(MAXK)
 
 # Main program includes
 IDIR_BASIC =include/basic
@@ -89,10 +84,11 @@ ifdef 32_BITS
 endif
 
 # Compiler options
-OPT		= $(ARCH) -Wall -O3 $(MACFLAG) -DNUMBER_OF_BITFIELDS_IN_BINARY_KMER=$(BITFIELDS) -pthread -g
+OPT		= $(ARCH) -Wall -O3 -DNUMBER_OF_BITFIELDS_IN_BINARY_KMER=$(BITFIELDS) -pthread -g
+#-Wno-duplicate-decl-specifier
 
 ifdef DEBUG
-OPT	= $(ARCH) -Wall -O0 $(MACFLAG) -DNUMBER_OF_BITFIELDS_IN_BINARY_KMER=$(BITFIELDS) -g -pthread
+OPT	= $(ARCH) -Wall -O0 -DNUMBER_OF_BITFIELDS_IN_BINARY_KMER=$(BITFIELDS) -g -pthread
 endif
 
 ifdef DEBUG_PRINT_LABELS
@@ -114,7 +110,7 @@ CFLAGS_METACORTEX_TESTS	= -I$(IDIR_CUNIT) $(CFLAGS_CUNIT) -I$(IDIR_BASIC) -I$(ID
 CFLAGS_BASIC_TESTS = -I$(IDIR_CUNIT) $(CFLAGS_CUNIT) -I$(IDIR_BASIC) -I$(IDIR_BASIC_TESTS)
 
 # Program objects
-METACORTEX_OBJ = obj/cortex/file_format.o obj/cortex/flags.o obj/cortex/cleaning.o obj/cortex/path.o obj/cortex/perfect_path.o obj/cortex/branches.o obj/cortex/y_walk.o obj/cortex/cmd_line.o obj/cortex/binary_kmer.o obj/cortex/seq.o obj/cortex/element.o obj/cortex/hash_value.o obj/cortex/hash_table.o obj/cortex/dB_graph.o obj/cortex/file_reader.o obj/cortex/metacortex.o obj/cortex/logger.o obj/cortex/metagraphs.o obj/cortex/coverage_walk.o obj/util/node_queue.o obj/cortex/graph_stats.o obj/cortex/bubble_find.o
+METACORTEX_OBJ = obj/cortex/file_format.o obj/cortex/flags.o obj/cortex/cleaning.o obj/cortex/path.o obj/cortex/perfect_path.o obj/cortex/branches.o obj/cortex/y_walk.o obj/cortex/cmd_line.o obj/cortex/binary_kmer.o obj/cortex/seq.o obj/cortex/element.o obj/cortex/hash_value.o obj/cortex/hash_table.o obj/cortex/dB_graph.o obj/cortex/file_reader.o obj/cortex/metacortex.o obj/cortex/logger.o obj/cortex/metagraphs.o obj/cortex/coverage_walk.o obj/util/node_queue.o obj/cortex/graph_stats.o obj/cortex/bubble_find.o obj/cortex/report_output.o
 KMERINFO_OBJ =  obj/cortex/flags.o obj/cortex/path.o obj/cortex/binary_kmer.o obj/cortex/seq.o obj/cortex/element.o obj/cortex/hash_table.o obj/cortex/file_reader.o obj/util/kmerinfo.o obj/cortex/logger.o obj/cortex/hash_value.o
 GRAPHOUT_OBJ = obj/cortex/flags.o obj/cortex/path.o obj/cortex/binary_kmer.o obj/cortex/seq.o obj/cortex/element.o obj/cortex/hash_table.o obj/cortex/file_reader.o obj/cortex/dB_graph.o obj/util/graphout.o obj/cortex/perfect_path.o obj/cortex/logger.o obj/cortex/hash_value.o obj/util/graph_formats.o obj/util/node_queue.o obj/cortex/cleaning.o obj/cortex/coverage_walk.o obj/util/graph_tools.o obj/cortex/file_format.o
 FILTERREADS_OBJ = obj/util/filter_reads.o obj/cortex/flags.o obj/cortex/path.o obj/cortex/binary_kmer.o obj/cortex/seq.o obj/cortex/element.o obj/cortex/hash_table.o obj/cortex/file_reader.o obj/cortex/dB_graph.o obj/cortex/perfect_path.o obj/cortex/logger.o obj/cortex/hash_value.o obj/util/node_queue.o obj/cortex/cleaning.o obj/cortex/file_format.o
@@ -123,29 +119,29 @@ HASH_TABLE_TESTS_OBJ = obj/cortex/flags.o obj/test/run_hash_table_tests.o obj/co
 GRAPH_TESTS_OBJ = obj/cortex/branches.o obj/cortex/file_format.o obj/test/test_dB_graph.o obj/cortex/logger.o  obj/cortex/cleaning.o  obj/cortex/perfect_path.o obj/cortex/path.o obj/cortex/flags.o obj/cortex/binary_kmer.o obj/cortex/seq.o obj/cortex/element.o obj/cortex/hash_value.o obj/cortex/hash_table.o obj/cortex/dB_graph.o obj/cortex/file_reader.o obj/cortex/y_walk.o  obj/test/test_file_reader.o obj/test/test_graph_element.o obj/test/run_dB_graph_tests.o
 
 #Library objects
-LIBRARY_OBJ =  obj/cortex/file_format.o obj/cortex/analysis.o obj/cortex/flags.o obj/cortex/cleaning.o obj/cortex/path.o obj/cortex/perfect_path.o obj/cortex/branches.o obj/cortex/y_walk.o obj/cortex/cmd_line.o obj/cortex/binary_kmer.o obj/cortex/seq.o obj/cortex/element.o obj/cortex/hash_value.o obj/cortex/hash_table.o obj/cortex/dB_graph.o obj/cortex/file_reader.o obj/cortex/metacortex.o obj/cortex/logger.o obj/cortex/metagraphs.o obj/cortex/coverage_walk.o obj/util/node_queue.o obj/cortex/graph_stats.o obj/cortex/bubble_find.o
+LIBRARY_OBJ =  obj/cortex/file_format.o obj/cortex/analysis.o obj/cortex/flags.o obj/cortex/cleaning.o obj/cortex/path.o obj/cortex/perfect_path.o obj/cortex/branches.o obj/cortex/y_walk.o obj/cortex/cmd_line.o obj/cortex/binary_kmer.o obj/cortex/seq.o obj/cortex/element.o obj/cortex/hash_value.o obj/cortex/hash_table.o obj/cortex/dB_graph.o obj/cortex/file_reader.o obj/cortex/metacortex.o obj/cortex/logger.o obj/cortex/metagraphs.o obj/cortex/coverage_walk.o obj/util/node_queue.o obj/cortex/graph_stats.o obj/cortex/bubble_find.o obj/cortex/report_output.o
 
 # Main rules
 metacortex : remove_objects $(METACORTEX_OBJ)
-	mkdir -p $(BIN); $(CC) -lm $(OPT) $(OPT_COLS) -o $(BIN)/metacortex_k$(BIN_SUFFIX) $(METACORTEX_OBJ)
+	mkdir -p $(BIN); $(CC) $(OPT) $(OPT_COLS) -o $(BIN)/metacortex_k$(BIN_SUFFIX) $(METACORTEX_OBJ) -lm
 
 kmerinfo: remove_objects $(KMERINFO_OBJ)
-	mkdir -p $(BIN); $(CC) -lm $(OPT) -o $(BIN)/kmerinfo $(KMERINFO_OBJ)
+	mkdir -p $(BIN); $(CC) $(OPT) -o $(BIN)/kmerinfo $(KMERINFO_OBJ) -lm
 
 graphout:remove_objects $(GRAPHOUT_OBJ)
-	mkdir -p $(BIN); $(CC) -lm $(OPT) -o $(BIN)/graphout_$(BIN_SUFFIX) $(GRAPHOUT_OBJ)
+	mkdir -p $(BIN); $(CC) $(OPT) -o $(BIN)/graphout_$(BIN_SUFFIX) $(GRAPHOUT_OBJ) -lm
 
 filterreads:remove_objects $(FILTERREADS_OBJ)
-	mkdir -p $(BIN); $(CC) -lm $(OPT) -o $(BIN)/filterreads_$(BIN_SUFFIX) $(FILTERREADS_OBJ)
+	mkdir -p $(BIN); $(CC) $(OPT) -o $(BIN)/filterreads_$(BIN_SUFFIX) $(FILTERREADS_OBJ) -lm
 
 run_basic_tests : remove_objects $(BASIC_TESTS_OBJ)
-	mkdir -p $(BIN); $(CC) $(OPT) $(CFLAGS_CUNIT) $(CFLAGS_BASIC_TESTS)      -lcunit -o $(BIN)/run_basic_tests_$(MAXK)$(READ_PAIR_SUFFIX) $(BASIC_TESTS_OBJ)
+	mkdir -p $(BIN); $(CC) $(OPT) $(CFLAGS_CUNIT) $(CFLAGS_BASIC_TESTS)      -lcunit -o $(BIN)/run_basic_tests_$(BIN_SUFFIX)$(READ_PAIR_SUFFIX) $(BASIC_TESTS_OBJ)
 
 run_hash_table_tests : remove_objects $(HASH_TABLE_TESTS_OBJ)
-	mkdir -p $(BIN); $(CC) $(OPT) $(CFLAGS_CUNIT) $(CFLAGS_HASH_TABLE_TESTS) -lcunit -o $(BIN)/run_hash_table_tests_$(MAXK) $(HASH_TABLE_TESTS_OBJ)
+	mkdir -p $(BIN); $(CC) $(OPT) $(CFLAGS_CUNIT) $(CFLAGS_HASH_TABLE_TESTS) -lcunit -o $(BIN)/run_hash_table_tests_$(BIN_SUFFIX) $(HASH_TABLE_TESTS_OBJ)
 
 run_graph_tests : remove_objects $(GRAPH_TESTS_OBJ)
-	mkdir -p $(BIN); $(CC) $(LINKOPT) $(CFLAGS_CUNIT)  -o $(BIN)/run_graph_tests_$(MAXK) $(GRAPH_TESTS_OBJ) -lcunit
+	mkdir -p $(BIN); $(CC) $(LINKOPT) $(CFLAGS_CUNIT)  -o $(BIN)/run_graph_tests_$(BIN_SUFFIX) $(GRAPH_TESTS_OBJ) -lcunit
 
 tests: remove_objects run_basic_tests run_hash_table_tests run_graph_tests
 

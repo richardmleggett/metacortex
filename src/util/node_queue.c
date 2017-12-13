@@ -1,13 +1,42 @@
-/*
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+/************************************************************************
+ *
+ * This file is part of MetaCortex
+ *
+ * Authors:
+ *     Richard M. Leggett (richard.leggett@earlham.ac.uk) and
+ *     Martin Ayling (martin.ayling@earlham.ac.uk)
+ *
+ * MetaCortex is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetaCortex is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetaCortex.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ************************************************************************
+ *
+ * This file is modified from source that was part of CORTEX. The
+ * original license notice for that is given below.
+ *
+ ************************************************************************
+ *
+ * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
- * **********************************************************************
+ *
+ ************************************************************************
  *
  * This file is part of CORTEX.
  *
@@ -24,9 +53,8 @@
  * You should have received a copy of the GNU General Public License
  * along with CORTEX.  If not, see <http://www.gnu.org/licenses/>.
  *
- * **********************************************************************
- */
- 
+ ************************************************************************/
+
 /*----------------------------------------------------------------------*
  * File:    nodequeue.c                                                 *
  * Purpose: A queue for nodes!                                          *
@@ -68,29 +96,31 @@ Queue* queue_new(int n)
 void* queue_push(Queue* q, void* item)
 {
 	if (q->number_of_items == q->max_size) {
+        printf("Reached max items %d of size %d\n", q->number_of_items, q->max_size);
 		return NULL;
 	}
-	
+
     q->items[q->number_of_items++] = item;
-    
+
 	return item;
 }
 
 void* queue_pop(Queue* q)
 {
     void* item = 0;
-	int i;
+	//int i;
 	
 	if (q->number_of_items > 0) {
-		item = q->items[0];
+		//item = q->items[0];
         
-		for (i=1; i<q->number_of_items; i++) {
-			q->items[i-1] = q->items[i];
-		}
+		//for (i=1; i<q->number_of_items; i++) {
+		//	q->items[i-1] = q->items[i];
+		//}
 		
+		item = q->items[q->number_of_items-1];
 		q->number_of_items--;
 	}
-    
+
 	return item;
 }
 
@@ -100,15 +130,15 @@ void queue_free(Queue *q)
 		int i;
 		for (i=0; i<q->number_of_items; i++) {
 			QueueItem* qi = queue_pop(q);
-            
+
 			if (qi) {
 			    free(qi);
-			} 
+			}
 		}
 		if (q->items) {
 			free(q->items);
 		}
-		
+
 		free(q);
 	}
 }
@@ -119,20 +149,20 @@ void queue_free(Queue *q)
 QueueItem* queue_push_node(Queue* q, dBNode* n, int d)
 {
 	QueueItem* item = malloc(sizeof(QueueItem));
-	
+
 	if (!item) {
 		return 0;
 	}
-	
+
 	item->node = n;
 	item->depth = d;
-    
+
 	//BinaryKmer tmp;
-	//char seq[kmer_size];	
+	//char seq[kmer_size];
 	//binary_kmer_assignment_operator(tmp, n->kmer);
-	//binary_kmer_to_seq(&tmp, kmer_size, seq);	
+	//binary_kmer_to_seq(&tmp, kmer_size, seq);
 	//printf("Pushing %s depth %d\n", seq, d);
-	
+
 	return queue_push(q, item);
 }
 
@@ -140,19 +170,19 @@ dBNode* queue_pop_node(Queue* q, int* d)
 {
 	QueueItem* item = queue_pop(q);
 	dBNode* node = 0;
-	
+
 	if (item) {
 		*d = item->depth;
-		node = item->node;		
-        
+		node = item->node;
+
 		//BinaryKmer tmp;
-		//char seq[kmer_size];	
+		//char seq[kmer_size];
 		//binary_kmer_assignment_operator(tmp, node->kmer);
 		//binary_kmer_to_seq(&tmp, kmer_size, seq);
 		//printf("Popped %s depth %d\n", seq, *d);
-        
+
 		free(item);
 	}
-	
+
 	return node;
 }

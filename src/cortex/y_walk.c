@@ -1,14 +1,42 @@
-/*
+/************************************************************************
+ *
+ * This file is part of MetaCortex
+ *
+ * Authors:
+ *     Richard M. Leggett (richard.leggett@earlham.ac.uk) and
+ *     Martin Ayling (martin.ayling@earlham.ac.uk)
+ *
+ * MetaCortex is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetaCortex is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetaCortex.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ************************************************************************
+ *
+ * This file is modified from source that was part of CORTEX. The
+ * original license notice for that is given below.
+ *
+ ************************************************************************
+ *
  * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
- * **********************************************************************
+ *
+ ************************************************************************
  *
  * This file is part of CORTEX.
  *
@@ -25,8 +53,7 @@
  * You should have received a copy of the GNU General Public License
  * along with CORTEX.  If not, see <http://www.gnu.org/licenses/>.
  *
- * **********************************************************************
- */
+ ************************************************************************/
 
 #include <string.h>
 #include <stdint.h>
@@ -170,12 +197,14 @@ static boolean continue_traversing(pathStep * current_step,
 
 
 
-static void mark_from_end(dBNode * node, void * args) {
+static void mark_from_end(dBNode * node, void * args)
+{
     WalkingFunctions  * wf  = ( WalkingFunctions  * ) args;
     pathStep first;
     first.node = node;
     first.orientation = undefined;
     first.path = NULL;
+    first.flags = 0;
     Path *buffer = NULL;
     if (!db_node_check_for_any_flag (node, Y_START ) ) {	//We already marked this as an end-point
         int fwd_count = db_node_edges_count(node, forward);
@@ -201,8 +230,8 @@ static void mark_from_end(dBNode * node, void * args) {
     }
 }
 
-
-static void mark_double_y_callback(Path * p, void * args) {
+static void mark_double_y_callback(Path * p, void * args)
+{
     
     pathStep ps;
     
@@ -214,11 +243,12 @@ static void mark_double_y_callback(Path * p, void * args) {
         (*double_y_count)++;
     }
 }
+
 void mark_double_y(dBGraph * db_graph)
 {
     
 	WalkingFunctions wf;
-	perfect_path_get_funtions(&wf);
+	perfect_path_get_functions(&wf);
 	wf.continue_traversing = &continue_searching;
 	wf.get_starting_step = &get_first_step_identity;
 	wf.pre_step_action = &pre_step_action;
@@ -259,9 +289,10 @@ Path *y_walk_get_path(dBNode * node, Orientation orientation,
 	boolean only_one_edge;
 	first.node = node;
 	first.orientation =  orientation;
+    first.flags = 0;
 	
 	WalkingFunctions wf;
-	perfect_path_get_funtions(&wf);
+	perfect_path_get_functions(&wf);
 	
 	void (* old_step_action)(pathStep * st) = wf.step_action;
 	void step_action (pathStep * step){
@@ -380,7 +411,7 @@ void y_walk_print_paths(char *filename, int max_length, int singleton_length,
 	mark_double_y(db_graph);
 	path_reset(path);
     
-	perfect_path_get_funtions(&wf);
+	perfect_path_get_functions(&wf);
 	wf.continue_traversing = &continue_traversing;
     //TODO: write a function that actually looks for where to start... 
 	wf.get_starting_step = &get_first_step_identity;

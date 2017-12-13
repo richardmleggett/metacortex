@@ -2,3 +2,5 @@ obj
 bin
 src/cortex/metacortex_old.c
 src/cortex/metacortex_new.c
+.Rhistory
+.DS_Store

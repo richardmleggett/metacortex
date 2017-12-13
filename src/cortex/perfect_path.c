@@ -1,14 +1,42 @@
-/*
+/************************************************************************
+ *
+ * This file is part of MetaCortex
+ *
+ * Authors:
+ *     Richard M. Leggett (richard.leggett@earlham.ac.uk) and
+ *     Martin Ayling (martin.ayling@earlham.ac.uk)
+ *
+ * MetaCortex is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetaCortex is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetaCortex.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ************************************************************************
+ *
+ * This file is modified from source that was part of CORTEX. The
+ * original license notice for that is given below.
+ *
+ ************************************************************************
+ *
  * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
- * **********************************************************************
+ *
+ ************************************************************************
  *
  * This file is part of CORTEX.
  *
@@ -25,8 +53,7 @@
  * You should have received a copy of the GNU General Public License
  * along with CORTEX.  If not, see <http://www.gnu.org/licenses/>.
  *
- * **********************************************************************
- */
+ ************************************************************************/
  
 #include <string.h>
 #include <stdint.h>
@@ -289,7 +316,7 @@ static void post_step_action(pathStep * ps){
 }
 
 
-WalkingFunctions * perfect_path_get_funtions(WalkingFunctions *
+WalkingFunctions * perfect_path_get_functions(WalkingFunctions *
 											 walking_functions)
 {
 	//walking_functions->find_first_node = &always_true;
@@ -319,7 +346,7 @@ int perfect_path_get_path_with_callback(dBNode * node, Orientation orientation, 
 {
 	
 	WalkingFunctions wf;
-	perfect_path_get_funtions(&wf);
+	perfect_path_get_functions(&wf);
 	
 	pathStep first;
 	first.node = node;
@@ -352,13 +379,14 @@ int perfect_path_get_path_with_callback_with_args(dBNode * node, Orientation ori
 {
 	
 	WalkingFunctions wf;
-	perfect_path_get_funtions(&wf);
+	perfect_path_get_functions(&wf);
 	
 	pathStep first;
 	first.node = node;
 	//first.orientation = orientation == undefined? reverse: orientation;
 	first.orientation = orientation;
 	first.label = Undefined;
+    first.flags = 0;
 	
 	if (orientation != undefined) {
 		db_node_has_precisely_one_edge_all_colours(node, orientation, &first.label);
@@ -387,7 +415,7 @@ int perfect_path_get_path_from_step_with_callback_with_args(pathStep  first,
 {
 	
 	WalkingFunctions wf;
-	perfect_path_get_funtions(&wf);
+	perfect_path_get_functions(&wf);
 	
 	
 	

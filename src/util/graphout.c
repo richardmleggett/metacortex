@@ -1,13 +1,42 @@
-/*
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+/************************************************************************
+ *
+ * This file is part of MetaCortex
+ *
+ * Authors:
+ *     Richard M. Leggett (richard.leggett@earlham.ac.uk) and
+ *     Martin Ayling (martin.ayling@earlham.ac.uk)
+ *
+ * MetaCortex is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetaCortex is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetaCortex.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ************************************************************************
+ *
+ * This file is modified from source that was part of CORTEX. The
+ * original license notice for that is given below.
+ *
+ ************************************************************************
+ *
+ * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
- * **********************************************************************
+ *
+ ************************************************************************
  *
  * This file is part of CORTEX.
  *
@@ -24,8 +53,7 @@
  * You should have received a copy of the GNU General Public License
  * along with CORTEX.  If not, see <http://www.gnu.org/licenses/>.
  *
- * **********************************************************************
- */
+ ************************************************************************/
 
 /*----------------------------------------------------------------------*
  * File:    graphout.c                                                  *
@@ -110,21 +138,16 @@ void cleanup_graph(dBGraph* db_graph)
     void clean_node(dBNode * node) {
         void check_edge(Nucleotide nucleotide) {
             // Check if edge exists
-            if (db_node_edge_exist_any_colour
-                (node, nucleotide, orientation)) {
+            if (db_node_edge_exist_any_colour(node, nucleotide, orientation)) {
                 // Now see if kmer it leads to exists and is flagged for output
                 pathStep current_step, next_step, rev_step;
                 current_step.node = node;
                 current_step.label = nucleotide;
                 current_step.orientation = orientation;
-                db_graph_get_next_step(&current_step,
-                                       &next_step, &rev_step,
-                                       db_graph);
-                if ((next_step.node == NULL) || 
-                    (!db_node_check_flag_visited(next_step.node))) {
-                    db_node_reset_edge_all_colours(node,
-                                                   orientation,
-                                                   nucleotide);
+                current_step.flags = 0;
+                db_graph_get_next_step(&current_step, &next_step, &rev_step, db_graph);
+                if ((next_step.node == NULL) || (!db_node_check_flag_visited(next_step.node))) {
+                    db_node_reset_edge_all_colours(node, orientation, nucleotide);
                 }
             }
         }
@@ -234,10 +257,10 @@ void parse_command_line_args(int argc, char* argv[])
         printf("      [-M] will output a GML file (.gml) for each search kmer\n");
         printf("      [-U] will output a Ubigraph file (.csv) for each search kmer\n");
         printf("      [-X] will output a GEXF file (.gexf.xml) for each search kmer\n");
-        printf("      \nGraph output options:\n");        
+        printf("      \nGraph output options:\n");
         printf("      [-a int] specifies the maximum length of path to add each step (default 10)\n");
         printf("      [-d int] specifies the maximum branch level (default 10)\n");
-        printf("      [-m int] specifies the maximum number of nodes to output (default 200)\n"); 
+        printf("      [-m int] specifies the maximum number of nodes to output (default 200)\n");
         printf("      [-n int] specifies number of buckets in hash table (default 17)\n");
         printf("      [-b int] specifies size of hash table buckets (default 60)\n");
         printf("      [-j] outputs only branching nodes\n");
@@ -291,11 +314,11 @@ void parse_command_line_args(int argc, char* argv[])
                     if (!ks) {
                         printf("ERROR: Invalid filename for -f parameter.\n");
                         exit(1);
-                    }										
+                    }
                     if (number_of_search_kmers >= MAX_SEARCH_KMERS) {
                         printf("Error: Too many search kmers.\n");
                         exit(1);
-                    }					
+                    }
                     search_kmers[number_of_search_kmers++] = ks;
                     break;
                 case 'l':
@@ -378,15 +401,15 @@ void load_ctx_files(char* file_of_filenames, dBGraph* graph)
         exit(1);
     }
     
-    // For each file 
+    // For each file
     while (!feof(fp_fnames)) {
         short colour = 0;
-        fscanf(fp_fnames, "%s %hd\n", filename, &colour);	
+        fscanf(fp_fnames, "%s %hd\n", filename, &colour);
         log_and_screen_printf("Loading %s\n", filename);
         load_binary_from_filename_into_graph(filename, graph, colour, 0);
         log_and_screen_printf("Loaded. Unique kmers: %i\n", graph->unique_kmers);
     }
-        
+    
     fclose(fp_fnames);
 }
 
@@ -412,7 +435,7 @@ void find_kmers_and_output_graphs(dBGraph* graph)
         // Walk graph
         log_and_screen_printf("Walking\n");
         r = graph_tools_walk_subgraph_for_kmer(&b, &gt_options, &gt_state, graph);
-        if (r > 0) {            
+        if (r > 0) {
             if (output_graphviz) {
                 sprintf(filename, "%s_%s.gv", base_filename, kmer_string);
                 log_and_screen_printf("Writing file %s...\n", filename);
@@ -460,7 +483,7 @@ void find_kmers_and_output_graphs(dBGraph* graph)
                 write_ctx_files(filename, graph);
             }
         }
-    }    
+    }
 }
 
 /*----------------------------------------------------------------------*
@@ -470,7 +493,7 @@ void find_kmers_and_output_graphs(dBGraph* graph)
  * Returns:                                                             *
  *----------------------------------------------------------------------*/
 int grow_graph_from_node(dBNode* start_node, dBNode** best_node, dBGraph* graph)
-{                         
+{
     Queue* nodes_to_walk;
     dBNode* node;
     int orientation;
@@ -504,15 +527,16 @@ int grow_graph_from_node(dBNode* start_node, dBNode** best_node, dBGraph* graph)
             if (!db_node_check_flag_visited(next_node)) {
                 pathStep first_step;
                 Path * new_path;
-                dBNode* end_node; 
+                dBNode* end_node;
                 int i = 0;
                 
                 //if (debug) printf("  Not already visited\n");
                 
-                // Get path				
+                // Get path
                 first_step.node = node;
                 first_step.orientation = orientation;
                 first_step.label = n;
+                first_step.flags = 0;
                 new_path = path_new(gt_options.max_nodes_to_output, graph->kmer_size);
                 if (!new_path) {
                     log_and_screen_printf("ERROR: Not enough memory to allocate new path.\n");
@@ -529,7 +553,7 @@ int grow_graph_from_node(dBNode* start_node, dBNode** best_node, dBGraph* graph)
                         if (queue_push_node(nodes_to_walk, end_node, depth+1) == NULL) {
                             log_and_screen_printf("Queue too large. Ending.\n");
                             exit(1);
-                        }                        
+                        }
                     }
                 }
                 
@@ -545,11 +569,11 @@ int grow_graph_from_node(dBNode* start_node, dBNode** best_node, dBGraph* graph)
                         {
                             best_coverage = this_coverage;
                             best_edges = this_edges;
-                            *best_node = new_path->nodes[i];                            
+                            *best_node = new_path->nodes[i];
                         }
                         
                         db_node_action_set_flag_visited(new_path->nodes[i]);
-                        current_graph_size++;                        
+                        current_graph_size++;
                     }
                 }
                 
@@ -569,7 +593,7 @@ int grow_graph_from_node(dBNode* start_node, dBNode** best_node, dBGraph* graph)
     // Add start node to list of nodes to visit
     if (queue_push_node(nodes_to_walk, start_node, 0) == NULL) {
         log_and_screen_printf("Queue too large. Ending.\n");
-        exit(1);        
+        exit(1);
     }
     
     if (!db_node_check_flag_visited(start_node)) {
@@ -586,7 +610,7 @@ int grow_graph_from_node(dBNode* start_node, dBNode** best_node, dBGraph* graph)
         orientation = forward;
         nucleotide_iterator(&walk_if_exists);
         orientation = reverse;
-        nucleotide_iterator(&walk_if_exists);				
+        nucleotide_iterator(&walk_if_exists);
     }
     
     queue_free(nodes_to_walk);
@@ -614,7 +638,7 @@ void do_graph_analysis(dBGraph* graph)
     char seq[256];
     
     path_array_initialise_buffers(graph->kmer_size);
-      
+    
     sub_graphs = calloc(MAX_SEEDS, sizeof(SubGraphInfo));
     if (!sub_graphs) {
         log_and_screen_printf("ERROR: Can't get memory for subgraphs\n");
@@ -638,7 +662,7 @@ void do_graph_analysis(dBGraph* graph)
             nodes_in_graph = grow_graph_from_node(node, &(sub_graphs[n_seeds].seed_node), graph);
             total_nodes += nodes_in_graph;
             
-            binary_kmer_to_seq(&(node->kmer), graph->kmer_size, seq);            
+            binary_kmer_to_seq(&(node->kmer), graph->kmer_size, seq);
             fprintf(fp, "%i\t%i\t%i\t%s\t", n_seeds, nodes_in_graph, total_nodes, seq);
             sub_graphs[n_seeds].graph_size = nodes_in_graph;
             binary_kmer_to_seq(&(sub_graphs[n_seeds].seed_node->kmer), graph->kmer_size, seq);
@@ -665,12 +689,12 @@ void do_graph_analysis(dBGraph* graph)
             log_and_screen_printf("ERROR: Can't open contig file.\n");
             exit(1);
         }
-
-        db_graph_reset_flags(graph);    
+        
+        db_graph_reset_flags(graph);
         log_and_screen_printf("Outputting contigs...\n");
         for (i=0; i<n_seeds; i++) {
-            log_printf("Graph %i\n", i);           
-            if (sub_graphs[i].graph_size >= min_subgraph_kmers) {            
+            log_printf("Graph %i\n", i);
+            if (sub_graphs[i].graph_size >= min_subgraph_kmers) {
                 binary_kmer_to_seq(&(sub_graphs[i].seed_node->kmer), graph->kmer_size, seq);
                 //log_printf("  Seed %s Orientation fwd\n", seq);
                 coverage_walk_get_path(sub_graphs[i].seed_node, forward, NULL, graph, path_fwd);
@@ -691,10 +715,10 @@ void do_graph_analysis(dBGraph* graph)
             }
             
         }
-        log_and_screen_printf("Finished contig output.\n");    
+        log_and_screen_printf("Finished contig output.\n");
         fclose(fp);
     }
-
+    
     free(sub_graphs);
 }
 
@@ -709,7 +733,7 @@ void display_arguments(void)
     int i;
     int total_mem = 0;
     
-    log_printf("\ngraphout - generate visualisations of parts of cortex assemblies\n\n");    
+    log_printf("\ngraphout - generate visualisations of parts of cortex assemblies\n\n");
     log_and_screen_printf(SVN_VERSION);
     log_and_screen_printf(SVN_COMMIT_DATE);
     log_and_screen_printf("Compiled on %s at %s \n\n", __DATE__, __TIME__);
@@ -728,7 +752,7 @@ void display_arguments(void)
     log_and_screen_printf("Input file of files: %s\n", file_of_filenames);
     
     if (consensus_contigs_filename) {
-        log_and_screen_printf(" Consensus filename: %s\n", consensus_contigs_filename);        
+        log_and_screen_printf(" Consensus filename: %s\n", consensus_contigs_filename);
         log_and_screen_printf(" Min subgraph kmers: %i\n", min_subgraph_kmers);
     }
     
@@ -744,7 +768,7 @@ void display_arguments(void)
     log_and_screen_printf(" Max nodes in graph: %d\n", gt_options.max_nodes_to_output);
     log_and_screen_printf("      Hash key bits: %d\n", hash_key_bits);
     log_and_screen_printf("   Hash key buckets: %d\n", bucket_size);
-    log_and_screen_printf("  Minor nodes small: %d\n\n", gt_options.make_minor_nodes_small);    
+    log_and_screen_printf("  Minor nodes small: %d\n\n", gt_options.make_minor_nodes_small);
 }
 
 /*----------------------------------------------------------------------*
@@ -806,8 +830,8 @@ int main (int argc, char * argv[])
     load_ctx_files(file_of_filenames, db_graph);
     
 #ifdef DEBUG_CLEANUP
-    db_graph_cleanup_graph(db_graph);	
-#endif	
+    db_graph_cleanup_graph(db_graph);
+#endif
     
     // We either analyse the graph or find kmers and output graphs
     if (analyse_graph) {

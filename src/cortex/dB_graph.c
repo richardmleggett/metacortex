@@ -1,4 +1,31 @@
-/*
+/************************************************************************
+ *
+ * This file is part of MetaCortex
+ *
+ * Authors:
+ *     Richard M. Leggett (richard.leggett@earlham.ac.uk) and
+ *     Martin Ayling (martin.ayling@earlham.ac.uk)
+ *
+ * MetaCortex is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetaCortex is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetaCortex.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ************************************************************************
+ *
+ * This file is modified from source that was part of CORTEX. The
+ * original license notice for that is given below.
+ *
+ ************************************************************************
+ *
  * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
  *
  * CORTEX project contacts:
@@ -8,7 +35,8 @@
  * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
- * **********************************************************************
+ *
+ ************************************************************************
  *
  * This file is part of CORTEX.
  *
@@ -25,8 +53,7 @@
  * You should have received a copy of the GNU General Public License
  * along with CORTEX.  If not, see <http://www.gnu.org/licenses/>.
  *
- * **********************************************************************
- */
+ ************************************************************************/
 
 #include <structs.h>
 #include <stdlib.h>
@@ -63,7 +90,6 @@
  */
 pathStep *db_graph_get_next_step(pathStep * current_step, pathStep * next_step, pathStep * rev_step, dBGraph * db_graph)
 {
-
 	assert(current_step != NULL);
 	assert(next_step != NULL);
 	assert(rev_step != NULL);
@@ -83,8 +109,7 @@ pathStep *db_graph_get_next_step(pathStep * current_step, pathStep * next_step, 
 	//dBNode * next_node = NULL;
 
 	// after the following line tmp_kmer and rev_kmer are pointing to the same B Kmer
-	BinaryKmer *rev_kmer =
-    binary_kmer_reverse_complement(&local_copy_of_kmer, db_graph->kmer_size, &tmp_kmer);
+	BinaryKmer *rev_kmer = binary_kmer_reverse_complement(&local_copy_of_kmer, db_graph->kmer_size, &tmp_kmer);
 
 	if (current_step->orientation == reverse) {
 		rev_step->label = binary_kmer_get_last_nucleotide(&local_copy_of_kmer);
@@ -108,8 +133,7 @@ pathStep *db_graph_get_next_step(pathStep * current_step, pathStep * next_step, 
         //		if (DEBUG) {
         //
         char tmpseq[db_graph->kmer_size];
-        printf("[db_graph_get_next_step] Cannot find %s so get a NULL node\n",
-               binary_kmer_to_seq(&tmp_kmer, db_graph->kmer_size, tmpseq));
+        printf("[db_graph_get_next_step] Cannot find %s so get a NULL node\n", binary_kmer_to_seq(&tmp_kmer, db_graph->kmer_size, tmpseq));
         //Commented by ricardo, to reduce the log as for the traversing
         //      algorithm relays on having this as null
         //		}
@@ -117,6 +141,7 @@ pathStep *db_graph_get_next_step(pathStep * current_step, pathStep * next_step, 
     //#endif
 
 	next_step->label = Undefined;
+
 	return next_step;
 }
 
@@ -743,7 +768,7 @@ void db_graph_calculate_stats(dBGraph * db_graph){
     }
     tmp_args[0]->db_graph = db_graph;
 
-	log_and_screen_printf("Calculating graph stats...\n");
+		log_and_screen_printf("Calculating graph stats...\n");
 
     db_graph->common_kmers_in_all_colours = 0;
 
@@ -1062,15 +1087,15 @@ int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions *
 	}
 
 	pathStep current_step, next_step, rev_step;
-
 	path_step_assign(&next_step, first_step);
     next_step.path = path; //This way, on all the assignments we keep the pointer to the path that was sent to the function originally.
-	functions->get_starting_step(&next_step, db_graph);
 
+	functions->get_starting_step(&next_step, db_graph);
 	//boolean  try = true;
 	int count = 0;
     boolean walked;
     boolean added;
+
 
 	do {
 		walked = false;
@@ -1080,9 +1105,9 @@ int db_graph_generic_walk(pathStep * first_step, Path * path, WalkingFunctions *
             //try = false;
             functions->pre_step_action(&current_step);
 
-            added = false;
+            added = false; // redundant?
             if (current_step.label != Undefined) {
-                functions->get_next_step(&current_step,&next_step, &rev_step,db_graph);
+                functions->get_next_step(&current_step, &next_step, &rev_step, db_graph);
             }
 
             if (added == false) {
@@ -1234,6 +1259,7 @@ int db_graph_get_neighbouring_nodes_all_colours(dBNode* start, Orientation orien
             current_step.node = start;
             current_step.label = nucleotide;
             current_step.orientation = orientation;
+            current_step.flags = 0;
             db_graph_get_next_step(&current_step, &next_step, &rev_step, db_graph);
 
             if (next_step.node != NULL) {

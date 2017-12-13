@@ -1,14 +1,42 @@
-/*
- * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo 
- * 
- * CORTEX project contacts:  
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and 
+/************************************************************************
+ *
+ * This file is part of MetaCortex
+ *
+ * Authors:
+ *     Richard M. Leggett (richard.leggett@earlham.ac.uk) and
+ *     Martin Ayling (martin.ayling@earlham.ac.uk)
+ *
+ * MetaCortex is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetaCortex is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetaCortex.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ************************************************************************
+ *
+ * This file is modified from source that was part of CORTEX. The
+ * original license notice for that is given below.
+ *
+ ************************************************************************
+ *
+ * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
+ *
+ * CORTEX project contacts:
+ * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
  * 		Z. Iqbal (zam@well.ox.ac.uk)
  *
- * Development team: 
+ * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
- * **********************************************************************
+ *
+ ************************************************************************
  *
  * This file is part of CORTEX.
  *
@@ -25,8 +53,7 @@
  * You should have received a copy of the GNU General Public License
  * along with CORTEX.  If not, see <http://www.gnu.org/licenses/>.
  *
- * **********************************************************************
- */
+ ************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -58,7 +85,7 @@ void binary_kmer_assignment_operator(BinaryKmer left, BinaryKmer right)
 }
 
 //returns true if they are the same
-boolean binary_kmer_comparison_operator(const BinaryKmer const left, const BinaryKmer const right)
+boolean binary_kmer_comparison_operator(const BinaryKmer left, const BinaryKmer right)
 {
 	
 	boolean they_are_the_same = true;
@@ -75,7 +102,7 @@ boolean binary_kmer_comparison_operator(const BinaryKmer const left, const Binar
 }
 
 //TODO: - this wrongly says left<right when they are the same! IS really a <= operator
-boolean binary_kmer_less_than(const BinaryKmer const left, const BinaryKmer const right, short kmer_size)
+boolean binary_kmer_less_than(const BinaryKmer left, const BinaryKmer right, short kmer_size)
 {
 	boolean left_is_less_than_right = false;
 	

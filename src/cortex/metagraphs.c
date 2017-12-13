@@ -1,18 +1,25 @@
-/*
- * METACORTEX
- * Copyright 2011-2013 Richard Leggett
+/************************************************************************
  *
- * Based on code from CORTEX
- * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
+ * This file is part of MetaCortex
  *
- * CORTEX project contacts:
- * 		M. Caccamo (mario.caccamo@bbsrc.ac.uk) and
- * 		Z. Iqbal (zam@well.ox.ac.uk)
+ * Authors:
+ *     Richard M. Leggett (richard.leggett@earlham.ac.uk) and
+ *     Martin Ayling (martin.ayling@earlham.ac.uk)
  *
- * CORTEX Development team:
- *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
- *       R. Leggett (richard@leggettnet.org.uk)
- */
+ * MetaCortex is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetaCortex is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetaCortex.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -83,6 +90,7 @@ int grow_graph_from_node(dBNode* start_node, dBNode** best_node, dBGraph* graph,
                 first_step.node = node;
                 first_step.orientation = orientation;
                 first_step.label = n;
+                first_step.flags = 0;
                 new_path = path_new(MAX_EXPLORE_NODES, graph->kmer_size);
                 if (!new_path) {
                     log_and_screen_printf("ERROR: Not enough memory to allocate new path.\n");
@@ -104,7 +112,7 @@ int grow_graph_from_node(dBNode* start_node, dBNode** best_node, dBGraph* graph,
 
                 // Now go through all nodes, look for best and mark all as visited
                 for (i=0; i<new_path->length; i++) {
-                  //  MARTIN : new_path established where?
+                    //  MARTIN : new_path established where?
                     if (!db_node_check_flag_visited(new_path->nodes[i])) {
                         int this_coverage = element_get_coverage_all_colours(new_path->nodes[i]);
                         int this_edges = db_node_edges_count_all_colours(new_path->nodes[i], forward) + db_node_edges_count_all_colours(new_path->nodes[i], reverse);
@@ -181,7 +189,7 @@ void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename,
     Path *path_rev = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
     Path *final_path = path_new(MAX_EXPLORE_PATH_LENGTH, graph->kmer_size);
     char seq[256];
-    char analysis_filename[strlen(consensus_contigs_filename) + 10];
+    char analysis_filename[256];
     long int total_nodes = 0;
     int n_seeds = 0;
     int counter= 0;
@@ -256,11 +264,18 @@ void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename,
                     if (final_path->length >= (min_contig_length - graph->kmer_size)) {
                         log_printf("Write path of size %d\n", final_path->length);
                         log_printf("graph size\t%i\n",nodes_in_graph);
-                        path_to_fasta(final_path, fp_contigs);
+                        path_to_fastg_gfa(final_path, fp_contigs, NULL, graph);
                     } else {
                         log_printf("Didn't write path of size %d\n", final_path->length);
                     }
-                    
+
+
+/*
+
+HERE - INSTEAD OF VISITING A BRANCH NODE, INSTEAD REMOVE EDGES FROM BEFORE
+AND AFTER IT ON CURRENT PATH
+
+*/
                     if (multiple_subgraph_contigs) {
                         /* Now clear visited flags for subgraph */
                         while (graph_queue->number_of_items > 0) {
@@ -281,7 +296,7 @@ void metacortex_find_subgraphs(dBGraph* graph, char* consensus_contigs_filename,
                     path_reset(path_rev);
                     path_reset(final_path);
                 } else {
-                    log_printf("  Number of nodes (%i} too small. Not outputting contig.\n", nodes_in_graph);
+                    log_printf("  Number of nodes (%i) too small. Not outputting contig.\n", nodes_in_graph);
                 }
 
                 counter++;

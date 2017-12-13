@@ -1,4 +1,31 @@
-/*
+/************************************************************************
+ *
+ * This file is part of MetaCortex
+ *
+ * Authors:
+ *     Richard M. Leggett (richard.leggett@earlham.ac.uk) and
+ *     Martin Ayling (martin.ayling@earlham.ac.uk)
+ *
+ * MetaCortex is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetaCortex is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetaCortex.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ************************************************************************
+ *
+ * This file is modified from source that was part of CORTEX. The
+ * original license notice for that is given below.
+ *
+ ************************************************************************
+ *
  * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
  *
  * CORTEX project contacts:
@@ -8,7 +35,8 @@
  * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
- * **********************************************************************
+ *
+ ************************************************************************
  *
  * This file is part of CORTEX.
  *
@@ -25,8 +53,13 @@
  * You should have received a copy of the GNU General Public License
  * along with CORTEX.  If not, see <http://www.gnu.org/licenses/>.
  *
- * **********************************************************************
- */
+ ************************************************************************/
+
+/************************************************************************
+ * path.h
+ ************************************************************************/
+
+#include <open_hash/hash_table.h>
 
 #ifndef PATH_H_
 #define PATH_H_
@@ -59,7 +92,7 @@
 #define PATH_FLAG_IS_DOUBLE_Y           8
 #define PATH_FLAG_IS_CYCLE              16
 #define PATH_FLAG_LONGER_THAN_BUFFER    32
-#define PATH_TOO_COMPEX                 64
+#define PATH_TOO_COMPLEX                 64
 
 //Block of flags for the path (may be useful)
 #define PRINT_FIRST          	(1 <<  0) //x0000 0001
@@ -88,72 +121,87 @@
 typedef enum  {NONE = 0,  FIRST = 1, LAST = 2 }PathEnd ;
 
 typedef struct {
-	long long id;
-	dBNode * * nodes;
-	Orientation * orientations;
-	Nucleotide * labels;
-  Flags * step_flags;
+    long long id;
+    dBNode * * nodes;
+    Orientation * orientations;
+    Nucleotide * labels;
+    Flags * step_flags;
 
-	int max_length;
-  //short depth;
+    int max_length;
+    //short depth;
 
-	int * in_nodes;
-	char * seq;
-	char * header;
+    int * in_nodes;
+    char * seq;
+    char * header;
 
-	int length;
-  int max_virtual_length; //A soft limit to be used when you want a limit smaller than the buffer size.
-  int new_nodes;
-	Flags flags;
-	int in_nodes_count;
-	int in_nodes_capacity;
-  int out_nodes_count;
-	short kmer_size;
-	boolean used;
+    int length;
+    int max_virtual_length; //A soft limit to be used when you want a limit smaller than the buffer size.
+    int new_nodes;
+    Flags flags;
+    int in_nodes_count;
+    int in_nodes_capacity;
+    int out_nodes_count;
+    short kmer_size;
+    boolean used;
 
-  	Flags stop_reasons_first;
-  	Flags stop_reasons_last;
+    Flags stop_reasons_first;
+    Flags stop_reasons_last;
 
 } Path;
 
 typedef struct {
-	dBNode * node;
-	Orientation orientation;
-	Nucleotide label;
+    dBNode * node;
+    Orientation orientation;
+    Nucleotide label;
     Flags flags;//This should be used as read only, it reflects the status of the flag when the step was queried from the path. Whe a step path is added, The flags are added to whatever flags set internally would be used.
     Path * path;//Pointer to the path to which the step belongs, if any. If NULL, it doesnt really matters.
 } pathStep;
 
 typedef struct{
-	pathStep step[4];
-	short count;
+    pathStep step[4];
+    short count;
 } nextSteps;
 
-
-
 typedef struct{
-	Path  ** paths;
-	int number_of_paths;
-	int capacity;
+    Path  ** paths;
+    int number_of_paths;
+    int capacity;
     short kmer_size;
 #ifdef  THREADS
     pthread_mutex_t mutex;
 #endif
 } PathArray;
 
-
-
 typedef struct{
-	uint64_t blunt_ends;
-	uint64_t converging_paths;
-	uint64_t diverging_paths;
-	uint64_t is_double_y;//used to count how many paths are double y
-	uint64_t is_cycle;
-	uint64_t longer_than_buffer;
+    uint64_t blunt_ends;
+    uint64_t converging_paths;
+    uint64_t diverging_paths;
+    uint64_t is_double_y;//used to count how many paths are double y
+    uint64_t is_cycle;
+    uint64_t longer_than_buffer;
 
-	uint64_t minimum_double_y; //count how many double Y were marked
-	uint64_t total_double_y_lenght; //counts the total lenght of the double Ys. We divide later by the minimum_double_y to get the average. However
+    uint64_t minimum_double_y; //count how many double Y were marked
+    uint64_t total_double_y_lenght; //counts the total lenght of the double Ys. We divide later by the minimum_double_y to get the average. However
 }PathCounts;
+
+typedef struct { // Is max path length here
+    Nucleotide labels[MAX_PATH_LENGTH] ; // String of labels
+    boolean is_highest_coverage;
+} PolyQueueItem;
+
+typedef struct {
+    long long H_count;
+    int S_count;
+    int L_count;
+    int P_count;
+    int current_S_line;
+    int overlap;
+    int max_length;
+    char gap_or_comma[1];
+    char orient[1];
+    char * P_line;
+    char * P_line_overlap;
+} gfa_stats;
 
 void path_counts_reset(PathCounts * pc);
 
@@ -173,12 +221,13 @@ void path_increase_id(Path * path);
 
 void path_to_fasta(Path * path, FILE * fout);
 
+void path_to_fastg_gfa(Path * path, FILE * fout, FILE * fout2, HashTable* graph);
+
 void path_to_fasta_debug(Path * path, FILE * fout);
 
 void path_to_fasta_colour(Path * path, FILE * fout, char * id);
 
-void path_get_statistics(double * avg_coverage, int * min_coverage,
-		int * max_coverage, Path * path);
+void path_get_statistics(double * avg_coverage, int * min_coverage, int * max_coverage, Path * path);
 
 int path_get_nodes_count(Path * path);
 
@@ -217,7 +266,6 @@ pathStep * path_get_last_step(pathStep * ps, Path * path);
 int path_index_of_step(pathStep * step, Path * path);
 
 int path_get_length(Path * path);
-
 
 PathArray * path_split_in_perfect_paths(Path * p);
 
@@ -315,7 +363,11 @@ boolean paths_equal(Path * path_a, Path * path_b);
 
 //STEP functions
 
+void path_step_new(pathStep * step);
+
 void path_step_assign(pathStep*to, pathStep*from);
+
+void path_step_initialise(pathStep * step);
 
 boolean path_step_equals(pathStep * step, pathStep * other);
 
@@ -331,6 +383,7 @@ void path_step_print(pathStep * step, int kmer_size, FILE * f);
 
 //PathArray functions
 PathArray * path_array_new(short number_of_paths);
+
 
 void path_array_destroy(PathArray * pa);
 
@@ -348,13 +401,12 @@ void path_array_initialise_buffers(short kmer_size);
 
 void path_array_to_fasta(FILE * f, PathArray * pa);
 
- /**
-  * This assumes that the program is always using the same kmer size!
-  */
+/**
+ * This assumes that the program is always using the same kmer size!
+ */
 Path * path_get_buffer_path();
 
 void path_free_buffer_path(Path * path);
-
 
 //Buffered array functions
 void path_array_free_from_buffer(PathArray * pa);
@@ -370,5 +422,17 @@ boolean is_step_marked_as_uncertain(int i, Path * path);
 void path_mark_as_visited(Path* path);
 
 void path_pairs_to_fasta(PathArray* pa, int distances[], FILE* fout);
+
+void * initalise_gfa_stats(gfa_stats * gfa, int max_length);
+
+void * destroy_gfa_stats(gfa_stats * gfa);
+
+void output_S_line(FILE * f, gfa_stats * gfa, char* seq);
+
+void output_L_line(FILE * f, gfa_stats * gfa);
+
+void post_polymorph_L_lines(FILE * f, gfa_stats * gfa);
+
+void add_to_P_line(gfa_stats * gfa);
 
 #endif /* PATH_H_ */

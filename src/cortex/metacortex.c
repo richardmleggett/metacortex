@@ -1,4 +1,31 @@
-/*
+/************************************************************************
+ *
+ * This file is part of MetaCortex
+ *
+ * Authors:
+ *     Richard M. Leggett (richard.leggett@earlham.ac.uk) and
+ *     Martin Ayling (martin.ayling@earlham.ac.uk)
+ *
+ * MetaCortex is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetaCortex is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetaCortex.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ************************************************************************
+ *
+ * This file is modified from source that was part of CORTEX. The
+ * original license notice for that is given below.
+ *
+ ************************************************************************
+ *
  * Copyright 2009-2011 Zamin Iqbal and Mario Caccamo
  *
  * CORTEX project contacts:
@@ -8,7 +35,8 @@
  * Development team:
  *       R. Ramirez-Gonzalez (Ricardo.Ramirez-Gonzalez@bbsrc.ac.uk)
  *       R. Leggett (richard@leggettnet.org.uk)
- * **********************************************************************
+ *
+ ************************************************************************
  *
  * This file is part of CORTEX.
  *
@@ -25,8 +53,7 @@
  * You should have received a copy of the GNU General Public License
  * along with CORTEX.  If not, see <http://www.gnu.org/licenses/>.
  *
- * **********************************************************************
- */
+ ************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -61,8 +88,8 @@ typedef struct {
 } ReadFileDescriptor;
 
 #define FILE_LIST_SIZE 1024
-#define TOTAL_MAX_LENGTH 10000
-#define BUBBLE_MAX_DEPTH 10
+#define TOTAL_MAX_LENGTH 10000  // bubble_find.c
+#define BUBBLE_MAX_DEPTH 10     // bubble_find.c
 
 void write_graphviz_file(char *filename, dBGraph * db_graph);
 void timestamp();
@@ -147,6 +174,8 @@ boolean add_read_file(char* filename, int colour, int pair, int* n_files, ReadFi
 void output_basic_info(CmdLine cmd_line)
 {
     log_and_screen_printf("Max k: %i\n", (NUMBER_OF_BITFIELDS_IN_BINARY_KMER*32)-1);
+    log_and_screen_printf("max_node_edges: %i\n", (cmd_line.max_node_edges));
+    log_and_screen_printf("delta_coverage: %f\n", (cmd_line.delta_coverage));
     if (cmd_line.input_file_format == FASTQ) {
         log_and_screen_printf("Quality score offset: %i", cmd_line.quality_score_offset);
         if (cmd_line.quality_score_offset == 33) {
@@ -172,8 +201,8 @@ int main(int argc, char **argv)
     long long seq_length = 0;
     int n_file_list = 0;
     int i;
-    int total_max_length = TOTAL_MAX_LENGTH;
-    int bubble_max_depth = BUBBLE_MAX_DEPTH;
+    //int total_max_length = TOTAL_MAX_LENGTH;
+    //int bubble_max_depth = BUBBLE_MAX_DEPTH;
 
     log_and_screen_printf("\nMetaCortex ");
     log_and_screen_printf(METACORTEX_VERSION);
@@ -222,7 +251,7 @@ int main(int argc, char **argv)
         db_graph_print_status(db_graph);
         fflush(stdout);
         int count_file = 0;
-        long long total_length = 0;	//total sequence length
+        db_graph->loaded_kmers = 0;	//total sequence length
 
         //Go through all the files, loading data into the graph
 
@@ -307,10 +336,10 @@ int main(int argc, char **argv)
                     break;
             }
 
-            total_length += seq_length;
+            db_graph->loaded_kmers += seq_length;
             timestamp();
             log_and_screen_printf("\nRead of file %'d complete. Total kmers: %'lld Bad reads: %'qd Seq length: %'qd Total seq length: %'qd\n\n",
-                                  i+1, hash_table_get_unique_kmers(db_graph), bad_reads, seq_length, total_length);
+                                  i+1, hash_table_get_unique_kmers(db_graph), bad_reads, seq_length, db_graph->loaded_kmers);
             hash_table_print_stats(db_graph);
 
             fflush(stdout);
@@ -327,8 +356,6 @@ int main(int argc, char **argv)
 		log_and_screen_printf("\nRemove low coverage nodes (<=%'d) \n", cmd_line.node_coverage_threshold);
 		fflush(stdout);
 		cleaning_remove_low_coverage(cmd_line.node_coverage_threshold, db_graph);
-        //		db_graph_remove_low_coverage_nodes
-        //		    (cmd_line.node_coverage_threshold, db_graph);
         hash_table_print_stats(db_graph);
 
 	}
@@ -349,23 +376,6 @@ int main(int argc, char **argv)
         log_and_screen_printf("%'d tips clipped\n", cleaning_remove_tips(cmd_line.tip_length, cmd_line.tip_clip_iterations ,db_graph));
         hash_table_print_stats(db_graph);
 	}
-
-    /* Prototype code */
-    if (cmd_line.remove_spurious_links) {
-		timestamp();
-		log_and_screen_printf("\nRemoving spurious links\n");
-		fflush(stdout);
-		int links_removed = cleaning_remove_spurious_links(cmd_line.remove_spurious_links_max_difference, cmd_line.remove_spurious_links_min_coverage, db_graph);
-		log_and_screen_printf("%'d links removed\n", links_removed);
-        hash_table_print_stats(db_graph);
-        if (cmd_line.tip_clip) {
-            timestamp();
-            log_and_screen_printf("\nClip tips\n");
-            fflush(stdout);
-            log_and_screen_printf("%'d tips clipped\n", cleaning_remove_tips(cmd_line.tip_length, cmd_line.tip_clip_iterations ,db_graph));
-            hash_table_print_stats(db_graph);
-        }
-    }
 
 	if (cmd_line.remove_bubbles) {
 		timestamp();
@@ -429,6 +439,13 @@ int main(int argc, char **argv)
         }
     }
 
+    // Write graphviz file?
+    if (cmd_line.graphviz) {
+      timestamp();
+      write_graphviz_file(cmd_line.output_graphviz_filename, db_graph);
+      fflush(stdout);
+    }
+
     if (cmd_line.output_fasta) {
         switch (cmd_line.algorithm) {
             case PERFECT_PATH:
@@ -459,9 +476,22 @@ int main(int argc, char **argv)
                 metacortex_find_subgraphs(db_graph, cmd_line.output_fasta_filename, cmd_line.min_subgraph_size, cmd_line.min_contig_length, cmd_line.multiple_subgraph_contigs);
                 break;
             case GRAPH_STATS:
+                // if --high_confidence option set by user, alter output name accordingly
+                if(cmd_line.high_confidence) {
+                    char temp[LENGTH_FILENAME];
+                    strcpy(temp, cmd_line.output_fasta_filename);
+                    sprintf(cmd_line.output_fasta_filename, "%s.high_conf", temp);
+                }
+
+                // pass path_coverage_minimum value to dBgraph for use later
+                db_graph->path_coverage_minimum = cmd_line.path_coverage_minimum;
 
                 log_and_screen_printf("\nSearching graph for stats...\n");
-                find_subgraph_stats(db_graph, cmd_line.output_fasta_filename);
+                find_subgraph_stats(db_graph, cmd_line.output_fasta_filename,
+                  cmd_line.min_subgraph_size, cmd_line.min_contig_length,
+                  cmd_line.max_node_edges, cmd_line.delta_coverage,
+                  cmd_line.linked_list_max_size,
+                  cmd_line.multiple_subgraph_contigs);
 
 
                 /* Put all of this into a seperate command line call (BUBBLEFIND)*/
@@ -477,13 +507,6 @@ int main(int argc, char **argv)
                 break;
         }
     }
-
-    // Write graphviz file?
-    if (cmd_line.graphviz) {
-        timestamp();
-        write_graphviz_file(cmd_line.output_graphviz_filename, db_graph);
-        fflush(stdout);
-	}
 
     // Stop program terminating, so XCode leaks tool can report!
     //printf("press char to continue");
