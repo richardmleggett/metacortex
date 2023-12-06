@@ -1,6 +1,3 @@
-MetaCortex
-==========
-
-This is unpublished and unfinished work. Please check with richard.leggett@tgac.ac.uk before using.
-
-Manual in 'doc' directory.
+MetaCortex is now maintained by Sam Martin:
+https://github.com/SR-Martin/metacortex
+Check that repository for a much more recent version.
